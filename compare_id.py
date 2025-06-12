@@ -44,8 +44,12 @@ def convert_tabs_to_spaces(text_with_tabs: str, tab_stop: int = 8) -> str:
     return "".join(converted_text)
 
 def read_lines(filename, tab_stop=8):
-    with open(str(filename), encoding="utf-8") as f:
-        return [convert_tabs_to_spaces(line.rstrip("\n"), tab_stop) for line in f]
+    try:
+        with open(str(filename), encoding="utf-8") as f:
+            return [convert_tabs_to_spaces(line.rstrip("\n"), tab_stop) for line in f]
+    except UnicodeDecodeError as e:
+        print(f"UnicodeDecodeError in file: {filename} -- {e}")
+        return []
 
 
 def extract_python_identifiers(py_lines):
@@ -75,19 +79,16 @@ matched_dict = {}
 py_only_dict = {}
 hoc_only_dict = {}
 
-hoc_root = "has_hoc_directives"
+hoc_root = "docs/hoc"
 python_root = "docs/python"
 
 for root, _, files in os.walk(hoc_root):
     for fname in files:
-        py_path = None
         hoc_path = os.path.join(root, fname)
-        # Recursively search for the file in docs/python
-        for py_root, _, py_files in os.walk(python_root):
-            if fname in py_files:
-                py_path = os.path.join(py_root, fname)
-                break
-        if py_path is not None:
+        # Get the relative path from hoc_root
+        rel_path = os.path.relpath(hoc_path, hoc_root)
+        py_path = os.path.join(python_root, rel_path)
+        if os.path.exists(py_path):
             py_lines = read_lines(py_path)
             hoc_lines = read_lines(hoc_path)
             py_ids = extract_python_identifiers(py_lines)
@@ -98,11 +99,11 @@ for root, _, files in os.walk(hoc_root):
             hoc_only = hoc_ids - py_ids
 
             if matched:
-                matched_dict[fname] = {"root": root, "identifiers": list(matched)}
+                matched_dict[rel_path] = {"root": root, "identifiers": list(matched)}
             if py_only:
-                py_only_dict[fname] = {"root": root, "identifiers": list(py_only)}
+                py_only_dict[rel_path] = {"root": root, "identifiers": list(py_only)}
             if hoc_only:
-                hoc_only_dict[fname] = {"root": root, "identifiers": list(hoc_only)}
+                hoc_only_dict[rel_path] = {"root": root, "identifiers": list(hoc_only)}
 
 
 all_identifiers = {
