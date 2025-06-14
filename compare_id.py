@@ -54,24 +54,24 @@ def read_lines(filename, tab_stop=8):
 
 def extract_python_identifiers(py_lines):
     pattern = re.compile(r"\s*\.\. (class|method|data|function)::\s+([A-Za-z0-9_.]+)")
-    identifiers = set()
+    identifiers = {}
     for line in py_lines:
         match = pattern.match(line)
         if match:
-            _, name = match.groups()
-            identifiers.add(name)
+            kind, name = match.groups()
+            identifiers[name] = kind
     return identifiers
 
 def extract_hoc_identifiers(hoc_lines, kinds=None):
     if kinds is None:
-        kinds = ["hoc:method", "hoc:data", "hoc:class", "hoc:function"]
-    identifiers = set()
+        kinds = ["method", "data", "class", "function"]
+    identifiers = {}
     for line in hoc_lines:
         for kind in kinds:
-            identifier = f".. {kind}::"
+            identifier = f".. hoc:{kind}::"
             if identifier in line:
                 name = line.split(identifier, 1)[1].strip()
-                identifiers.add(name)
+                identifiers[name] = kind
     return identifiers
 
 
@@ -94,22 +94,35 @@ for root, _, files in os.walk(hoc_root):
             py_ids = extract_python_identifiers(py_lines)
             hoc_ids = extract_hoc_identifiers(hoc_lines)
 
-            matched = py_ids & hoc_ids
-            py_only = py_ids - hoc_ids
-            hoc_only = hoc_ids - py_ids
+            # Create sets of (name, kind) tuples for comparison
+            py_set = set((name, kind) for name, kind in py_ids.items())
+            hoc_set = set((name, kind) for name, kind in hoc_ids.items())
+
+            matched = py_set & hoc_set
+            py_only = py_set - hoc_set
+            hoc_only = hoc_set - py_set
+
+            if hoc_only:
+                hoc_only_dict[rel_path] = {
+                    "identifiers": [f"{k}|{n}" for k, n in hoc_only]
+                }
+
+            if py_only:
+                py_only_dict[rel_path] = {
+                    "identifiers": [f"{k}|{n}" for k, n in py_only]
+                }
 
             if matched:
-                matched_dict[rel_path] = {"root": root, "identifiers": list(matched)}
-            if py_only:
-                py_only_dict[rel_path] = {"root": root, "identifiers": list(py_only)}
-            if hoc_only:
-                hoc_only_dict[rel_path] = {"root": root, "identifiers": list(hoc_only)}
-
+                matched_dict[rel_path] = {
+                    "identifiers": [f"{k}|{n}" for k, n in matched]
+                }
 
 all_identifiers = {
-    "matched": matched_dict,
+    "hoc_only": hoc_only_dict,
     "python_only": py_only_dict,
-    "hoc_only": hoc_only_dict
+    "matched": matched_dict
+    
+    
 }
 
 with open("all_identifiers.json", "w", encoding="utf-8") as f:

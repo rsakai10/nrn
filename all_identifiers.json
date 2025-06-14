@@ -1,0 +1,1383 @@
+{
+  "hoc_only": {
+    "visualization/glyph.rst": {
+      "identifiers": [
+        "Glyph.curve_to|method",
+        "Glyph.close_path|method",
+        "Glyph.line_to|method",
+        "Glyph.new_path|method",
+        "Glyph.move_to|method",
+        "Glyph.stroke|method",
+        "Glyph.control_point|method"
+      ]
+    },
+    "modelspec/programmatic/topology.rst": {
+      "identifiers": [
+        "nseg|data"
+      ]
+    },
+    "modelspec/programmatic/hocmech.rst": {
+      "identifiers": [
+        "hocmech|function"
+      ]
+    },
+    "modelspec/programmatic/topology/secref.rst": {
+      "identifiers": [
+        "SectionRef.root|method",
+        "SectionRef.child|method",
+        "SectionRef.trueparent|method",
+        "SectionRef.sec|method",
+        "SectionRef.parent|method"
+      ]
+    },
+    "modelspec/programmatic/network/parcon.rst": {
+      "identifiers": [
+        "ParallelContext.step_wait|method"
+      ]
+    },
+    "programming/mechstan.rst": {
+      "identifiers": [
+        "MechanismStandard.in|method"
+      ]
+    },
+    "programming/io/printf.rst": {
+      "identifiers": [
+        "hoc_stdio|function"
+      ]
+    },
+    "programming/math/matrix.rst": {
+      "identifiers": [
+        "Matrix.cholesky_factor|method"
+      ]
+    },
+    "programming/math/vector.rst": {
+      "identifiers": [
+        "Vector.as_numpy()|method"
+      ]
+    },
+    "programming/pointers/pointer.rst": {
+      "identifiers": [
+        "Pointer.val|method"
+      ]
+    }
+  },
+  "python_only": {
+    "visualization/rvarplt.rst": {
+      "identifiers": [
+        "RangeVarPlot.plot|method",
+        "RangeVarPlot.vector|method"
+      ]
+    },
+    "visualization/plotshapeclass.rst": {
+      "identifiers": [
+        "PlotShape.plot|method"
+      ]
+    },
+    "visualization/glyph.rst": {
+      "identifiers": [
+        "Glyph.close|method",
+        "Glyph.s|method",
+        "Glyph.curve|method",
+        "Glyph.path|method",
+        "Glyph.l|method",
+        "Glyph.m|method",
+        "Glyph.cpt|method"
+      ]
+    },
+    "modelspec/programmatic/topology.rst": {
+      "identifiers": [
+        "Section|class",
+        "Section.subtree|method",
+        "Section.parentseg|method",
+        "Section.nseg|data",
+        "Section.connect|method",
+        "Section.wholetree|method",
+        "Section.orientation|method",
+        "Section.cell|method",
+        "Section.hname|method",
+        "Section.disconnect|method",
+        "Section.name|method"
+      ]
+    },
+    "modelspec/programmatic/mechtype.rst": {
+      "identifiers": [
+        "MechanismType.file|method",
+        "MechanismType.code|method"
+      ]
+    },
+    "modelspec/programmatic/rxd.rst": {
+      "identifiers": [
+        "rxd.nodelist.NodeList.include_flux|method",
+        "rxd.node.Node.satisfies|method",
+        "rxd.Species.defined_on_region|method",
+        "rxd.DistributedBoundary|class",
+        "rxd.Shell|class",
+        "rxd.node.NodeExtracellular.satisfies|method",
+        "rxd.Species.re_init|method",
+        "rxd.node.NodeExtracellular|class",
+        "rxd.node.Node3D|class",
+        "rxd.node.Node3D.satisfies|method",
+        "rxd.FixedPerimeter|class",
+        "rxd.node.Node1D.satisfies|method",
+        "rxd.nodelist.NodeList.value_to_grid|method",
+        "rxd.node.Node|class",
+        "rxd.Species.indices|method",
+        "rxd.Species.concentrations|method",
+        "rxd.node.Node1D|class",
+        "rxd.FixedCrossSection|class",
+        "rxd.node.Node.include_flux|method",
+        "rxd.FractionalVolume|class",
+        "rxd.export.sbml|function",
+        "rxd.ScalableBorder|class"
+      ]
+    },
+    "modelspec/programmatic/hocmech.rst": {
+      "identifiers": [
+        "make_pointprocess|function",
+        "make_mechanism|function"
+      ]
+    },
+    "modelspec/programmatic/topology/secref.rst": {
+      "identifiers": [
+        "SectionRef.child|data",
+        "SectionRef.trueparent|data",
+        "SectionRef.sec|data",
+        "SectionRef.parent|data",
+        "SectionRef.root|data"
+      ]
+    },
+    "modelspec/programmatic/mechanisms/mech.rst": {
+      "identifiers": [
+        "PatternStim|class"
+      ]
+    },
+    "modelspec/programmatic/network/parcon.rst": {
+      "identifiers": [
+        "ParallelContext.py_allgather|method",
+        "ParallelContext.py_broadcast|method",
+        "ParallelContext.get_partition|method",
+        "ParallelContext.mpiabort_on_error|method",
+        "ParallelContext.mpi_init|method",
+        "ParallelContext.py_gather|method",
+        "ParallelContext.nworker|method",
+        "ParallelContext.optimize_node_order|method",
+        "ParallelContext.py_scatter|method"
+      ]
+    },
+    "modelspec/programmatic/network/netcon.rst": {
+      "identifiers": [
+        "NetCon.preseg|method",
+        "NetCon.postseg|method"
+      ]
+    },
+    "simctrl/cvode.rst": {
+      "identifiers": [
+        "CVode.diam_change_count|method",
+        "CVode.extra_scatter_gather|method",
+        "CVode.extra_scatter_gather_remove|method",
+        "CVode.structure_change_count|method"
+      ]
+    },
+    "simctrl/bbsavestate.rst": {
+      "identifiers": [
+        "BBSaveState.save|method",
+        "BBSaveState.restore|method"
+      ]
+    },
+    "programming/mechstan.rst": {
+      "identifiers": [
+        "MechanismStandard.is_array|method",
+        "MechanismStandard._in|method"
+      ]
+    },
+    "programming/internals.rst": {
+      "identifiers": [
+        "use_exp_pow_precision|function",
+        "nrn_digest|function"
+      ]
+    },
+    "programming/io/printf.rst": {
+      "identifiers": [
+        "hoc_stdout|function"
+      ]
+    },
+    "programming/math/vector.rst": {
+      "identifiers": [
+        "Vector.as_numpy|method"
+      ]
+    },
+    "programming/math/random.rst": {
+      "identifiers": [
+        "NMODLRandom.uniform|method",
+        "NMODLRandom.get_ids|method",
+        "NMODLRandom.set_ids|method",
+        "NMODLRandom.get_seq|method",
+        "NMODLRandom|class",
+        "NMODLRandom.set_seq|method"
+      ]
+    },
+    "programming/pointers/ptrvector.rst": {
+      "identifiers": [
+        "PtrVector.plot|method",
+        "PtrVector.label|method"
+      ]
+    }
+  },
+  "matched": {
+    "visualization/shape.rst": {
+      "identifiers": [
+        "Shape.show|method",
+        "Shape.exec_menu|method",
+        "Shape|class",
+        "Shape.nearest|method",
+        "Shape.menu_action|method",
+        "Shape.color|method",
+        "Shape.point_mark|method",
+        "Shape.erase_all|method",
+        "Shape.len_scale|method",
+        "Shape.view_count|method",
+        "Shape.action|method",
+        "Shape.beginline|method",
+        "Shape.point_mark_remove|method",
+        "Shape.menu_tool|method",
+        "Shape.unmap|method",
+        "Shape.mark|method",
+        "Shape.printfile|method",
+        "Shape.observe|method",
+        "Shape.color_list|method",
+        "Shape.erase|method",
+        "Shape.size|method",
+        "Shape.color_all|method",
+        "Shape.flush|method",
+        "Shape.push_selected|method",
+        "Shape.view|method",
+        "Shape.select|method",
+        "Shape.line|method",
+        "Shape.save_name|method",
+        "Shape.label|method",
+        "Shape.rotate|method"
+      ]
+    },
+    "visualization/rvarplt.rst": {
+      "identifiers": [
+        "RangeVarPlot.end|method",
+        "RangeVarPlot.from_vector|method",
+        "RangeVarPlot.left|method",
+        "RangeVarPlot.origin|method",
+        "RangeVarPlot.to_vector|method",
+        "RangeVarPlot.list|method",
+        "RangeVarPlot.color|method",
+        "RangeVarPlot.begin|method",
+        "RangeVarPlot|class",
+        "RangeVarPlot.right|method"
+      ]
+    },
+    "visualization/oldgrph.rst": {
+      "identifiers": [
+        "axis|function",
+        "graphmode|function",
+        "setcolor|function",
+        "ploty|function",
+        "plotx|function",
+        "plot|function",
+        "settext|function",
+        "plt|function",
+        "graph|function",
+        "regraph|function"
+      ]
+    },
+    "visualization/notify.rst": {
+      "identifiers": [
+        "doEvents|function",
+        "doNotify|function"
+      ]
+    },
+    "visualization/graph.rst": {
+      "identifiers": [
+        "Graph.beginline|method",
+        "Graph.color|method",
+        "Graph.simgraph|method",
+        "Graph.exec_menu|method",
+        "Graph.relative|method",
+        "Graph.addexpr|method",
+        "Graph.view|method",
+        "Graph.gif|method",
+        "Graph.yaxis|method",
+        "Graph.line|method",
+        "Graph.family|method",
+        "Graph.unmap|method",
+        "Graph.menu_tool|method",
+        "Graph.addvar|method",
+        "Graph.xexpr|method",
+        "Graph.mark|method",
+        "Graph.save_name|method",
+        "Graph.line_info|method",
+        "Graph.printfile|method",
+        "Graph.xaxis|method",
+        "Graph.addobject|method",
+        "Graph.menu_action|method",
+        "Graph.erase_all|method",
+        "Graph.vfixed|method",
+        "Graph.fastflush|method",
+        "Graph.vector|method",
+        "Graph|class",
+        "Graph.getline|method",
+        "Graph.erase|method",
+        "Graph.align|method",
+        "Graph.begin|method",
+        "Graph.menu_remove|method",
+        "Graph.view_size|method",
+        "Graph.flush|method",
+        "Graph.view_count|method",
+        "Graph.view_info|method",
+        "Graph.crosshair_action|method",
+        "Graph.size|method",
+        "Graph.plot|method",
+        "Graph.glyph|method",
+        "Graph.fixed|method",
+        "Graph.brush|method",
+        "Graph.label|method"
+      ]
+    },
+    "visualization/plotshapeclass.rst": {
+      "identifiers": [
+        "PlotShape.erase|method",
+        "PlotShape.len_scale|method",
+        "PlotShape.scale|method",
+        "PlotShape.size|method",
+        "PlotShape.view_count|method",
+        "PlotShape.menu_action|method",
+        "PlotShape.mark|method",
+        "PlotShape.push_selected|method",
+        "PlotShape.menu_tool|method",
+        "PlotShape.colormap|method",
+        "PlotShape.label|method",
+        "PlotShape.erase_all|method",
+        "PlotShape.save_name|method",
+        "PlotShape.flush|method",
+        "PlotShape.show|method",
+        "PlotShape.variable|method",
+        "PlotShape.exec_menu|method",
+        "PlotShape.printfile|method",
+        "PlotShape.hinton|method",
+        "PlotShape|class",
+        "PlotShape.view|method",
+        "PlotShape.line|method",
+        "PlotShape.color|method",
+        "PlotShape.nearest|method",
+        "PlotShape.beginline|method",
+        "PlotShape.fastflush|method",
+        "PlotShape.unmap|method",
+        "PlotShape.observe|method",
+        "PlotShape.color_all|method",
+        "PlotShape.color_list|method",
+        "PlotShape.rotate|method"
+      ]
+    },
+    "visualization/glyph.rst": {
+      "identifiers": [
+        "Glyph.label|method",
+        "Glyph.circle|method",
+        "Glyph.glyph|method",
+        "Glyph|class",
+        "Glyph.gif|method",
+        "Glyph.erase|method",
+        "Glyph.fill|method"
+      ]
+    },
+    "analysis/programmatic/optimization.rst": {
+      "identifiers": [
+        "fit_praxis|function",
+        "attr_praxis|function",
+        "pval_praxis|function",
+        "stop_praxis|function"
+      ]
+    },
+    "analysis/programmatic/impedance.rst": {
+      "identifiers": [
+        "Impedance.compute|method",
+        "Impedance.transfer_phase|method",
+        "Impedance.ratio|method",
+        "Impedance.loc|method",
+        "Impedance.input_phase|method",
+        "Impedance|class",
+        "Impedance.transfer|method",
+        "Impedance.deltafac|method",
+        "Impedance.input|method"
+      ]
+    },
+    "analysis/programmatic/misc.rst": {
+      "identifiers": [
+        "nernst|function",
+        "ghk|function"
+      ]
+    },
+    "modelspec/programmatic/electrod.rst": {
+      "identifiers": [
+        "Electrode.amp|method",
+        "Electrode.Returnlevel|method",
+        "Electrode.VClampigraph|method",
+        "Electrode.amp0|method",
+        "Electrode.VClamp|method",
+        "Electrode.Testlevel|method",
+        "Electrode|class",
+        "Electrode.IClamp|method",
+        "Electrode.dur0|method",
+        "Electrode.del|method",
+        "Electrode.VClampFamily|method",
+        "Electrode.dur|method",
+        "Electrode.Location|method",
+        "Electrode.Holding|method"
+      ]
+    },
+    "modelspec/programmatic/ste.rst": {
+      "identifiers": [
+        "StateTransitionEvent.transition|method",
+        "StateTransitionEvent.state|method",
+        "StateTransitionEvent|class"
+      ]
+    },
+    "modelspec/programmatic/ions.rst": {
+      "identifiers": [
+        "ion_register|function",
+        "ion_charge|function",
+        "ion_style|function"
+      ]
+    },
+    "modelspec/programmatic/topology.rst": {
+      "identifiers": [
+        "disconnect|function",
+        "secname|function",
+        "parent_connection|function",
+        "parent_node|function",
+        "issection|function",
+        "parent_section|function",
+        "delete_section|function",
+        "section_owner|function",
+        "psection|function",
+        "topology|function",
+        "sectionname|function",
+        "section_exists|function",
+        "section_orientation|function",
+        "ismembrane|function"
+      ]
+    },
+    "modelspec/programmatic/mechtype.rst": {
+      "identifiers": [
+        "MechanismType.has_net_event|method",
+        "MechanismType.remove|method",
+        "MechanismType.selected|method",
+        "MechanismType.count|method",
+        "MechanismType.internal_type|method",
+        "MechanismType.select|method",
+        "MechanismType.is_artificial|method",
+        "MechanismType.action|method",
+        "MechanismType.pp_begin|method",
+        "MechanismType|class",
+        "MechanismType.make|method",
+        "MechanismType.is_netcon_target|method",
+        "MechanismType.pp_next|method",
+        "MechanismType.menu|method"
+      ]
+    },
+    "modelspec/programmatic/obsoletestimuli.rst": {
+      "identifiers": [
+        "fclampv|function",
+        "fstim|function",
+        "fstimi|function",
+        "fclamp|function",
+        "prstim|function",
+        "fclampi|function"
+      ]
+    },
+    "modelspec/programmatic/rxd.rst": {
+      "identifiers": [
+        "rxd.State|class",
+        "rxd.Rate|class",
+        "rxd.Species|class",
+        "rxd.MultiCompartmentReaction|class",
+        "rxd.nodelist.NodeList|class",
+        "rxd.Extracellular|class",
+        "rxd.Parameter|class",
+        "rxd.RxDException|class",
+        "rxd.set_solve_type|function",
+        "rxd.re_init|function",
+        "rxd.nthread|function",
+        "rxd.Region|class",
+        "rxd.Reaction|class"
+      ]
+    },
+    "modelspec/programmatic/kschan.rst": {
+      "identifiers": [
+        "KSChan.remove_state|method",
+        "KSChan.gmax|method",
+        "KSChan.state|method",
+        "KSChan.trans|method",
+        "KSChan.ion|method",
+        "KSState.name|method",
+        "KSGate.nstate|method",
+        "KSTrans.parm|method",
+        "KSChan.nstate|method",
+        "KSTrans.ftype|method",
+        "KSState.gate|method",
+        "KSGate.power|method",
+        "KSChan.remove_transition|method",
+        "KSChan.pr|method",
+        "KSGate.index|method",
+        "KSTrans.target|method",
+        "KSChan.ntrans|method",
+        "KSTrans.f|method",
+        "KSChan.add_transition|method",
+        "KSChan.add_ksstate|method",
+        "KSState|class",
+        "KSGate|class",
+        "KSChan.iv_type|method",
+        "KSChan.add_hhstate|method",
+        "KSChan.ngate|method",
+        "KSTrans|class",
+        "KSChan.gate|method",
+        "KSChan.nligand|method",
+        "KSTrans.inftau|method",
+        "KSChan.name|method",
+        "KSState.frac|method",
+        "KSTrans.index|method",
+        "KSTrans.ab|method",
+        "KSTrans.type|method",
+        "KSTrans.src|method",
+        "KSChan.setstructure|method",
+        "KSChan|class",
+        "KSChan.erev|method",
+        "KSGate.sindex|method",
+        "KSTrans.set_f|method",
+        "KSChan.ligand|method",
+        "KSState.index|method",
+        "KSTrans.ligand|method"
+      ]
+    },
+    "modelspec/programmatic/linmod.rst": {
+      "identifiers": [
+        "LinearMechanism|class"
+      ]
+    },
+    "modelspec/programmatic/topology/seclist.rst": {
+      "identifiers": [
+        "SectionList.printnames|method",
+        "SectionList.unique|method",
+        "SectionList.remove|method",
+        "SectionList.allroots|method",
+        "SectionList.subtree|method",
+        "SectionList.wholetree|method",
+        "SectionList.append|method",
+        "SectionList|class",
+        "SectionList.children|method"
+      ]
+    },
+    "modelspec/programmatic/topology/secspec.rst": {
+      "identifiers": [
+        "push_section|function",
+        "pop_section|function"
+      ]
+    },
+    "modelspec/programmatic/topology/secref.rst": {
+      "identifiers": [
+        "SectionRef.is_cas|method",
+        "SectionRef.nchild|method",
+        "SectionRef.has_trueparent|method",
+        "SectionRef.has_parent|method",
+        "SectionRef|class",
+        "SectionRef.exists|method"
+      ]
+    },
+    "modelspec/programmatic/topology/geometry.rst": {
+      "identifiers": [
+        "pt3dstyle|function",
+        "spine3d|function",
+        "diam3d|function",
+        "Ra|data",
+        "area|function",
+        "L|data",
+        "arc3d|function",
+        "y3d|function",
+        "diam|data",
+        "pt3dremove|function",
+        "pt3dclear|function",
+        "pt3dchange|function",
+        "define_shape|function",
+        "ri|function",
+        "n3d|function",
+        "diam_changed|data",
+        "pt3dadd|function",
+        "pt3dinsert|function",
+        "getSpineArea|function",
+        "setSpineArea|function",
+        "x3d|function",
+        "pt3dconst|function",
+        "distance|function",
+        "z3d|function"
+      ]
+    },
+    "modelspec/programmatic/mechanisms/mech.rst": {
+      "identifiers": [
+        "pnt.get_segment|method",
+        "ExpSyn|class",
+        "pnt.get_loc|method",
+        "SEClamp|class",
+        "IntFire1|class",
+        "APCount|class",
+        "IntFire4|class",
+        "IClamp|class",
+        "Exp2Syn|class",
+        "pnt.has_loc|method",
+        "pnt.loc|method",
+        "AlphaSynapse|class",
+        "VClamp|class",
+        "IntFire2|class",
+        "NetStim|class"
+      ]
+    },
+    "modelspec/programmatic/network/parcon.rst": {
+      "identifiers": [
+        "ParallelContext.vtransfer_time|method",
+        "ParallelContext.prcellstate|method",
+        "ParallelContext.t|method",
+        "ParallelContext.look_take|method",
+        "ParallelContext.upkpyobj|method",
+        "ParallelContext.broadcast|method",
+        "ParallelContext.allreduce|method",
+        "ParallelContext.upkstr|method",
+        "ParallelContext.event_time|method",
+        "ParallelContext|class",
+        "ParallelContext.spike_record|method",
+        "ParallelContext.splitcell|method",
+        "ParallelContext.submit|method",
+        "ParallelContext.thread_stat|method",
+        "ParallelContext.thread_ctime|method",
+        "ParallelContext.nhost_world|method",
+        "ParallelContext.runworker|method",
+        "ParallelContext.gid_connect|method",
+        "ParallelContext.alltoall|method",
+        "ParallelContext.id_world|method",
+        "ParallelContext.dt|method",
+        "ParallelContext.step_time|method",
+        "ParallelContext.subworlds|method",
+        "ParallelContext.set_gid2node|method",
+        "ParallelContext.post|method",
+        "ParallelContext.spike_statistics|method",
+        "ParallelContext.sec_in_thread|method",
+        "ParallelContext.Threads|method",
+        "ParallelContext.partition|method",
+        "ParallelContext.nhost|method",
+        "ParallelContext.upkscalar|method",
+        "ParallelContext.done|method",
+        "ParallelContext.outputcell|method",
+        "ParallelContext.id_bbs|method",
+        "ParallelContext.set_maxstep|method",
+        "ParallelContext.nthread|method",
+        "ParallelContext.take|method",
+        "ParallelContext.pack|method",
+        "ParallelContext.mech_time|method",
+        "ParallelContext.gid2obj|method",
+        "ParallelContext.multisplit|method",
+        "ParallelContext.gid2cell|method",
+        "ParallelContext.barrier|method",
+        "ParallelContext.time|method",
+        "ParallelContext.gid_clear|method",
+        "ParallelContext.id|method",
+        "ParallelContext.gid_exists|method",
+        "ParallelContext.send_time|method",
+        "ParallelContext.retval|method",
+        "ParallelContext.threshold|method",
+        "ParallelContext.cell|method",
+        "ParallelContext.target_var|method",
+        "ParallelContext.pyret|method",
+        "ParallelContext.timeout|method",
+        "ParallelContext.nhost_bbs|method",
+        "ParallelContext.wait_time|method",
+        "ParallelContext.py_alltoall|method",
+        "ParallelContext.thread_busywait|method",
+        "ParallelContext.spike_compress|method",
+        "ParallelContext.upkvec|method",
+        "ParallelContext.integ_time|method",
+        "ParallelContext.setup_transfer|method",
+        "ParallelContext.max_histogram|method",
+        "ParallelContext.working|method",
+        "ParallelContext.context|method",
+        "ParallelContext.look|method",
+        "ParallelContext.unpack|method",
+        "ParallelContext.userid|method",
+        "ParallelContext.thread_how_many_proc|method",
+        "ParallelContext.source_var|method",
+        "ParallelContext.psolve|method",
+        "ParallelContext.allgather|method"
+      ]
+    },
+    "modelspec/programmatic/network/parnet.rst": {
+      "identifiers": [
+        "ParallelNetManager.want_all_spikes|method",
+        "ParallelNetManager.prstat|method",
+        "ParallelNetManager.pcontinue|method",
+        "ParallelNetManager.round_robin|method",
+        "ParallelNetManager.create_cell|method",
+        "ParallelNetManager.gatherspikes|method",
+        "ParallelNetManager.prun|method",
+        "ParallelNetManager.pinit|method",
+        "ParallelNetManager.splitcell|method",
+        "ParallelNetManager.psolve|method",
+        "ParallelNetManager.set_gid2node|method",
+        "ParallelNetManager.gid_exists|method",
+        "ParallelNetManager.register_cell|method",
+        "ParallelNetManager|class",
+        "ParallelNetManager.nc_append|method",
+        "ParallelNetManager.spike_record|method"
+      ]
+    },
+    "modelspec/programmatic/network/netcon.rst": {
+      "identifiers": [
+        "NetCon.synlist|method",
+        "NetCon.delay|data",
+        "NetCon.precelllist|method",
+        "NetCon.weight|data",
+        "NetCon.syn|method",
+        "NetCon.get_recordvec|method",
+        "NetCon.record|method",
+        "NetCon|class",
+        "NetCon.postcelllist|method",
+        "NetCon.preloc|method",
+        "NetCon.wcnt|method",
+        "NetCon.threshold|data",
+        "NetCon.postcell|method",
+        "NetCon.valid|method",
+        "NetCon.pre|method",
+        "NetCon.event|method",
+        "NetCon.prelist|method",
+        "NetCon.setpost|method",
+        "NetCon.x|data",
+        "NetCon.postloc|method",
+        "NetCon.srcgid|method",
+        "NetCon.active|method",
+        "NetCon.precell|method"
+      ]
+    },
+    "simctrl/cvode.rst": {
+      "identifiers": [
+        "CVode.acor|method",
+        "CVode.ygather|method",
+        "CVode.debug_event|method",
+        "CVode.dae_init_dteps|method",
+        "CVode.poolshrink|method",
+        "CVode.atolscale|method",
+        "CVode.atol|method",
+        "CVode.cache_efficient|method",
+        "CVode.stiff|method",
+        "CVode.states|method",
+        "CVode.f|method",
+        "CVode.use_daspk|method",
+        "CVode.record_remove|method",
+        "CVode.store_events|method",
+        "CVode.maxorder|method",
+        "CVode.re_init|method",
+        "CVode.event|method",
+        "CVode.active|method",
+        "CVode.dstates|method",
+        "CVode.print_event_queue|method",
+        "CVode.use_long_double|method",
+        "CVode.record|method",
+        "CVode.spike_stat|method",
+        "CVode.rtol|method",
+        "CVode.statistics|method",
+        "CVode.minstep|method",
+        "CVode.use_mxb|method",
+        "CVode.use_local_dt|method",
+        "CVode.statename|method",
+        "CVode.current_method|method",
+        "CVode.solve|method",
+        "CVode.error_weights|method",
+        "CVode.fixed_step|method",
+        "CVode.use_fast_imem|method",
+        "CVode.yscatter|method",
+        "CVode.free_event_queues|method",
+        "CVode.simgraph_remove|method",
+        "CVode.queue_mode|method",
+        "CVode.maxstep|method",
+        "CVode|class",
+        "CVode.state_magnitudes|method",
+        "CVode.event_queue_info|method",
+        "CVode.condition_order|method",
+        "CVode.order|method",
+        "CVode.netconlist|method",
+        "CVode.jacobian|method"
+      ]
+    },
+    "simctrl/batch.rst": {
+      "identifiers": [
+        "batch_save|function",
+        "batch_run|function"
+      ]
+    },
+    "simctrl/bbsavestate.rst": {
+      "identifiers": [
+        "BBSaveState.restore_test|method",
+        "BBSaveState.save_test|method",
+        "BBSaveState.ignore|method",
+        "BBSaveState.vector_play_init|method",
+        "BBSaveState|class"
+      ]
+    },
+    "simctrl/programmatic.rst": {
+      "identifiers": [
+        "celsius|data",
+        "finitialize|function",
+        "t|data",
+        "frecord_init|function",
+        "fadvance|function",
+        "FInitializeHandler|class",
+        "initnrn|function",
+        "secondorder|data",
+        "dt|data",
+        "stoprun|data",
+        "FInitializeHandler.allprint|method",
+        "clamp_resist|data",
+        "fmatrix|function",
+        "fcurrent|function"
+      ]
+    },
+    "simctrl/savstate.rst": {
+      "identifiers": [
+        "SaveState.writehoc|method",
+        "SaveState.fwrite|method",
+        "SaveState.save|method",
+        "SaveState.restore|method",
+        "SaveState.fread|method",
+        "SaveState|class"
+      ]
+    },
+    "simctrl/sessionsave.rst": {
+      "identifiers": [
+        "save_session|function",
+        "print_session|function"
+      ]
+    },
+    "simctrl/interpretermanagement.rst": {
+      "identifiers": [
+        "quit|function",
+        "retrieveaudit|function",
+        "saveaudit|function"
+      ]
+    },
+    "programming/errors.rst": {
+      "identifiers": [
+        "nrn_feenableexcept|function",
+        "coredump_on_error|function",
+        "show_errmess_always|function",
+        "execerror|function"
+      ]
+    },
+    "programming/dynamiccode.rst": {
+      "identifiers": [
+        "load_proc|function",
+        "execute|function",
+        "execute1|function",
+        "load_file|function",
+        "load_template|function",
+        "load_func|function"
+      ]
+    },
+    "programming/strfun.rst": {
+      "identifiers": [
+        "StringFunctions.alias_list|method",
+        "StringFunctions|class",
+        "StringFunctions.tail|method",
+        "StringFunctions.substr|method",
+        "StringFunctions.references|method",
+        "StringFunctions.is_artificial|method",
+        "StringFunctions.head|method",
+        "StringFunctions.right|method",
+        "StringFunctions.is_name|method",
+        "StringFunctions.len|method",
+        "StringFunctions.left|method",
+        "StringFunctions.is_point_process|method",
+        "StringFunctions.alias|method"
+      ]
+    },
+    "programming/sscanf.rst": {
+      "identifiers": [
+        "sscanf|function"
+      ]
+    },
+    "programming/system.rst": {
+      "identifiers": [
+        "nrn_load_dll|function",
+        "getcwd|function",
+        "system|function",
+        "neuronhome|function",
+        "WinExec|function",
+        "show_winio|function",
+        "machine_name|function",
+        "chdir|function",
+        "nrnversion|function",
+        "stopsw|function",
+        "startsw|function",
+        "unix_mac_pc|function"
+      ]
+    },
+    "programming/mechstan.rst": {
+      "identifiers": [
+        "MechanismStandard.get|method",
+        "MechanismStandard.save|method",
+        "MechanismStandard|class",
+        "MechanismStandard.panel|method",
+        "MechanismStandard.name|method",
+        "MechanismStandard.action|method",
+        "MechanismStandard.set|method",
+        "MechanismStandard.count|method",
+        "MechanismStandard.out|method"
+      ]
+    },
+    "programming/timer.rst": {
+      "identifiers": [
+        "Timer.end|method",
+        "Timer|class",
+        "Timer.seconds|method",
+        "Timer.start|method"
+      ]
+    },
+    "programming/strings.rst": {
+      "identifiers": [
+        "sprint|function",
+        "strcmp|function"
+      ]
+    },
+    "programming/internals.rst": {
+      "identifiers": [
+        "name_declared|function",
+        "object_pop|function",
+        "object_id|function",
+        "symbols|function",
+        "hoc_pointer_|function",
+        "allobjects|function",
+        "object_push|function",
+        "allobjectvars|function"
+      ]
+    },
+    "programming/io/file.rst": {
+      "identifiers": [
+        "File.flush|method",
+        "File.scanvar|method",
+        "File.vwrite|method",
+        "File.vread|method",
+        "File.wopen|method",
+        "File.seek|method",
+        "File.scanstr|method",
+        "File.close|method",
+        "File.chooser|method",
+        "File|class",
+        "File.ropen|method",
+        "File.dir|method",
+        "File.unlink|method",
+        "File.xopen|method",
+        "File.getname|method",
+        "File.tell|method",
+        "File.isopen|method",
+        "File.gets|method",
+        "File.eof|method",
+        "File.aopen|method",
+        "File.printf|method",
+        "File.mktemp|method"
+      ]
+    },
+    "programming/io/ropen.rst": {
+      "identifiers": [
+        "ropen|function",
+        "wopen|function",
+        "fprint|function",
+        "xopen|function"
+      ]
+    },
+    "programming/io/read.rst": {
+      "identifiers": [
+        "xred|function",
+        "getstr|function",
+        "fscan|function",
+        "sred|function"
+      ]
+    },
+    "programming/io/printf.rst": {
+      "identifiers": [
+        "printf|function"
+      ]
+    },
+    "programming/math/guimath.rst": {
+      "identifiers": [
+        "GUIMath.d2line|method",
+        "GUIMath.feround|method",
+        "GUIMath.inside|method",
+        "GUIMath|class",
+        "GUIMath.d2line_seg|method"
+      ]
+    },
+    "programming/math/functions.rst": {
+      "identifiers": [
+        "atan|function",
+        "abs|function",
+        "log10|function",
+        "erfc|function",
+        "log|function",
+        "tanh|function",
+        "sin|function",
+        "exp|function",
+        "cos|function",
+        "erf|function",
+        "int|function",
+        "atan2|function",
+        "sqrt|function"
+      ]
+    },
+    "programming/math/mcran4.rst": {
+      "identifiers": [
+        "mcell_ran4|function",
+        "mcell_ran4_init|function",
+        "use_mcell_ran4|function"
+      ]
+    },
+    "programming/math/matrix.rst": {
+      "identifiers": [
+        "Matrix.nrow|method",
+        "Matrix.setrow|method",
+        "Matrix.setcol|method",
+        "Matrix.from_vector|method",
+        "Matrix.scanf|method",
+        "Matrix.spgetrowval|method",
+        "Matrix.pow|method",
+        "Matrix.getrow|method",
+        "Matrix.x|data",
+        "Matrix.mulm|method",
+        "Matrix.ncol|method",
+        "Matrix.printf|method",
+        "Matrix.c|method",
+        "Matrix.add|method",
+        "Matrix.setval|method",
+        "Matrix.getcol|method",
+        "Matrix.getdiag|method",
+        "Matrix.muls|method",
+        "Matrix.ident|method",
+        "Matrix.inverse|method",
+        "Matrix.transpose|method",
+        "Matrix.to_vector|method",
+        "Matrix.fprint|method",
+        "Matrix.mulv|method",
+        "Matrix.solv|method",
+        "Matrix.setdiag|method",
+        "Matrix|class",
+        "Matrix.resize|method",
+        "Matrix.getval|method",
+        "Matrix.sprowlen|method",
+        "Matrix.zero|method",
+        "Matrix.det|method",
+        "Matrix.bcopy|method",
+        "Matrix.exp|method",
+        "Matrix.svd|method",
+        "Matrix.symmeig|method"
+      ]
+    },
+    "programming/math/vector.rst": {
+      "identifiers": [
+        "Vector.spikebin|method",
+        "Vector.get|method",
+        "Vector.var|method",
+        "Vector.sqrt|method",
+        "Vector.from_python|method",
+        "Vector.median|method",
+        "Vector.size|method",
+        "Vector.integral|method",
+        "Vector.set|method",
+        "Vector.stdev|method",
+        "Vector.fft|method",
+        "Vector.c|method",
+        "Vector.eq|method",
+        "Vector.indwhere|method",
+        "Vector.scale|method",
+        "Vector.mark|method",
+        "Vector.reduce|method",
+        "Vector.sort|method",
+        "Vector.buffer_size|method",
+        "Vector.contains|method",
+        "Vector.addrand|method",
+        "Vector.fwrite|method",
+        "Vector.sin|method",
+        "Vector.filter|method",
+        "Vector.smhist|method",
+        "Vector.ploterr|method",
+        "Vector.fit|method",
+        "Vector.meansqerr|method",
+        "Vector.insrt|method",
+        "Vector.vwrite|method",
+        "Vector.floor|method",
+        "Vector|class",
+        "Vector.dot|method",
+        "Vector.mul|method",
+        "Vector.sum|method",
+        "Vector.at|method",
+        "Vector.min_ind|method",
+        "Vector.indgen|method",
+        "Vector.play_remove|method",
+        "Vector.scanf|method",
+        "Vector.remove|method",
+        "Vector.setrand|method",
+        "Vector.sub|method",
+        "Vector.mag|method",
+        "Vector.tanh|method",
+        "Vector.abs|method",
+        "Vector.rebin|method",
+        "Vector.max|method",
+        "Vector.indvwhere|method",
+        "Vector.psth|method",
+        "Vector.record|method",
+        "Vector.spctrm|method",
+        "Vector.append|method",
+        "Vector.index|method",
+        "Vector.reverse|method",
+        "Vector.histogram|method",
+        "Vector.log10|method",
+        "Vector.x|data",
+        "Vector.from_double|method",
+        "Vector.hist|method",
+        "Vector.min|method",
+        "Vector.sumgauss|method",
+        "Vector.stderr|method",
+        "Vector.fill|method",
+        "Vector.plot|method",
+        "Vector.ind|method",
+        "Vector.fread|method",
+        "Vector.scantil|method",
+        "Vector.trigavg|method",
+        "Vector.pow|method",
+        "Vector.add|method",
+        "Vector.resample|method",
+        "Vector.line|method",
+        "Vector.label|method",
+        "Vector.to_python|method",
+        "Vector.resize|method",
+        "Vector.play|method",
+        "Vector.deriv|method",
+        "Vector.medfltr|method",
+        "Vector.mean|method",
+        "Vector.interpolate|method",
+        "Vector.cl|method",
+        "Vector.vread|method",
+        "Vector.sumsq|method",
+        "Vector.inf|method",
+        "Vector.log|method",
+        "Vector.correl|method",
+        "Vector.sortindex|method",
+        "Vector.rotate|method",
+        "Vector.copy|method",
+        "Vector.div|method",
+        "Vector.printf|method",
+        "Vector.convlv|method",
+        "Vector.max_ind|method",
+        "Vector.apply|method",
+        "Vector.where|method"
+      ]
+    },
+    "programming/math/random.rst": {
+      "identifiers": [
+        "Random.normal|method",
+        "Random.play|method",
+        "Random.Random123|method",
+        "Random.uniform|method",
+        "Random.Random123_globalindex|method",
+        "Random.repick|method",
+        "Random.lognormal|method",
+        "Random|class",
+        "Random.discunif|method",
+        "Random.poisson|method",
+        "Random.geometric|method",
+        "Random.hypergeo|method",
+        "Random.negexp|method",
+        "Random.MCellRan4|method",
+        "Random.erlang|method",
+        "Random.seq|method",
+        "Random.weibull|method",
+        "Random.binomial|method"
+      ]
+    },
+    "programming/math/misc.rst": {
+      "identifiers": [
+        "float_epsilon|data"
+      ]
+    },
+    "programming/math/eqnsolve.rst": {
+      "identifiers": [
+        "prmat|function",
+        "solve|function",
+        "eqinit|function"
+      ]
+    },
+    "programming/gui/vfe.rst": {
+      "identifiers": [
+        "ValueFieldEditor|class",
+        "ValueFieldEditor.default|method"
+      ]
+    },
+    "programming/gui/widgets.rst": {
+      "identifiers": [
+        "xstatebutton|function",
+        "xradiobutton|function",
+        "xlabel|function",
+        "xfixedvalue|function",
+        "xslider|function",
+        "xvalue|function",
+        "units|function",
+        "xpvalue|function",
+        "xcheckbox|function",
+        "xmenu|function",
+        "xvarlabel|function",
+        "xpanel|function",
+        "xbutton|function"
+      ]
+    },
+    "programming/gui/list.rst": {
+      "identifiers": [
+        "List.index|method",
+        "List.remove|method",
+        "List.accept_action|method",
+        "List.prepend|method",
+        "List|class",
+        "List.o|method",
+        "List.select_action|method",
+        "List.selected|method",
+        "List.count|method",
+        "List.insrt|method",
+        "List.remove_all|method",
+        "List.browser|method",
+        "List.scroll_pos|method",
+        "List.append|method",
+        "List.object|method",
+        "List.select|method"
+      ]
+    },
+    "programming/gui/pwman.rst": {
+      "identifiers": [
+        "PWManager.hide|method",
+        "PWManager.landscape|method",
+        "PWManager.window_place|method",
+        "PWManager.leader|method",
+        "PWManager.iconify|method",
+        "PWManager.snap|method",
+        "PWManager.manager|method",
+        "PWManager.scale|method",
+        "PWManager|class",
+        "PWManager.save|method",
+        "PWManager.is_mapped|method",
+        "PWManager.group|method",
+        "PWManager.paper_place|method",
+        "PWManager.map|method",
+        "PWManager.deco|method",
+        "PWManager.deiconify|method",
+        "PWManager.name|method",
+        "PWManager.printfile|method",
+        "PWManager.count|method",
+        "PWManager.close|method"
+      ]
+    },
+    "programming/gui/secbrows.rst": {
+      "identifiers": [
+        "SectionBrowser.select|method",
+        "SectionBrowser|class",
+        "SectionBrowser.select_action|method",
+        "SectionBrowser.accept_action|method"
+      ]
+    },
+    "programming/gui/layout.rst": {
+      "identifiers": [
+        "VBox.intercept|method",
+        "VBox.ref|method",
+        "VBox.priority|method",
+        "VBox.save|method",
+        "Deck.save|method",
+        "VBox.unmap|method",
+        "VBox.adjust|method",
+        "Deck.remove_last|method",
+        "Deck.remove|method",
+        "VBox|class",
+        "Deck.move_last|method",
+        "VBox.dismiss_action|method",
+        "VBox.map|method",
+        "HBox|class",
+        "Deck.unmap|method",
+        "VBox.full_request|method",
+        "VBox.dialog|method",
+        "Deck.flip_to|method",
+        "VBox.adjuster|method",
+        "VBox.ismapped|method",
+        "Deck.map|method",
+        "Deck|class",
+        "VBox.size|method",
+        "Deck.intercept|method"
+      ]
+    },
+    "programming/gui/nfunc.rst": {
+      "identifiers": [
+        "nrnmechmenu|function",
+        "nrnpointmenu|function",
+        "nrnglobalmechmenu|function",
+        "nrnsecmenu|function"
+      ]
+    },
+    "programming/gui/dialog.rst": {
+      "identifiers": [
+        "boolean_dialog|function",
+        "string_dialog|function",
+        "continue_dialog|function"
+      ]
+    },
+    "programming/gui/symchooser.rst": {
+      "identifiers": [
+        "SymChooser.text|method",
+        "SymChooser.run|method",
+        "SymChooser|class"
+      ]
+    },
+    "programming/gui/misc.rst": {
+      "identifiers": [
+        "ivoc_style|function",
+        "variable_domain|function",
+        "pwman_place|function"
+      ]
+    },
+    "programming/gui/texteditor.rst": {
+      "identifiers": [
+        "TextEditor.text|method",
+        "TextEditor.readonly|method",
+        "TextEditor|class",
+        "TextEditor.map|method"
+      ]
+    },
+    "programming/pointers/pointer.rst": {
+      "identifiers": [
+        "Pointer.s|method",
+        "Pointer|class",
+        "Pointer.assign|method"
+      ]
+    },
+    "programming/pointers/ptrvector.rst": {
+      "identifiers": [
+        "PtrVector.ptr_update_callback|method",
+        "PtrVector.resize|method",
+        "PtrVector.scatter|method",
+        "PtrVector.getval|method",
+        "PtrVector.setval|method",
+        "PtrVector|class",
+        "PtrVector.size|method",
+        "PtrVector.pset|method",
+        "PtrVector.gather|method"
+      ]
+    },
+    "programming/pointers/misc.rst": {
+      "identifiers": [
+        "this_node|function",
+        "this_section|function"
+      ]
+    }
+  }
+}

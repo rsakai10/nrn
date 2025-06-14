@@ -1,0 +1,8718 @@
+{
+  "analysis/guitools.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "analysis/guitools/funfit.rst": {
+    "python_only": [
+      {
+        "directive": "image",
+        "argument": "../../images/parameterizedfunctionfitter.png"
+      }
+    ]
+  },
+  "analysis/guitools/impedancetools.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ":maxdepth: 1"
+      }
+    ]
+  },
+  "analysis/guitools/impedanx.rst": {
+    "python_only": [
+      {
+        "directive": "image",
+        "argument": "../../images/impedanx-logavsx.png"
+      }
+    ]
+  },
+  "analysis/guitools/mulfit.rst": {
+    "common": [
+      {
+        "directive": "index",
+        "argument": "MulRunFitter"
+      }
+    ]
+  },
+  "analysis/guitools/runfit.rst": {
+    "common": [
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "analysis/programmatic.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "analysis/programmatic/impedance.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Impedance"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.compute"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.deltafac"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.input"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.input_phase"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.loc"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.ratio"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.transfer"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Impedance.transfer_phase"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Impedance"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.compute"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.deltafac"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.input"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.input_phase"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.loc"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.ratio"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.transfer"
+      },
+      {
+        "directive": "method",
+        "argument": "Impedance.transfer_phase"
+      }
+    ]
+  },
+  "analysis/programmatic/misc.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "ghk"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nernst"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "ghk"
+      },
+      {
+        "directive": "function",
+        "argument": "nernst"
+      }
+    ]
+  },
+  "analysis/programmatic/optimization.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "attr_praxis"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fit_praxis"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pval_praxis"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "stop_praxis"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "attr_praxis"
+      },
+      {
+        "directive": "function",
+        "argument": "fit_praxis"
+      },
+      {
+        "directive": "function",
+        "argument": "pval_praxis"
+      },
+      {
+        "directive": "function",
+        "argument": "stop_praxis"
+      }
+    ]
+  },
+  "index.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/guitools.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/guitools/pointman.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic/electrod.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Electrode"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.Holding"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.IClamp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.Location"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.Returnlevel"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.Testlevel"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.VClamp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.VClampFamily"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.VClampigraph"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.amp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.amp0"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.del"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.dur"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Electrode.dur0"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Electrode"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.Holding"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.IClamp"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.Location"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.Returnlevel"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.Testlevel"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.VClamp"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.VClampFamily"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.VClampigraph"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.amp"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.amp0"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.del"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.dur"
+      },
+      {
+        "directive": "method",
+        "argument": "Electrode.dur0"
+      }
+    ]
+  },
+  "modelspec/programmatic/hocmech.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "hocmech"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "make_mechanism"
+      },
+      {
+        "directive": "function",
+        "argument": "make_pointprocess"
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic/ions.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "ion_charge"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "ion_register"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "ion_style"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "ion_charge"
+      },
+      {
+        "directive": "function",
+        "argument": "ion_register"
+      },
+      {
+        "directive": "function",
+        "argument": "ion_style"
+      }
+    ]
+  },
+  "modelspec/programmatic/kschan.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "KSChan"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "KSGate"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "KSState"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "KSTrans"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.add_hhstate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.add_ksstate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.add_transition"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.erev"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.gate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.gmax"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.ion"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.iv_type"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.ligand"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.ngate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.nligand"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.nstate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.ntrans"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.pr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.remove_state"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.remove_transition"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.setstructure"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.state"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSChan.trans"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSGate.index"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSGate.nstate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSGate.power"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSGate.sindex"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSState.frac"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSState.gate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSState.index"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSState.name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.ab"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.f"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.ftype"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.index"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.inftau"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.ligand"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.parm"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.set_f"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.src"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.target"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "KSTrans.type"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "KSChan"
+      },
+      {
+        "directive": "class",
+        "argument": "KSGate"
+      },
+      {
+        "directive": "class",
+        "argument": "KSState"
+      },
+      {
+        "directive": "class",
+        "argument": "KSTrans"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.add_hhstate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.add_ksstate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.add_transition"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.erev"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.gate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.gmax"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.ion"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.iv_type"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.ligand"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.name"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.ngate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.nligand"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.nstate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.ntrans"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.pr"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.remove_state"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.remove_transition"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.setstructure"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.state"
+      },
+      {
+        "directive": "method",
+        "argument": "KSChan.trans"
+      },
+      {
+        "directive": "method",
+        "argument": "KSGate.index"
+      },
+      {
+        "directive": "method",
+        "argument": "KSGate.nstate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSGate.power"
+      },
+      {
+        "directive": "method",
+        "argument": "KSGate.sindex"
+      },
+      {
+        "directive": "method",
+        "argument": "KSState.frac"
+      },
+      {
+        "directive": "method",
+        "argument": "KSState.gate"
+      },
+      {
+        "directive": "method",
+        "argument": "KSState.index"
+      },
+      {
+        "directive": "method",
+        "argument": "KSState.name"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.ab"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.f"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.ftype"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.index"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.inftau"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.ligand"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.parm"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.set_f"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.src"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.target"
+      },
+      {
+        "directive": "method",
+        "argument": "KSTrans.type"
+      }
+    ]
+  },
+  "modelspec/programmatic/linmod.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "LinearMechanism"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "LinearMechanism"
+      }
+    ]
+  },
+  "modelspec/programmatic/mechanisms.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic/mechanisms/mech.rst": {
+    "common": [
+      {
+        "directive": "index",
+        "argument": "capacitance (mechanism)"
+      },
+      {
+        "directive": "index",
+        "argument": "extracellular (mechanism)"
+      },
+      {
+        "directive": "index",
+        "argument": "fastpas (mechanism)"
+      },
+      {
+        "directive": "index",
+        "argument": "hh (mechanism)"
+      },
+      {
+        "directive": "index",
+        "argument": "pas (mechanism)"
+      },
+      {
+        "directive": "index",
+        "argument": "setdata (mechanism)"
+      },
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "APCount"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "AlphaSynapse"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "Exp2Syn"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "ExpSyn"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "IClamp"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "IntFire1"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "IntFire2"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "IntFire4"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "NetStim"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "SEClamp"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "VClamp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "pnt.get_loc"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "pnt.get_segment"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "pnt.has_loc"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "pnt.loc"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "APCount"
+      },
+      {
+        "directive": "class",
+        "argument": "AlphaSynapse"
+      },
+      {
+        "directive": "class",
+        "argument": "Exp2Syn"
+      },
+      {
+        "directive": "class",
+        "argument": "ExpSyn"
+      },
+      {
+        "directive": "class",
+        "argument": "IClamp"
+      },
+      {
+        "directive": "class",
+        "argument": "IntFire1"
+      },
+      {
+        "directive": "class",
+        "argument": "IntFire2"
+      },
+      {
+        "directive": "class",
+        "argument": "IntFire4"
+      },
+      {
+        "directive": "class",
+        "argument": "NetStim"
+      },
+      {
+        "directive": "class",
+        "argument": "PatternStim"
+      },
+      {
+        "directive": "class",
+        "argument": "SEClamp"
+      },
+      {
+        "directive": "class",
+        "argument": "VClamp"
+      },
+      {
+        "directive": "method",
+        "argument": "pnt.get_loc"
+      },
+      {
+        "directive": "method",
+        "argument": "pnt.get_segment"
+      },
+      {
+        "directive": "method",
+        "argument": "pnt.has_loc"
+      },
+      {
+        "directive": "method",
+        "argument": "pnt.loc"
+      }
+    ]
+  },
+  "modelspec/programmatic/mechtype.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "MechanismType"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.count"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.has_net_event"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.internal_type"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.is_artificial"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.is_netcon_target"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.make"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.menu"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.pp_begin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.pp_next"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.select"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismType.selected"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "MechanismType"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.action"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.code"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.count"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.file"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.has_net_event"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.internal_type"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.is_artificial"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.is_netcon_target"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.make"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.menu"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.pp_begin"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.pp_next"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.remove"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.select"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismType.selected"
+      }
+    ]
+  },
+  "modelspec/programmatic/network.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic/network/netcon.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "NetCon"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "NetCon.delay"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "NetCon.threshold"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "NetCon.weight"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "NetCon.x"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.active"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.event"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.get_recordvec"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.postcell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.postcelllist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.postloc"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.pre"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.precell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.precelllist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.prelist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.preloc"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.record"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.setpost"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.srcgid"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.syn"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.synlist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.valid"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "NetCon.wcnt"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "NetCon"
+      },
+      {
+        "directive": "data",
+        "argument": "NetCon.delay"
+      },
+      {
+        "directive": "data",
+        "argument": "NetCon.threshold"
+      },
+      {
+        "directive": "data",
+        "argument": "NetCon.weight"
+      },
+      {
+        "directive": "data",
+        "argument": "NetCon.x"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.active"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.event"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.get_recordvec"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.postcell"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.postcelllist"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.postloc"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.postseg"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.pre"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.precell"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.precelllist"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.prelist"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.preloc"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.preseg"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.record"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.setpost"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.srcgid"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.syn"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.synlist"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.valid"
+      },
+      {
+        "directive": "method",
+        "argument": "NetCon.wcnt"
+      }
+    ]
+  },
+  "modelspec/programmatic/network/parcon.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "ParallelContext"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.Threads"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.allgather"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.allreduce"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.alltoall"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.barrier"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.broadcast"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.cell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.context"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.done"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.dt"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.event_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.gid2cell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.gid2obj"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.gid_clear"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.gid_connect"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.gid_exists"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.id"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.id_bbs"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.id_world"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.integ_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.look"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.look_take"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.max_histogram"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.mech_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.multisplit"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.nhost"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.nhost_bbs"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.nhost_world"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.nthread"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.outputcell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.pack"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.partition"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.post"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.prcellstate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.psolve"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.py_alltoall"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.pyret"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.retval"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.runworker"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.sec_in_thread"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.send_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.set_gid2node"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.set_maxstep"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.setup_transfer"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.source_var"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.spike_compress"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.spike_record"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.spike_statistics"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.splitcell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.step_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.step_wait"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.submit"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.subworlds"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.t"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.take"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.target_var"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.thread_busywait"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.thread_ctime"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.thread_how_many_proc"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.thread_stat"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.threshold"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.timeout"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.unpack"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.upkpyobj"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.upkscalar"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.upkstr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.upkvec"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.userid"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.vtransfer_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.wait_time"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelContext.working"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "ParallelContext"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.Threads"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.allgather"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.allreduce"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.alltoall"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.barrier"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.broadcast"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.cell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.context"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.done"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.dt"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.event_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.get_partition"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.gid2cell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.gid2obj"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.gid_clear"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.gid_connect"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.gid_exists"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.id"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.id_bbs"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.id_world"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.integ_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.look"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.look_take"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.max_histogram"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.mech_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.mpi_init"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.mpiabort_on_error"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.multisplit"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.nhost"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.nhost_bbs"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.nhost_world"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.nthread"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.nworker"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.optimize_node_order"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.outputcell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.pack"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.partition"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.post"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.prcellstate"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.psolve"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.py_allgather"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.py_alltoall"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.py_broadcast"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.py_gather"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.py_scatter"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.pyret"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.retval"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.runworker"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.sec_in_thread"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.send_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.set_gid2node"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.set_maxstep"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.setup_transfer"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.source_var"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.spike_compress"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.spike_record"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.spike_statistics"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.splitcell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.step_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.submit"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.subworlds"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.t"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.take"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.target_var"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.thread_busywait"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.thread_ctime"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.thread_how_many_proc"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.thread_stat"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.threshold"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.timeout"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.unpack"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.upkpyobj"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.upkscalar"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.upkstr"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.upkvec"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.userid"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.vtransfer_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.wait_time"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelContext.working"
+      }
+    ]
+  },
+  "modelspec/programmatic/network/parnet.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "ParallelNetManager"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.create_cell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.gatherspikes"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.gid_exists"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.nc_append"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.pcontinue"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.pinit"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.prstat"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.prun"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.psolve"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.register_cell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.round_robin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.set_gid2node"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.spike_record"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.splitcell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ParallelNetManager.want_all_spikes"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "ParallelNetManager"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.create_cell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.gatherspikes"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.gid_exists"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.nc_append"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.pcontinue"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.pinit"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.prstat"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.prun"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.psolve"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.register_cell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.round_robin"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.set_gid2node"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.spike_record"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.splitcell"
+      },
+      {
+        "directive": "method",
+        "argument": "ParallelNetManager.want_all_spikes"
+      }
+    ]
+  },
+  "modelspec/programmatic/obsoletestimuli.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "fclamp"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fclampi"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fclampv"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fstim"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fstimi"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "prstim"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "fclamp"
+      },
+      {
+        "directive": "function",
+        "argument": "fclampi"
+      },
+      {
+        "directive": "function",
+        "argument": "fclampv"
+      },
+      {
+        "directive": "function",
+        "argument": "fstim"
+      },
+      {
+        "directive": "function",
+        "argument": "fstimi"
+      },
+      {
+        "directive": "function",
+        "argument": "prstim"
+      }
+    ]
+  },
+  "modelspec/programmatic/rxd.rst": {
+    "common": [
+      {
+        "directive": "code",
+        "argument": ""
+      },
+      {
+        "directive": "property",
+        "argument": "rxd.v"
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.Extracellular"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.MultiCompartmentReaction"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.Parameter"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.Rate"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.Reaction"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.Region"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.RxDException"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.Species"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.State"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "rxd.nodelist.NodeList"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "rxd.nthread"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "rxd.re_init"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "rxd.set_solve_type"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "attribute",
+        "argument": "rxd.inside"
+      },
+      {
+        "directive": "attribute",
+        "argument": "rxd.membrane"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.DistributedBoundary"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Extracellular"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.FixedCrossSection"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.FixedPerimeter"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.FractionalVolume"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.MultiCompartmentReaction"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Parameter"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Rate"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Reaction"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Region"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.RxDException"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.ScalableBorder"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Shell"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.Species"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.State"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.node.Node"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.node.Node1D"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.node.Node3D"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.node.NodeExtracellular"
+      },
+      {
+        "directive": "class",
+        "argument": "rxd.nodelist.NodeList"
+      },
+      {
+        "directive": "function",
+        "argument": "rxd.export.sbml"
+      },
+      {
+        "directive": "function",
+        "argument": "rxd.nthread"
+      },
+      {
+        "directive": "function",
+        "argument": "rxd.re_init"
+      },
+      {
+        "directive": "function",
+        "argument": "rxd.set_solve_type"
+      },
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic/rxdmath.rst": {
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "rxdmath.acos"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.acosh"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.asin"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.asinh"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.atan"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.atan2"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.ceil"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.copysign"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.cos"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.cosh"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.degrees"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.erf"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.erfc"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.exp"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.expm1"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.fabs"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.factorial"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.floor"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.fmod"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.gamma"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.lgamma"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.log"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.log10"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.log1p"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.pow"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.radians"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.sin"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.sinh"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.sqrt"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.tan"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.tanh"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.trunc"
+      },
+      {
+        "directive": "function",
+        "argument": "rxdmath.vtrap"
+      }
+    ]
+  },
+  "modelspec/programmatic/ste.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "StateTransitionEvent"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StateTransitionEvent.state"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StateTransitionEvent.transition"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "StateTransitionEvent"
+      },
+      {
+        "directive": "method",
+        "argument": "StateTransitionEvent.state"
+      },
+      {
+        "directive": "method",
+        "argument": "StateTransitionEvent.transition"
+      }
+    ]
+  },
+  "modelspec/programmatic/topology.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:data",
+        "argument": "nseg"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "delete_section"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "disconnect"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "ismembrane"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "issection"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "parent_connection"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "parent_node"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "parent_section"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "psection"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "secname"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "section_exists"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "section_orientation"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "section_owner"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "sectionname"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "topology"
+      },
+      {
+        "directive": "index",
+        "argument": "connect (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "create (keyword)"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Section"
+      },
+      {
+        "directive": "data",
+        "argument": "Section.nseg"
+      },
+      {
+        "directive": "function",
+        "argument": "delete_section"
+      },
+      {
+        "directive": "function",
+        "argument": "disconnect"
+      },
+      {
+        "directive": "function",
+        "argument": "ismembrane"
+      },
+      {
+        "directive": "function",
+        "argument": "issection"
+      },
+      {
+        "directive": "function",
+        "argument": "parent_connection"
+      },
+      {
+        "directive": "function",
+        "argument": "parent_node"
+      },
+      {
+        "directive": "function",
+        "argument": "parent_section"
+      },
+      {
+        "directive": "function",
+        "argument": "psection"
+      },
+      {
+        "directive": "function",
+        "argument": "secname"
+      },
+      {
+        "directive": "function",
+        "argument": "section_exists"
+      },
+      {
+        "directive": "function",
+        "argument": "section_orientation"
+      },
+      {
+        "directive": "function",
+        "argument": "section_owner"
+      },
+      {
+        "directive": "function",
+        "argument": "sectionname"
+      },
+      {
+        "directive": "function",
+        "argument": "topology"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.cell"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.connect"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.disconnect"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.hname"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.name"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.orientation"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.parentseg"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.subtree()"
+      },
+      {
+        "directive": "method",
+        "argument": "Section.wholetree()"
+      }
+    ]
+  },
+  "modelspec/programmatic/topology/geometry.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:data",
+        "argument": "L"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "Ra"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "diam"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "diam_changed"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "arc3d"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "area"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "define_shape"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "diam3d"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "distance"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "getSpineArea"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "n3d"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dadd"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dchange"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dclear"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dconst"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dinsert"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dremove"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pt3dstyle"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "ri"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "setSpineArea"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "spine3d"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "x3d"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "y3d"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "z3d"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "data",
+        "argument": "L"
+      },
+      {
+        "directive": "data",
+        "argument": "Ra"
+      },
+      {
+        "directive": "data",
+        "argument": "diam"
+      },
+      {
+        "directive": "data",
+        "argument": "diam_changed"
+      },
+      {
+        "directive": "function",
+        "argument": "arc3d"
+      },
+      {
+        "directive": "function",
+        "argument": "area"
+      },
+      {
+        "directive": "function",
+        "argument": "define_shape"
+      },
+      {
+        "directive": "function",
+        "argument": "diam3d"
+      },
+      {
+        "directive": "function",
+        "argument": "distance"
+      },
+      {
+        "directive": "function",
+        "argument": "getSpineArea"
+      },
+      {
+        "directive": "function",
+        "argument": "n3d"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dadd"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dchange"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dclear"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dconst"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dinsert"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dremove"
+      },
+      {
+        "directive": "function",
+        "argument": "pt3dstyle"
+      },
+      {
+        "directive": "function",
+        "argument": "ri"
+      },
+      {
+        "directive": "function",
+        "argument": "setSpineArea"
+      },
+      {
+        "directive": "function",
+        "argument": "spine3d"
+      },
+      {
+        "directive": "function",
+        "argument": "x3d"
+      },
+      {
+        "directive": "function",
+        "argument": "y3d"
+      },
+      {
+        "directive": "function",
+        "argument": "z3d"
+      }
+    ]
+  },
+  "modelspec/programmatic/topology/seclist.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "SectionList"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.allroots"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.append"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.children"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.printnames"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.subtree"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.unique"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionList.wholetree"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "SectionList"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.allroots"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.append"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.children"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.printnames"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.remove"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.subtree"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.unique"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionList.wholetree"
+      }
+    ]
+  },
+  "modelspec/programmatic/topology/secref.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "SectionRef"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.child"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.exists"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.has_parent"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.has_trueparent"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.is_cas"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.nchild"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.parent"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.root"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.sec"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionRef.trueparent"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "SectionRef"
+      },
+      {
+        "directive": "data",
+        "argument": "SectionRef.child"
+      },
+      {
+        "directive": "data",
+        "argument": "SectionRef.parent"
+      },
+      {
+        "directive": "data",
+        "argument": "SectionRef.root"
+      },
+      {
+        "directive": "data",
+        "argument": "SectionRef.sec"
+      },
+      {
+        "directive": "data",
+        "argument": "SectionRef.trueparent"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionRef.exists"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionRef.has_parent"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionRef.has_trueparent"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionRef.is_cas"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionRef.nchild"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "modelspec/programmatic/topology/secspec.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "pop_section"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "push_section"
+      },
+      {
+        "directive": "index",
+        "argument": "access (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "forall (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "forsec (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "ifsec (keyword)"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "pop_section"
+      },
+      {
+        "directive": "function",
+        "argument": "push_section"
+      }
+    ]
+  },
+  "programming/dynamiccode.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "execute"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "execute1"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "load_file"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "load_func"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "load_proc"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "load_template"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "execute"
+      },
+      {
+        "directive": "function",
+        "argument": "execute1"
+      },
+      {
+        "directive": "function",
+        "argument": "load_file"
+      },
+      {
+        "directive": "function",
+        "argument": "load_func"
+      },
+      {
+        "directive": "function",
+        "argument": "load_proc"
+      },
+      {
+        "directive": "function",
+        "argument": "load_template"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/errors.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "coredump_on_error"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "execerror"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrn_feenableexcept"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "show_errmess_always"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "coredump_on_error"
+      },
+      {
+        "directive": "function",
+        "argument": "execerror"
+      },
+      {
+        "directive": "function",
+        "argument": "nrn_feenableexcept"
+      },
+      {
+        "directive": "function",
+        "argument": "show_errmess_always"
+      }
+    ]
+  },
+  "programming/gui/dialog.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "boolean_dialog"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "continue_dialog"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "string_dialog"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "boolean_dialog"
+      },
+      {
+        "directive": "function",
+        "argument": "continue_dialog"
+      },
+      {
+        "directive": "function",
+        "argument": "string_dialog"
+      }
+    ]
+  },
+  "programming/gui/layout.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Deck"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "HBox"
+      },
+      {
+        "directive": "hoc:class",
+        "argument": "VBox"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.flip_to"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.intercept"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.map"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.move_last"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.remove_last"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.save"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Deck.unmap"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.adjust"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.adjuster"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.dialog"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.dismiss_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.full_request"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.intercept"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.ismapped"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.map"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.priority"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.ref"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.save"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "VBox.unmap"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Deck"
+      },
+      {
+        "directive": "class",
+        "argument": "HBox"
+      },
+      {
+        "directive": "class",
+        "argument": "VBox"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.flip_to"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.intercept"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.map"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.move_last"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.remove"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.remove_last"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.save"
+      },
+      {
+        "directive": "method",
+        "argument": "Deck.unmap"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.adjust"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.adjuster"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.dialog"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.dismiss_action"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.full_request"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.intercept"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.ismapped"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.map"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.priority"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.ref"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.save"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.size"
+      },
+      {
+        "directive": "method",
+        "argument": "VBox.unmap"
+      }
+    ]
+  },
+  "programming/gui/list.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "List"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.accept_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.append"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.browser"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.count"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.index"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.insrt"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.o"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.object"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.prepend"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.remove_all"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.scroll_pos"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.select"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.select_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "List.selected"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "List"
+      },
+      {
+        "directive": "method",
+        "argument": "List.accept_action"
+      },
+      {
+        "directive": "method",
+        "argument": "List.append"
+      },
+      {
+        "directive": "method",
+        "argument": "List.browser"
+      },
+      {
+        "directive": "method",
+        "argument": "List.count"
+      },
+      {
+        "directive": "method",
+        "argument": "List.index"
+      },
+      {
+        "directive": "method",
+        "argument": "List.insrt"
+      },
+      {
+        "directive": "method",
+        "argument": "List.o"
+      },
+      {
+        "directive": "method",
+        "argument": "List.object"
+      },
+      {
+        "directive": "method",
+        "argument": "List.prepend"
+      },
+      {
+        "directive": "method",
+        "argument": "List.remove"
+      },
+      {
+        "directive": "method",
+        "argument": "List.remove_all"
+      },
+      {
+        "directive": "method",
+        "argument": "List.scroll_pos"
+      },
+      {
+        "directive": "method",
+        "argument": "List.select"
+      },
+      {
+        "directive": "method",
+        "argument": "List.select_action"
+      },
+      {
+        "directive": "method",
+        "argument": "List.selected"
+      }
+    ]
+  },
+  "programming/gui/misc.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "ivoc_style"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "pwman_place"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "variable_domain"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "ivoc_style"
+      },
+      {
+        "directive": "function",
+        "argument": "pwman_place"
+      },
+      {
+        "directive": "function",
+        "argument": "variable_domain"
+      }
+    ]
+  },
+  "programming/gui/nfunc.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "nrnglobalmechmenu"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrnmechmenu"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrnpointmenu"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrnsecmenu"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "nrnglobalmechmenu"
+      },
+      {
+        "directive": "function",
+        "argument": "nrnmechmenu"
+      },
+      {
+        "directive": "function",
+        "argument": "nrnpointmenu"
+      },
+      {
+        "directive": "function",
+        "argument": "nrnsecmenu"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/gui/pwman.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "PWManager"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.close"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.count"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.deco"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.deiconify"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.group"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.hide"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.iconify"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.is_mapped"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.landscape"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.leader"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.manager"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.map"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.paper_place"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.printfile"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.save"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.scale"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.snap"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PWManager.window_place"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "PWManager"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.close"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.count"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.deco"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.deiconify"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.group"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.hide"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.iconify"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.is_mapped"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.landscape"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.leader"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.manager"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.map"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.name"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.paper_place"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.printfile"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.save"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.scale"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.snap"
+      },
+      {
+        "directive": "method",
+        "argument": "PWManager.window_place"
+      }
+    ]
+  },
+  "programming/gui/secbrows.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "SectionBrowser"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionBrowser.accept_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionBrowser.select"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SectionBrowser.select_action"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "SectionBrowser"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionBrowser.accept_action"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionBrowser.select"
+      },
+      {
+        "directive": "method",
+        "argument": "SectionBrowser.select_action"
+      }
+    ]
+  },
+  "programming/gui/symchooser.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "SymChooser"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SymChooser.run"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SymChooser.text"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "SymChooser"
+      },
+      {
+        "directive": "method",
+        "argument": "SymChooser.run"
+      },
+      {
+        "directive": "method",
+        "argument": "SymChooser.text"
+      }
+    ]
+  },
+  "programming/gui/texteditor.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "TextEditor"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "TextEditor.map"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "TextEditor.readonly"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "TextEditor.text"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "TextEditor"
+      },
+      {
+        "directive": "method",
+        "argument": "TextEditor.map"
+      },
+      {
+        "directive": "method",
+        "argument": "TextEditor.readonly"
+      },
+      {
+        "directive": "method",
+        "argument": "TextEditor.text"
+      }
+    ]
+  },
+  "programming/gui/vfe.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "ValueFieldEditor"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "ValueFieldEditor.default"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "ValueFieldEditor"
+      },
+      {
+        "directive": "method",
+        "argument": "ValueFieldEditor.default"
+      }
+    ]
+  },
+  "programming/gui/widgets.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "units"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xbutton"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xcheckbox"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xfixedvalue"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xlabel"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xmenu"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xpanel"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xpvalue"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xradiobutton"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xslider"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xstatebutton"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xvalue"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xvarlabel"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "units"
+      },
+      {
+        "directive": "function",
+        "argument": "xbutton"
+      },
+      {
+        "directive": "function",
+        "argument": "xcheckbox"
+      },
+      {
+        "directive": "function",
+        "argument": "xfixedvalue"
+      },
+      {
+        "directive": "function",
+        "argument": "xlabel"
+      },
+      {
+        "directive": "function",
+        "argument": "xmenu"
+      },
+      {
+        "directive": "function",
+        "argument": "xpanel"
+      },
+      {
+        "directive": "function",
+        "argument": "xpvalue"
+      },
+      {
+        "directive": "function",
+        "argument": "xradiobutton"
+      },
+      {
+        "directive": "function",
+        "argument": "xslider"
+      },
+      {
+        "directive": "function",
+        "argument": "xstatebutton"
+      },
+      {
+        "directive": "function",
+        "argument": "xvalue"
+      },
+      {
+        "directive": "function",
+        "argument": "xvarlabel"
+      },
+      {
+        "directive": "image",
+        "argument": "../../images/guiwidgets-example.png"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/guidesign.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/hoc-from-python.rst": {
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "neuron.hoc.HocObject"
+      },
+      {
+        "directive": "class",
+        "argument": "neuron.n.Section"
+      },
+      {
+        "directive": "method",
+        "argument": "neuron.hoc.execute"
+      },
+      {
+        "directive": "method",
+        "argument": "neuron.hoc.hoc_ac"
+      },
+      {
+        "directive": "method",
+        "argument": "neuron.n.cas"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      },
+      {
+        "directive": "toctree",
+        "argument": ""
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/hoc.rst": {
+    "hoc_only": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/hocsyntax.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "argtype"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "numarg"
+      },
+      {
+        "directive": "index",
+        "argument": "arguments"
+      },
+      {
+        "directive": "index",
+        "argument": "comments"
+      },
+      {
+        "directive": "index",
+        "argument": "expression"
+      },
+      {
+        "directive": "index",
+        "argument": "func"
+      },
+      {
+        "directive": "index",
+        "argument": "iterator"
+      },
+      {
+        "directive": "index",
+        "argument": "obfunc"
+      },
+      {
+        "directive": "index",
+        "argument": "proc"
+      },
+      {
+        "directive": "index",
+        "argument": "syntax (HOC)"
+      },
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/internals.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "allobjects"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "allobjectvars"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "hoc_pointer_"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "name_declared"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "object_id"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "object_pop"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "object_push"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "symbols"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "allobjects"
+      },
+      {
+        "directive": "function",
+        "argument": "allobjectvars"
+      },
+      {
+        "directive": "function",
+        "argument": "hoc_pointer_"
+      },
+      {
+        "directive": "function",
+        "argument": "name_declared"
+      },
+      {
+        "directive": "function",
+        "argument": "nrn_digest"
+      },
+      {
+        "directive": "function",
+        "argument": "object_id"
+      },
+      {
+        "directive": "function",
+        "argument": "object_pop"
+      },
+      {
+        "directive": "function",
+        "argument": "object_push"
+      },
+      {
+        "directive": "function",
+        "argument": "symbols"
+      },
+      {
+        "directive": "function",
+        "argument": "use_exp_pow_precision"
+      }
+    ]
+  },
+  "programming/io.rst": {
+    "hoc_only": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/io/file.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "File"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.aopen"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.chooser"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.close"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.dir"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.eof"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.flush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.getname"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.gets"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.isopen"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.mktemp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.printf"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.ropen"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.scanstr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.scanvar"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.seek"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.tell"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.unlink"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.vread"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.vwrite"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.wopen"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "File.xopen"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "File"
+      },
+      {
+        "directive": "method",
+        "argument": "File.aopen"
+      },
+      {
+        "directive": "method",
+        "argument": "File.chooser"
+      },
+      {
+        "directive": "method",
+        "argument": "File.close"
+      },
+      {
+        "directive": "method",
+        "argument": "File.dir"
+      },
+      {
+        "directive": "method",
+        "argument": "File.eof"
+      },
+      {
+        "directive": "method",
+        "argument": "File.flush"
+      },
+      {
+        "directive": "method",
+        "argument": "File.getname"
+      },
+      {
+        "directive": "method",
+        "argument": "File.gets"
+      },
+      {
+        "directive": "method",
+        "argument": "File.isopen"
+      },
+      {
+        "directive": "method",
+        "argument": "File.mktemp"
+      },
+      {
+        "directive": "method",
+        "argument": "File.printf"
+      },
+      {
+        "directive": "method",
+        "argument": "File.ropen"
+      },
+      {
+        "directive": "method",
+        "argument": "File.scanstr"
+      },
+      {
+        "directive": "method",
+        "argument": "File.scanvar"
+      },
+      {
+        "directive": "method",
+        "argument": "File.seek"
+      },
+      {
+        "directive": "method",
+        "argument": "File.tell"
+      },
+      {
+        "directive": "method",
+        "argument": "File.unlink"
+      },
+      {
+        "directive": "method",
+        "argument": "File.vread"
+      },
+      {
+        "directive": "method",
+        "argument": "File.vwrite"
+      },
+      {
+        "directive": "method",
+        "argument": "File.wopen"
+      },
+      {
+        "directive": "method",
+        "argument": "File.xopen"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/io/plotters.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "lw"
+      }
+    ]
+  },
+  "programming/io/printf.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "hoc_stdio"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "printf"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "hoc_stdout"
+      },
+      {
+        "directive": "function",
+        "argument": "printf"
+      }
+    ]
+  },
+  "programming/io/read.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "fscan"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "getstr"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "sred"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xred"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "fscan"
+      },
+      {
+        "directive": "function",
+        "argument": "getstr"
+      },
+      {
+        "directive": "function",
+        "argument": "sred"
+      },
+      {
+        "directive": "function",
+        "argument": "xred"
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/io/ropen.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "fprint"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "ropen"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "wopen"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "xopen"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "fprint"
+      },
+      {
+        "directive": "function",
+        "argument": "ropen"
+      },
+      {
+        "directive": "function",
+        "argument": "wopen"
+      },
+      {
+        "directive": "function",
+        "argument": "xopen"
+      }
+    ]
+  },
+  "programming/math/constants.rst": {
+    "common": [
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/math/eqnsolve.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "eqinit"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "prmat"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "solve"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "eqinit"
+      },
+      {
+        "directive": "function",
+        "argument": "prmat"
+      },
+      {
+        "directive": "function",
+        "argument": "solve"
+      }
+    ]
+  },
+  "programming/math/functions.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "abs"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "atan"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "atan2"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "cos"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "erf"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "erfc"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "exp"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "int"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "log"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "log10"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "sin"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "sqrt"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "tanh"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "abs"
+      },
+      {
+        "directive": "function",
+        "argument": "atan"
+      },
+      {
+        "directive": "function",
+        "argument": "atan2"
+      },
+      {
+        "directive": "function",
+        "argument": "cos"
+      },
+      {
+        "directive": "function",
+        "argument": "erf"
+      },
+      {
+        "directive": "function",
+        "argument": "erfc"
+      },
+      {
+        "directive": "function",
+        "argument": "exp"
+      },
+      {
+        "directive": "function",
+        "argument": "int"
+      },
+      {
+        "directive": "function",
+        "argument": "log"
+      },
+      {
+        "directive": "function",
+        "argument": "log10"
+      },
+      {
+        "directive": "function",
+        "argument": "sin"
+      },
+      {
+        "directive": "function",
+        "argument": "sqrt"
+      },
+      {
+        "directive": "function",
+        "argument": "tanh"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/math/guimath.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "GUIMath"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "GUIMath.d2line"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "GUIMath.d2line_seg"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "GUIMath.feround"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "GUIMath.inside"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "GUIMath"
+      },
+      {
+        "directive": "method",
+        "argument": "GUIMath.d2line"
+      },
+      {
+        "directive": "method",
+        "argument": "GUIMath.d2line_seg"
+      },
+      {
+        "directive": "method",
+        "argument": "GUIMath.feround"
+      },
+      {
+        "directive": "method",
+        "argument": "GUIMath.inside"
+      }
+    ]
+  },
+  "programming/math/matrix.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Matrix"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "Matrix.x"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.add"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.bcopy"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.c"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.cholesky_factor"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.det"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.exp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.fprint"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.from_vector"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.getcol"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.getdiag"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.getrow"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.getval"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.ident"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.inverse"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.mulm"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.muls"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.mulv"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.ncol"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.nrow"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.pow"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.printf"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.resize"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.scanf"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.setcol"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.setdiag"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.setrow"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.setval"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.solv"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.spgetrowval"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.sprowlen"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.svd"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.symmeig"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.to_vector"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.transpose"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Matrix.zero"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Matrix"
+      },
+      {
+        "directive": "data",
+        "argument": "Matrix.x"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.add"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.bcopy"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.c"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.det"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.exp"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.fprint"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.from_vector"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.getcol"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.getdiag"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.getrow"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.getval"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.ident"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.inverse"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.mulm"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.muls"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.mulv"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.ncol"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.nrow"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.pow"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.printf"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.resize"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.scanf"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.setcol"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.setdiag"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.setrow"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.setval"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.solv"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.spgetrowval"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.sprowlen"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.svd"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.symmeig"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.to_vector"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.transpose"
+      },
+      {
+        "directive": "method",
+        "argument": "Matrix.zero"
+      }
+    ]
+  },
+  "programming/math/mcran4.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "mcell_ran4"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "mcell_ran4_init"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "use_mcell_ran4"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "mcell_ran4"
+      },
+      {
+        "directive": "function",
+        "argument": "mcell_ran4_init"
+      },
+      {
+        "directive": "function",
+        "argument": "use_mcell_ran4"
+      }
+    ]
+  },
+  "programming/math/misc.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:data",
+        "argument": "float_epsilon"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "data",
+        "argument": "float_epsilon"
+      }
+    ]
+  },
+  "programming/math/random.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ":maxdepth: 1"
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Random"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.MCellRan4"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.Random123"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.Random123_globalindex"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.binomial"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.discunif"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.erlang"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.geometric"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.hypergeo"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.lognormal"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.negexp"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.normal"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.play"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.poisson"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.repick"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.seq"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.uniform"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Random.weibull"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "NMODLRandom"
+      },
+      {
+        "directive": "class",
+        "argument": "Random"
+      },
+      {
+        "directive": "method",
+        "argument": "NMODLRandom.get_ids"
+      },
+      {
+        "directive": "method",
+        "argument": "NMODLRandom.get_seq"
+      },
+      {
+        "directive": "method",
+        "argument": "NMODLRandom.set_ids"
+      },
+      {
+        "directive": "method",
+        "argument": "NMODLRandom.set_seq"
+      },
+      {
+        "directive": "method",
+        "argument": "NMODLRandom.uniform"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.MCellRan4"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.Random123"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.Random123_globalindex"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.binomial"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.discunif"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.erlang"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.geometric"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.hypergeo"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.lognormal"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.negexp"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.normal"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.play"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.poisson"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.repick"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.seq"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.uniform"
+      },
+      {
+        "directive": "method",
+        "argument": "Random.weibull"
+      }
+    ]
+  },
+  "programming/math/vector.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Vector"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "Vector.x"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.abs"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.add"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.addrand"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.append"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.apply"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.as_numpy()"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.at"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.buffer_size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.c"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.cl"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.contains"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.convlv"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.copy"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.correl"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.deriv"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.div"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.dot"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.eq"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.fft"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.fill"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.filter"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.fit"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.floor"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.fread"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.from_double"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.from_python"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.fwrite"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.get"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.hist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.histogram"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.ind"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.index"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.indgen"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.indvwhere"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.indwhere"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.inf"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.insrt"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.integral"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.interpolate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.label"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.line"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.log"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.log10"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.mag"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.mark"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.max"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.max_ind"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.mean"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.meansqerr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.medfltr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.median"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.min"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.min_ind"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.mul"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.play"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.play_remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.plot"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.ploterr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.pow"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.printf"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.psth"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.rebin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.record"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.reduce"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.resample"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.resize"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.reverse"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.rotate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.scale"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.scanf"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.scantil"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.set"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.setrand"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.smhist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sort"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sortindex"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.spctrm"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.spikebin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sqrt"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.stderr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.stdev"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sub"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sum"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sumgauss"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.sumsq"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.tanh"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.to_python"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.trigavg"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.var"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.vread"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.vwrite"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Vector.where"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Vector"
+      },
+      {
+        "directive": "data",
+        "argument": "Vector.x"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.abs"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.add"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.addrand"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.append"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.apply"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.as_numpy()"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.at"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.buffer_size"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.c"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.cl"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.contains"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.convlv"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.copy"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.correl"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.deriv"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.div"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.dot"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.eq"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.fft"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.fill"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.filter"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.fit"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.floor"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.fread"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.from_double"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.from_python"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.fwrite"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.get"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.hist"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.histogram"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.ind"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.index"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.indgen"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.indvwhere"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.indwhere"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.inf"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.insrt"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.integral"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.interpolate"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.label"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.line"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.log"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.log10"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.mag"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.mark"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.max"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.max_ind"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.mean"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.meansqerr"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.medfltr"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.median"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.min"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.min_ind"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.mul"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.play"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.play_remove"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.plot"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.ploterr"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.pow"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.printf"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.psth"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.rebin"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.record"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.reduce"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.remove"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.resample"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.resize"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.reverse"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.rotate"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.scale"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.scanf"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.scantil"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.set"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.setrand"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sin"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.size"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.smhist"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sort"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sortindex"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.spctrm"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.spikebin"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sqrt"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.stderr"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.stdev"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sub"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sum"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sumgauss"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.sumsq"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.tanh"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.to_python"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.trigavg"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.var"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.vread"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.vwrite"
+      },
+      {
+        "directive": "method",
+        "argument": "Vector.where"
+      }
+    ]
+  },
+  "programming/mathematics.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/mechstan.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "MechanismStandard"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.count"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.get"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.in"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.out"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.panel"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.save"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "MechanismStandard.set"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "MechanismStandard"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard._in"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.action"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.count"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.get"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.is_array"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.name"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.out"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.panel"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.save"
+      },
+      {
+        "directive": "method",
+        "argument": "MechanismStandard.set"
+      }
+    ]
+  },
+  "programming/ockeywor.rst": {
+    "hoc_only": [
+      {
+        "directive": "index",
+        "argument": "break (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "continue (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "debug (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "delete (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "depvar (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "double (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "else (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "eqn (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "for (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "help (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "if (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "insert (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "local (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "localobj (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "print (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "read (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "return (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "setpointer (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "stop (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "strdef (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "uninsert (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "while (keyword)"
+      }
+    ]
+  },
+  "programming/oop.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:data",
+        "argument": "this"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "init"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "unref"
+      },
+      {
+        "directive": "index",
+        "argument": "NULLobject"
+      },
+      {
+        "directive": "index",
+        "argument": "begintemplate (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "endtemplate (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "external (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "new (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "objectvar (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "objref (keyword)"
+      },
+      {
+        "directive": "index",
+        "argument": "public (keyword)"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/pointers/misc.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "this_node"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "this_section"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "this_node"
+      },
+      {
+        "directive": "function",
+        "argument": "this_section"
+      }
+    ]
+  },
+  "programming/pointers/pointer.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Pointer"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Pointer.assign"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Pointer.s"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Pointer.val"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "attribute",
+        "argument": "Pointer.val"
+      },
+      {
+        "directive": "class",
+        "argument": "Pointer"
+      },
+      {
+        "directive": "method",
+        "argument": "Pointer.assign"
+      },
+      {
+        "directive": "method",
+        "argument": "Pointer.s"
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/pointers/ptrvector.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "PtrVector"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.gather"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.getval"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.pset"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.ptr_update_callback"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.resize"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.scatter"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.setval"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PtrVector.size"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "PtrVector"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.gather"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.getval"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.label"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.plot"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.pset"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.ptr_update_callback"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.resize"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.scatter"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.setval"
+      },
+      {
+        "directive": "method",
+        "argument": "PtrVector.size"
+      }
+    ]
+  },
+  "programming/predec.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:data",
+        "argument": "hoc_ac_"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "hoc_cross_x_"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "hoc_cross_y_"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "hoc_obj_"
+      }
+    ]
+  },
+  "programming/projectmanagement.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ":maxdepth: 1"
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/python-from-hoc.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "PythonObject"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrnpython"
+      }
+    ]
+  },
+  "programming/references.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/sscanf.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "sscanf"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "sscanf"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "programming/strfun.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "StringFunctions"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.alias"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.alias_list"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.head"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.is_artificial"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.is_name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.is_point_process"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.left"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.len"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.references"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.right"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.substr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "StringFunctions.tail"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "StringFunctions"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.alias"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.alias_list"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.head"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.is_artificial"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.is_name"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.is_point_process"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.left"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.len"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.references"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.right"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.substr"
+      },
+      {
+        "directive": "method",
+        "argument": "StringFunctions.tail"
+      }
+    ]
+  },
+  "programming/strings.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "sprint"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "strcmp"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "sprint"
+      },
+      {
+        "directive": "function",
+        "argument": "strcmp"
+      }
+    ]
+  },
+  "programming/system.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "WinExec"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "chdir"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "getcwd"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "machine_name"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "neuronhome"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrn_load_dll"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "nrnversion"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "show_winio"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "startsw"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "stopsw"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "system"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "unix_mac_pc"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "WinExec"
+      },
+      {
+        "directive": "function",
+        "argument": "chdir"
+      },
+      {
+        "directive": "function",
+        "argument": "getcwd"
+      },
+      {
+        "directive": "function",
+        "argument": "machine_name"
+      },
+      {
+        "directive": "function",
+        "argument": "neuronhome"
+      },
+      {
+        "directive": "function",
+        "argument": "nrn_load_dll"
+      },
+      {
+        "directive": "function",
+        "argument": "nrnversion"
+      },
+      {
+        "directive": "function",
+        "argument": "show_winio"
+      },
+      {
+        "directive": "function",
+        "argument": "startsw"
+      },
+      {
+        "directive": "function",
+        "argument": "stopsw"
+      },
+      {
+        "directive": "function",
+        "argument": "system"
+      },
+      {
+        "directive": "function",
+        "argument": "unix_mac_pc"
+      },
+      {
+        "directive": "seealso",
+        "argument": "`For most of these system calls, check Python's os module <https://docs.python.org/3/library/os.html>`_"
+      },
+      {
+        "directive": "seealso",
+        "argument": "`Python's \"platform\" module provides access to this information and more <https://docs.python.org/3/library/platform.html>`_"
+      }
+    ]
+  },
+  "programming/timer.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Timer"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Timer.end"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Timer.seconds"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Timer.start"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Timer"
+      },
+      {
+        "directive": "method",
+        "argument": "Timer.end"
+      },
+      {
+        "directive": "method",
+        "argument": "Timer.seconds"
+      },
+      {
+        "directive": "method",
+        "argument": "Timer.start"
+      }
+    ]
+  },
+  "simctrl/batch.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "batch_run"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "batch_save"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "batch_run"
+      },
+      {
+        "directive": "function",
+        "argument": "batch_save"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "simctrl/bbsavestate.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "BBSaveState"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "BBSaveState.ignore"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "BBSaveState.restore_test"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "BBSaveState.save_test"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "BBSaveState.vector_play_init"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "BBSaveState"
+      },
+      {
+        "directive": "method",
+        "argument": "BBSaveState.ignore"
+      },
+      {
+        "directive": "method",
+        "argument": "BBSaveState.restore"
+      },
+      {
+        "directive": "method",
+        "argument": "BBSaveState.restore_test"
+      },
+      {
+        "directive": "method",
+        "argument": "BBSaveState.save"
+      },
+      {
+        "directive": "method",
+        "argument": "BBSaveState.save_test"
+      },
+      {
+        "directive": "method",
+        "argument": "BBSaveState.vector_play_init"
+      }
+    ]
+  },
+  "simctrl/cvode.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "CVode"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.acor"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.active"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.atol"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.atolscale"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.cache_efficient"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.condition_order"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.current_method"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.dae_init_dteps"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.debug_event"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.dstates"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.error_weights"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.event"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.event_queue_info"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.f"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.fixed_step"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.free_event_queues"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.jacobian"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.maxorder"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.maxstep"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.minstep"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.netconlist"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.order"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.poolshrink"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.print_event_queue"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.queue_mode"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.re_init"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.record"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.record_remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.rtol"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.simgraph_remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.solve"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.spike_stat"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.state_magnitudes"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.statename"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.states"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.statistics"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.stiff"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.store_events"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.use_daspk"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.use_fast_imem"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.use_local_dt"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.use_long_double"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.use_mxb"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.ygather"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "CVode.yscatter"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "CVode"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.acor"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.active"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.atol"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.atolscale"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.cache_efficient"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.condition_order"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.current_method"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.dae_init_dteps"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.debug_event"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.diam_change_count"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.dstates"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.error_weights"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.event"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.event_queue_info"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.extra_scatter_gather"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.extra_scatter_gather_remove"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.f"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.fixed_step"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.free_event_queues"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.jacobian"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.maxorder"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.maxstep"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.minstep"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.netconlist"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.order"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.poolshrink"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.print_event_queue"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.queue_mode"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.re_init"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.record"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.record_remove"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.rtol"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.simgraph_remove"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.solve"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.spike_stat"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.state_magnitudes"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.statename"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.states"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.statistics"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.stiff"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.store_events"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.structure_change_count"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.use_daspk"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.use_fast_imem"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.use_local_dt"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.use_long_double"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.use_mxb"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.ygather"
+      },
+      {
+        "directive": "method",
+        "argument": "CVode.yscatter"
+      }
+    ]
+  },
+  "simctrl/family.rst": {
+    "common": [
+      {
+        "directive": "index",
+        "argument": "makeFamily (HOC function)"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "code",
+        "argument": ""
+      },
+      {
+        "directive": "image",
+        "argument": "../images/ExecCommand.png"
+      },
+      {
+        "directive": "image",
+        "argument": "../images/GatherVec.png"
+      },
+      {
+        "directive": "image",
+        "argument": "../images/VecWrap.png"
+      },
+      {
+        "directive": "image",
+        "argument": "../images/VectorPlay.png"
+      },
+      {
+        "directive": "image",
+        "argument": "../images/makeFamily.png"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "simctrl/interpretermanagement.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "quit"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "retrieveaudit"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "saveaudit"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "quit"
+      },
+      {
+        "directive": "function",
+        "argument": "retrieveaudit"
+      },
+      {
+        "directive": "function",
+        "argument": "saveaudit"
+      }
+    ]
+  },
+  "simctrl/programmatic.rst": {
+    "common": [
+      {
+        "directive": "toctree",
+        "argument": ":maxdepth: 1"
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "FInitializeHandler"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "celsius"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "clamp_resist"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "dt"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "secondorder"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "stoprun"
+      },
+      {
+        "directive": "hoc:data",
+        "argument": "t"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fadvance"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fcurrent"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "finitialize"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "fmatrix"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "frecord_init"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "initnrn"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "FInitializeHandler.allprint"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "FInitializeHandler"
+      },
+      {
+        "directive": "data",
+        "argument": "celsius"
+      },
+      {
+        "directive": "data",
+        "argument": "clamp_resist"
+      },
+      {
+        "directive": "data",
+        "argument": "dt"
+      },
+      {
+        "directive": "data",
+        "argument": "secondorder"
+      },
+      {
+        "directive": "data",
+        "argument": "stoprun"
+      },
+      {
+        "directive": "data",
+        "argument": "t"
+      },
+      {
+        "directive": "function",
+        "argument": "fadvance"
+      },
+      {
+        "directive": "function",
+        "argument": "fcurrent"
+      },
+      {
+        "directive": "function",
+        "argument": "finitialize"
+      },
+      {
+        "directive": "function",
+        "argument": "fmatrix"
+      },
+      {
+        "directive": "function",
+        "argument": "frecord_init"
+      },
+      {
+        "directive": "function",
+        "argument": "initnrn"
+      },
+      {
+        "directive": "method",
+        "argument": "FInitializeHandler.allprint"
+      }
+    ]
+  },
+  "simctrl/runctrl.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "simctrl/savstate.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "SaveState"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SaveState.fread"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SaveState.fwrite"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SaveState.restore"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SaveState.save"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "SaveState.writehoc"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "SaveState"
+      },
+      {
+        "directive": "method",
+        "argument": "SaveState.fread"
+      },
+      {
+        "directive": "method",
+        "argument": "SaveState.fwrite"
+      },
+      {
+        "directive": "method",
+        "argument": "SaveState.restore"
+      },
+      {
+        "directive": "method",
+        "argument": "SaveState.save"
+      },
+      {
+        "directive": "method",
+        "argument": "SaveState.writehoc"
+      }
+    ]
+  },
+  "simctrl/sessionsave.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "print_session"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "save_session"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "print_session"
+      },
+      {
+        "directive": "function",
+        "argument": "save_session"
+      }
+    ]
+  },
+  "simctrl/stdrun.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      },
+      {
+        "directive": "toctree",
+        "argument": ""
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "visualization/glyph.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Glyph"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.circle"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.close_path"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.control_point"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.curve_to"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.erase"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.fill"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.gif"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.glyph"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.label"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.line_to"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.move_to"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.new_path"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Glyph.stroke"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Glyph"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.circle"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.close"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.cpt"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.curve"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.erase"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.fill"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.gif"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.glyph"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.l"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.label"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.m"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.path"
+      },
+      {
+        "directive": "method",
+        "argument": "Glyph.s"
+      }
+    ]
+  },
+  "visualization/graph.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Graph"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.addexpr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.addobject"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.addvar"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.align"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.begin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.beginline"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.brush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.color"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.crosshair_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.erase"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.erase_all"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.exec_menu"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.family"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.fastflush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.fixed"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.flush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.getline"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.gif"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.glyph"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.label"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.line"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.line_info"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.mark"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.menu_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.menu_remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.menu_tool"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.plot"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.printfile"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.relative"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.save_name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.simgraph"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.unmap"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.vector"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.vfixed"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.view"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.view_count"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.view_info"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.view_size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.xaxis"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.xexpr"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Graph.yaxis"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Graph"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.addexpr"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.addobject"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.addvar"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.align"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.begin"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.beginline"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.brush"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.color"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.crosshair_action"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.erase"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.erase_all"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.exec_menu"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.family"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.fastflush"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.fixed"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.flush"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.getline"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.gif"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.glyph"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.label"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.line"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.line_info"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.mark"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.menu_action"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.menu_remove"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.menu_tool"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.plot"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.printfile"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.relative"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.save_name"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.simgraph"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.size"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.unmap"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.vector"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.vfixed"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.view"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.view_count"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.view_info"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.view_size"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.xaxis"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.xexpr"
+      },
+      {
+        "directive": "method",
+        "argument": "Graph.yaxis"
+      }
+    ]
+  },
+  "visualization/gui.rst": {
+    "common": [
+      {
+        "directive": "seealso",
+        "argument": ""
+      }
+    ],
+    "hoc_only": [
+      {
+        "directive": "seealso",
+        "argument": ":ref:`hoc_FamilyLabel`"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "image",
+        "argument": "../images/filechooser.png"
+      },
+      {
+        "directive": "image",
+        "argument": "../images/panel.png"
+      },
+      {
+        "directive": "note",
+        "argument": ""
+      },
+      {
+        "directive": "seealso",
+        "argument": ":ref:`FamilyLabel`"
+      }
+    ]
+  },
+  "visualization/notify.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "doEvents"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "doNotify"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "doEvents"
+      },
+      {
+        "directive": "function",
+        "argument": "doNotify"
+      }
+    ]
+  },
+  "visualization/oldgrph.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:function",
+        "argument": "axis"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "graph"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "graphmode"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "plot"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "plotx"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "ploty"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "plt"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "regraph"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "setcolor"
+      },
+      {
+        "directive": "hoc:function",
+        "argument": "settext"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "function",
+        "argument": "axis"
+      },
+      {
+        "directive": "function",
+        "argument": "graph"
+      },
+      {
+        "directive": "function",
+        "argument": "graphmode"
+      },
+      {
+        "directive": "function",
+        "argument": "plot"
+      },
+      {
+        "directive": "function",
+        "argument": "plotx"
+      },
+      {
+        "directive": "function",
+        "argument": "ploty"
+      },
+      {
+        "directive": "function",
+        "argument": "plt"
+      },
+      {
+        "directive": "function",
+        "argument": "regraph"
+      },
+      {
+        "directive": "function",
+        "argument": "setcolor"
+      },
+      {
+        "directive": "function",
+        "argument": "settext"
+      },
+      {
+        "directive": "warning",
+        "argument": ""
+      }
+    ]
+  },
+  "visualization/plotshape.rst": {
+    "common": [
+      {
+        "directive": "note",
+        "argument": ""
+      }
+    ]
+  },
+  "visualization/plotshapeclass.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "PlotShape"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.beginline"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.color"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.color_all"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.color_list"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.colormap"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.erase"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.erase_all"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.exec_menu"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.fastflush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.flush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.hinton"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.label"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.len_scale"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.line"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.mark"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.menu_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.menu_tool"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.nearest"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.observe"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.printfile"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.push_selected"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.rotate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.save_name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.scale"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.show"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.unmap"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.variable"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.view"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "PlotShape.view_count"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "PlotShape"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.beginline"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.color"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.color_all"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.color_list"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.colormap"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.erase"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.erase_all"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.exec_menu"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.fastflush"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.flush"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.hinton"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.label"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.len_scale"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.line"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.mark"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.menu_action"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.menu_tool"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.nearest"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.observe"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.plot"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.printfile"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.push_selected"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.rotate"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.save_name"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.scale"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.show"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.size"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.unmap"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.variable"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.view"
+      },
+      {
+        "directive": "method",
+        "argument": "PlotShape.view_count"
+      }
+    ]
+  },
+  "visualization/rvarplt.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "RangeVarPlot"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.begin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.color"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.end"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.from_vector"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.left"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.list"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.origin"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.right"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "RangeVarPlot.to_vector"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "RangeVarPlot"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.begin"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.color"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.end"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.from_vector"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.left"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.list"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.origin"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.plot"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.right"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.to_vector"
+      },
+      {
+        "directive": "method",
+        "argument": "RangeVarPlot.vector"
+      }
+    ]
+  },
+  "visualization/shape.rst": {
+    "hoc_only": [
+      {
+        "directive": "hoc:class",
+        "argument": "Shape"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.beginline"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.color"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.color_all"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.color_list"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.erase"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.erase_all"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.exec_menu"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.flush"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.label"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.len_scale"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.line"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.mark"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.menu_action"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.menu_tool"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.nearest"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.observe"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.point_mark"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.point_mark_remove"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.printfile"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.push_selected"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.rotate"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.save_name"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.select"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.show"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.size"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.unmap"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.view"
+      },
+      {
+        "directive": "hoc:method",
+        "argument": "Shape.view_count"
+      }
+    ],
+    "python_only": [
+      {
+        "directive": "class",
+        "argument": "Shape"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.action"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.beginline"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.color"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.color_all"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.color_list"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.erase"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.erase_all"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.exec_menu"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.flush"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.label"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.len_scale"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.line"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.mark"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.menu_action"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.menu_tool"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.nearest"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.observe"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.point_mark"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.point_mark_remove"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.printfile"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.push_selected"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.rotate"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.save_name"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.select"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.show"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.size"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.unmap"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.view"
+      },
+      {
+        "directive": "method",
+        "argument": "Shape.view_count"
+      }
+    ]
+  },
+  "visualization/shapebox.rst": {
+    "common": [
+      {
+        "directive": "index",
+        "argument": "MenuExpore (HOC class)"
+      },
+      {
+        "directive": "index",
+        "argument": "PointProcessLocator (HOC class)"
+      }
+    ]
+  }
+}
