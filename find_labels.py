@@ -49,13 +49,20 @@ def read_lines(filename, tab_stop=8):
 
 
 
-def extract_hoc_blocks_by_label(lines):
+def extract_hoc_blocks_by_label(lines, kinds=None):
     """
     Extract blocks from HOC docs keyed by normalized label (e.g., 'mech_fast' from '_hoc_mech_fast').
-    Ignores directives like `.. index::` inside the block content.
+    Supports specific HOC directives like `.. hoc:method::`, and skips known non-content directives.
     """
+    if kinds is None:
+        kinds = ["hoc:method", "hoc:data", "hoc:class", "hoc:function"]
+
     label_pattern = re.compile(r"^\s*\.\. _([^\s:]+):")
-    directive_pattern = re.compile(r"^\s*\.\. (class|method|data|function|index|attribute|property)::")
+    # Match both standard Sphinx and hoc-style directives
+    directive_pattern = re.compile(r"^\s*\.\. (?:" + "|".join(
+        ["class", "method", "data", "function", "index", "attribute", "property"] + kinds
+    ) + r")::")
+
     blocks = {}
     i = 0
 
@@ -66,6 +73,7 @@ def extract_hoc_blocks_by_label(lines):
             label = re.sub(r'^hoc_', '', full_label)
 
             i += 1
+            # Skip any blank lines after label
             while i < len(lines) and not lines[i].strip():
                 i += 1
 
@@ -73,22 +81,31 @@ def extract_hoc_blocks_by_label(lines):
             while i < len(lines):
                 next_line = lines[i]
                 block_lines.append(next_line)
-                i += 1
 
-                # Break after appending if separator is reached
-                if next_line.strip() == "----":
+                # End the block if we hit another label or directive
+                if directive_pattern.match(next_line) or label_pattern.match(next_line):
+                    i += 1
                     break
-                # Stop if next line is a label or directive
-                if i < len(lines):
-                    if label_pattern.match(lines[i]) or directive_pattern.match(lines[i]):
+
+                # Special case for block delimiter
+                if next_line.strip() == "----":
+                    i += 1
+                    continue
+
+                # Peek ahead: stop if next line is a label or directive
+                if i + 1 < len(lines):
+                    peek_line = lines[i + 1]
+                    if directive_pattern.match(peek_line) or label_pattern.match(peek_line):
+                        i += 1
                         break
+
+                i += 1
 
             blocks[label] = "\n".join(block_lines).strip()
         else:
             i += 1
 
     return blocks
-
 
 def merge_by_label(py_lines, hoc_blocks, out_path):
     merged = []
