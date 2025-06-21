@@ -2902,37 +2902,72 @@ ModelDescriptionIssues
 Channels
 ~~~~~~~~
 
-The SOLVE PROCEDURE form was often used to implement 
-the exponential integration method for HH like states and was 
-very efficient in the context of the Crank-Nicolson like
-staggered time step approach historically used by NEURON. 
-Furthermore the exponential integration often used tables 
-of rates which were calculated under the assumption of 
-a fixed time step, dt. Although it can still be used under some 
-circumstances, the usage to integrate states 
-should be considered obsolete and converted to 
-a DERIVATIVE form. To do this, 
+    .. tab:: Python
 
-1)  replace the PROCEDURE block with a DERIVATIVE block, eg. 
+        The SOLVE PROCEDURE form was often used to implement 
+        the exponential integration method for HH like states and was 
+        very efficient in the context of the Crank-Nicolson like
+        staggered time step approach historically used by NEURON. 
+        Furthermore the exponential integration often used tables 
+        of rates which were calculated under the assumption of 
+        a fixed time step, dt. Although it can still be used under some 
+        circumstances, the usage to integrate states 
+        should be considered obsolete and converted to 
+        a DERIVATIVE form. To do this, 
 
-    .. code-block::
-        none
+        1)  replace the PROCEDURE block with a DERIVATIVE block, eg. 
+
+            .. code-block::
+                none
+                
+                DERIVATIVE states { 
+                m' = (minf - m)/mtau 
+                ... 
+                } 
+        2)  replace the SOLVE statement in the BREAKPOINT block with 
+            ``SOLVE states METHOD cnexp``
+        3)  if using tables, store mtau instead of :math:`(1 -\exp(-dt/m_{tau}))`
+            The nmodl translator will emit c code for both the staggered 
+            time step and high order variable time step methods. The only 
+            downside is slightly less efficiency with the staggered time 
+            step method since the exp(-dt...) is calculated instead of 
+            looked up in tables. 
         
-        DERIVATIVE states { 
-        m' = (minf - m)/mtau 
-        ... 
-        } 
-2)  replace the SOLVE statement in the BREAKPOINT block with 
-    ``SOLVE states METHOD cnexp``
-3)  if using tables, store mtau instead of :math:`(1 -\exp(-dt/m_{tau}))`
-    The nmodl translator will emit c code for both the staggered 
-    time step and high order variable time step methods. The only 
-    downside is slightly less efficiency with the staggered time 
-    step method since the exp(-dt...) is calculated instead of 
-    looked up in tables. 
- 
-In summary, no model should anymore depend on :data:`dt`. 
-         
+        In summary, no model should anymore depend on :data:`dt`. 
+                
+    .. tab:: HOC
+
+        The SOLVE PROCEDURE form was often used to implement 
+        the exponential integration method for HH like states and was 
+        very efficient in the context of the Crank-Nicolson like
+        staggered time step approach historically used by NEURON. 
+        Furthermore the exponential integration often used tables 
+        of rates which were calculated under the assumption of 
+        a fixed time step, dt. Although it can still be used under some 
+        circumstances, the usage to integrate states 
+        should be considered obsolete and converted to 
+        a DERIVATIVE form. To do this, 
+
+        1)  replace the PROCEDURE block with a DERIVATIVE block, eg. 
+
+            .. code-block::
+                none
+                
+                DERIVATIVE states { 
+                m' = (minf - m)/mtau 
+                ... 
+                } 
+        2)  replace the SOLVE statement in the BREAKPOINT block with 
+            ``SOLVE states METHOD cnexp``
+        3)  if using tables, store mtau instead of :math:`(1 -\exp(-dt/m_{tau}))`
+            The nmodl translator will emit c code for both the staggered 
+            time step and high order variable time step methods. The only 
+            downside is slightly less efficiency with the staggered time 
+            step method since the exp(-dt...) is calculated instead of 
+            looked up in tables. 
+        
+        In summary, no model should anymore depend on :data:`dt`.
+                
 
 
 Concentrations
@@ -2948,98 +2983,192 @@ Concentrations
 Events
 ~~~~~~
 
- 
-How does one handle events?  This is really the only serious 
-difficulty in writing models that work properly in the 
-context of a variable time step method. All models which involve 
-discontinuous functions of time, eg steps, pulses, synaptic 
-onset, require special provision to notify the integrator that 
-an event has occurred within this time step, ie between t-dt and t. 
-If this is not done, the time step may be so large that it 
-completely misses a pulse or synaptic event. And if it does see 
-the effect of the event, there is a huge inefficiency involved in the 
-variable step method's search for the location of the event and the 
-concomitant tremendous reduction in size of dt. 
- 
-So, if you change any variable discontinuously in the model 
-at some time tevent, call 
-call 
+    .. tab:: Python
 
-.. code-block::
-    none
+        How does one handle events?  This is really the only serious 
+        difficulty in writing models that work properly in the 
+        context of a variable time step method. All models which involve 
+        discontinuous functions of time, eg steps, pulses, synaptic 
+        onset, require special provision to notify the integrator that 
+        an event has occurred within this time step, ie between t-dt and t. 
+        If this is not done, the time step may be so large that it 
+        completely misses a pulse or synaptic event. And if it does see 
+        the effect of the event, there is a huge inefficiency involved in the 
+        variable step method's search for the location of the event and the 
+        concomitant tremendous reduction in size of dt. 
+        
+        So, if you change any variable discontinuously in the model 
+        at some time tevent, call 
+        call 
 
-            at_time(tevent) 
+        .. code-block::
+            none
 
-The user may check the return value of this function to decide 
-if something needs changing. Examples of the two styles of usage are: 
- 
-1) Just notify and do the logic separately. 
+                    at_time(tevent) 
 
-    .. code-block::
-        none
+        The user may check the return value of this function to decide 
+        if something needs changing. Examples of the two styles of usage are: 
+        
+        1) Just notify and do the logic separately. 
 
-                at_time(del) 
-                at_time(del + dur) 
-                if t >= del and t <= del + dur:
-                        istim = on_value 
-                else:
+            .. code-block::
+                none
+
+                        at_time(del) 
+                        at_time(del + dur) 
+                        if t >= del and t <= del + dur:
+                                istim = on_value 
+                        else:
+                                istim = 0 
+                        
+
+        
+        2) Use the at_time return value to do the logic. 
+
+            .. code-block::
+                none
+
+                INITIAL { 
                         istim = 0 
-                
-
- 
-2) Use the at_time return value to do the logic. 
-
-    .. code-block::
-        none
-
-        INITIAL { 
-                istim = 0 
-        } 
-        ... 
-                if (at_time(del)):
-                        istim = on_value 
                 } 
-                if (at_time(del + dur)):
-                        istim = 0 
-                
+                ... 
+                        if (at_time(del)):
+                                istim = on_value 
+                        } 
+                        if (at_time(del + dur)):
+                                istim = 0 
+                        
 
-Notice the requirement of initialization or else if the previous 
-run was stopped before del + dur the value of istim would be on_value 
-at the beginning of the next run. 
- 
-What happens internally when at_time(tevent) is called? 
- 
-The interesting case (t-dt < tevent <= t) --- 
-First, at_time returns 0. Then 
-CVode changes its step size to (tevent - (t-dt) - epsilon) and redoes 
-the step starting at t-dt. Note that this should be safely prior 
-to the event (so at_time still returns 0), 
-but if not then the above process will repeat 
-until a step size is found for which there is no event. 
-CVode then re-initializes it's internal state and 
-restarts from a new initial condition at tevent+epsilon. 
-Now when at_time is called, it returns 1. 
-Note that in its single step mode, CVode.solve() will return 
-at t = tevent-epsilon, the subsequent call will start the 
-initial condition at t = tevent + epsilon and return after a normal 
-step (usually quite small). 
- 
-The case (tevent <= t - dt) --- at_time returns 0. 
- 
-The case (tevent > t) --- at_time returns 0. 
- 
-Note that 
-an action potential model with 
-axonal delay delivering a "message" to a synaptic model may or 
-may not think it worthwhile to call at_time at the time of threshold 
-(I would just do my own interpolation to set t_threshold) 
-but will certainly call at_time(t_threshold + delay)  (and possibly not 
-allow t_threshold to change again until it returns a 1); 
- 
-I am sorry that the variable time step method requires that the 
-model author take careful account of events but I see no way 
-to have them automatically taken care of. 
- 
+        Notice the requirement of initialization or else if the previous 
+        run was stopped before del + dur the value of istim would be on_value 
+        at the beginning of the next run. 
+        
+        What happens internally when at_time(tevent) is called? 
+        
+        The interesting case (t-dt < tevent <= t) --- 
+        First, at_time returns 0. Then 
+        CVode changes its step size to (tevent - (t-dt) - epsilon) and redoes 
+        the step starting at t-dt. Note that this should be safely prior 
+        to the event (so at_time still returns 0), 
+        but if not then the above process will repeat 
+        until a step size is found for which there is no event. 
+        CVode then re-initializes it's internal state and 
+        restarts from a new initial condition at tevent+epsilon. 
+        Now when at_time is called, it returns 1. 
+        Note that in its single step mode, CVode.solve() will return 
+        at t = tevent-epsilon, the subsequent call will start the 
+        initial condition at t = tevent + epsilon and return after a normal 
+        step (usually quite small). 
+        
+        The case (tevent <= t - dt) --- at_time returns 0. 
+        
+        The case (tevent > t) --- at_time returns 0. 
+        
+        Note that 
+        an action potential model with 
+        axonal delay delivering a "message" to a synaptic model may or 
+        may not think it worthwhile to call at_time at the time of threshold 
+        (I would just do my own interpolation to set t_threshold) 
+        but will certainly call at_time(t_threshold + delay)  (and possibly not 
+        allow t_threshold to change again until it returns a 1); 
+        
+        I am sorry that the variable time step method requires that the 
+        model author take careful account of events but I see no way 
+        to have them automatically taken care of. 
+        
+    .. tab:: HOC
+
+        How does one handle events?  This is really the only serious 
+        difficulty in writing models that work properly in the 
+        context of a variable time step method. All models which involve 
+        discontinuous functions of time, eg steps, pulses, synaptic 
+        onset, require special provision to notify the integrator that 
+        an event has occurred within this time step, ie between t-dt and t. 
+        If this is not done, the time step may be so large that it 
+        completely misses a pulse or synaptic event. And if it does see 
+        the effect of the event, there is a huge inefficiency involved in the 
+        variable step method's search for the location of the event and the 
+        concomitant tremendous reduction in size of dt. 
+        
+        So, if you change any variable discontinuously in the model 
+        at some time tevent, call 
+        call 
+
+        .. code-block::
+            none
+
+                    at_time(tevent) 
+
+        The user may check the return value of this function to decide 
+        if something needs changing. Examples of the two styles of usage are: 
+        
+        1) Just notify and do the logic separately. 
+
+            .. code-block::
+                none
+
+                    at_time(del) 
+                    at_time(del + dur) 
+                    if (t >= del && t <= del + dur) { 
+                        istim = on_value 
+                    }else{ 
+                        istim = 0 
+                    } 
+
+        
+        2) Use the at_time return value to do the logic. 
+
+            .. code-block::
+                none
+
+                INITIAL { 
+                    istim = 0 
+                } 
+                ... 
+                    if (at_time(del)) { 
+                        istim = on_value 
+                    } 
+                    if (at_time(del + dur)) { 
+                        istim = 0 
+                    } 
+
+        Notice the requirement of initialization or else if the previous 
+        run was stopped before del + dur the value of istim would be on_value 
+        at the beginning of the next run. 
+        
+        What happens internally when at_time(tevent) is called? 
+        
+        The interesting case (t-dt < tevent <= t) --- 
+        First, at_time returns 0. Then 
+        CVode changes its step size to (tevent - (t-dt) - epsilon) and redoes 
+        the step starting at t-dt. Note that this should be safely prior 
+        to the event (so at_time still returns 0), 
+        but if not then the above process will repeat 
+        until a step size is found for which there is no event. 
+        CVode then re-initializes it's internal state and 
+        restarts from a new initial condition at tevent+epsilon. 
+        Now when at_time is called, it returns 1. 
+        Note that in its single step mode, CVode.solve() will return 
+        at t = tevent-epsilon, the subsequent call will start the 
+        initial condition at t = tevent + epsilon and return after a normal 
+        step (usually quite small). 
+        
+        The case (tevent <= t - dt) --- at_time returns 0. 
+        
+        The case (tevent > t) --- at_time returns 0. 
+        
+        Note that 
+        an action potential model with 
+        axonal delay delivering a "message" to a synaptic model may or 
+        may not think it worthwhile to call at_time at the time of threshold 
+        (I would just do my own interpolation to set t_threshold) 
+        but will certainly call at_time(t_threshold + delay)  (and possibly not 
+        allow t_threshold to change again until it returns a 1); 
+        
+        I am sorry that the variable time step method requires that the 
+        model author take careful account of events but I see no way 
+        to have them automatically taken care of. 
+        
 
  
 

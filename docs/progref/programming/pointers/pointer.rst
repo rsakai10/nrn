@@ -82,16 +82,30 @@ Pointer Class
 
 .. attribute:: Pointer.val
 
+    .. tab:: Python
 
-    Syntax:
-        ``x = ptr.val``
+        Syntax:
+            ``x = ptr.val``
 
-        ``ptr.val = expr``
+            ``ptr.val = expr``
 
 
-    Description:
-        Returns the value of the variable pointed to by ptr or, if the left 
-        hand side of an assignment, sets the value of the variable. See the example in the constructor.
+        Description:
+            Returns the value of the variable pointed to by ptr or, if the left 
+            hand side of an assignment, sets the value of the variable. See the example in the constructor.
+
+    .. tab:: HOC
+
+        Syntax:
+            ``x = ptr.val``
+
+            ``ptr.val = expr``
+
+
+        Description:
+            Returns the value of the variable pointed to by ptr or, if the left 
+            hand side of an assignment, sets the value of the variable. 
+
 
          
 

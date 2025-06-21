@@ -468,6 +468,40 @@ MechanismStandard (Parameter Control)
 
             Python support for this method was added in NEURON 7.5.
 
+    .. tab:: HOC
+
+        Syntax:
+            ``ms.in()``
+
+            :samp:`ms.in({x})`
+
+            :samp:`ms.in({pointprocess})`
+
+            :samp:`ms.in({mechanismstandard})`
+
+
+        Description:
+            copies parameter values into this mechanism standard from ... 
+
+
+            ``ms.in()`` 
+                the mechanism located in first segment of the currently accessed section. 
+
+            :samp:`ms.in({x})` 
+                the mechanism located in the segment containing x of the currently accessed section. 
+                (Note that x=0 and 1 are considered to lie in the 
+                0+ and 1- segments respectively so a proper iteration uses for(x, 0). 
+                See :ref:`for <hoc_keyword_for>`.
+
+            :samp:`ms.in({pointprocess})` 
+                the point process object 
+
+            :samp:`ms.in({mechanismstandard})` 
+                another mechanism standard 
+
+            If the source is not the same type as the standard then nothing happens. 
+
+
 ----
 
 

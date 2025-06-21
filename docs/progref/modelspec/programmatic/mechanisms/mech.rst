@@ -1645,108 +1645,77 @@ Mechanisms
 
 ----
 
-
-.. index::  setdata (mechanism)
-
-.. _mech_setdata:
-
-**setdata**
-
-    Syntax:
-        ``n.setdata_suffix(section(x))``
-
-    Deprecated for Python:
-        In Python one can use the syntax ``section(x).suffix.fname(args)`` to call a FUNCTION
-        or PROCEDURE regardless of whether the function uses RANGE variables.
-        
-    Description:
-        If a mechanism function is called that uses RANGE variables, then the 
-        appropriate data needed by the function must first be indicated via a setdata call. 
-        This is unnecessary if the function uses only GLOBAL variables. 
-        The suffix refers to the name of the mechanism. E.g. ``n.setdata_hh(soma(0.5)).`` 
-
-    .. warning::
-        The THREADSAFE mechanism case is a bit more complicated if the mechanism 
-        anywhere assigns a value to a GLOBAL variable. When the user explicitly 
-        specifies that a mechanism is THREADSAFE, those GLOBAL variables that 
-        anywhere appear on the left hand side of an assignment statement (and there 
-        is no such assignment with the PROTECT prefix) 
-        are actually 
-        thread specific variables. 
-        Hoc access to thread specific global variables is with respect to a static 
-        instance which is shared by 
-        the first thread in which mechanism actually exists. 
-
-         
-
-----
-
-
-.. index::  capacitance (mechanism)
-
-.. _mech_capacitance:
-
-**capacitance**
-
-
-    Syntax:
-        ``section.cm (uF/cm2)``
-
-        ``section.i_cap (mA/cm2)``
-
-
-    Description:
-        capacitance is a mechanism that automatically is inserted into every section. 
-        cm is a range variable with a default value of 1.0. 
-        i_cap is a range variable which contains the varying membrane capacitive current 
-        during a simulation. Note that i_cap is most accurate when a variable step 
-        integration method is used. 
-
-         
-
-----
-
-
 .. index::  hh (mechanism)
 
 .. _mech_hh:
-
+  
 **hh**
 
-
-    Syntax:
-        ``section.insert('hh')``
-
-        ``section.insert(n.hh)``
-
-
-    Description:
-        See `<nrn src dir>/src/nrnoc/hh.mod <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/hh.mod>`_
-         
-        Hodgkin-Huxley sodium, potassium, and leakage channels. Range variables 
-        specific to this model are: 
-
-        .. code-block::
-            none
-
-            hh.gnabarh  0.120 mho/cm2   Maximum specific sodium channel conductance 
-            hh.gkbar    0.036 mho/cm2   Maximum potassium channel conductance 
-            hh.gl       0.0003 mho/cm2  Leakage conductance 
-            hh.el       -54.3 mV        Leakage reversal potential 
-            hh.m                        sodium activation state variable 
-            hh.h                        sodium inactivation state variable 
-            hh.n                        potassium activation state variable 
-            hh.ina      mA/cm2          sodium current through the hh channels 
-            hh.ik       mA/cm2          potassium current through the hh channels 
-             
-            n.rates_hh(v) computes the global variables [mhn]inf_hh and [mhn]tau_hh 
-            from the rate functions. usetable_hh defaults to 1. 
-
-        This model used the na and k ions to read ena, ek and write ina, ik. 
-
-
+    .. tab:: Python
+        
+        
+            Syntax:
+                ``section.insert('hh')``
+        
+                ``section.insert(n.hh)``
+        
+        
+            Description:
+                See `<nrn src dir>/src/nrnoc/hh.mod <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/hh.mod>`_
+        
+                Hodgkin-Huxley sodium, potassium, and leakage channels. Range variables
+                specific to this model are:
+        
+                .. code-block::
+                    none
+        
+                    hh.gnabarh  0.120 mho/cm2   Maximum specific sodium channel conductance
+                    hh.gkbar    0.036 mho/cm2   Maximum potassium channel conductance
+                    hh.gl       0.0003 mho/cm2  Leakage conductance
+                    hh.el       -54.3 mV        Leakage reversal potential
+                    hh.m                        sodium activation state variable
+                    hh.h                        sodium inactivation state variable
+                    hh.n                        potassium activation state variable
+                    hh.ina      mA/cm2          sodium current through the hh channels
+                    hh.ik       mA/cm2          potassium current through the hh channels
+        
+                    n.rates_hh(v) computes the global variables [mhn]inf_hh and [mhn]tau_hh
+                    from the rate functions. usetable_hh defaults to 1.
+        
+                This model used the na and k ions to read ena, ek and write ina, ik.
+               
+    .. tab:: HOC
+                
+            Syntax:
+                ``insert hh``
+        
+        
+            Description:
+                See `<nrn src dir>/src/nrnoc/hh.mod <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/hh.mod>`_
+        
+                Hodgkin-Huxley sodium, potassium, and leakage channels. Range variables
+                specific to this model are:
+        
+                .. code-block::
+                    none
+        
+                    gnabar_hh   0.120 mho/cm2   Maximum specific sodium channel conductance
+                    gkbar_hh    0.036 mho/cm2   Maximum potassium channel conductance
+                    gl_hh       0.0003 mho/cm2  Leakage conductance
+                    el_hh       -54.3 mV        Leakage reversal potential
+                    m_hh                        sodium activation state variable
+                    h_hh                        sodium inactivation state variable
+                    n_hh                        potassium activation state variable
+                    ina_hh      mA/cm2          sodium current through the hh channels
+                    ik_hh       mA/cm2          potassium current through the hh channels
+        
+                    rates_hh(v) computes the global variables [mhn]inf_hh and [mhn]tau_hh
+                    from the rate functions. usetable_hh defaults to 1.
+        
+                This model used the na and k ions to read ena, ek and write ina, ik.
+        
+        
 ----
-
 
 .. index::  pas (mechanism)
 
@@ -1754,27 +1723,48 @@ Mechanisms
 
 **pas**
 
-    Syntax:
-        ``section.insert('pas')``
+    .. tab:: Python
 
-        ``section.insert(n.pas)``
+    
 
-        ``section(x).pas.g -- mho/cm2   conductance``
+        Syntax:
+            ``section.insert('pas')``
+    
+            ``section.insert(n.pas)``
+    
+            ``section(x).pas.g -- mho/cm2   conductance``
+    
+            ``section(x).pas.e -- mV                reversal potential``
+    
+            ``section(x).pas.i -- mA/cm2            non-specific current``
+    
+    
+        Description:
+            See `<nrn src dir>/src/nrnoc/passive.mod <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/passive.mod>`_
+    
+            Passive membrane channel.
+    
+    .. tab:: HOC
 
-        ``section(x).pas.e -- mV                reversal potential``
 
-        ``section(x).pas.i -- mA/cm2            non-specific current``
-
-
-    Description:
-        See `<nrn src dir>/src/nrnoc/passive.mod <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/passive.mod>`_
-         
-        Passive membrane channel. 
-
-
+    
+        Syntax:
+            ``insert pas``
+    
+            ``g_pas -- mho/cm2      conductance``
+    
+            ``e_pas -- mV           reversal potential``
+    
+            ``i -- mA/cm2           non-specific current``
+    
+    
+        Description:
+            See `<nrn src dir>/src/nrnoc/passive.mod <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/passive.mod>`_
+    
+            Passive membrane channel.
+        
+        
 ----
-
-
 
 .. index::  fastpas (mechanism)
 
@@ -1782,18 +1772,30 @@ Mechanisms
 
 **fastpas**
 
-        See `<nrn src dir>/src/nrnoc/passive0.c <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/passive0.c>`_
-         
-        Passive membrane channel. Same as the :ref:`pas <mech_pas>` mechanism but hand coded to 
-        be a bit faster (avoids the wasteful numerical derivative computation of 
-        the conductance and does not save the current). Generally not worth 
-        using since passive channel computations are not usually the rate limiting 
-        step of a simulation. 
-         
+    .. tab:: Python
 
+    
+            See `<nrn src dir>/src/nrnoc/passive0.c <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/passive0.c>`_
+    
+            Passive membrane channel. Same as the :ref:`pas <mech_pas>` mechanism but hand coded to
+            be a bit faster (avoids the wasteful numerical derivative computation of
+            the conductance and does not save the current). Generally not worth
+            using since passive channel computations are not usually the rate limiting
+            step of a simulation.
+        
+    .. tab:: HOC
+        
+
+            See `<nrn src dir>/src/nrnoc/passive0.cpp <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/passive0.cpp>`_
+    
+            Passive membrane channel. Same as the :ref:`pas <hoc_mech_pas>` mechanism but hand coded to
+            be a bit faster (avoids the wasteful numerical derivative computation of
+            the conductance and does not save the current). Generally not worth
+            using since passive channel computations are not usually the rate limiting
+            step of a simulation.
+        
+        
 ----
-
-
 
 .. index::  extracellular (mechanism)
 
@@ -1801,184 +1803,400 @@ Mechanisms
 
 **extracellular**
 
-    Syntax:
-        ``section.insert(n.extracellular)``
-
-        ``nlayer = n.nlayer_extracellular()``
-
-        ``nlayer = n.nlayer_extracellular(nlayer)``
-
-        ``.vext[nlayer] -- mV``
-
-        ``.i_membrane -- mA/cm2``
-
-        ``.xraxial[nlayer] -- MOhms/cm``
-
-        ``.xg[nlayer]   -- mho/cm2``
-
-        ``.xc[nlayer]   -- uF/cm2``
-
-        ``.extracellular.e -- mV``
-
-    Description:
-        By default, adds two layers of extracellular field to the section. Vext is 
-        solved simultaneously with the v. When the extracellular mechanism 
-        is present, v refers to the membrane potential and vext (i.e. vext[0]) 
-        refers to 
-        the extracellular potential just next to the membrane. Thus the 
-        internal potential is v+vext (but see Warning below). 
-         
-        This mechanism is useful for simulating the stimulation with 
-        extracellular electrodes, response in the presence of an extracellular 
-        potential boundary condition computed by some external program, leaky 
-        patch clamps, incomplete seals in the myelin sheath along with current 
-        flow in the space between the myelin and the axon. It is required 
-        when connecting :class:`LinearMechanism` (e.g. a circuit built with 
-        the :menuselection:`NEURON Main Menu --> Build --> Linear Circuit`) to extracellular nodes. 
-         
-        i_membrane correctly does not include contributions from ELECTRODE_CURRENT 
-        point processes. 
-
-        See i_membrane\_ at :meth:`CVode.use_fast_imem`. i_membrane\_
-        has units of nA instead of mA/cm2 (i.e. total membrane current
-        out of the segment) and so is available at 0 and 1 locations of
-        sections. It does not require that extracellular be inserted and so
-        results in much faster simulations. It works during parallel simulations
-        with variable step methods.
-         
-        The figure illustrates the form the electrical equivalent circuit 
-        when this mechanism is present. Note that previous documentation 
-        was incorrect in showing that extracellular.e was in series with 
-        the ``xg[nlayer-1],xc[nlayer-1]`` parallel combination. 
-        In fact it has always been the case 
-        that extracellular.e was in series with ``xg[nlayer-1]`` and ``xc[nlayer-1]``
-        was in parallel with that series combination. 
-         
-        .. note::
+    .. tab:: Python
         
-            The only reason for default nlayer=2 is so that when only a single 
-            layer is needed (the usual case), then extracellular.e is consistent 
-            with the previous documentation with the old default nlayer=1.
-            If you are not using both xc[0] > 0 and extracellular.e != 0 then
-            nlayer=1 is sufficient and faster than nlayer=2.
+        Syntax:
+            ``section.insert(n.extracellular)``
+    
+            ``nlayer = n.nlayer_extracellular()``
+    
+            ``nlayer = n.nlayer_extracellular(nlayer)``
+    
+            ``.vext[nlayer] -- mV``
+    
+            ``.i_membrane -- mA/cm2``
+    
+            ``.xraxial[nlayer] -- MOhms/cm``
+    
+            ``.xg[nlayer]   -- mho/cm2``
+    
+            ``.xc[nlayer]   -- uF/cm2``
+    
+            ``.extracellular.e -- mV``
+    
+        Description:
+            By default, adds two layers of extracellular field to the section. Vext is
+            solved simultaneously with the v. When the extracellular mechanism
+            is present, v refers to the membrane potential and vext (i.e. vext[0])
+            refers to
+            the extracellular potential just next to the membrane. Thus the
+            internal potential is v+vext (but see Warning below).
+    
+            This mechanism is useful for simulating the stimulation with
+            extracellular electrodes, response in the presence of an extracellular
+            potential boundary condition computed by some external program, leaky
+            patch clamps, incomplete seals in the myelin sheath along with current
+            flow in the space between the myelin and the axon. It is required
+            when connecting :class:`LinearMechanism` (e.g. a circuit built with
+            the :menuselection:`NEURON Main Menu --> Build --> Linear Circuit`) to extracellular nodes.
+    
+            i_membrane correctly does not include contributions from ELECTRODE_CURRENT
+            point processes.
+    
+            See i_membrane\_ at :meth:`CVode.use_fast_imem`. i_membrane\_
+            has units of nA instead of mA/cm2 (i.e. total membrane current
+            out of the segment) and so is available at 0 and 1 locations of
+            sections. It does not require that extracellular be inserted and so
+            results in much faster simulations. It works during parallel simulations
+            with variable step methods.
+    
+            The figure illustrates the form the electrical equivalent circuit
+            when this mechanism is present. Note that previous documentation
+            was incorrect in showing that extracellular.e was in series with
+            the ``xg[nlayer-1],xc[nlayer-1]`` parallel combination.
+            In fact it has always been the case
+            that extracellular.e was in series with ``xg[nlayer-1]`` and ``xc[nlayer-1]``
+            was in parallel with that series combination.
+    
+            .. note::
+    
+                The only reason for default nlayer=2 is so that when only a single
+                layer is needed (the usual case), then extracellular.e is consistent
+                with the previous documentation with the old default nlayer=1.
+                If you are not using both xc[0] > 0 and extracellular.e != 0 then
+                nlayer=1 is sufficient and faster than nlayer=2.
+    
+            The number of extracellular layers can be changed with the
+            n.nlayer_extracellular(nlayer) function. (Returns the current
+            number extracellular layers with or without the argument). The number
+            of layers can be changed only if there are no existing
+            extracellular mechanism instances in any section. Array limits
+            for xraxial, xc, xg, and vext are ``[0:nlayer]``. The minimum
+            value for nlayer is 1. Default values are xg[i] = 1e9, xc[i] = 0.0
+            xraxial[i] = 1e9, so all layers start out tightly connected to ground.
+    
+            With two layers the equivalent circuit looks like:
+    
+            .. code-block::
+                none
+    
+    
+                            Ra
+                o/`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'\o vext + v
+                        |          |          |          |
+                    ---        ---        ---        ---
+                    |   |      |   |      |   |      |   |
+                    ---        ---        ---        ---
+                        |          |          |          |
+                        |          |          |          |     i_membrane
+                        |  xraxial |          |          |
+                    /`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'vext
+                        |          |          |          |
+                    ---        ---        ---        ---     xc and xg
+                    |   |      |   |      |   |      |   |    in  parallel
+                    ---        ---        ---        ---
+                        |          |          |          |
+                        |          |          |          |
+                        |xraxial[1]|          |          |
+                    /`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'vext[1]
+                        |          |          |          |
+                    ---        ---        ---        ---     the series xg[1], e_extracellular
+                    |   |      |   |      |   |      |   |    combination is in parallel with
+                    |  ---     |  ---     |  ---     |  ---   the xc[1] capacitance. This is
+                    |   -      |   -      |   -      |   -    identical to a membrane with
+                    ---        ---        ---        ---     cm, g_pas, e_pas
+                        |          |          |          |
+                -------------------------------------------- ground
+    
+    
+    
+            Extracellular potentials do a great deal
+            of violence to one's intuition and it is important that the user
+            carefully consider the results of simulations that use them.
+            It is best to start out believing that there are bugs in the method
+            and attempt to prove their existence.
+    
+            See `<nrn src dir>/src/nrnoc/extcelln.c <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/extcell.c>`_
+            and `<nrn src dir>/examples/nrnoc/extcab*.hoc <https://github.com/neuronsimulator/nrn/blob/master/share/examples/nrniv/nrnoc>`_.
+    
+        .. warning::
+            xcaxial is also defined but is not implemented. If you need those
+            then add them with the :class:`LinearMechanism` .
+    
+            Prior versions of this document indicated that
+            e_extracellular is in series with the parallel (xc,xg)
+            pair. In fact it was in series with xg of the layer.
+            The above equivalent circuit has been changed to reflect the truth
+            about the implementation.
+    
+            In v4.3.1 2000/09/06 and before
+            vext(0) and vext(1) are the voltages at the centers of the first and
+            last segments instead of the zero area nodes.
+    
+            Now the above bug is fixed and
+            vext(0) and vext(1) are the voltages at the zero area nodes.
+    
+            From extcelln.c the comment is:
+    
+            .. code-block::
+                none
+    
+                        i_membrane = sav_g * ndlist[i]->v + sav_rhs;
+                #if 1
+                        /* i_membrane is a current density (mA/cm2). However
+                            it contains contributions from Non-ELECTRODE_CURRENT
+                            point processes. i_membrane(0) and i_membrane(1) will
+                            return the membrane current density at the points
+                            0.5/nseg and 1-0.5/nseg respectively. This can cause
+                            confusion if non-ELECTRODE_CURRENT point processes
+                            are located at these 0-area nodes since 1) not only
+                            is the true current density infinite, but 2) the
+                            correct absolute current is being computed here
+                                at the x=1 point but is not available, and 3) the
+                            correct absolute current at x=0 is not computed
+                            if the parent is a rootnode or there is no
+                            extracellular mechanism for the parent of this
+                            section. Thus, if non-ELECTRODE_CURRENT point processes
+                            eg synapses, are being used it is not a good idea to
+                            insert them at the points x=0 or x=1
+                        */
+                #else
+                            i_membrane *= ndlist[i]->area;
+                            /* i_membrane is nA for every segment. This is different
+                                from all other continuous mechanism currents and
+                                same as PointProcess currents since it contains
+                                non-ELECTRODE_CURRENT point processes and may
+                                be non-zero for the zero area nodes.
+                            */
+                #endif
+    
+    
+    
+    
+            In v4.3.1 2000/09/06 and before
+            extracellular layers will not be connected across sections unless
+            the parent section of the connection contains the extracellular
+            mechanism. This is because the 0 area node of the connection is
+            "owned" by the parent section. In particular, root nodes never contain
+            extracellular mechanisms and thus multiple sections connected to the
+            root node always appear to be extracellularly disconnected.
+            This bug has been fixed. However it is still the case that
+            vext(0) can be non-zero only if the section owning the 0 node has had
+            the extracellular mechanism inserted. It is best to have every section
+            in a cell contain the extracellular mechanism if any one of them does
+            to avoid confusion with regard to (the in fact correct) boundary conditions.
+    
 
-        The number of extracellular layers can be changed with the
-        n.nlayer_extracellular(nlayer) function. (Returns the current
-        number extracellular layers with or without the argument). The number
-        of layers can be changed only if there are no existing
-        extracellular mechanism instances in any section. Array limits
-        for xraxial, xc, xg, and vext are ``[0:nlayer]``. The minimum
-        value for nlayer is 1. Default values are xg[i] = 1e9, xc[i] = 0.0
-        xraxial[i] = 1e9, so all layers start out tightly connected to ground.
+    .. tab:: HOC
 
-        With two layers the equivalent circuit looks like: 
+        
+        Syntax:
+            ``insert extracellular``
+    
+            ``vext[2] -- mV``
+    
+            ``i_membrane -- mA/cm2``
+    
+            ``xraxial[2] -- MOhms/cm``
+    
+            ``xg[2] -- mho/cm2``
+    
+            ``xc[2] -- uF/cm2``
+    
+            ``e_extracellular -- mV``
+    
+    
+        Description:
+            Adds two layers of extracellular field to the section. Vext is
+            solved simultaneously with the v. When the extracellular mechanism
+            is present, v refers to the membrane potential and vext (i.e. vext[0])
+            refers to
+            the extracellular potential just next to the membrane. Thus the
+            internal potential is v+vext (but see BUGS).
+    
+            This mechanism is useful for simulating the stimulation with
+            extracellular electrodes, response in the presence of an extracellular
+            potential boundary condition computed by some external program, leaky
+            patch clamps, incomplete seals in the myelin sheath along with current
+            flow in the space between the myelin and the axon. It is required
+            when connecting :hoc:class:`LinearMechanism` (e.g. a circuit built with
+            the :menuselection:`NEURON Main Menu --> Build --> Linear Circuit`) to extracellular nodes.
+    
+            i_membrane correctly does not include contributions from ELECTRODE_CURRENT
+            point processes.
+    
+            See i_membrane\_ at :hoc:meth:`CVode.use_fast_imem`.
+    
+            The figure illustrates the form the electrical equivalent circuit
+            when this mechanism is present. Note that previous documentation
+            was incorrect in showing that e_extracellular was in series with
+            the ``xg[nlayer-1],xc[nlayer-1]`` parallel combination.
+            In fact it has always been the case
+            that e_extracellular was in series with xg[nlayer-1] and xc[nlayer-1]
+            was in parallel
+            with that series combination.
+    
+            .. note::
+    
+                The only reason the standard
+                distribution is built with nlayer=2 is so that when only a single
+                layer is needed (the usual case), then e_extracellular is consistent
+                with the previous documentation with the old default nlayer=1.
+    
+            e_extracellular is connected in series with the conductance of
+            the last extracellular layer.
+            With two layers the equivalent circuit looks like:
+    
+    
+            .. code-block::
+                none
+    
+    
+                            Ra
+                o/`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'\o vext + v
+                        |          |          |          |
+                    ---        ---        ---        ---
+                    |   |      |   |      |   |      |   |
+                    ---        ---        ---        ---
+                        |          |          |          |
+                        |          |          |          |     i_membrane
+                        |  xraxial |          |          |
+                    /`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'vext
+                        |          |          |          |
+                    ---        ---        ---        ---     xc and xg
+                    |   |      |   |      |   |      |   |    in  parallel
+                    ---        ---        ---        ---
+                        |          |          |          |
+                        |          |          |          |
+                        |xraxial[1]|          |          |
+                    /`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'vext[1]
+                        |          |          |          |
+                    ---        ---        ---        ---     the series xg[1], e_extracellular
+                    |   |      |   |      |   |      |   |    combination is in parallel with
+                    |  ---     |  ---     |  ---     |  ---   the xc[1] capacitance. This is
+                    |   -      |   -      |   -      |   -    identical to a membrane with
+                    ---        ---        ---        ---     cm, g_pas, e_pas
+                        |          |          |          |
+                -------------------------------------------- ground
+    
+    
+    
+            Extracellular potentials do a great deal
+            of violence to one's intuition and it is important that the user
+            carefully consider the results of simulations that use them.
+            It is best to start out believing that there are bugs in the method
+            and attempt to prove their existence.
+    
+            See `<nrn src dir>/src/nrnoc/extcell.cpp <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/extcell.cpp>`_
+            and `<nrn src dir>/share/examples/nrniv/nrnoc/extcab*.hoc <https://github.com/neuronsimulator/nrn/tree/master/share/examples/nrniv/nrnoc>`_.
+    
+            NEURON can be compiled with any number of extracellular layers.
+            See below.
+    
+        .. warning::
+            xcaxial is also defined but is not implemented. If you need those
+            then add them with the :hoc:class:`LinearMechanism` .
+    
+            Prior versions of this document indicated that
+            e_extracellular is in series with the parallel (xc,xg)
+            pair. In fact it was in series with xg of the layer.
+            The above equivalent circuit has been changed to reflect the truth
+            about the implementation.
+    
+            In v4.3.1 2000/09/06 and before
+            vext(0) and vext(1) are the voltages at the centers of the first and
+            last segments instead of the zero area nodes.
+    
+            Now the above bug is fixed and
+            vext(0) and vext(1) are the voltages at the zero area nodes.
+    
+            From extcell.c the comment is:
+    
+            .. code-block::
+                none
+    
+                        i_membrane = sav_g * ndlist[i]->v + sav_rhs;
+                #if 1
+                        /* i_membrane is a current density (mA/cm2). However
+                            it contains contributions from Non-ELECTRODE_CURRENT
+                            point processes. i_membrane(0) and i_membrane(1) will
+                            return the membrane current density at the points
+                            0.5/nseg and 1-0.5/nseg respectively. This can cause
+                            confusion if non-ELECTRODE_CURRENT point processes
+                            are located at these 0-area nodes since 1) not only
+                            is the true current density infinite, but 2) the
+                            correct absolute current is being computed here
+                                at the x=1 point but is not available, and 3) the
+                            correct absolute current at x=0 is not computed
+                            if the parent is a rootnode or there is no
+                            extracellular mechanism for the parent of this
+                            section. Thus, if non-ELECTRODE_CURRENT point processes
+                            eg synapses, are being used it is not a good idea to
+                            insert them at the points x=0 or x=1
+                        */
+                #else
+                            i_membrane *= ndlist[i]->area;
+                            /* i_membrane is nA for every segment. This is different
+                                from all other continuous mechanism currents and
+                                same as PointProcess currents since it contains
+                                non-ELECTRODE_CURRENT point processes and may
+                                be non-zero for the zero area nodes.
+                            */
+                #endif
+    
+    
+    
+    
+            In v4.3.1 2000/09/06 and before
+            extracellular layers will not be connected across sections unless
+            the parent section of the connection contains the extracellular
+            mechanism. This is because the 0 area node of the connection is
+            "owned" by the parent section. In particular, root nodes never contain
+            extracellular mechanisms and thus multiple sections connected to the
+            root node always appear to be extracellularly disconnected.
+            This bug has been fixed. However it is still the case that
+            vext(0) can be non-zero only if the section owning the 0 node has had
+            the extracellular mechanism inserted. It is best to have every section
+            in a cell contain the extracellular mechanism if any one of them does
+            to avoid confusion with regard to (the in fact correct) boundary conditions.
+    
+    
+    
+    
+        Syntax:
+            ``nrn/src/nrnoc/options.h``
+    
+            ``#define EXTRACELLULAR 2 /* number of extracellular layers */``
+    
+            ``insert extracellular``
+    
+            ``vext[i] -- mV``
+    
+            ``i_membrane -- mA/cm2``
+    
+            ``xraxial[i] -- MOhms/cm``
+    
+            ``xg[i] -- mho/cm2``
+    
+            ``xc[i] -- uF/cm2``
+    
+            ``e_extracellular -- mV``
+    
+    
+    
+        Description:
+            If other than 2 extracellular layers is desired, you may recompile the
+            program by changing the :file:`nrn/src/nrnoc/options.h` line
+            ``#define EXTRACELLULAR 2``
+            to the number of layers desired. Be sure to recompile both nrnoc and nrniv
+            as well as any user defined .mod files that use the ELECTRODE_CURRENT statement.
+    
+            Note that vext is a synonym in hoc for vext[0]. Since the default value for
+            xg[i] = 1e9 all layers start out tightly connected to ground so
+            previous single layer extracellular simulations should produce the same
+            results if either xc or e_extracellular was 0.
+    
+            e_extracellular is connected in series with the conductance of
+            the last extracellular layer.
 
-        .. code-block::
-            none
-
-             
-                      Ra                 
-            o/`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'\o vext + v 
-                 |          |          |          |      
-                ---        ---        ---        --- 
-               |   |      |   |      |   |      |   | 
-                ---        ---        ---        --- 
-                 |          |          |          |      
-                 |          |          |          |     i_membrane      
-                 |  xraxial |          |          | 
-             /`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'vext 
-                 |          |          |          |      
-                ---        ---        ---        ---     xc and xg 
-               |   |      |   |      |   |      |   |    in  parallel 
-                ---        ---        ---        --- 
-                 |          |          |          |      
-                 |          |          |          |      
-                 |xraxial[1]|          |          |      
-             /`--o--'\/\/`--o--'\/\/`--o--'\/\/`--o--'vext[1] 
-                 |          |          |          |      
-                ---        ---        ---        ---     the series xg[1], e_extracellular 
-               |   |      |   |      |   |      |   |    combination is in parallel with 
-               |  ---     |  ---     |  ---     |  ---   the xc[1] capacitance. This is 
-               |   -      |   -      |   -      |   -    identical to a membrane with 
-                ---        ---        ---        ---     cm, g_pas, e_pas 
-                 |          |          |          |      
-            -------------------------------------------- ground 
-             
-
-         
-        Extracellular potentials do a great deal 
-        of violence to one's intuition and it is important that the user 
-        carefully consider the results of simulations that use them. 
-        It is best to start out believing that there are bugs in the method 
-        and attempt to prove their existence. 
-
-        See `<nrn src dir>/src/nrnoc/extcelln.c <https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/extcell.c>`_
-        and `<nrn src dir>/examples/nrnoc/extcab*.hoc <https://github.com/neuronsimulator/nrn/blob/master/share/examples/nrniv/nrnoc>`_.
-         
-    .. warning::
-        xcaxial is also defined but is not implemented. If you need those 
-        then add them with the :class:`LinearMechanism` . 
-         
-        Prior versions of this document indicated that 
-        e_extracellular is in series with the parallel (xc,xg) 
-        pair. In fact it was in series with xg of the layer. 
-        The above equivalent circuit has been changed to reflect the truth 
-        about the implementation. 
-         
-        In v4.3.1 2000/09/06 and before 
-        vext(0) and vext(1) are the voltages at the centers of the first and 
-        last segments instead of the zero area nodes. 
-         
-        Now the above bug is fixed and 
-        vext(0) and vext(1) are the voltages at the zero area nodes. 
-         
-        From extcelln.c the comment is: 
-
-        .. code-block::
-            none
-
-                    i_membrane = sav_g * ndlist[i]->v + sav_rhs; 
-            #if 1 
-                    /* i_membrane is a current density (mA/cm2). However   
-                       it contains contributions from Non-ELECTRODE_CURRENT 
-                       point processes. i_membrane(0) and i_membrane(1) will 
-                       return the membrane current density at the points 
-                       0.5/nseg and 1-0.5/nseg respectively. This can cause 
-                       confusion if non-ELECTRODE_CURRENT point processes 
-                       are located at these 0-area nodes since 1) not only 
-                       is the true current density infinite, but 2) the  
-                       correct absolute current is being computed here  
-                         at the x=1 point but is not available, and 3) the  
-                       correct absolute current at x=0 is not computed 
-                       if the parent is a rootnode or there is no 
-                       extracellular mechanism for the parent of this 
-                       section. Thus, if non-ELECTRODE_CURRENT point processes 
-                       eg synapses, are being used it is not a good idea to 
-                       insert them at the points x=0 or x=1 
-                    */ 
-            #else 
-                       i_membrane *= ndlist[i]->area; 
-                       /* i_membrane is nA for every segment. This is different 
-                          from all other continuous mechanism currents and 
-                          same as PointProcess currents since it contains 
-                          non-ELECTRODE_CURRENT point processes and may 
-                          be non-zero for the zero area nodes. 
-                       */ 
-            #endif 
-             
-
-         
-         
-        In v4.3.1 2000/09/06 and before 
-        extracellular layers will not be connected across sections unless 
-        the parent section of the connection contains the extracellular 
-        mechanism. This is because the 0 area node of the connection is 
-        "owned" by the parent section. In particular, root nodes never contain 
-        extracellular mechanisms and thus multiple sections connected to the 
-        root node always appear to be extracellularly disconnected. 
-        This bug has been fixed. However it is still the case that 
-        vext(0) can be non-zero only if the section owning the 0 node has had 
-        the extracellular mechanism inserted. It is best to have every section 
-        in a cell contain the extracellular mechanism if any one of them does 
-        to avoid confusion with regard to (the in fact correct) boundary conditions. 
 

@@ -285,3 +285,37 @@ Redirect Standard Out
         .. note::
 
             Despite the misleading name, this redirects standard out from both Python and HOC.
+
+    .. tab:: HOC
+
+        Syntax:
+            :samp:`hoc_stdout("{filename}")`
+
+            ``hoc_stdout()``
+
+
+        Description:
+            With a filename argument, switches the original standard out to filename. 
+            With no arguments. switches current standard out back to original filename. 
+            
+            Only one level of switching allowed. Switching back to original causes 
+            future output to append to the stdout. Switching to "filename" writes 
+            stdout from the beginning of the file. 
+
+        Example:
+
+            .. code-block::
+                none
+
+                proc p() { 
+                    print "one" // to original standard out 
+                        hoc_stdout("temp.tmp") 
+                        print "two" // to temp.tmp 
+                    forall psection() // to temp.tmp 
+                        hoc_stdout() 
+                        print "three" // to original standard out 
+                } 
+                p() 
+
+
+

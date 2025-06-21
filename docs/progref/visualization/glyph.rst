@@ -93,6 +93,16 @@ Glyph
         Description:
             Begin a new path. 
 
+    .. tab:: HOC
+
+        Syntax:
+            ``g = g.path()``
+
+
+        Description:
+            Begin a new path. 
+
+
          
 
 ----
@@ -111,7 +121,15 @@ Glyph
         Description:
             Set the current point to the coordinates. 
 
-         
+    .. tab:: HOC
+
+        Syntax:
+            ``g = g.m(x, y)``
+
+
+        Description:
+            Set the current point to the coordinates.
+            
 
 ----
 
@@ -122,6 +140,15 @@ Glyph
     .. tab:: Python
     
     
+        Syntax:
+            ``g = g.l(x, y)``
+
+
+        Description:
+            A line from the current point to the coordinates. 
+
+    .. tab:: HOC
+
         Syntax:
             ``g = g.l(x, y)``
 
@@ -145,7 +172,16 @@ Glyph
 
 
         Description:
-            Draw a curve from the current point to x,y 
+            Draw a curve from the current point to x,y
+
+    .. tab:: HOC
+
+        Syntax:
+            ``g = g.curve(x,y, x1,y1, x2,y2)``
+
+
+        Description:
+            Draw a curve from the current point to x,y  
 
          
 
@@ -165,6 +201,14 @@ Glyph
         Description:
             A line from the current point to the first point of the path. 
 
+    .. tab:: HOC
+
+        Syntax:
+            ``g = g.close()``
+
+
+        Description:
+            A line from the current point to the first point of the path. 
          
 
 ----
@@ -238,8 +282,20 @@ Glyph
         Description:
             Render the current path as a line. 
 
-         
+    .. tab:: HOC
 
+        Syntax:
+            ``g = g.s()``
+
+            ``g = g.s(colorindex)``
+
+            ``g = g.s(colorindex, brushindex)``
+
+
+        Description:
+            Render the current path as a line. 
+
+         
 ----
 
 
@@ -290,6 +346,18 @@ Glyph
             Draw a small open rectangle at the coordinates. Intended to indicate 
             special locations on the glyph which can be selected. Not very useful 
             at this time. 
+
+    .. tab:: HOC
+
+        Syntax:
+            ``g = g.cpt(x,y)``
+
+
+        Description:
+            Draw a small open rectangle at the coordinates. Intended to indicate 
+            special locations on the glyph which can be selected. Not very useful 
+            at this time. 
+
 
          
 

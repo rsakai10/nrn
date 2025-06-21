@@ -2090,8 +2090,45 @@ summer webinar series is available :ref:`here<parallel-neuron-sims-2021-07-13>`.
             It does not include gap junction voltage transfer time or multisplit
             communication time.
         
+
 ----
 
+.. method:: ParallelContext.step_wait
+
+    .. tab:: HOC
+        
+        Syntax:
+            ``total = pc.step_wait()``
+
+            ``0 = pc.step_wait(-1)``
+
+
+        Description:
+            The barrier time (seconds) between the end of a step and the
+            beginning of spike exchange. Note that pc.wait_time() includes
+            this barrier time. step_wait is useful in calculating a more
+            accurate load balance (properly reduced by dynamic load imbalance)
+            and a better statistic for spike exchange communication time.
+            
+            The barrier overhead during a simulation can be turned off with
+            pc.step_wait(-1) in which case the time spent in
+            allgather spike exchange will include that barrier time. In this case
+            pc.step_wait() will return 0.0 . 
+
+            Prior to the existence of this function, load balance was generally
+            computed as (average step_time / maximum step_time). That is accurate
+            to the extent that each individual step on a given process takes
+            constant time but fails to the extent that there is significant
+            dynamic variation in a dt step on a given process during a run (e.g
+            a lot of variation in the number of spikes delivered per time step).
+
+            A better evaluation of load balance (accounting for dynamic load
+            imbalance as well as static load imbalance) is
+            (average step_time / maximum (step_time + step_wait))
+
+            Note that if static load imbalance dominates the load imbalance,
+            then one expects the minimum step_wait to be close to 0.
+----
 
 
 .. method:: ParallelContext.send_time
@@ -5896,104 +5933,161 @@ Parallel Transfer
 
 ..  method:: ParallelContext.nrncore_write
 
-    Syntax:
-        ``pc.nrncore_write([path[, append_files_dat]])``
+    .. tab:: Python
 
-    Description:
-        Writes files describing the existing model in such a way that those
-        files can be read by CoreNEURON to simulate the model and produce
-        exactly the same results as if the model were simulated in NEURON.
+        Syntax:
+            ``pc.nrncore_write([path[, append_files_dat]])``
 
-        The files are written in the directory specified by the path argument
-        (default '.').
+        Description:
+            Writes files describing the existing model in such a way that those
+            files can be read by CoreNEURON to simulate the model and produce
+            exactly the same results as if the model were simulated in NEURON.
 
-        Rank 0 writes a file called bbcore_mech.dat (into path) which lists
-        all the membrane mechanisms in ascii format of:
+            The files are written in the directory specified by the path argument
+            (default '.').
 
-        name type pointtype artificial is_ion param_size dparam_size charge_if_ion
+            Rank 0 writes a file called bbcore_mech.dat (into path) which lists
+            all the membrane mechanisms in ascii format of:
 
-        At the end of the bbcore_mech.dat file is a binary value that is
-        used by the CoreNEURON reader to determine if byteswapping is needed
-        in case of machine endianness difference between writing and reading.
+            name type pointtype artificial is_ion param_size dparam_size charge_if_ion
 
-        Each rank also writes pc.nthread() pairs of model data files containing
-        mixed ascii and binary data that completely defines the model
-        specification within a thread, The pair of files in each thread are
-        named <gidgroup>_1.dat and <gidgroup>_2.dat  where gidgroup is one
-        of the gids in the thread (the files contain data for all the gids
-        in a thread). <gidgroup>_1.dat contains network topology data and
-        <gidgroup>_2.dat contains all the data needed to actually construct
-        the cells and synapses and specify connection weights and delays.
+            At the end of the bbcore_mech.dat file is a binary value that is
+            used by the CoreNEURON reader to determine if byteswapping is needed
+            in case of machine endianness difference between writing and reading.
 
-        If the second argument does not exist or has a value of False (or 0),
-        rank 0 writes a "files.dat" file with version string, a -1
-        indicator if there are gap junctions, and a integer value that
-        specifies the total number of gidgroups followed by one gidgroup value per
-        line for all threads of all ranks.
+            Each rank also writes pc.nthread() pairs of model data files containing
+            mixed ascii and binary data that completely defines the model
+            specification within a thread, The pair of files in each thread are
+            named <gidgroup>_1.dat and <gidgroup>_2.dat  where gidgroup is one
+            of the gids in the thread (the files contain data for all the gids
+            in a thread). <gidgroup>_1.dat contains network topology data and
+            <gidgroup>_2.dat contains all the data needed to actually construct
+            the cells and synapses and specify connection weights and delays.
 
-        If the model is too large to exist in NEURON (models typcially use
-        an order of magnitude less memory in CoreNEURON) the model can
+            If the second argument does not exist or has a value of False (or 0),
+            rank 0 writes a "files.dat" file with version string, a -1
+            indicator if there are gap junctions, and a integer value that
+            specifies the total number of gidgroups followed by one gidgroup value per
+            line for all threads of all ranks.
+
+            If the model is too large to exist in NEURON (models typcially use
+            an order of magnitude less memory in CoreNEURON) the model can
+            be constructed in NEURON as a series of submodels.
+            When one submodel is constructed
+            on each rank, this function can be called with a second argument
+            with a value of True (or nonzero) which signals that the existing
+            files.dat file should have its n_gidgroups line updated
+            and the pc.nthread() gidgroup values for each rank should be
+            appended to the files.dat file. Note that one can either create
+            submodels sequentially within a single launch, though that requires
+            a "teardown" function to destroy the model in preparation for building
+            the next submodel, or sequentially create the submodels as a series
+            of separate launches. A user written "teardown" function should,
+            in order, free all gids with :func:`gid_clear` , arrange for all
+            NetCon to be freed, and arrange for all Sections to be destroyed.
+            These latter two are straightforward if the submodel is created as
+            an instance of a class. An example of sequential build, nrncore_write,
+            teardown is the test_submodel.py in
+            http://github.com/neuronsimulator/ringtest.
+
+            Multisplit is not supported.
+            The model cannot be more complicated than a spike or gap
+            junction coupled parallel network model of real and artificial cells.
+            Real cells must have gids, Artificial cells without gids connect
+            only to cells in the same thread. No POINTER to data outside of the
+            thread that holds the pointer. 
+        
+    .. tab:: HOC
+
+        Syntax:
+        ``pc.nrnbbcore_write([path[, gidgroup_vec]])``
+
+        Description:
+            Writes files describing the existing model in such a way that those
+            files can be read by CoreNEURON to simulate the model and produce
+            exactly the same results as if the model were simulated in NEURON.
+
+            The files are written in the directory specified by the path argument
+            (default '.').
+
+            Rank 0 writes a file called ``bbcore_mech.dat`` (into path) which lists
+            all the membrane mechanisms in ascii format of:
+
+            name type pointtype artificial is_ion param_size dparam_size charge_if_ion
+
+            At the end of the ``bbcore_mech.dat`` file is a binary value that is
+            used by the CoreNEURON reader to determine if byteswapping is needed
+            in case of machine endianness difference between writing and reading.
+
+            Each rank also writes ``pc.nthread()`` pairs of model data files containing
+            mixed ascii and binary data that completely defines the model
+            specification within a thread, The pair of files in each thread are
+            named <gidgroup>_1.dat and <gidgroup>_2.dat  where gidgroup is one
+            of the gids in the thread (the files contain data for all the gids
+            in a thread). <gidgroup>_1.dat contains network topology data and
+            <gidgroup>_2.dat contains all the data needed to actually construct
+            the cells and synapses and specify connection weights and delays.
+
+            If the second argument does not exist, 
+            rank 0 writes a "files.dat" file with a first value that
+        specifies the total number of gidgroups and one gidgroup value per
+            line for all threads of all ranks.
+
+            If the model is too large to exist in NEURON (models typcially use
+            an order of magnitude less memory in CoreNEURON) the model can
         be constructed in NEURON as a series of submodels.
-        When one submodel is constructed
-        on each rank, this function can be called with a second argument
-        with a value of True (or nonzero) which signals that the existing
-        files.dat file should have its n_gidgroups line updated
-        and the pc.nthread() gidgroup values for each rank should be
-        appended to the files.dat file. Note that one can either create
-        submodels sequentially within a single launch, though that requires
-        a "teardown" function to destroy the model in preparation for building
-        the next submodel, or sequentially create the submodels as a series
-        of separate launches. A user written "teardown" function should,
-        in order, free all gids with :func:`gid_clear` , arrange for all
-        NetCon to be freed, and arrange for all Sections to be destroyed.
-        These latter two are straightforward if the submodel is created as
-        an instance of a class. An example of sequential build, nrncore_write,
-        teardown is the test_submodel.py in
-        http://github.com/neuronsimulator/ringtest.
+            When one piece is constructed
+            on each rank, this function can be called with a second argument which
+            must be a Vector. In this case, rank 0 will NOT write a files.dat
+            and instead the ``pc.nthread()`` gidgroup values for the rank will be
+            returned in the :class:`Vector`. 
 
-        Multisplit is not supported.
-        The model cannot be more complicated than a spike or gap
-        junction coupled parallel network model of real and artificial cells.
-        Real cells must have gids, Artificial cells without gids connect
-        only to cells in the same thread. No POINTER to data outside of the
-        thread that holds the pointer. 
+            Multisplit is not supported.
+            The model cannot be more complicated than a spike or gap
+            junction coupled parallel network model of real and artificial cells.
+            Real cells must have gids, Artificial cells without gids connect
+            only to cells in the same thread. No POINTER to data outside of the
+            thread that holds the pointer. 
+
 
 ----
 
 ..  method:: ParallelContext.nrncore_run
 
-    Syntax:
-        ``pc.nrncore_run(argstr, [bool])``
+    .. tab:: Python
 
-    Description:
-        Run the model using CoreNEURON in online (direct transfer) mode
-        using the arguments specified in
-        argstr. If the optional second arg, bool, default 0, is 1, then
-        trajectory values are sent back to NEURON on every time step to allow
-        incremental plotting of Graph lines. Otherwise, trajectories are
-        buffered and sent back at the end of the run. In any case, all
-        variables and event queue state are copied back to NEURON at the end
-        of the run as well as spike raster data.
+        Syntax:
+            ``pc.nrncore_run(argstr, [bool])``
 
-        This method is not generally used since running a model using CoreNEURON
-        in online mode is easier with the idiom:
+        Description:
+            Run the model using CoreNEURON in online (direct transfer) mode
+            using the arguments specified in
+            argstr. If the optional second arg, bool, default 0, is 1, then
+            trajectory values are sent back to NEURON on every time step to allow
+            incremental plotting of Graph lines. Otherwise, trajectories are
+            buffered and sent back at the end of the run. In any case, all
+            variables and event queue state are copied back to NEURON at the end
+            of the run as well as spike raster data.
 
-        .. code-block:: python
+            This method is not generally used since running a model using CoreNEURON
+            in online mode is easier with the idiom:
 
-            from neuron import n, gui
-            pc = n.ParallelContext()
-            # construct model ...
+            .. code-block:: python
 
-            # run model
-            from neuron import coreneuron
-            coreneuron.enable = True
-            n.stdinit()
-            pc.psolve(n.tstop)
+                from neuron import n, gui
+                pc = n.ParallelContext()
+                # construct model ...
 
-        In this case, :func:`psolve`, uses ``nrncore_run`` behind the scenes
-        with the argstr it gets from ``coreneuron.nrncore_arg(n.tstop)``
-        which is ``" --tstop 5 --cell-permute 1 --verbose 2 --voltage 1000."``
+                # run model
+                from neuron import coreneuron
+                coreneuron.enable = True
+                n.stdinit()
+                pc.psolve(n.tstop)
 
-        CoreNEURON in online mode does not do the
-        equivalent :func:`finitialize`
-        but relies on NEURON's initialization of states and event queue.
+            In this case, :func:`psolve`, uses ``nrncore_run`` behind the scenes
+            with the argstr it gets from ``coreneuron.nrncore_arg(n.tstop)``
+            which is ``" --tstop 5 --cell-permute 1 --verbose 2 --voltage 1000."``
+
+            CoreNEURON in online mode does not do the
+            equivalent :func:`finitialize`
+            but relies on NEURON's initialization of states and event queue.

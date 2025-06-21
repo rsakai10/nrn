@@ -5,33 +5,134 @@ Basic Reaction-Diffusion
 
 Overview
 --------
-NEURON provides the ``rxd`` submodule to simplify and standardize the specification of
-models incorporating reaction-diffusion dynamics, including ion accumulation. To load
-this module, use:
 
-.. code::
-    python
+    .. tab:: Python
 
-    from neuron import rxd
+        NEURON provides the ``rxd`` submodule to simplify and standardize the specification of
+        models incorporating reaction-diffusion dynamics, including ion accumulation. To load
+        this module, use:
 
-Note: In older code, you may find ``from neuron import crxd as rxd`` but this is equivalent to the above as ``crxd`` has been an alias for ``rxd`` for several years.
+        .. code::
+            python
 
-In general, a reaction-diffusion model specification involves answering three conceptual questions:
+            from neuron import rxd
 
-1. :ref:`Where <rxd_where>` the dynamics are occurring (specified using an :class:`rxd.Region` or :class:`rxd.Extracellular`)
-2. :ref:`Who <rxd_who>` is involved (specified using an :class:`rxd.Species` or :class:`rxd.State`)
-3. :ref:`What <rxd_what>` the reactions are (specified using :class:`rxd.Reaction`, :class:`rxd.Rate`, or :class:`rxd.MultiCompartmentReaction`)
+        Note: In older code, you may find ``from neuron import crxd as rxd`` but this is equivalent to the above as ``crxd`` has been an alias for ``rxd`` for several years.
 
-Another key class is :class:`rxd.Parameter` for defining spatially varying parameters.
-Integration options may be specified using :func:`rxd.set_solve_type`.
+        In general, a reaction-diffusion model specification involves answering three conceptual questions:
 
-Related resources
-~~~~~~~~~~~~~~~~~
+        1. :ref:`Where <rxd_where>` the dynamics are occurring (specified using an :class:`rxd.Region` or :class:`rxd.Extracellular`)
+        2. :ref:`Who <rxd_who>` is involved (specified using an :class:`rxd.Species` or :class:`rxd.State`)
+        3. :ref:`What <rxd_what>` the reactions are (specified using :class:`rxd.Reaction`, :class:`rxd.Rate`, or :class:`rxd.MultiCompartmentReaction`)
 
-See also our `reaction-diffusion tutorials <../../../rxd-tutorials/index.html>`_,
-the discussion about :ref:`ion accumulation <ion_channel_accumulation_bio_faq>` and
-:ref:`ion diffusion <ion_diffusion_bio_faq>`, and the 2021 NetPyNE course
-:ref:`lecture and exercise <netpyne_neuron_rxd_video>` videos on reaction-diffusion in NEURON.
+        Another key class is :class:`rxd.Parameter` for defining spatially varying parameters.
+        Integration options may be specified using :func:`rxd.set_solve_type`.
+
+
+        Related resources
+        ~~~~~~~~~~~~~~~~~
+
+        See also our `reaction-diffusion tutorials <../../../rxd-tutorials/index.html>`_,
+        the discussion about :ref:`ion accumulation <ion_channel_accumulation_bio_faq>` and
+        :ref:`ion diffusion <ion_diffusion_bio_faq>`, and the 2021 NetPyNE course
+        :ref:`lecture and exercise <netpyne_neuron_rxd_video>` videos on reaction-diffusion in NEURON.
+
+    .. tab:: HOC
+
+        NEURON provides the ``rxd`` submodule to simplify and standardize the specification of
+        models incorporating reaction-diffusion dynamics, including ion accumulation. 
+        The interface is implemented using Python, however as long as Python is available to
+        NEURON, reaction-diffusion dynamics may be specified using HOC.
+
+        We can access the ``rxd`` module in HOC via:
+
+        .. code::
+            hoc
+
+            objref pyobj, h, rxd
+
+            {
+                // load reaction-diffusion support and get convenient handles
+                nrnpython("from neuron import n, rxd")
+                pyobj = new PythonObject()
+                rxd = pyobj.rxd
+                h = pyobj.h
+            }
+
+        The above additionally provides access to an object called ``n`` which is traditionally
+        how Python accesses core NEURON functionality (e.g. in Python one would use n. :class:`Vector`
+        instead of :hoc:class:`Vector`). You might not need to use ``n`` since when working in HOC,
+        but it does provide certain convenient functions like :func:`n.allsec`, which returns
+        an iterable of all sections usable with ``rxd`` without  having to explicitly construct
+        a :hoc:class:`SectionList`.
+
+        The main gotchas of using rxd in HOC is that (1) ``rxd`` in Python uses operator overloading to 
+        specify reactants and products; in HOC, one must use ``__add__``, etc instead.
+        (2) rxd in Python is usually used with keyword arguments; in HOC, everything must be 
+        specified using positional notation.
+
+        Here's a full working example that simulates a calcium buffering reaction: 
+        ``Ca + Buf <> CaBuf``:
+
+        .. code::
+            hoc
+
+            objref pyobj, h, rxd, cyt, ca, buf, cabuf, buffering, g
+
+            {
+                // load reaction-diffusion support and get convenient handles
+                nrnpython("from neuron import n, rxd")
+                pyobj = new PythonObject()
+                rxd = pyobj.rxd
+                h = pyobj.h
+            }
+
+            {
+                // define the domain and the dynamics
+                create soma
+                
+                cyt = rxd.Region(n.allsec(), "i")
+                ca = rxd.Species(cyt, 0, "ca", 2, 1)
+                buf = rxd.Species(cyt, 0, "buf", 0, 1)
+                cabuf = rxd.Species(cyt, 0, "cabuf", 0, 0)
+
+                buffering = rxd.Reaction(ca.__add__(buf), cabuf, 1, 0.1)
+            }
+
+            {
+                // if launched with nrniv, we need this to get graph to update automatically
+                // and to use run()
+                load_file("stdrun.hoc")
+            }
+
+            {
+                // define the graph
+                g = new Graph()
+                g.addvar("ca", &soma.cai(0.5), 1, 1)
+                g.addvar("cabuf", &soma.cabufi(0.5), 2, 1)
+                g.size(0, 10, 0, 1)
+                graphList[0].append(g)
+            }
+
+            {
+                // run the simulation
+                tstop = 20
+                run()
+            }
+
+        In particular, note that instead of ``ca + buf`` one must write
+        ``ca.__add__(buf)``.
+
+
+        In general, a reaction-diffusion model specification involves answering three conceptual questions:
+
+        1. :ref:`Where <hoc_rxd_where>` the dynamics are occurring (specified using an :class:`rxd.Region` or :class:`rxd.Extracellular`)
+        2. :ref:`Who <hoc_rxd_who>` is involved (specified using an :class:`rxd.Species` or :class:`rxd.State`)
+        3. :ref:`What <hoc_rxd_what>` the reactions are (specified using :class:`rxd.Reaction`, :class:`rxd.Rate`, or :class:`rxd.MultiCompartmentReaction`)
+
+        Another key class is :class:`rxd.Parameter` for defining spatially varying parameters.
+        Integration options may be specified using :func:`rxd.set_solve_type`.
+
 
 .. _rxd_where:
 

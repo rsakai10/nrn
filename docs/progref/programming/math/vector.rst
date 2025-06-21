@@ -4534,6 +4534,33 @@ Vector
                 print(np_vec)  # [  0.  11.  22.   3.   4.]
                 v.printf()  # 0     11      22      3       4
 
+    .. tab:: HOC
+
+        Syntax:
+            ``numpyarray = vec.as_numpy()``
+
+
+        Description:
+            The numpyarray points into the data of the Hoc Vector, i.e. does not
+            copy the data. Do not
+            use the numpyarray if the Vector is destroyed.
+
+
+        Example:
+
+            .. code-block::
+                python
+
+                from neuron import n
+                v = n.Vector(5).indgen()
+                v_np = v.as_numpy()
+                print(v_np)  # [0.  1.  2.  3.  4.]
+                v.x[1] += 10
+                v_np[2] += 20
+                print(v_np)  # [  0.  11.  22.   3.   4.]
+                v.printf()  #0	11	22	3	4
+
+
 
 ----
 
