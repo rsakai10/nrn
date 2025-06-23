@@ -194,10 +194,7 @@ LinearMechanism
         
         
             ``lm = new LinearMechanism(c, g, y, [y0], b, sl, xvec, [layervec])``
-        
-        
-            ``lm = new LinearMechanism(pycallable, c, g, y, ...)``
-        
+                
         
         Description:
             Adds linear equations to the tree matrix current balance equations. 
@@ -314,81 +311,4 @@ LinearMechanism
               disappear. 
         
         
-        Description (continued):
-            If the pycallable argument (A Python Callable object) is present
-            it is called just before the b Vector is used during a simulation. The
-            callable can change the elements of b and g (but do not introduce new
-            elements into g) as a function of time and states. It may be useful for
-            stability and performance to place the linearized part of b into g.
-            Consider the following pendulum.py with equations 
         
-        
-        Example:
-        
-        
-            .. math::
-        
-        
-                    \frac{d\theta}{dt} = \omega
-        
-        
-            .. math::
-        
-        
-                    \frac{d\omega}{dt} = -\frac{g}{L} \sin(\theta) \text{ with } \frac{g}{L}=1 
-        
-        
-            .. code-block::
-                python
-        
-        
-                from neuron import n
-                from math import sin
-        
-        
-                n.load_file('nrngui.hoc')
-        
-        
-                cmat = n.Matrix(2,2,2).ident()
-        
-        
-                gmat = n.Matrix(2,2,2)
-                gmat.setval(0,1, -1)
-        
-        
-                y = n.Vector(2)
-                y0 = n.Vector(2)
-                b = n.Vector(2)
-        
-        
-                def callback():
-                  b.x[1] = -sin(y.x[0])
-        
-        
-                nlm = n.LinearMechanism(callback, cmat, gmat, y, y0, b)
-        
-        
-                dummy = n.Section()
-                trajec = n.Vector()
-                tvec = n.Vector()
-                trajec.record(y._ref_x[0])
-                tvec.record(n._ref_t)
-        
-        
-                graph = n.Graph()
-                n.tstop=50
-        
-        
-                def prun(theta0, omega0):
-                  graph.erase()
-                  y0.x[0] = theta0
-                  y0.x[1] = omega0
-                  n.run()
-                  trajec.line(graph, tvec)
-        
-        
-                n.dt /= 10
-                n.cvode.atol(1e-5)
-                n.cvode_active(1)
-                prun(0, 1.9999) # 2.0001 will keep it rotating
-                graph.exec_menu("View = plot")
