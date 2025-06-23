@@ -173,33 +173,38 @@ def git_process(process_dir, branch_name="merge-hoc-python-docs", commit_message
         subprocess.run(["git", "push", "--set-upstream", "origin", branch_name], check=True)
         print("✅ Push complete.")
 
-if __name__ == "__main__":
-    process_dir = "visualization"
-    rst_hoc_dir = f"docs/hoc/{process_dir}"
-    hoc_directives_dir = "has_hoc_directives" # os.path.join(rst_hoc_dir, "has_hoc_directives")
-    py_dir = f"docs/python/{process_dir}"
-    out_dir = f"docs/progref/{process_dir}"
-    os.makedirs(hoc_directives_dir, exist_ok=True)
-    os.makedirs(out_dir, exist_ok=True)
+# if __name__ == "__main__":
+#     process_dir = "visualization"
+#     rst_hoc_dir = f"docs/hoc/{process_dir}"
+#     hoc_directives_dir = "has_hoc_directives" # os.path.join(rst_hoc_dir, "has_hoc_directives")
+#     py_dir = f"docs/python/{process_dir}"
+#     out_dir = f"docs/progref/{process_dir}"
+#     os.makedirs(hoc_directives_dir, exist_ok=True)
+#     os.makedirs(out_dir, exist_ok=True)
 
-    scan_rst_hoc_folder(rst_hoc_dir, hoc_directives_dir)
+#     scan_rst_hoc_folder(rst_hoc_dir, hoc_directives_dir)
 
-    for fname in os.listdir(hoc_directives_dir):
-        file = fname[:-4]
-        py_path = os.path.join(py_dir, f"{file}.rst")
-        hoc_path = os.path.join(hoc_directives_dir, fname)
-        out_path = os.path.join(out_dir, f"{file}.rst")
-        if os.path.exists(out_path):
-            print(f"Skipped (already exists): {file}.rst")
-            continue
-        if os.path.exists(py_path):
-            py_lines = read_lines(py_path)
-            hoc_lines = read_lines(hoc_path)
-            hoc_blocks = extract_blocks_with_parse_rst_style(hoc_lines)
-            merge_by_indent(py_lines, hoc_blocks, out_path)
-            print(f"Merged: {file}")
-        else:
-            print(f"Python file not found for: {file}")
+#     for fname in os.listdir(hoc_directives_dir):
+#         file = fname[:-4]
+#         py_path = os.path.join(py_dir, f"{file}.rst")
+#         hoc_path = os.path.join(hoc_directives_dir, fname)
+#         out_path = os.path.join(out_dir, f"{file}.rst")
+#         if os.path.exists(out_path):
+#             print(f"Skipped (already exists): {file}.rst")
+#             continue
+#         if os.path.exists(py_path):
+#             py_lines = read_lines(py_path)
+#             hoc_lines = read_lines(hoc_path)
+#             hoc_blocks = extract_blocks_with_parse_rst_style(hoc_lines)
+#             merge_by_indent(py_lines, hoc_blocks, out_path)
+#             print(f"Merged: {file}")
+#         else:
+#             print(f"Python file not found for: {file}")
 
-    git_process(process_dir)
+#     git_process(process_dir)
 
+py_read_lines = read_lines("docs/python/visualization/oldgrph.rst")
+hoc_read_lines = read_lines("docs/hoc/visualization/oldgrph.rst")
+hoc_blocks = extract_blocks_with_parse_rst_style(hoc_read_lines)
+out_dir = f"docs/oldgrph.rst"
+merge_by_indent(py_read_lines, hoc_blocks, out_dir)
