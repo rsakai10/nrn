@@ -93,7 +93,7 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
 
             if collected_code:
                 indent = len(line) - len(line.lstrip()) + 4
-                new_lines.append(' ' * indent + '.. code-block:: matlab\n\n')
+                new_lines.append('\n' + ' ' * indent + '.. code-block:: matlab\n\n')
                 for code in collected_code:
                     matlab_code = gpt_python_to_matlab(code)
                     for ml in matlab_code.splitlines():
