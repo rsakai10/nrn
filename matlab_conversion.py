@@ -8,6 +8,7 @@ client = openai.OpenAI(
     organization="org-3z6NAgNdNa6W5HskVBdfqbxJ"
 )
 
+
 def extract_code_block_lines(lines, start_index):
     """Extracts an indented code block starting at start_index."""
     code_lines = []
@@ -71,25 +72,45 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
         lines = f.readlines()
 
     new_lines = []
-    codeblock_pattern = re.compile(r'\s*\.\. (code-block|code)::\s*(python)?\s*$')
+    codeblock_pattern = re.compile(r'\s*\.\. (code-block|code)::\s*(python)?\s*$', re.IGNORECASE)
     inline_code_pattern = re.compile(r'``([^`]+)``')
     i = 0
 
     while i < len(lines):
         line = lines[i]
 
-        # Handle Syntax: blocks with grouped inline Python code
-        if line.strip().startswith('Syntax:'):
+        match = codeblock_pattern.match(line)
+        if match:
+            language = match.group(2)
+            # Skip non-Python blocks (e.g., 'none', 'text', 'javascript')
+            if language and language.lower() not in ('python',):
+                i += 1
+                continue
+
+            indent = len(line) - len(line.lstrip())
+            i += 1
+            code_lines, i = extract_code_block_lines(lines, i)
+            if code_lines:
+                matlab_code = gpt_python_to_matlab('\n'.join(code_lines))
+                new_lines.append(' ' * indent + '.. code-block:: matlab\n\n')
+                for ml in matlab_code.splitlines():
+                    if ml.strip():
+                        new_lines.append(' ' * (indent + 4) + ml + '\n')
+                new_lines.append('\n')
+            continue
+
+        # Handle "Syntax:" sections
+        elif line.strip().startswith('Syntax:'):
             new_lines.append(line)
             i += 1
             collected_code = []
             while i < len(lines):
                 subline = lines[i]
                 if subline.strip().startswith('Description:'):
-                    break  # End of syntax block
+                    break
                 matches = inline_code_pattern.findall(subline)
                 collected_code.extend(matches)
-                i += 1  # only increment here
+                i += 1
 
             if collected_code:
                 indent = len(line) - len(line.lstrip()) + 4
@@ -100,13 +121,11 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
                         if ml.strip():
                             new_lines.append(' ' * (indent + 4) + ml + '\n')
                 new_lines.append('\n')
-
-            # Skip i += 1 below — already incremented during Syntax: handling
             continue
 
         else:
             new_lines.append(line)
-            i += 1  # only increment here for non-Syntax lines
+            i += 1
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
@@ -134,8 +153,9 @@ def batch_convert_rst_python_blocks_to_matlab(src_root, dst_root):
                 print(f"Converting: {src_path} -> {dst_path}")
                 convert_rst_python_blocks_to_matlab(src_path, dst_path)
 
+
 # Example usage:
-# This will convert all .rst files under docs/python to docs/matlab
+#This will convert all .rst files under docs/python to docs/matlab
 #batch_convert_rst_python_blocks_to_matlab('docs/python', 'docs/matlab')
 
-convert_rst_python_blocks_to_matlab("docs/python/visualization/graph.rst", "docs/matlab/visualization/graph.rst")
+convert_rst_python_blocks_to_matlab("docs/python/programming/gui/widgets.rst", "docs/matlab/programming/gui/widgets.rst")
