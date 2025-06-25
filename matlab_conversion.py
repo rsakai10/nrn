@@ -76,6 +76,8 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
     inline_code_pattern = re.compile(r'``([^`]+)``')
     i = 0
 
+    matlab_cache = {}
+
     while i < len(lines):
         line = lines[i]
 
@@ -83,7 +85,7 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
         if match:
             language = match.group(2)
             # Skip non-Python blocks (e.g., 'none', 'text', 'javascript')
-            if language and language.lower() not in ('python',):
+            if language and language.lower() in ('none',):
                 i += 1
                 continue
 
@@ -91,27 +93,49 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
             i += 1
             code_lines, i = extract_code_block_lines(lines, i)
             if code_lines:
-                matlab_code = gpt_python_to_matlab('\n'.join(code_lines))
-                new_lines.append(' ' * indent + '.. code-block:: matlab\n\n')
-                for ml in matlab_code.splitlines():
-                    if ml.strip():
-                        new_lines.append(' ' * (indent + 4) + ml + '\n')
-                new_lines.append('\n')
+                py_code = '\n'.join(code_lines)
+                if py_code.strip():  # skip empty blocks
+                    if py_code in matlab_cache:
+                        matlab_code = matlab_cache[py_code]
+                    else:
+                        matlab_code = gpt_python_to_matlab(py_code)
+                        matlab_cache[py_code] = matlab_code
+                    new_lines.append(' ' * indent + '.. code-block:: matlab\n\n')
+                    for ml in matlab_code.splitlines():
+                        if ml.strip():
+                            new_lines.append(' ' * (indent + 4) + ml + '\n')
+                    new_lines.append('\n')
             continue
 
-        # Handle "Syntax:" sections
-        elif line.strip().startswith('Syntax:'):
+        if line.strip().startswith('Syntax:'):
             new_lines.append(line)
             i += 1
             collected_code = []
+
             while i < len(lines):
                 subline = lines[i]
+
+                # Stop at new section
                 if subline.strip().startswith('Description:'):
                     break
+
+                # Handle inline code (e.g., ``n.xbutton(...)``)
                 matches = inline_code_pattern.findall(subline)
                 collected_code.extend(matches)
                 i += 1
 
+                # Check if this line is a code-block directive
+                codeblock_match = re.match(r'\s*\.\. (code-block|code)::\s*(python)?\s*$', subline, re.IGNORECASE)
+                if codeblock_match:
+                    block_indent = len(subline) - len(subline.lstrip())
+                    # Skip blank lines right after the directive
+                    while i < len(lines) and lines[i].strip() == '':
+                        i += 1
+                    code_lines, i = extract_code_block_lines(lines, i)
+                    if code_lines:
+                        collected_code.append('\n'.join(code_lines))
+
+            # Convert all collected code snippets into MATLAB
             if collected_code:
                 indent = len(line) - len(line.lstrip()) + 4
                 new_lines.append('\n' + ' ' * indent + '.. code-block:: matlab\n\n')
@@ -121,11 +145,10 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
                         if ml.strip():
                             new_lines.append(' ' * (indent + 4) + ml + '\n')
                 new_lines.append('\n')
-            continue
+            continue  # prevent i += 1 again
 
-        else:
-            new_lines.append(line)
-            i += 1
+        new_lines.append(line)
+        i += 1
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
@@ -156,6 +179,6 @@ def batch_convert_rst_python_blocks_to_matlab(src_root, dst_root):
 
 # Example usage:
 #This will convert all .rst files under docs/python to docs/matlab
-#batch_convert_rst_python_blocks_to_matlab('docs/python', 'docs/matlab')
+batch_convert_rst_python_blocks_to_matlab('docs/python/programming/math', 'docs/matlab/programming/math')
 
-convert_rst_python_blocks_to_matlab("docs/python/programming/gui/widgets.rst", "docs/matlab/programming/gui/widgets.rst")
+# convert_rst_python_blocks_to_matlab("docs/python/programming/gui/widgets.rst", "docs/matlab/programming/gui/widgets.rst")
