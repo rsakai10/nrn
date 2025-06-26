@@ -47,14 +47,21 @@ def extract_python_codeblocks(rst_path):
                 code_blocks.append('\n'.join(code_lines))
         else:
             i += 1
-
+    
     return code_blocks
 
 def gpt_python_to_matlab(py_code):
     prompt = (
-        "Assume there is a matlab interface in NEURON and convert the following Python code to MATLAB code. "
-        "from neuron import n, gui should be converted to n = neuron.launch(); Only output the MATLAB code. Do not add any mark-down style backticks (e.g., ```matlab)\n\n"
-        f"Python code:\n{py_code}"
+            f"""Convert the following Python code to MATLAB, assuming a MATLAB interface for NEURON exists. Follow these guidelines:
+            
+            • If a section is assigned using sec='something', ignore the sec= part and just pass 'something' as a string.
+            • End each MATLAB statement with a semicolon (;).
+            • Convert from neuron import n, gui to n = neuron.launch();.
+            • Only include n = neuron.launch(); in the MATLAB output if the original Python code contains from neuron import n, gui. Otherwise, do not define n. 
+            • Only output the MATLAB code. Do not include any Markdown formatting such as code blocks.
+
+            Python code:
+            {py_code}"""
     )
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -107,7 +114,7 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
                     new_lines.append('\n')
             continue
 
-        if line.strip().startswith('Syntax:'):
+        elif line.strip().startswith('Syntax:'):
             new_lines.append(line)
             i += 1
             collected_code = []
@@ -116,7 +123,7 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
                 subline = lines[i]
 
                 # Stop at new section
-                if subline.strip().startswith('Description:'):
+                if subline.strip().startswith('Description:') or subline.strip().startswith('Example:'):
                     break
 
                 # Handle inline code (e.g., ``n.xbutton(...)``)
@@ -179,6 +186,8 @@ def batch_convert_rst_python_blocks_to_matlab(src_root, dst_root):
 
 # Example usage:
 #This will convert all .rst files under docs/python to docs/matlab
-batch_convert_rst_python_blocks_to_matlab('docs/python/modelspec', 'docs/matlab/modelspec')
+batch_convert_rst_python_blocks_to_matlab('docs/python/programming/gui', 'docs/matlab/programming/gui')
 
-# convert_rst_python_blocks_to_matlab("docs/python/programming/gui/widgets.rst", "docs/matlab/programming/gui/widgets.rst")
+# convert_rst_python_blocks_to_matlab("docs/python/modelspec/programmatic/ste.rst", "docs/matlab/modelspec/programmatic/ste.rst")
+
+# extract_python_codeblocks("docs/python/modelspec/programmatic/rxd.rst")
