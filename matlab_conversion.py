@@ -143,7 +143,7 @@ def convert_rst_python_blocks_to_matlab(rst_path, out_path):
                     matlab_code = gpt_python_to_matlab(code)
                     for ml in matlab_code.splitlines():
                         if ml.strip():
-                            new_lines.append(' ' * (indent + 4) + ml + '\n')
+                            new_lines.append(' ' * (indent + 4) + ml + '\n\n')
                 new_lines.append('\n')
             continue  # prevent i += 1 again
 
@@ -179,6 +179,6 @@ def batch_convert_rst_python_blocks_to_matlab(src_root, dst_root):
 
 # Example usage:
 #This will convert all .rst files under docs/python to docs/matlab
-batch_convert_rst_python_blocks_to_matlab('docs/python/programming/math', 'docs/matlab/programming/math')
+batch_convert_rst_python_blocks_to_matlab('docs/python/modelspec', 'docs/matlab/modelspec')
 
 # convert_rst_python_blocks_to_matlab("docs/python/programming/gui/widgets.rst", "docs/matlab/programming/gui/widgets.rst")
