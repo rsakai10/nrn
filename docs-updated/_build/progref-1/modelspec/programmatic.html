@@ -1,0 +1,625 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programmatic Model Specification &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Programmatic Model Specification</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/progref-1/modelspec/programmatic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="programmatic-model-specification">
+<h1>Programmatic Model Specification<a class="headerlink" href="#programmatic-model-specification" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html"><code class="docutils literal notranslate"><span class="pre">pt3dclear()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dadd"><code class="docutils literal notranslate"><span class="pre">pt3dadd()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dconst"><code class="docutils literal notranslate"><span class="pre">pt3dconst()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dstyle"><code class="docutils literal notranslate"><span class="pre">pt3dstyle()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dinsert"><code class="docutils literal notranslate"><span class="pre">pt3dinsert()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dremove"><code class="docutils literal notranslate"><span class="pre">pt3dremove()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dchange"><code class="docutils literal notranslate"><span class="pre">pt3dchange()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#reading-3d-data-from-neuron">Reading 3D Data from NEURON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#n3d"><code class="docutils literal notranslate"><span class="pre">n3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#x3d"><code class="docutils literal notranslate"><span class="pre">x3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#y3d"><code class="docutils literal notranslate"><span class="pre">y3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#z3d"><code class="docutils literal notranslate"><span class="pre">z3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#diam3d"><code class="docutils literal notranslate"><span class="pre">diam3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#arc3d"><code class="docutils literal notranslate"><span class="pre">arc3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#spine3d"><code class="docutils literal notranslate"><span class="pre">spine3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#setSpineArea"><code class="docutils literal notranslate"><span class="pre">setSpineArea()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#getSpineArea"><code class="docutils literal notranslate"><span class="pre">getSpineArea()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#define_shape"><code class="docutils literal notranslate"><span class="pre">define_shape()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#area"><code class="docutils literal notranslate"><span class="pre">area()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#ri"><code class="docutils literal notranslate"><span class="pre">ri()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#distance"><code class="docutils literal notranslate"><span class="pre">distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#diam_changed"><code class="docutils literal notranslate"><span class="pre">diam_changed</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#L"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#diam"><code class="docutils literal notranslate"><span class="pre">diam</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#Ra"><code class="docutils literal notranslate"><span class="pre">Ra</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/secspec.html"><code class="docutils literal notranslate"><span class="pre">pop_section()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/secspec.html#push_section"><code class="docutils literal notranslate"><span class="pre">push_section()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/seclist.html"><code class="docutils literal notranslate"><span class="pre">SectionList</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.append"><code class="docutils literal notranslate"><span class="pre">SectionList.append()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.remove"><code class="docutils literal notranslate"><span class="pre">SectionList.remove()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.children"><code class="docutils literal notranslate"><span class="pre">SectionList.children()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.subtree"><code class="docutils literal notranslate"><span class="pre">SectionList.subtree()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.wholetree"><code class="docutils literal notranslate"><span class="pre">SectionList.wholetree()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.allroots"><code class="docutils literal notranslate"><span class="pre">SectionList.allroots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.unique"><code class="docutils literal notranslate"><span class="pre">SectionList.unique()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.printnames"><code class="docutils literal notranslate"><span class="pre">SectionList.printnames()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/secref.html"><code class="docutils literal notranslate"><span class="pre">SectionRef</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.sec"><code class="docutils literal notranslate"><span class="pre">SectionRef.sec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.parent"><code class="docutils literal notranslate"><span class="pre">SectionRef.parent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.trueparent"><code class="docutils literal notranslate"><span class="pre">SectionRef.trueparent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.child"><code class="docutils literal notranslate"><span class="pre">SectionRef.child</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.root"><code class="docutils literal notranslate"><span class="pre">SectionRef.root</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.has_parent"><code class="docutils literal notranslate"><span class="pre">SectionRef.has_parent()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.has_trueparent"><code class="docutils literal notranslate"><span class="pre">SectionRef.has_trueparent()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.nchild"><code class="docutils literal notranslate"><span class="pre">SectionRef.nchild()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.is_cas"><code class="docutils literal notranslate"><span class="pre">SectionRef.is_cas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.exists"><code class="docutils literal notranslate"><span class="pre">SectionRef.exists()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html"><code class="docutils literal notranslate"><span class="pre">pt3dclear()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dadd"><code class="docutils literal notranslate"><span class="pre">pt3dadd()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dconst"><code class="docutils literal notranslate"><span class="pre">pt3dconst()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dstyle"><code class="docutils literal notranslate"><span class="pre">pt3dstyle()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dinsert"><code class="docutils literal notranslate"><span class="pre">pt3dinsert()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dremove"><code class="docutils literal notranslate"><span class="pre">pt3dremove()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#pt3dchange"><code class="docutils literal notranslate"><span class="pre">pt3dchange()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/geometry.html#reading-3d-data-from-neuron">Reading 3D Data from NEURON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#n3d"><code class="docutils literal notranslate"><span class="pre">n3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#x3d"><code class="docutils literal notranslate"><span class="pre">x3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#y3d"><code class="docutils literal notranslate"><span class="pre">y3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#z3d"><code class="docutils literal notranslate"><span class="pre">z3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#diam3d"><code class="docutils literal notranslate"><span class="pre">diam3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#arc3d"><code class="docutils literal notranslate"><span class="pre">arc3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#spine3d"><code class="docutils literal notranslate"><span class="pre">spine3d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#setSpineArea"><code class="docutils literal notranslate"><span class="pre">setSpineArea()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#getSpineArea"><code class="docutils literal notranslate"><span class="pre">getSpineArea()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#define_shape"><code class="docutils literal notranslate"><span class="pre">define_shape()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#area"><code class="docutils literal notranslate"><span class="pre">area()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#ri"><code class="docutils literal notranslate"><span class="pre">ri()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#distance"><code class="docutils literal notranslate"><span class="pre">distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#diam_changed"><code class="docutils literal notranslate"><span class="pre">diam_changed</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#L"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#diam"><code class="docutils literal notranslate"><span class="pre">diam</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/geometry.html#Ra"><code class="docutils literal notranslate"><span class="pre">Ra</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/secspec.html"><code class="docutils literal notranslate"><span class="pre">pop_section()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/secspec.html#push_section"><code class="docutils literal notranslate"><span class="pre">push_section()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/seclist.html"><code class="docutils literal notranslate"><span class="pre">SectionList</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.append"><code class="docutils literal notranslate"><span class="pre">SectionList.append()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.remove"><code class="docutils literal notranslate"><span class="pre">SectionList.remove()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.children"><code class="docutils literal notranslate"><span class="pre">SectionList.children()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.subtree"><code class="docutils literal notranslate"><span class="pre">SectionList.subtree()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.wholetree"><code class="docutils literal notranslate"><span class="pre">SectionList.wholetree()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.allroots"><code class="docutils literal notranslate"><span class="pre">SectionList.allroots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.unique"><code class="docutils literal notranslate"><span class="pre">SectionList.unique()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/seclist.html#SectionList.printnames"><code class="docutils literal notranslate"><span class="pre">SectionList.printnames()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology/secref.html"><code class="docutils literal notranslate"><span class="pre">SectionRef</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.sec"><code class="docutils literal notranslate"><span class="pre">SectionRef.sec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.parent"><code class="docutils literal notranslate"><span class="pre">SectionRef.parent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.trueparent"><code class="docutils literal notranslate"><span class="pre">SectionRef.trueparent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.child"><code class="docutils literal notranslate"><span class="pre">SectionRef.child</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.root"><code class="docutils literal notranslate"><span class="pre">SectionRef.root</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.has_parent"><code class="docutils literal notranslate"><span class="pre">SectionRef.has_parent()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.has_trueparent"><code class="docutils literal notranslate"><span class="pre">SectionRef.has_trueparent()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.nchild"><code class="docutils literal notranslate"><span class="pre">SectionRef.nchild()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.is_cas"><code class="docutils literal notranslate"><span class="pre">SectionRef.is_cas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology/secref.html#SectionRef.exists"><code class="docutils literal notranslate"><span class="pre">SectionRef.exists()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html"><code class="docutils literal notranslate"><span class="pre">Section</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.connect"><code class="docutils literal notranslate"><span class="pre">Section.connect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.disconnect"><code class="docutils literal notranslate"><span class="pre">Section.disconnect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.nseg"><code class="docutils literal notranslate"><span class="pre">Section.nseg</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.orientation"><code class="docutils literal notranslate"><span class="pre">Section.orientation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.parentseg"><code class="docutils literal notranslate"><span class="pre">Section.parentseg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.cell"><code class="docutils literal notranslate"><span class="pre">Section.cell()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.hname"><code class="docutils literal notranslate"><span class="pre">Section.hname()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.name"><code class="docutils literal notranslate"><span class="pre">Section.name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.subtree"><code class="docutils literal notranslate"><span class="pre">Section.subtree()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/topology.html#Section.wholetree"><code class="docutils literal notranslate"><span class="pre">Section.wholetree()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#id0"><code class="docutils literal notranslate"><span class="pre">topology()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#delete_section"><code class="docutils literal notranslate"><span class="pre">delete_section()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#section_exists"><code class="docutils literal notranslate"><span class="pre">section_exists()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#section_owner"><code class="docutils literal notranslate"><span class="pre">section_owner()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#disconnect"><code class="docutils literal notranslate"><span class="pre">disconnect()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#issection"><code class="docutils literal notranslate"><span class="pre">issection()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#ismembrane"><code class="docutils literal notranslate"><span class="pre">ismembrane()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#sectionname"><code class="docutils literal notranslate"><span class="pre">sectionname()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#secname"><code class="docutils literal notranslate"><span class="pre">secname()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#psection"><code class="docutils literal notranslate"><span class="pre">psection()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#parent_section"><code class="docutils literal notranslate"><span class="pre">parent_section()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#parent_node"><code class="docutils literal notranslate"><span class="pre">parent_node()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#parent_connection"><code class="docutils literal notranslate"><span class="pre">parent_connection()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/topology.html#section_orientation"><code class="docutils literal notranslate"><span class="pre">section_orientation()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/ions.html">Ions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/ions.html#ion_style"><code class="docutils literal notranslate"><span class="pre">ion_style()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/ions.html#ion_register"><code class="docutils literal notranslate"><span class="pre">ion_register()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/ions.html#ion_charge"><code class="docutils literal notranslate"><span class="pre">ion_charge()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/mechanisms.html">Dynamics (Channels, etc…)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/hocmech.html"><code class="docutils literal notranslate"><span class="pre">make_pointprocess()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/hocmech.html#make_mechanism"><code class="docutils literal notranslate"><span class="pre">make_mechanism()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/kschan.html"><code class="docutils literal notranslate"><span class="pre">KSChan</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.setstructure"><code class="docutils literal notranslate"><span class="pre">KSChan.setstructure()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.remove_state"><code class="docutils literal notranslate"><span class="pre">KSChan.remove_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.remove_transition"><code class="docutils literal notranslate"><span class="pre">KSChan.remove_transition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.ngate"><code class="docutils literal notranslate"><span class="pre">KSChan.ngate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.nstate"><code class="docutils literal notranslate"><span class="pre">KSChan.nstate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.ntrans"><code class="docutils literal notranslate"><span class="pre">KSChan.ntrans()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.nligand"><code class="docutils literal notranslate"><span class="pre">KSChan.nligand()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.pr"><code class="docutils literal notranslate"><span class="pre">KSChan.pr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.iv_type"><code class="docutils literal notranslate"><span class="pre">KSChan.iv_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.gmax"><code class="docutils literal notranslate"><span class="pre">KSChan.gmax()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.erev"><code class="docutils literal notranslate"><span class="pre">KSChan.erev()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.add_hhstate"><code class="docutils literal notranslate"><span class="pre">KSChan.add_hhstate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.add_ksstate"><code class="docutils literal notranslate"><span class="pre">KSChan.add_ksstate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.add_transition"><code class="docutils literal notranslate"><span class="pre">KSChan.add_transition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.trans"><code class="docutils literal notranslate"><span class="pre">KSChan.trans()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.state"><code class="docutils literal notranslate"><span class="pre">KSChan.state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.gate"><code class="docutils literal notranslate"><span class="pre">KSChan.gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.name"><code class="docutils literal notranslate"><span class="pre">KSChan.name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.ion"><code class="docutils literal notranslate"><span class="pre">KSChan.ion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSChan.ligand"><code class="docutils literal notranslate"><span class="pre">KSChan.ligand()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/kschan.html#KSState"><code class="docutils literal notranslate"><span class="pre">KSState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSState.frac"><code class="docutils literal notranslate"><span class="pre">KSState.frac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSState.index"><code class="docutils literal notranslate"><span class="pre">KSState.index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSState.gate"><code class="docutils literal notranslate"><span class="pre">KSState.gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSState.name"><code class="docutils literal notranslate"><span class="pre">KSState.name()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/kschan.html#KSGate"><code class="docutils literal notranslate"><span class="pre">KSGate</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSGate.nstate"><code class="docutils literal notranslate"><span class="pre">KSGate.nstate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSGate.power"><code class="docutils literal notranslate"><span class="pre">KSGate.power()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSGate.sindex"><code class="docutils literal notranslate"><span class="pre">KSGate.sindex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSGate.index"><code class="docutils literal notranslate"><span class="pre">KSGate.index()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/kschan.html#KSTrans"><code class="docutils literal notranslate"><span class="pre">KSTrans</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.set_f"><code class="docutils literal notranslate"><span class="pre">KSTrans.set_f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.index"><code class="docutils literal notranslate"><span class="pre">KSTrans.index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.type"><code class="docutils literal notranslate"><span class="pre">KSTrans.type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.ftype"><code class="docutils literal notranslate"><span class="pre">KSTrans.ftype()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.ab"><code class="docutils literal notranslate"><span class="pre">KSTrans.ab()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.inftau"><code class="docutils literal notranslate"><span class="pre">KSTrans.inftau()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.f"><code class="docutils literal notranslate"><span class="pre">KSTrans.f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.src"><code class="docutils literal notranslate"><span class="pre">KSTrans.src()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.target"><code class="docutils literal notranslate"><span class="pre">KSTrans.target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.parm"><code class="docutils literal notranslate"><span class="pre">KSTrans.parm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/kschan.html#KSTrans.ligand"><code class="docutils literal notranslate"><span class="pre">KSTrans.ligand()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/linmod.html"><code class="docutils literal notranslate"><span class="pre">LinearMechanism</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html"><code class="docutils literal notranslate"><span class="pre">pnt.get_loc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#pnt.get_segment"><code class="docutils literal notranslate"><span class="pre">pnt.get_segment()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#pnt.loc"><code class="docutils literal notranslate"><span class="pre">pnt.loc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#pnt.has_loc"><code class="docutils literal notranslate"><span class="pre">pnt.has_loc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#IClamp"><code class="docutils literal notranslate"><span class="pre">IClamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#AlphaSynapse"><code class="docutils literal notranslate"><span class="pre">AlphaSynapse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#VClamp"><code class="docutils literal notranslate"><span class="pre">VClamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#SEClamp"><code class="docutils literal notranslate"><span class="pre">SEClamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#APCount"><code class="docutils literal notranslate"><span class="pre">APCount</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#ExpSyn"><code class="docutils literal notranslate"><span class="pre">ExpSyn</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#Exp2Syn"><code class="docutils literal notranslate"><span class="pre">Exp2Syn</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#NetStim"><code class="docutils literal notranslate"><span class="pre">NetStim</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#PatternStim"><code class="docutils literal notranslate"><span class="pre">PatternStim</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#IntFire1"><code class="docutils literal notranslate"><span class="pre">IntFire1</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#IntFire2"><code class="docutils literal notranslate"><span class="pre">IntFire2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechanisms/mech.html#IntFire4"><code class="docutils literal notranslate"><span class="pre">IntFire4</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/rxd.html"><code class="docutils literal notranslate"><span class="pre">rxd.Region</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.Region.nrn_region"><code class="docutils literal notranslate"><span class="pre">rxd.Region.nrn_region</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.Region.secs"><code class="docutils literal notranslate"><span class="pre">rxd.Region.secs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.Region.geometry"><code class="docutils literal notranslate"><span class="pre">rxd.Region.geometry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.Region.name"><code class="docutils literal notranslate"><span class="pre">rxd.Region.name</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#id0"><code class="docutils literal notranslate"><span class="pre">rxd.Region.nrn_region</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#id1"><code class="docutils literal notranslate"><span class="pre">rxd.Region.secs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#id2"><code class="docutils literal notranslate"><span class="pre">rxd.Region.geometry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#id3"><code class="docutils literal notranslate"><span class="pre">rxd.Region.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/rxd.html#for-specifying-the-geometry">For specifying the geometry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.inside"><code class="docutils literal notranslate"><span class="pre">rxd.inside</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.membrane"><code class="docutils literal notranslate"><span class="pre">rxd.membrane</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.DistributedBoundary"><code class="docutils literal notranslate"><span class="pre">rxd.DistributedBoundary</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.FractionalVolume"><code class="docutils literal notranslate"><span class="pre">rxd.FractionalVolume</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.Shell"><code class="docutils literal notranslate"><span class="pre">rxd.Shell</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.FixedCrossSection"><code class="docutils literal notranslate"><span class="pre">rxd.FixedCrossSection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.FixedPerimeter"><code class="docutils literal notranslate"><span class="pre">rxd.FixedPerimeter</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#rxd.ScalableBorder"><code class="docutils literal notranslate"><span class="pre">rxd.ScalableBorder</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#extracellular-regions">Extracellular regions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.Extracellular"><code class="docutils literal notranslate"><span class="pre">rxd.Extracellular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.Species"><code class="docutils literal notranslate"><span class="pre">rxd.Species</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.State"><code class="docutils literal notranslate"><span class="pre">rxd.State</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.Parameter"><code class="docutils literal notranslate"><span class="pre">rxd.Parameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.Reaction"><code class="docutils literal notranslate"><span class="pre">rxd.Reaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.Rate"><code class="docutils literal notranslate"><span class="pre">rxd.Rate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.MultiCompartmentReaction"><code class="docutils literal notranslate"><span class="pre">rxd.MultiCompartmentReaction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#mathematical-functions-for-rate-expressions">Mathematical functions for rate expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#manipulating-nodes">Manipulating nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.nodelist.NodeList"><code class="docutils literal notranslate"><span class="pre">rxd.nodelist.NodeList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.node.Node"><code class="docutils literal notranslate"><span class="pre">rxd.node.Node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.node.Node1D"><code class="docutils literal notranslate"><span class="pre">rxd.node.Node1D</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.node.Node3D"><code class="docutils literal notranslate"><span class="pre">rxd.node.Node3D</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.node.NodeExtracellular"><code class="docutils literal notranslate"><span class="pre">rxd.node.NodeExtracellular</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#membrane-potential">Membrane potential</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.v"><code class="docutils literal notranslate"><span class="pre">rxd.v</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#synchronization-with-segments">Synchronization with segments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.re_init"><code class="docutils literal notranslate"><span class="pre">rxd.re_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#numerical-options">Numerical options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.nthread"><code class="docutils literal notranslate"><span class="pre">rxd.nthread()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.set_solve_type"><code class="docutils literal notranslate"><span class="pre">rxd.set_solve_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#sbml-export">SBML Export</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.export.sbml"><code class="docutils literal notranslate"><span class="pre">rxd.export.sbml()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#saving-and-restoring-state">Saving and restoring state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/rxd.html#error-handling">Error handling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/rxd.html#rxd.RxDException"><code class="docutils literal notranslate"><span class="pre">rxd.RxDException</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/network.html">Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/network/parcon.html"><code class="docutils literal notranslate"><span class="pre">ParallelContext</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nhost"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nhost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.id"><code class="docutils literal notranslate"><span class="pre">ParallelContext.id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.mpiabort_on_error"><code class="docutils literal notranslate"><span class="pre">ParallelContext.mpiabort_on_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.submit"><code class="docutils literal notranslate"><span class="pre">ParallelContext.submit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.working"><code class="docutils literal notranslate"><span class="pre">ParallelContext.working()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.retval"><code class="docutils literal notranslate"><span class="pre">ParallelContext.retval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.pyret"><code class="docutils literal notranslate"><span class="pre">ParallelContext.pyret()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.userid"><code class="docutils literal notranslate"><span class="pre">ParallelContext.userid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.runworker"><code class="docutils literal notranslate"><span class="pre">ParallelContext.runworker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.done"><code class="docutils literal notranslate"><span class="pre">ParallelContext.done()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.context"><code class="docutils literal notranslate"><span class="pre">ParallelContext.context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.post"><code class="docutils literal notranslate"><span class="pre">ParallelContext.post()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.take"><code class="docutils literal notranslate"><span class="pre">ParallelContext.take()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.look"><code class="docutils literal notranslate"><span class="pre">ParallelContext.look()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.look_take"><code class="docutils literal notranslate"><span class="pre">ParallelContext.look_take()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.pack"><code class="docutils literal notranslate"><span class="pre">ParallelContext.pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.unpack"><code class="docutils literal notranslate"><span class="pre">ParallelContext.unpack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.upkscalar"><code class="docutils literal notranslate"><span class="pre">ParallelContext.upkscalar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.upkstr"><code class="docutils literal notranslate"><span class="pre">ParallelContext.upkstr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.upkvec"><code class="docutils literal notranslate"><span class="pre">ParallelContext.upkvec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.upkpyobj"><code class="docutils literal notranslate"><span class="pre">ParallelContext.upkpyobj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.wait_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.wait_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.step_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.step_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.send_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.send_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.event_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.event_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.integ_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.integ_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.vtransfer_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.vtransfer_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.mech_time"><code class="docutils literal notranslate"><span class="pre">ParallelContext.mech_time()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/network/parcon.html#implementation-notes">Implementation Notes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.mpi_init"><code class="docutils literal notranslate"><span class="pre">ParallelContext.mpi_init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.barrier"><code class="docutils literal notranslate"><span class="pre">ParallelContext.barrier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.allreduce"><code class="docutils literal notranslate"><span class="pre">ParallelContext.allreduce()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.allgather"><code class="docutils literal notranslate"><span class="pre">ParallelContext.allgather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.alltoall"><code class="docutils literal notranslate"><span class="pre">ParallelContext.alltoall()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.py_alltoall"><code class="docutils literal notranslate"><span class="pre">ParallelContext.py_alltoall()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.py_allgather"><code class="docutils literal notranslate"><span class="pre">ParallelContext.py_allgather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.py_gather"><code class="docutils literal notranslate"><span class="pre">ParallelContext.py_gather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.py_scatter"><code class="docutils literal notranslate"><span class="pre">ParallelContext.py_scatter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.py_broadcast"><code class="docutils literal notranslate"><span class="pre">ParallelContext.py_broadcast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.broadcast"><code class="docutils literal notranslate"><span class="pre">ParallelContext.broadcast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.subworlds"><code class="docutils literal notranslate"><span class="pre">ParallelContext.subworlds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nhost_world"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nhost_world()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.id_world"><code class="docutils literal notranslate"><span class="pre">ParallelContext.id_world()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nhost_bbs"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nhost_bbs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.id_bbs"><code class="docutils literal notranslate"><span class="pre">ParallelContext.id_bbs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.set_gid2node"><code class="docutils literal notranslate"><span class="pre">ParallelContext.set_gid2node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.gid_exists"><code class="docutils literal notranslate"><span class="pre">ParallelContext.gid_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.threshold"><code class="docutils literal notranslate"><span class="pre">ParallelContext.threshold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.cell"><code class="docutils literal notranslate"><span class="pre">ParallelContext.cell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.outputcell"><code class="docutils literal notranslate"><span class="pre">ParallelContext.outputcell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.spike_record"><code class="docutils literal notranslate"><span class="pre">ParallelContext.spike_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.gid_connect"><code class="docutils literal notranslate"><span class="pre">ParallelContext.gid_connect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.psolve"><code class="docutils literal notranslate"><span class="pre">ParallelContext.psolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.timeout"><code class="docutils literal notranslate"><span class="pre">ParallelContext.timeout()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.set_maxstep"><code class="docutils literal notranslate"><span class="pre">ParallelContext.set_maxstep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.spike_compress"><code class="docutils literal notranslate"><span class="pre">ParallelContext.spike_compress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.gid2obj"><code class="docutils literal notranslate"><span class="pre">ParallelContext.gid2obj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.gid2cell"><code class="docutils literal notranslate"><span class="pre">ParallelContext.gid2cell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.spike_statistics"><code class="docutils literal notranslate"><span class="pre">ParallelContext.spike_statistics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.max_histogram"><code class="docutils literal notranslate"><span class="pre">ParallelContext.max_histogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.source_var"><code class="docutils literal notranslate"><span class="pre">ParallelContext.source_var()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.target_var"><code class="docutils literal notranslate"><span class="pre">ParallelContext.target_var()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.setup_transfer"><code class="docutils literal notranslate"><span class="pre">ParallelContext.setup_transfer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.splitcell"><code class="docutils literal notranslate"><span class="pre">ParallelContext.splitcell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.multisplit"><code class="docutils literal notranslate"><span class="pre">ParallelContext.multisplit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.gid_clear"><code class="docutils literal notranslate"><span class="pre">ParallelContext.gid_clear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.Threads"><code class="docutils literal notranslate"><span class="pre">ParallelContext.Threads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nthread"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nthread()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nworker"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nworker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.partition"><code class="docutils literal notranslate"><span class="pre">ParallelContext.partition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.get_partition"><code class="docutils literal notranslate"><span class="pre">ParallelContext.get_partition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.thread_stat"><code class="docutils literal notranslate"><span class="pre">ParallelContext.thread_stat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.thread_busywait"><code class="docutils literal notranslate"><span class="pre">ParallelContext.thread_busywait()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.thread_how_many_proc"><code class="docutils literal notranslate"><span class="pre">ParallelContext.thread_how_many_proc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.sec_in_thread"><code class="docutils literal notranslate"><span class="pre">ParallelContext.sec_in_thread()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.thread_ctime"><code class="docutils literal notranslate"><span class="pre">ParallelContext.thread_ctime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.t"><code class="docutils literal notranslate"><span class="pre">ParallelContext.t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.dt"><code class="docutils literal notranslate"><span class="pre">ParallelContext.dt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.optimize_node_order"><code class="docutils literal notranslate"><span class="pre">ParallelContext.optimize_node_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.prcellstate"><code class="docutils literal notranslate"><span class="pre">ParallelContext.prcellstate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nrncore_write"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nrncore_write()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parcon.html#ParallelContext.nrncore_run"><code class="docutils literal notranslate"><span class="pre">ParallelContext.nrncore_run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/network/parnet.html"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.set_gid2node"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.set_gid2node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.round_robin"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.round_robin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.gid_exists"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.gid_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.create_cell"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.create_cell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.register_cell"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.register_cell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.nc_append"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.nc_append()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.want_all_spikes"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.want_all_spikes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.spike_record"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.spike_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.prun"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.prun()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.psolve"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.psolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.pinit"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.pinit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.pcontinue"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.pcontinue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.prstat"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.prstat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.gatherspikes"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.gatherspikes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/parnet.html#ParallelNetManager.splitcell"><code class="docutils literal notranslate"><span class="pre">ParallelNetManager.splitcell()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/network/netcon.html"><code class="docutils literal notranslate"><span class="pre">NetCon</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.valid"><code class="docutils literal notranslate"><span class="pre">NetCon.valid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.active"><code class="docutils literal notranslate"><span class="pre">NetCon.active()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.event"><code class="docutils literal notranslate"><span class="pre">NetCon.event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.syn"><code class="docutils literal notranslate"><span class="pre">NetCon.syn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.pre"><code class="docutils literal notranslate"><span class="pre">NetCon.pre()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.preloc"><code class="docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.preseg"><code class="docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.postloc"><code class="docutils literal notranslate"><span class="pre">NetCon.postloc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.postseg"><code class="docutils literal notranslate"><span class="pre">NetCon.postseg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.precell"><code class="docutils literal notranslate"><span class="pre">NetCon.precell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.postcell"><code class="docutils literal notranslate"><span class="pre">NetCon.postcell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.setpost"><code class="docutils literal notranslate"><span class="pre">NetCon.setpost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.prelist"><code class="docutils literal notranslate"><span class="pre">NetCon.prelist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.synlist"><code class="docutils literal notranslate"><span class="pre">NetCon.synlist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.postcelllist"><code class="docutils literal notranslate"><span class="pre">NetCon.postcelllist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.precelllist"><code class="docutils literal notranslate"><span class="pre">NetCon.precelllist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.delay"><code class="docutils literal notranslate"><span class="pre">NetCon.delay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.wcnt"><code class="docutils literal notranslate"><span class="pre">NetCon.wcnt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.weight"><code class="docutils literal notranslate"><span class="pre">NetCon.weight</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.threshold"><code class="docutils literal notranslate"><span class="pre">NetCon.threshold</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.x"><code class="docutils literal notranslate"><span class="pre">NetCon.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.record"><code class="docutils literal notranslate"><span class="pre">NetCon.record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.get_recordvec"><code class="docutils literal notranslate"><span class="pre">NetCon.get_recordvec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="programmatic/network/netcon.html#NetCon.srcgid"><code class="docutils literal notranslate"><span class="pre">NetCon.srcgid()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/electrod.html"><code class="docutils literal notranslate"><span class="pre">Electrode</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.IClamp"><code class="docutils literal notranslate"><span class="pre">Electrode.IClamp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.del"><code class="docutils literal notranslate"><span class="pre">Electrode.del()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.dur"><code class="docutils literal notranslate"><span class="pre">Electrode.dur()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.amp"><code class="docutils literal notranslate"><span class="pre">Electrode.amp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.VClamp"><code class="docutils literal notranslate"><span class="pre">Electrode.VClamp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.dur0"><code class="docutils literal notranslate"><span class="pre">Electrode.dur0()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.amp0"><code class="docutils literal notranslate"><span class="pre">Electrode.amp0()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.VClampigraph"><code class="docutils literal notranslate"><span class="pre">Electrode.VClampigraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.VClampFamily"><code class="docutils literal notranslate"><span class="pre">Electrode.VClampFamily()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.Testlevel"><code class="docutils literal notranslate"><span class="pre">Electrode.Testlevel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.Holding"><code class="docutils literal notranslate"><span class="pre">Electrode.Holding()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.Returnlevel"><code class="docutils literal notranslate"><span class="pre">Electrode.Returnlevel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/electrod.html#Electrode.Location"><code class="docutils literal notranslate"><span class="pre">Electrode.Location()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/mechtype.html"><code class="docutils literal notranslate"><span class="pre">MechanismType</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.select"><code class="docutils literal notranslate"><span class="pre">MechanismType.select()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.selected"><code class="docutils literal notranslate"><span class="pre">MechanismType.selected()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.remove"><code class="docutils literal notranslate"><span class="pre">MechanismType.remove()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.make"><code class="docutils literal notranslate"><span class="pre">MechanismType.make()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.count"><code class="docutils literal notranslate"><span class="pre">MechanismType.count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.menu"><code class="docutils literal notranslate"><span class="pre">MechanismType.menu()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.action"><code class="docutils literal notranslate"><span class="pre">MechanismType.action()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.is_netcon_target"><code class="docutils literal notranslate"><span class="pre">MechanismType.is_netcon_target()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.has_net_event"><code class="docutils literal notranslate"><span class="pre">MechanismType.has_net_event()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.is_artificial"><code class="docutils literal notranslate"><span class="pre">MechanismType.is_artificial()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.pp_begin"><code class="docutils literal notranslate"><span class="pre">MechanismType.pp_begin()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.pp_next"><code class="docutils literal notranslate"><span class="pre">MechanismType.pp_next()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.internal_type"><code class="docutils literal notranslate"><span class="pre">MechanismType.internal_type()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.file"><code class="docutils literal notranslate"><span class="pre">MechanismType.file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/mechtype.html#MechanismType.code"><code class="docutils literal notranslate"><span class="pre">MechanismType.code()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/ste.html"><code class="docutils literal notranslate"><span class="pre">StateTransitionEvent</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/ste.html#StateTransitionEvent.state"><code class="docutils literal notranslate"><span class="pre">StateTransitionEvent.state()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/ste.html#StateTransitionEvent.transition"><code class="docutils literal notranslate"><span class="pre">StateTransitionEvent.transition()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="programmatic/obsoletestimuli.html">Obsolete Stimuli</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/obsoletestimuli.html#fstim"><code class="docutils literal notranslate"><span class="pre">fstim()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/obsoletestimuli.html#fstimi"><code class="docutils literal notranslate"><span class="pre">fstimi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/obsoletestimuli.html#fclamp"><code class="docutils literal notranslate"><span class="pre">fclamp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/obsoletestimuli.html#fclampi"><code class="docutils literal notranslate"><span class="pre">fclampi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/obsoletestimuli.html#fclampv"><code class="docutils literal notranslate"><span class="pre">fclampv()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="programmatic/obsoletestimuli.html#prstim"><code class="docutils literal notranslate"><span class="pre">prstim()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

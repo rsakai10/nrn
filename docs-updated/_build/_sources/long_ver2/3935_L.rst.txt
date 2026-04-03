@@ -1,0 +1,112 @@
+.. _section_area_3d_method:
+
+Calculating Section Surface Area: Stylized vs 3D Method
+=======================================================
+
+When working with :class:`h.Section` objects in NEURON, the surface area calculation depends on how the section geometry is specified: the **stylized** method or the **3D pt3d** method.
+
+Area Calculation Using Stylized Geometry
+----------------------------------------
+
+If the section geometry is set using the stylized method by assigning
+
+- :attr:`sec.L` (length), and
+- :attr:`sec.diam` (diameter)
+
+then the surface area of the segment at midpoint (:meth:`sec(x).area()`) corresponds to the side area of a cylinder (assuming a fixed diameter along its length):
+
+.. math::
+
+    \text{Area} \approx L * \pi * \text{diam}
+
+This can be computed manually, for example:
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section()
+    sec.L = 7.0
+    sec.diam = 35.0
+    approx_area = sec.L * sec.diam * 3.141592653589793
+    neuron_area = sec(0.5).area()
+    print("Custom area:", approx_area)
+    print("NEURON area:", neuron_area)
+
+Output:
+
+.. code-block:: none
+
+    Custom area: 769.690200129
+    NEURON area: 769.690200129
+
+In this case, both formulas yield the same result.
+
+Area Calculation Using 3D Point Geometry
+----------------------------------------
+
+If the section geometry is defined with the 3D method using :meth:`h.pt3dadd` to specify points along the section with explicit coordinates and diameters, the area computation is more accurate and accounts for tapering and segment geometry.
+
+Surface area of a segment in this case is calculated by summing the lateral surface areas of all truncated cones (frusta) formed by adjacent 3D points along the section. Each frustum contributes:
+
+.. math::
+
+    A_i = \pi (r_i + r_{i+1}) \cdot s_i
+
+where
+
+- \(r_i, r_{i+1}\) are the radii at adjacent 3D points,
+- \(s_i = \sqrt{\Delta x^2 + \Delta y^2 + \Delta z^2}\) is the length of the segment between points considering 3D distance.
+
+This formula is derived from the lateral surface area of a conical frustum.
+
+Example illustrating the difference:
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section()
+    h.pt3dadd(0.0, 0.0, 0.0, 60.0, sec=sec)  # x, y, z, diameter
+    h.pt3dadd(7.0, 0.0, 0.0, 10.0, sec=sec)
+    print("sec L: ", sec.L)            # length considered along x-axis
+    print("sec diam: ", sec.diam)      # diameter at midpoint
+    custom_area = sec.L * sec.diam * 3.141592653589793  # stylized formula ignoring taper
+    neuron_area = sec(0.5).area()
+    print("Custom area:", custom_area)
+    print("NEURON area (frustum-based):", neuron_area)
+
+Output:
+
+.. code-block:: none
+
+    sec L:  7.0
+    sec diam:  35.0
+    Custom area: 769.690200129
+    NEURON area (frustum-based): 2854.61711509
+
+.. note::
+   The difference arises because :attr:`sec.diam` reports the diameter at the midpoint only, whereas the actual surface area sums contributions from all cross-sectional changes between 3D points.
+
+.. note::
+   Even if two 3D points share the same coordinates but have different diameters, a nonzero area contribution exists because of diameter difference over zero length.
+
+Transmembrane Current Computations
+----------------------------------
+
+NEURON uses the **actual surface area calculated by** :meth:`SectionRef.area <h.Segment.area>` (the frustum summation if 3D points are used) for all transmembrane current and ion flux computations. This ensures that membrane currents are computed on the physically accurate surface rather than a simplified cylinder approximation.
+
+Summary
+-------
+
+- **Stylized geometry** (setting :attr:`L` and :attr:`diam`) leads to area approximated as length × diameter × π.
+- **3D geometry** (using :meth:`pt3dadd`) leads to area computed as sum of conical frusta lateral areas, taking tapering and spatial changes into account.
+- The method :meth:`sec(x).area()` returns the correct membrane surface area at position *x* along the section.
+- NEURON uses this computed area internally for transmembrane currents.
+
+.. seealso::
+
+   :meth:`Section.pt3dadd`,
+   :meth:`SectionRef.area`,
+   :attr:`Section.L`,
+   :attr:`Section.diam`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3935 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3935>`_

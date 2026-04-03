@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to change parameters used in NMODL for channel kinetics from hoc or Python? &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="How to access ionic currents defined in NMODL mechanisms from HOC or Python?" href="How_to_access_ionic_currents_defined_in_NMODL_mechanisms_from_HOC_or_Python.html" />
+    <link rel="prev" title="Changing units in NMODL: How do unit definitions affect current calculations?" href="Changing_units_in_NMODL_How_do_unit_definitions_affect_current_calculations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../mod-file-examples.html">Where can I find examples of mod files?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../compile-mod-files.html">How do I compile mod files?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mod-files-not-compiling.html">I can’t get mod files to compile.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../incompatible-nmodl-intermediate-files.html">I installed a new version of NEURON, and now I see error messages like this: ‘mecanisms fooba needs to be re-translated. its version 5.2 “c” code is incompatible with this neuron version’.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nmodl-built-in-functions-list.html">Is there a list of functions that are built into NMODL?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hoc-built-in-functions-list.html">Is there a list of functions that are built into hoc?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../neuron-built-in-functions-list.html">Is there a list of functions that are built into NEURON?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nmodls_built_in_functions.html">NMODL’s built-in functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Units_Errors_in_mod_Files__How_to_Fix_Common_Issues_in_the_Morgan_Santhakumar_2007_Model.html">Units Errors in mod Files: How to Fix Common Issues in the Morgan/Santhakumar 2007 Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Changing_units_in_NMODL_How_do_unit_definitions_affect_current_calculations.html">Changing units in NMODL: How do unit definitions affect current calculations?</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">How to change parameters used in NMODL for channel kinetics from hoc or Python?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How_to_access_ionic_currents_defined_in_NMODL_mechanisms_from_HOC_or_Python.html">How to access ionic currents defined in NMODL mechanisms from HOC or Python?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Noise_MOD_causing_voltage_discontinuities_due_to_random_number_generation_in_BREAKPOINT.html">Noise MOD causing voltage discontinuities due to random number generation in BREAKPOINT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How_does_a_section_recognize_a_mechanisms_current_in_NEURON.html">How does a section recognize a mechanism’s current in NEURON?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parallel_assignment_of_large_arrays_in_multiple_instances_of_an_NMODL_mechanism.html">Parallel assignment of large arrays in multiple instances of an NMODL mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How_to_access_and_interpret_3D_morphology_points_after_importing_with_Import3D.html">How to access and interpret 3D morphology points after importing with Import3D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">How to change parameters used in NMODL for channel kinetics from hoc or Python?</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/How_to_change_parameters_used_in_NMODL_for_channel_kinetics_from_hoc_or_Python.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-change-parameters-used-in-nmodl-for-channel-kinetics-from-hoc-or-python">
+<h1>How to change parameters used in NMODL for channel kinetics from hoc or Python?<a class="headerlink" href="#how-to-change-parameters-used-in-nmodl-for-channel-kinetics-from-hoc-or-python" title="Link to this heading"></a></h1>
+<p>When modifying parameters defined in a MOD file that affect channel kinetics (e.g., voltage-dependence parameters), changing the parameter values from hoc or Python alone may not immediately affect the channel kinetics if the mechanism uses <cite>TABLE</cite> statements to cache voltage-dependent variables.</p>
+<p>Key points:
+- Variables and parameters declared in the <cite>PARAMETER</cite> block and exposed via <cite>RANGE</cite> or <cite>GLOBAL</cite> can be accessed and modified from hoc or Python using the syntax <cite>paramname_mechname</cite>.
+- If your mechanism uses <cite>TABLE</cite> statements without the appropriate <cite>DEPEND</cite> clauses, changing parameters from hoc or Python will not update the cached tables, and the channel kinetics will not change during simulation.
+- To make parameter changes effective immediately, you have two options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Disable table usage by setting <cite>usetable_mechname = 0</cite> from hoc or Python. This forces the kinetics to be recalculated at each step but can slow down simulations.</p></li>
+<li><p>Modify your <cite>TABLE</cite> statements in the MOD file to include <cite>DEPEND</cite> clauses listing all parameters that affect each table. This ensures NEURON automatically recalculates tables when those parameters change.</p></li>
+</ol>
+</div></blockquote>
+<p>Example of disabling tables from hoc or Python:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>usetable_kv1 = 0  // Disable tables for kv1 mechanism
+kv1.vhkv1ninf_kv1 = -70
+kv1.kkv1ninf_kv1 = 20
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span>
+<span class="n">sec</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;kv1&#39;</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">usetable_kv1</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Disable tables</span>
+<span class="n">sec</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">kv1</span><span class="o">.</span><span class="n">vhkv1ninf_kv1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">70</span>
+<span class="n">sec</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">kv1</span><span class="o">.</span><span class="n">kkv1ninf_kv1</span> <span class="o">=</span> <span class="mi">20</span>
+</pre></div>
+</div>
+<p>Example modification of TABLE statements in NMODL to include DEPEND (conceptual):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TABLE ninf FROM -100 TO 100 WITH 200 DEPEND vhkv1ninf, kkv1ninf
+TABLE ntau FROM -100 TO 100 WITH 200 DEPEND akv1ntaul, bkv1ntaul, ckv1ntaul, dkv1ntaul, akv1ntaur, bkv1ntaur, ckv1ntaur, dkv1ntaur
+TABLE hinf FROM -100 TO 100 WITH 200 DEPEND akv1hinf, bkv1hinf, vhkv1hinf, kkv1hinf
+TABLE htau FROM -100 TO 100 WITH 200 DEPEND akv1htaul, bkv1htaul, ckv1htaul, dkv1htaul, akv1htaur, bkv1htaur, ckv1htaur, dkv1htaur
+</pre></div>
+</div>
+<p>Note: Because NMODL allows only one <cite>TABLE</cite> statement per function, it may be necessary to separate the voltage-dependent variables into different FUNCTIONS or PROCEDURES to assign different <cite>DEPEND</cite> clauses. Alternatively, consider removing the <cite>TABLE</cite> statements when parameters change frequently to avoid inconsistency.</p>
+<p>Tips:</p>
+<ul class="simple">
+<li><p>Avoid redundant naming in variables and parameters relative to the mechanism SUFFIX for easier access (e.g., use <cite>gbar</cite> instead of <cite>gkv1bar</cite>).</p></li>
+<li><p>After modifying parameters that affect tables, remember to recompile the MOD files.</p></li>
+<li><p>Refer to “The NEURON simulation environment” and “Expanding NEURON’s repertoire of mechanisms with NMODL” papers for comprehensive understanding.</p></li>
+</ul>
+<p>Summary:
+Changing parameters that influence voltage-dependent kinetics requires attention to how <cite>TABLE</cite> statements are defined in MOD files. Disabling tables during parameter sweeps or properly using <cite>DEPEND</cite> clauses ensures parameter changes take immediate effect in simulations.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4033">https://neuron.yale.edu/phpBB/viewtopic.php?t=4033</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Changing_units_in_NMODL_How_do_unit_definitions_affect_current_calculations.html" class="btn btn-neutral float-left" title="Changing units in NMODL: How do unit definitions affect current calculations?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="How_to_access_ionic_currents_defined_in_NMODL_mechanisms_from_HOC_or_Python.html" class="btn btn-neutral float-right" title="How to access ionic currents defined in NMODL mechanisms from HOC or Python?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

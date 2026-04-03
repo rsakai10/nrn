@@ -1,0 +1,158 @@
+Changing NMODL Parameters Affecting Channel Kinetics from Hoc or Python
+==========================================================================
+
+When writing mod files that describe ion channel kinetics in NEURON via NMODL, you may define various parameters affecting rate constants, time constants, and steady-state values. It is common to want to change these parameters dynamically from hoc or Python to explore their effects on channel behavior.
+
+This document explains the correct approach to changing such parameters and how to ensure that these changes affect the channel kinetics as expected.
+
+Parameter Naming and Access
+---------------------------
+
+- **Suffix and Variable Names**  
+  The `SUFFIX` declared in the NEURON block defines the namespace for mechanism variables and parameters. For instance, if the suffix is `kv1`, and you declare `RANGE gkv1bar` in the mechanism, the hoc variable will be accessed as `gkv1bar_kv1`.  
+
+- **Avoid Redundant Naming**  
+  It is recommended to avoid embedding the suffix string redundantly in variable or parameter names. For example, use `gbar` instead of `gkv1bar` in the NMODL file, so that hoc access is `gbar_kv1` instead of `gkv1bar_kv1`. This improves code readability and ease of use.
+
+Accessing and Changing Parameters in Hoc or Python
+--------------------------------------------------
+
+- Parameters declared as `PARAMETER` or `GLOBAL` in NMODL can be accessed and modified through hoc or Python using the mechanism instance variables, e.g.:
+
+  ```hoc
+  kv1_instance.gbar_kv1 = 0.002
+  print kv1_instance.gbar_kv1
+  ```
+
+- **Important:** If you declare such variables in hoc scripts independently (e.g., `gkv1bar = 0.0015`), this creates unrelated hoc variables that do not affect the NMODL mechanism.
+
+Handling TABLE Statements and Parameter Changes
+-----------------------------------------------
+
+- **Purpose of TABLE**  
+  The NMODL `TABLE` statement allows precomputing voltage-dependent variables such as activation/inactivation curves (e.g., `ninf`, `tau`) to accelerate simulations by using lookup tables instead of recalculating at every time step.
+
+- **Issue with Changing Parameters**  
+  When rate or steady-state variables depend on parameters that can be changed at runtime from hoc/Python, the lookup tables *do not automatically update* to reflect these changes.
+
+- **Usual Implementation:**
+
+  ```mod
+  TABLE ninf, ntau, hinf, htau
+    FROM -100 TO 100 WITH 200
+  ```
+
+  This creates tables for the gating variables, but they only update during model initialization.
+
+- **What happens if you change parameters (e.g., `vhkv1ninf`) from hoc?**
+
+  The tables are *not recalculated*, so the kinetics remain those computed for the original parameter values.
+
+Solutions to Ensure Parameter Changes Take Effect
+-------------------------------------------------
+
+1. **Disable Table Usage**
+
+   Set the `usetable` flag for the mechanism to 0 in hoc or Python:
+
+   ```hoc
+   kv1_instance.usetable_kv1 = 0
+   ```
+
+   This disables use of lookup tables, causing the model to recalculate gating variables at every time step, ensuring parameter changes are reflected immediately.
+
+   **Note:** This may slow down long simulations but guarantees correctness when you vary parameters dynamically.
+
+2. **Use DEPEND Clauses in TABLE Statements**
+
+   You can specify parameter dependencies in the `TABLE` statement so that NEURON knows when to rebuild the tables. For example:
+
+   ```mod
+   TABLE hinf
+     DEPEND vhkv1hinf, kkv1hinf
+     FROM -100 TO 100 WITH 200
+   ```
+
+   This instructs NEURON to recompute `hinf` lookup tables whenever `vhkv1hinf` or `kkv1hinf` change.
+
+   However:
+
+   - **NMODL supports only one `TABLE` statement per function or variable.**  
+     You cannot split one variable's table into multiple declarations.
+
+   - You must create **separate functions or procedures** for each table if different parameters affect different gating variables.
+
+   - Example splitting function (conceptual):
+
+     ```mod
+     FUNCTION ninf(v(v)) {
+       TABLE DEPEND vhkv1ninf, kkv1ninf FROM -100 TO 100 WITH 200
+       ninf = 1/(1+exp(-(v-vhkv1ninf)/kkv1ninf))
+     }
+     ```
+
+3. **Avoid Overuse of `TABLE` with Numerous Parameters**
+
+   Because managing multiple DEPEND clauses and splitting procedures increases code complexity and maintenance cost, consider:
+
+   - Commenting out the `TABLE` statements during early stages of model development or when parameters change frequently.
+
+   - Accepting a small decrease in simulation speed in exchange for modeling flexibility and correctness.
+
+Additional Advice
+-----------------
+
+- Always **read The NEURON Book** chapters relevant to NMODL and hoc.
+
+- Verify that you're modifying the *correct* parameter variables bound to your channel instance, not hoc variables with the same names but unrelated to the mechanism.
+
+- Use consistent, concise variable names without redundant suffixes.
+
+- When performance is critical and parameters are fixed, use `TABLE` with appropriate `DEPEND` clauses.
+
+Example Python and Hoc Usage
+----------------------------
+
+```python
+from neuron import h, gui
+
+soma = h.Section(name='soma')
+soma.insert('kv1')
+
+# Changing a parameter:
+soma.gbar_kv1 = 0.002  # assuming 'gbar' is the parameter name in mod file
+
+# Disable use of tables (forces recalculation at each step)
+soma.usetable_kv1 = 0
+```
+
+```hoc
+create soma
+access soma
+insert kv1
+
+// Change a parameter that affects kinetics
+soma.gbar_kv1 = 0.002
+
+// Disable use of lookup tables for kv1
+soma.usetable_kv1 = 0
+```
+
+Summary
+-------
+
+- To change channel kinetic parameters at runtime and see effects immediately, either disable lookup tables (`usetable=0`) or define `DEPEND` clauses in `TABLE` statements for parameters that affect rate constants or steady states.
+
+- Using redundant variable names with suffixes in NMODL is discouraged to simplify hoc/Python access.
+
+- Remember that simply assigning hoc variables with the same names as NMODL parameters but not linked to the channel instance will have no effect on channel behavior.
+
+- Performance gains from `TABLE` come at a complexity cost when parameters vary; prioritize correctness before optimization.
+
+.. note::
+   For detailed explanation of `TABLE` and `DEPEND`, see the NMODL documentation on table lookup usage.
+
+.. seealso::
+   :mod:`h.Section`, :meth:`h.Section.insert`, :attr:`Mechanism.usetable_*`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4033 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4033>`_

@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Coordinates Storage in Sections &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">3D Coordinates Storage in Sections</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4190_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>Morphology 3D Points Reconstruction with <code class="xref py py-class docutils literal notranslate"><span class="pre">Import3d</span></code></p>
+<p>When working with neuron morphologies imported via the <code class="xref py py-class docutils literal notranslate"><span class="pre">Import3d</span></code> tool (e.g., from an <cite>.asc</cite> file), understanding how to access and interpret the 3D points of sections and segments is essential. This guide clarifies how NEURON manages 3D geometry data and how to properly reconstruct and navigate the morphology in Python or HOC.</p>
+<section id="d-coordinates-storage-in-sections">
+<h1>3D Coordinates Storage in Sections<a class="headerlink" href="#d-coordinates-storage-in-sections" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>A <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section" title="Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a> stores its 3D coordinates using “3D points” arrays. These are accessed by the methods:</p>
+<ul>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.n3d()</span></code> — returns the number of 3D points describing the section’s morphology.</p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.x3d(index)()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.y3d(index)()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.z3d(index)()</span></code> — return the x, y, and z coordinates of the 3D point at <cite>index</cite>.</p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.diam3d(index)()</span></code> — diameter at the 3D point.</p></li>
+</ul>
+</li>
+<li><p>The 3D points (pt3d info) represent the morphology path and diameter at discrete locations along the section, describing its shape.</p></li>
+<li><p>The first and last 3D points correspond to the 0 end of the section’s first segment and the 1 end of the last segment respectively.</p></li>
+<li><p>Importantly, <strong>intermediate 3D points do not necessarily coincide with segment boundaries or segment centers</strong>, and segments themselves do not store 3D coordinates directly.</p></li>
+</ul>
+</section>
+<section id="iterating-over-segments-and-sections">
+<h1>Iterating Over Segments and Sections<a class="headerlink" href="#iterating-over-segments-and-sections" title="Link to this heading"></a></h1>
+<ul>
+<li><p>Segments of a section are ephemeral and determined by the section’s spatial discretization parameter <cite>nseg</cite>. This number can change during model development.</p></li>
+<li><p>Iterate over segments in a section using:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+for seg in section:</p>
+<blockquote>
+<div><p># seg.x is the normalized location (0 ≤ seg.x ≤ 1) along the section
+# seg represents an instance of nrn.Segment</p>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</li>
+<li><p>Creating a persistent list of segments is possible, but generally unnecessary:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">segments</span> <span class="pre">=</span> <span class="pre">[seg</span> <span class="pre">for</span> <span class="pre">seg</span> <span class="pre">in</span> <span class="pre">section]</span>
+<span class="pre">`</span></code></p>
+</li>
+</ul>
+</section>
+<section id="clarifications-about-3d-coordinates-and-section-connectivity">
+<h1>Clarifications About 3D Coordinates and Section Connectivity<a class="headerlink" href="#clarifications-about-3d-coordinates-and-section-connectivity" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>A section does <strong>not</strong> store 3D coordinates for its parent connection point independently; however, you can access the connection relative location using <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.parentseg" title="Section.parentseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.parentseg()</span></code></a> which returns the parent segment at which the section is connected.</p></li>
+<li><p>The value <cite>seg.x</cite> for <cite>parentseg</cite> corresponds to the normalized path length (0 to 1) along the <em>parent</em> section where the child section connects, <strong>not</strong> to a particular 3D point index from the pt3d data.</p></li>
+<li><p>The 3D point connectivity is <strong>not guaranteed to match exactly</strong> between parent and child sections because:</p>
+<ol class="arabic simple">
+<li><p>The points used to describe section geometry (pt3d info) depend on shape irregularities and original measurement algorithms, not the segment discretization.</p></li>
+<li><p>The child section’s 0 or 1 end can be connected anywhere along the parent section, including internal nodes (not strictly endpoints).</p></li>
+<li><p>The child’s pt3d coordinates will be automatically translated for visualization (e.g., in shape plots) so that its 3D geometry connects correctly to the parent section, even if the original 3D data points differ.</p></li>
+</ol>
+</li>
+<li><p>Use <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.pt3dstyle()</span></code> and related functionality to control or prevent these translations as needed.</p></li>
+</ul>
+</section>
+<section id="example-inspecting-3d-points-of-a-section">
+<h1>Example: Inspecting 3D Points of a Section<a class="headerlink" href="#example-inspecting-3d-points-of-a-section" title="Link to this heading"></a></h1>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+from neuron import h</p>
+<p>axon = h.Section(name=’axon’)
+axon.pt3dclear()
+axon.pt3dadd(0, 0, 0, 1)
+axon.pt3dadd(100, 0, 0, 1)</p>
+<p>print(“Number of 3D points:”, axon.n3d())
+for i in range(axon.n3d()):</p>
+<blockquote>
+<div><p>print(f”Point {i}: x={axon.x3d(i)}, y={axon.y3d(i)}, z={axon.z3d(i)}, diam={axon.diam3d(i)}”)</p>
+</div></blockquote>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+</section>
+<section id="handling-section-connectivity-and-parent-segments">
+<h1>Handling Section Connectivity and Parent Segments<a class="headerlink" href="#handling-section-connectivity-and-parent-segments" title="Link to this heading"></a></h1>
+<ul>
+<li><p>To find the location along a parent section where a child connects:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">parent_segment</span> <span class="pre">=</span> <span class="pre">child_section.parentseg()</span>
+<span class="pre">connection_location</span> <span class="pre">=</span> <span class="pre">parent_segment.x</span>&#160; <span class="pre">#</span> <span class="pre">normalized</span> <span class="pre">(0</span> <span class="pre">to</span> <span class="pre">1)</span> <span class="pre">distance</span> <span class="pre">along</span> <span class="pre">parent</span> <span class="pre">section</span>
+<span class="pre">`</span></code></p>
+</li>
+<li><p>This location is not tied intrinsically to any specific 3D point index from the parent section’s pt3d data.</p></li>
+</ul>
+</section>
+<section id="key-points-summary">
+<h1>Key Points Summary<a class="headerlink" href="#key-points-summary" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Segments do not store their own 3D points. The 3D shape is stored at the section level.</p></li>
+<li><p>3D points describe the shape path, not segment boundaries or centers.</p></li>
+<li><p>Segment count and positions depend on <cite>nseg</cite> and are dynamic.</p></li>
+<li><p>Parent-child connections can occur at any normalized position (0 ≤ x ≤ 1) along a parent section.</p></li>
+<li><p>The 3D morphology displayed in shape plots may be translated for proper visual connection; original pt3d points remain unchanged.</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.n3d()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.x3d()</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.parentseg" title="Section.parentseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.parentseg()</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.pt3dstyle()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4190">https://neuron.yale.edu/phpBB/viewtopic.php?t=4190</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

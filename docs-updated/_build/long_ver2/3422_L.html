@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calcium Diffusion in Multiple Radial Shells &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Calcium Diffusion in Multiple Radial Shells</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3422_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calcium-diffusion-in-multiple-radial-shells">
+<h1>Calcium Diffusion in Multiple Radial Shells<a class="headerlink" href="#calcium-diffusion-in-multiple-radial-shells" title="Link to this heading"></a></h1>
+<p>When modeling intracellular calcium dynamics with radial diffusion, calcium concentration is often represented within multiple concentric shells beneath the membrane. This approach is used, for example, in the calcium diffusion pool (cdp) model from Example 9.8 of the NEURON Book.</p>
+<section id="local-vs-average-calcium-concentration">
+<h2>Local vs. Average Calcium Concentration<a class="headerlink" href="#local-vs-average-calcium-concentration" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The calcium concentration variable exposed to mechanisms via <cite>USEION</cite> in NMODL (commonly named <cite>cai</cite>) corresponds specifically to the concentration in the outermost shell (the shell immediately adjacent to the membrane).</p></li>
+<li><p>This value is <em>not</em> the average calcium concentration inside the cell volume.</p></li>
+<li><p>The rationale is that membrane mechanisms (channels, pumps, buffers) detect and respond to local calcium concentration near the membrane, not a spatial average.</p></li>
+<li><p>Therefore, <cite>cai</cite> and extracellular concentration <cite>cao</cite> represent <em>local</em> concentrations used to calculate electrochemical gradients or gating of calcium-dependent channels.</p></li>
+</ul>
+</section>
+<section id="comparison-with-experimental-calcium-imaging">
+<h2>Comparison with Experimental Calcium Imaging<a class="headerlink" href="#comparison-with-experimental-calcium-imaging" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Experimentally measured calcium signals, such as calcium-bound dye fluorescence, typically represent an <em>average concentration</em> over the imaged volume, not just near the membrane.</p></li>
+<li><p>Calibration procedures convert fluorescence changes to estimates of free calcium concentration averaged over the measurement volume.</p></li>
+<li><p>To compare model output with experimental calcium signals, it is generally more appropriate to use a volume-weighted average calcium concentration across all radial shells.</p></li>
+</ul>
+</section>
+<section id="considerations-for-model-experiment-comparison">
+<h2>Considerations for Model-Experiment Comparison<a class="headerlink" href="#considerations-for-model-experiment-comparison" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The dye’s distribution, affinity, and kinetics affect the relationship between free calcium and the fluorescence signal.</p></li>
+<li><p>The dye may bind calcium and alter calcium buffering, changing amplitude and time course of calcium transients.</p></li>
+<li><p>If the dye distribution and properties are known and assumed uniform over the cytoplasm, the optical signal corresponds roughly to the volume-weighted average of calcium-bound dye concentration.</p></li>
+<li><p>If dye kinetics or buffering effects are significant, a nonlinear transformation from free calcium to calcium-bound dye complex concentration is required.</p></li>
+</ul>
+</section>
+<section id="calculating-volume-weighted-average-calcium-concentration-in-hoc">
+<h2>Calculating Volume-Weighted Average Calcium Concentration in HOC<a class="headerlink" href="#calculating-volume-weighted-average-calcium-concentration-in-hoc" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Record calcium concentrations in each shell:</strong></p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>hoc
+// $1: number of radial shells
+// $2: segment location (0 to 1)
+// Must be called with the section of interest accessed.</p>
+<dl>
+<dt>obfunc mkcaveclist() {</dt><dd><p>local i localobj tmpvec, tmplist
+tmplist = new List()
+for i=0, $1-1 {</p>
+<blockquote>
+<div><p>tmpvec = new Vector()
+tmpvec.record(&amp;ca[i]_cadifus($2))
+tmplist.append(tmpvec)</p>
+</div></blockquote>
+<p>}
+return tmplist</p>
+</dd>
+</dl>
+<p>}</p>
+<p>objref cavecs, tvec
+tvec = new Vector()
+tvec.record(&amp;t)
+// Example: record from the middle (0.5) of a dendritic section with numshells shells
+cavecs = mkcaveclist(numshells, 0.5)
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</li>
+<li><p><strong>Define weights for each shell based on relative volumes:</strong></p>
+<p>For a cylindrical shell with normalized inner radius <cite>r_i</cite> and outer radius <cite>r_o</cite>, relative volume ∝ <cite>r_o² - r_i²</cite>.</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>hoc
+objref weights
+weights = new Vector(numshells)</p>
+<p>// Example assignment (you must fill this based on your shell radii):
+// weights.x[0] = r_o0^2 - r_i0^2
+// weights.x[1] = r_o1^2 - r_i1^2
+// …
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+</li>
+<li><p><strong>Sum weighted contributions of each shell to get average concentration:</strong></p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>hoc
+// $o1: List of recorded shell calcium vectors
+// $o2: Vector of shell weights</p>
+<dl>
+<dt>obfunc wtsum() {</dt><dd><p>local i localobj tmpsum, tobj
+tmpsum = new Vector($o1.o(0).count(), 0) // Initialize to zero
+for i=0, $o2.count()-1 {</p>
+<blockquote>
+<div><p>tobj = $o1.o(i).c // copy ith shell Vector
+tobj.mul($o2.x[i]) // weight by volume
+tmpsum.add(tobj)</p>
+</div></blockquote>
+<p>}
+return tmpsum</p>
+</dd>
+</dl>
+<p>}</p>
+<p>objref meanca
+meanca = wtsum(cavecs, weights)
+// meanca now contains the time course of average free calcium concentration
+<a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+</li>
+</ol>
+</section>
+<section id="transforming-free-calcium-to-calcium-bound-dye-concentration">
+<h2>Transforming Free Calcium to Calcium-Bound Dye Concentration<a class="headerlink" href="#transforming-free-calcium-to-calcium-bound-dye-concentration" title="Link to this heading"></a></h2>
+<p>If calcium buffering by the dye is significant and dye kinetics are known, calculate calcium-bound dye concentration from free calcium as follows:</p>
+<ol class="arabic">
+<li><p><strong>Define a function `f` in HOC or as a HOC procedure</strong> that maps free calcium concentration <cite>ca</cite> to calcium-bound dye concentration assuming steady state:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">ca</span> <span class="pre">+</span> <span class="pre">dye</span> <span class="pre">&lt;-&gt;</span> <span class="pre">ca*dye</span> <span class="pre">complex</span>
+<span class="pre">`</span></code></p>
+<p>The function <cite>f</cite> uses initial free calcium and dye concentrations and returns equilibrium bound dye concentration.</p>
+</li>
+<li><p><strong>Apply `f` to each recorded shell calcium vector:</strong></p>
+<p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a>hoc
+dye0 = 0 // global initial dye concentration (set as appropriate)</p>
+<dl>
+<dt>obfunc xformcai() {</dt><dd><p>local i localobj tmpvec, tmplist
+tmplist = new List()
+for i=0, $o1.count()-1 {</p>
+<blockquote>
+<div><p>tmpvec = $o1.o(i).c
+tmpvec.apply(“f”)  // apply function f elementwise
+tmplist.append(tmpvec)</p>
+</div></blockquote>
+<p>}
+return tmplist</p>
+</dd>
+</dl>
+<p>}</p>
+<p>objref cadyevecs
+cadyevecs = xformcai(cavecs, 0.15)  // e.g., dye0=0.15 µM
+<a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+</li>
+<li><p><strong>Compute weighted sum of calcium-bound dye concentrations:</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">objref</span> <span class="pre">meancadye</span>
+<span class="pre">meancadye</span> <span class="pre">=</span> <span class="pre">wtsum(cadyevecs,</span> <span class="pre">weights)</span>
+<span class="pre">`</span></code></p>
+</li>
+</ol>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The variable <cite>cai</cite> used by mechanisms represents local calcium concentration in the shell adjacent to the membrane, essential for channel gating and flux calculations.</p></li>
+<li><p>To compare simulations with experimentally measured volume-averaged calcium signals (e.g. fluorescence from calcium indicators), compute the volume-weighted average over all radial shells.</p></li>
+<li><p>If dye buffering is important, transform free calcium concentrations to calcium-bound dye concentrations before averaging.</p></li>
+<li><p>Use <cite>Vector.record</cite> in HOC to obtain shell concentrations, then apply volume weights to obtain averages.</p></li>
+<li><p>Precise comparisons require knowledge of dye properties, distribution, and region of experimental measurement.</p></li>
+</ul>
+<p>This approach ensures an accurate and interpretable link between modeled intracellular calcium dynamics and experimental calcium imaging data.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3422">https://neuron.yale.edu/phpBB/viewtopic.php?t=3422</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

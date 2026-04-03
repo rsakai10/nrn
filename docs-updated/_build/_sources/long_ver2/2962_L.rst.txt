@@ -1,0 +1,141 @@
+Using For Loops to Run Multiple Simulations with Parameter Variation
+======================================================================
+
+This section explains how to run multiple simulation trials in a hoc file using loops to vary input parameters, such as event times, across runs. It also clarifies common errors and recommends best practices for simulation control using NEURON's standard run system.
+
+Event Time Vector Setup
+-----------------------
+
+To generate a vector of event times (e.g., stimulus spike times) that changes on each run, use the :class:`Vector` methods efficiently instead of appending values in loops. Define a procedure that resizes and populates the vector before each run:
+
+.. code-block:: hoc
+
+  // svec is a global or previously declared Vector
+  svec = new Vector()
+
+  // $1 = start time, $2 = interval dt, $3 = number of intervals
+  proc before_run() {
+      svec.resize($3+1)
+      svec.indgen($2)  // fills vector with 0, dt, 2*dt, ...
+      svec.add($1)     // adds start time to each element
+  }
+
+Creating and Starting VecStim for Each Run
+-------------------------------------------
+
+Create a new :class:`VecStim` object each run and play the updated event vector:
+
+.. code-block:: hoc
+
+  objref vecstim
+  vecstim = new VecStim()
+  vecstim.play(svec)
+
+Simulation Control Using Standard Run System
+--------------------------------------------
+
+Instead of writing custom procedures for initialization and advancing time, use NEURON's built-in :meth:`run` procedure. This is achieved by loading either :file:`nrngui.hoc` or :file:`stdgui.hoc`. The latter suppresses GUI windows if not needed.
+
+Example batch run loop varying intervals:
+
+.. code-block:: hoc
+
+  proc batrun() {
+      local i
+      for i=1, $1 {
+          before_run(3000, i, 100)  // example parameters
+          run()                     // standard NEURON run
+          counter()                 // user-defined procedure to analyze results
+      }
+  }
+
+  
+Analysis and Recording
+----------------------
+
+Example procedures for recording spike times and calculating spike frequency:
+
+.. code-block:: hoc
+
+  objref grcspk, nc, spkcnts
+  spkcnts = new Vector()  // to store frequency results
+
+  proc newvec() {
+      grcspk = new Vector()
+      nc = new NetCon(&v(0.5), nil)
+      nc.threshold = 0
+      nc.record(grcspk)
+  }
+
+  proc counter() {
+      local firstspk, lastspk, totspk, spkfreq
+      totspk = grcspk.size()
+      if (totspk <= 1) {
+          spkfreq = 0
+      } else {
+          firstspk = grcspk.x[0]
+          lastspk = grcspk.x[totspk-1]
+          spkfreq = (totspk - 1) / (lastspk - firstspk)
+      }
+      spkcnts.append(spkfreq)
+  }
+
+Important Notes
+---------------
+
+- Always declare object references like :objref:`Vector` or :objref:`File` before assigning to them to avoid syntax errors.
+
+- Avoid continuously appending new event times to the same vector without clearing or resizing it, as this may cause scheduling errors such as negative event times in :class:`VecStim`.
+
+- There is no need (and no mechanism) to "close" hoc files after loading. The :class:`File` class and related functions (:func:`wopen`, :meth:`File.wclose`) control text file I/O, not hoc file management.
+
+- Setting simulation parameters such as time step (:var:`dt`) and integration method should be done before calling :meth:`run`.
+
+Integration Mode and Time Step Control
+--------------------------------------
+
+- Set the fixed time step by assigning to the global variable :var:`dt` before running the simulation:
+
+  .. code-block:: hoc
+
+    dt = 0.001  // set fixed time step
+
+- Control integration mode for fixed-step integration via the :var:`secondorder` variable (selects backward Euler or Crank-Nicholson variants).
+
+- For variable time step integration, use the VariableTimeStep tool through the GUI or load a saved session (.ses) file. This requires empirically tuning absolute tolerances for each state variable.
+
+Example of controlling :var:`dt` in batch runs:
+
+.. code-block:: hoc
+
+  proc batrun() {
+      local i, dtold
+      dtold = dt
+      dt = 0.001
+      for i=1, $1 {
+          before_run(3000, i, 100)
+          run()
+          counter()
+      }
+      print "Executed ", $1, " runs with dt ", dt
+      dt = dtold
+  }
+
+Summary
+-------
+
+- Use Vector methods like :meth:`Vector.indgen` and :meth:`Vector.add` to prepare event time vectors efficiently.
+
+- Use the standard :meth:`run` procedure for advancing the simulation rather than custom looping with :meth:`fadvance`.
+
+- Create new recording objects (e.g., :class:`Vector`, :class:`NetCon`) fresh for each simulation run.
+
+- Ensure object references are declared before assigning.
+
+- There is no hoc file closing command; loading hoc files is one-time at runtime.
+
+- Control :var:`dt` and integration settings prior to running simulations.
+
+By following these guidelines, you can efficiently run multiple simulation trials varying timing or other parameters, avoiding common mistakes and harnessing built-in NEURON tools for simulation control.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2962 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2962>`_

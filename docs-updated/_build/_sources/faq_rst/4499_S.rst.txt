@@ -1,0 +1,128 @@
+.. _handling_discontinuities_and_pointers:
+
+Handling Discontinuities and POINTER Use in NET_RECEIVE with Variable Time Step
+--------------------------------------------------------------------------------
+
+When enforcing boundary limits on state variables (e.g., ensuring a state variable ``a`` does not drop below zero) using :meth:`NET_RECEIVE` with :meth:`WATCH` statements and variable time step integration, drastic slowdowns may occur due to many self-events triggering rapid time step reduction.
+
+For example, consider two state variables ``a`` and ``b``, with ``b`` an algebraic oscillator and ``a`` a differential equation driven by ``b`` and constrained to stay nonnegative.
+
+**Single-File NMODL Example:**
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS equations
+    }
+
+    PARAMETER {
+        b0 = 1.0
+        w = 0.628
+    }
+
+    STATE { a b }
+
+    BREAKPOINT {
+        SOLVE states METHOD derivimplicit
+    }
+
+    INITIAL {
+        a = 1.0
+        b = 1
+        net_send(0,1)
+    }
+
+    DERIVATIVE states {
+        b = b0 * cos(w * t)
+        a' = a * (1 - a) - b
+    }
+
+    NET_RECEIVE(flag) {
+        if (flag == 1) {
+            WATCH (a < 0) 2
+        } else if (flag == 2) {
+            net_event(t)
+            a = 0
+        }
+    }
+
+Separating ``a`` and ``b`` equations into separate .mod files and connecting with :class:`POINTER` is possible but can amplify inefficiencies when combined with variable time step and :meth:`WATCH`. The adaptive integrator's small steps and rapid self-events cause slowdowns. POINTER access itself does not intrinsically cause major computational burden.
+
+**Key observations and guidance:**
+
+.. note::
+
+   - Variable time step integrators struggle with discontinuities triggered by :meth:`WATCH` and :meth:`NET_RECEIVE`. The integrator often takes tiny steps near state resets.
+
+   - Fixed time step integration combined with explicit resets within the :meth:`BREAKPOINT` block using simple if-statements is generally more efficient and stable for enforcing hard boundaries.
+
+**Example using fixed time step and reset in BREAKPOINT:**
+
+.. code-block:: mod
+
+    NEURON {
+        SUFFIX fixedstep
+    }
+
+    PARAMETER {
+        b0 = 1.0
+        w = 0.628
+    }
+
+    STATE { a b }
+
+    BREAKPOINT {
+        SOLVE states METHOD derivimplicit
+        if (a < 0) {
+            a = 0
+        }
+        b = b0 * cos(w * t)
+    }
+
+    INITIAL {
+        a = 1.0
+    }
+
+    DERIVATIVE states {
+        a' = a * (1 - a) - b
+    }
+
+**Using POINTERs:**
+
+.. note::
+
+   Using :class:`POINTER` to access state variables across mechanisms does *not* typically degrade performance significantly. The slowdown in the variable time step scenario arises mainly from solver event handling overload near discontinuities.
+
+**Alternative approach using a smooth "squashing" function to avoid hard resets:**
+
+Replace hard limits with a logistic attenuation of the forcing term to keep ``a`` positive without discontinuities, enabling efficient variable time step integration:
+
+.. code-block:: mod
+
+    FUNCTION expit(x) {
+        expit = 1 / (1 + exp(-x))
+    }
+
+    FUNCTION b(t) {
+        b = b0 * cos(w * t)
+    }
+
+    DERIVATIVE states {
+        a' = a * (1 - a) - b(t) * expit(k*(a - c))
+    }
+
+where ``k`` and ``c`` are parameters controlling steepness and threshold of attenuation.
+
+**Summary:**
+
+- For strict boundary enforcement via discrete events (e.g., resetting ``a`` to zero using :meth:`NET_RECEIVE` and :meth:`WATCH`), fixed time step integration with explicit boundary condition handling in the :meth:`BREAKPOINT` block is preferred.
+
+- Using POINTERs to share variables between mechanisms does not inherently cause large performance hits.
+
+- To enable efficient variable time step integration, approximate hard boundaries by smooth nonlinear functions (e.g., logistic attenuation) eliminating abrupt resets.
+
+.. seealso::
+
+   :class:`NET_RECEIVE`, :meth:`WATCH`, :class:`POINTER`, :meth:`BREAKPOINT` block, :class:`CVode` for variable time step integration.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4499 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4499>`_

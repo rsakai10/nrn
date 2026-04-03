@@ -1,0 +1,58 @@
+Automating Parameter Exploration in NEURON
+===========================================
+
+When running simulations in NEURON, it is often useful to automate the exploration of parameter space by varying parameters programmatically across multiple runs. This avoids manual changes for each simulation and facilitates systematic analysis.
+
+Automating Simulations with a `for` Loop
+----------------------------------------
+
+You can use a simple `for` loop to vary a parameter, such as the amplitude of a stimulus, across multiple runs. For example, if you have an `IClamp` object referenced by `stim`, the following loop runs simulations with stimulus amplitudes from 0.1 to 1 nA in steps of 0.1 nA:
+
+.. code-block:: hoc
+
+   for j = 1,10 {
+     stim.amp = 0.1*j
+     run()
+   }
+
+Using an `iterator` for Arbitrary Parameter Sets
+-----------------------------------------------
+
+NEURON also supports the `iterator` construct, which allows iterating over an arbitrary set of values. This is useful when the parameter values are not evenly spaced or follow a specific set:
+
+.. code-block:: hoc
+
+   iterator case() { local i
+     for i = 2, numarg() {  // start at 2 because first argument is the address
+       $&1 = $i  // assign the i-th argument value to the address
+       iterator_statement  // execute the statement(s) inside the iterator
+     }
+   }
+
+   for case(&stim.amp, 0.1, 1/PI, sqrt(2)) {
+     run()
+   }
+
+Notes
+-----
+
+- Ensure your main hoc file includes the line:
+
+  .. code-block:: hoc
+
+     load_file("nrngui.hoc")
+
+  This loads NEURON's standard run system required for `run()`.
+
+- Consult the NEURON Programmer's Reference for detailed information on the `for` and `iterator` keywords.
+
+.. seealso::
+
+   - `NEURON Programming Reference <https://neuron.yale.edu/neuron/static/py_doc/programmers_reference.html>`_
+
+Reference
+---------
+
+This guidance is adapted from a NEURON forum discussion:
+
+`Automating exploration of parameter space - NEURON Forum (Topic ID: 2493) <https://www.neuron.yale.edu/phpBB/viewtopic.php?f=16&t=2493>`_

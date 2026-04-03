@@ -1,0 +1,211 @@
+Interfacing NEURON with Other Software at Runtime
+==================================================
+
+This section explains how to implement callbacks from Python code during a NEURON simulation to enable runtime control of model components (e.g., artificial cells or mechanisms whose behavior depends on external software). It also provides an improved strategy using built-in NEURON Python callback mechanisms, avoiding the need for custom NMODL code.
+
+.. note::
+   A previously proposed approach involved a custom NMODL POINT_PROCESS with a pointer to a Python callback function, setting the callback via a :meth:`set_callback` procedure and calling it at each time step in the :keyword:`BEFORE STEP` block. However, this approach has limitations when passing Python function arguments and managing callback lifetimes.
+
+Custom NMODL POINT_PROCESS Callback Example
+-------------------------------------------
+
+Below is an example NMODL snippet illustrating a POINT_PROCESS that holds a pointer to a Python callback and executes it before each integration step:
+
+.. code-block:: mod
+
+    NEURON {
+      POINT_PROCESS PyBeforeStep
+      POINTER callback
+    }
+
+    ASSIGNED {callback}
+
+    VERBATIM
+    extern int (*nrnpy_hoccommand_exec)(Object*);
+    ENDVERBATIM
+
+    BEFORE STEP {
+    VERBATIM
+      if (nrnpy_hoccommand_exec && _p_callback) {
+        Object** po = (Object**)(&(_p_callback));
+        (*nrnpy_hoccommand_exec)(*po);
+      }
+    ENDVERBATIM
+    }
+
+    PROCEDURE set_callback() {
+    VERBATIM
+      Object** po = (Object**)(&(_p_callback));
+      Object* old = *po;
+      *po = (Object*)0;
+      if (ifarg(1)) {
+        *po = *hoc_objgetarg(1);
+        hoc_obj_ref(*po);
+      }
+      if (old) { hoc_obj_unref(old); }
+    ENDVERBATIM
+    }
+
+Python Usage with the NMODL Callback
+------------------------------------
+
+An example Python script that uses the above POINT_PROCESS aims to modify the spike interval of a :class:`h.NetStim` artificially during simulation:
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file('stdrun.hoc')
+    import matplotlib.pyplot as plt
+
+    def foo(ns):  # called every time step
+        if h.t % 50 == 0.0:
+            ns.interval += 10
+
+    soma = h.Section(name='soma')
+    soma.insert('hh')
+    syn = h.ExpSyn(soma(0.5))
+    syn.tau = 20
+    syn.e = 0
+
+    ns = h.NetStim()
+    ns.interval = 20  # [ms]
+    ns.start = 0
+    ns.noise = 0
+    ns.number = 1e9
+
+    nc = h.NetCon(ns, syn)
+    nc.delay = 0
+    nc.weight[0] = 0.1
+
+    vx = h.Vector().record(soma(0.5)._ref_v)  # record soma voltage
+    t = h.Vector().record(h._ref_t)
+
+    a = h.PyBeforeStep(soma(0.5))
+    a.set_callback(foo(ns))  # This calls foo(ns) immediately, passing None as callback
+
+    h.tstop = 500
+    h.run()
+
+    plt.plot(t, vx)
+    plt.show()
+
+.. note::
+   In the above code, passing ``foo(ns)`` to :meth:`set_callback` calls ``foo(ns)`` immediately during callback setup, passing its return value (None) as the callback. Consequently, the callback is not invoked at subsequent time steps as intended.
+
+Improved Approach: Using Built-in Python Callback Support in NEURON
+-------------------------------------------------------------------
+
+NEURON provides built-in Python callback support that works more robustly, with no need for custom NMODL code. Callbacks can be placed at various points during simulation:
+
+- At initialization via :class:`h.FInitializeHandler`
+- At regularly spaced intervals via :meth:`h.CVode.extra_scatter_gather`
+- Scheduled at specific times via :meth:`h.CVode.event`
+
+Example demonstrating each callback type:
+
+.. code-block:: python
+
+    from neuron import h
+    from neuron.units import mV, ms
+
+    h.load_file('stdrun.hoc')
+
+    def called_once():
+        print(f"called_once, t={h.t}")
+
+    def called_often():
+        print(f"called_often, t={h.t}")
+
+    def called_on_event():
+        print(f"called_on_event, t={h.t}")
+
+    fih = h.FInitializeHandler(called_once)           # called once at initialization
+    esg = h.CVode().extra_scatter_gather(0, called_often)  # called every time step
+
+    h.finitialize(-65 * mV)
+    event = h.CVode().event(0.1 * ms, called_on_event)  # called at scheduled event
+
+    h.continuerun(0.2 * ms)
+
+Expected output:
+
+.. code-block::
+
+    called_once, t=0
+    called_often, t=0
+    called_often, t=0.025
+    called_often, t=0.05
+    called_often, t=0.075
+    called_on_event, t=0.1
+    called_often, t=0.1
+    called_often, t=0.125
+    called_often, t=0.15
+    called_often, t=0.175
+
+Using Callbacks to Control Artificial Cell Spikes at Runtime
+------------------------------------------------------------
+
+To implement runtime control of spike times in an artificial cell (e.g., a :class:`h.NetStim`), define a Python callback function that modifies the NetStim parameters, and schedule this function using :meth:`h.CVode.extra_scatter_gather` or via timed events.
+
+Example adjusting a NetStim interval every simulation time step:
+
+.. code-block:: python
+
+    from neuron import h
+    import matplotlib.pyplot as plt
+
+    h.load_file('stdrun.hoc')
+
+    soma = h.Section(name='soma')
+    soma.insert('hh')
+    syn = h.ExpSyn(soma(0.5))
+    syn.tau = 20
+    syn.e = 0
+
+    ns = h.NetStim()
+    ns.interval = 20  # initial interval in ms
+    ns.start = 0
+    ns.noise = 0
+    ns.number = 1e9
+
+    nc = h.NetCon(ns, syn)
+    nc.delay = 0
+    nc.weight[0] = 0.1
+
+    vx = h.Vector().record(soma(0.5)._ref_v)
+    t = h.Vector().record(h._ref_t)
+
+    def update_interval():
+        if h.t % 50 == 0:
+            ns.interval += 10
+
+    # Schedule update_interval to be called before every solver step
+    cvode = h.CVode()
+    esg = cvode.extra_scatter_gather(0, update_interval)
+
+    h.tstop = 500
+    h.run()
+
+    plt.plot(t, vx)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Membrane potential (mV)')
+    plt.show()
+
+.. note::
+   - The callback passed to :meth:`h.CVode.extra_scatter_gather` must be a zero-argument Python callable.
+   - Avoid directly passing function calls with arguments (e.g., ``foo(ns)``). Instead, use a closure or lambda to capture arguments if necessary.
+   - The callback will be executed at each integration step, providing runtime control over model parameters.
+
+Summary and Recommendations
+---------------------------
+
+- Avoid using the custom NMODL POINT_PROCESS approach for Python callbacks unless necessary.
+- Use :class:`h.FInitializeHandler`, :meth:`h.CVode.extra_scatter_gather`, or :meth:`h.CVode.event` for Python callbacks integrated with NEURON's solver.
+- Pass zero-argument Python callables to these handlers. Use closures or :func:`lambda` to incorporate arguments.
+- This allows seamless interfacing with external software or Python processes controlling simulation variables at runtime.
+
+.. seealso::
+
+   :class:`h.FInitializeHandler`, :meth:`h.CVode.extra_scatter_gather`, :meth:`h.CVode.event`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4242 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4242>`_

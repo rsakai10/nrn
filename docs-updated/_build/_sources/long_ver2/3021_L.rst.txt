@@ -1,0 +1,95 @@
+Playing a Sequence of Event Times Into a Point Process Using VecStim
+======================================================================
+
+When you have a set of event times (e.g., spike times) generated externally or from a custom model and you want to deliver these events to a synaptic mechanism or other point processes in NEURON, the recommended approach is to use the :class:`VecStim` artificial cell.
+
+The :class:`VecStim` mechanism plays events at specified times and generates network events accordingly, which can then be connected to synapses or other targets via :class:`NetCon`.
+
+Steps to Use VecStim
+--------------------
+
+1. **Compile VecStim Mechanism**
+
+   - Locate the source file `vecevent.mod` in your NEURON installation under the examples directory (e.g., `nrn/share/nrn/examples/nrniv/netcon` on UNIX/Linux/macOS or the equivalent path on Windows).
+   - Copy `vecevent.mod` into your model directory.
+   - Compile with `nrnivmodl` (UNIX/Linux/macOS) or `mknrndll` (Windows).
+
+2. **Prepare the Vector of Event Times**
+
+   - Create a Vector that contains the times (in ms) at which you want to generate events.
+   - Times must be positive and in **strictly increasing order**.
+   - Populate this Vector prior to running the simulation (after model setup but before `h.run()`).
+
+3. **Instantiate VecStim and Play the Event Times**
+
+   For example, in HOC:
+
+   .. code-block:: hoc
+
+      objref vs, spike_times
+      spike_times = new Vector()
+      // Fill spike_times, e.g.,
+      spike_times.size(3)
+      spike_times.x[0] = 5
+      spike_times.x[1] = 12
+      spike_times.x[2] = 20
+
+      vs = new VecStim()
+      vs.play(spike_times)
+
+4. **Connect VecStim to a Synapse**
+
+   - Use a :class:`NetCon` to connect from `vs` (the VecStim) to the synaptic point process on your postsynaptic cell.
+
+   For example:
+
+   .. code-block:: hoc
+
+      objref nc, syn
+      syn = new ExpSyn(0.5)  // example synapse at soma midpoint
+      nc = new NetCon(vs, syn)
+      nc.weight[0] = 0.005  // synaptic weight
+      nc.delay = 0          // typically 0 delay for VecStim events
+
+5. **Run the Simulation**
+
+   - When the simulation runs, VecStim will generate events at the specified times and activate the synapse accordingly.
+
+Example Python Code Using NEURON hoc Interface
+----------------------------------------------
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Create a postsynaptic cell section (e.g., soma)
+    soma = h.Section(name='soma')
+    syn = h.ExpSyn(soma(0.5))
+
+    # Prepare spike time vector
+    spike_times = h.Vector([5, 12, 20])  # Spike times in ms
+
+    # Create VecStim instance
+    vs = h.VecStim()
+    vs.play(spike_times)
+
+    # Connect VecStim to synapse
+    nc = h.NetCon(vs, syn)
+    nc.weight[0] = 0.005
+
+    # Setup and run
+    h.finitialize(-65)
+    h.continuerun(50)
+
+Notes
+-----
+
+- Using :class:`VecStim` to deliver event times is safer and more reliable than attempting to play arbitrary values into a point process directly through :meth:`Vector.play` on a point process pointer. Incorrect usage may lead to segmentation faults.
+- You can generate spike time vectors by any method you prefer, as long as they follow NEURON's event timing constraints.
+- Alternative approaches (e.g., modifying the source code of the point process) are typically unnecessary since :class:`VecStim` is designed precisely for this use case.
+
+.. seealso::
+
+   :class:`VecStim`, :class:`NetCon`, :meth:`Vector.play`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3021 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3021>`_

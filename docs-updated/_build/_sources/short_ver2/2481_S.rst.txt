@@ -1,0 +1,26 @@
+Calculating Total Membrane Capacitance
+======================================
+
+The total membrane capacitance of a cell can be computed by summing the product of the membrane area and specific membrane capacitance (`cm`) over all segments of all sections. In pseudocode:
+
+.. code-block:: text
+
+   total_cm = 0
+   for each section:
+       for each segment:
+           total_cm += segment_area * segment_cm
+
+In HOC, this can be implemented as:
+
+.. code-block:: hoc
+
+   func totalcm() {
+       local tmp
+       tmp = 0
+       forall for (x,0) tmp += area(x)*cm(x)
+       return tmp
+   }
+
+Here, `area(x)` and `cm(x)` refer to the area and specific membrane capacitance of segment `x`. Use :meth:`section.area` and the segment’s `cm` property in Python accordingly.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2481 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2481>`_

@@ -1,0 +1,218 @@
+Simple Internal Calcium Concentration Mechanism
+=================================================
+
+This section describes how to implement and correctly initialize a simple internal calcium concentration mechanism in NEURON. It addresses common issues related to units, geometry, parameter initialization, and correct conversion of calcium current density to calcium concentration changes inside a compartment.
+
+Calcium Accumulation Model
+--------------------------
+
+The calcium concentration dynamics are described by the equation:
+
+.. math::
+
+   \\tau \\frac{d[Ca^{2+}]}{dt} = -F \\cdot I_{Ca} - [Ca^{2+}] + C_0
+
+where
+
+- :math:`[Ca^{2+}]` is the internal calcium concentration,
+- :math:`I_{Ca}` is the calcium current (in nA),
+- :math:`F` is a scaling factor (in μM/nA), reflecting calcium influx per current,
+- :math:`\\tau` is the time constant for calcium removal (buffering and extrusion),
+- :math:`C_0` is the background (resting) calcium concentration (in μM).
+
+In NEURON, currents are expressed as current densities (:math:`\text{mA/cm}^2`), so conversion for compartment geometry is required.
+
+Key Points and Recommendations
+------------------------------
+
+- **Parameter Initialization:**  
+  Always define separate parameters for initial calcium concentration and background calcium concentration to avoid ambiguity. Use a :code:`RANGE` variable named :code:`cai0` explicitly to control the initial calcium concentration per instance.
+
+- **Units and Geometry:**  
+  Surface area and volume of the compartment affect the calcium concentration change. For a cylindrical compartment with diameter :math:`d` and length :math:`L`:
+
+  - Surface area :math:`S = \pi d L`
+  - Volume :math:`V = \pi (d/2)^2 L`
+
+- **Conversion Factor for Calcium Influx:**  
+  The rate of change of :code:`cai` due to calcium inward current density (:code:`ica`) is given by:
+
+  .. math::
+
+     \\frac{d[Ca^{2+}]}{dt} = - \\frac{4 \cdot I_{Ca}}{F_{c} \cdot d} + \\frac{C_0 - [Ca^{2+}]}{\\tau}
+
+  where :math:`F_c` is Faraday's constant and the factor 4 comes from surface area/volume ratio for cylinders.
+
+- **Avoid Using Compartment Length (:code:`L`) in Concentration Calculation:**  
+  Do not multiply current density by compartment volume (:code:`L*(diam)`) directly in the mod file because NEURON supports variable and adaptive spatial discretization. Use geometry only to determine diameter; surface-to-volume ratios suffice.
+
+- **Initialization Controls:** 
+  Setting :code:`cai` to :code:`cai0` during :code:`INITIAL` block ensures controlled starting concentration. If :code:`cai0` is declared :code:`RANGE`, it is accessible and modifiable from hoc/Python.
+
+- **Custom Initialization Loops:**  
+  Avoid complicated custom initialization loops that manually advance simulation time and fiddle with :code:`dt`; use NEURON's default initialization by calling :meth:`h.finitialize()`.
+
+Example MOD File Implementing Correct Calcium Accumulation
+-----------------------------------------------------------
+
+.. code-block:: mod
+
+    NEURON {
+      SUFFIX cacumst
+      USEION ca READ ica WRITE cai
+      RANGE tau, C0, cai0
+    }
+
+    UNITS {
+      (mA) = (milliamp)
+      (mol) = (1)
+      (molar) = (mol/liter)
+      (mM) = (millimolar)
+      (uM) = (micromolar)
+      (um) = (micrometer)
+      FARADAY = (faraday) (coulombs)
+    }
+
+    PARAMETER {
+      tau = 303 (ms)      : Time constant for removal (e.g. soma of AB cell)
+      C0 = 0.5 (uM)      : Background (resting) Ca concentration
+      cai0 = 0.5 (uM)    : Initial Ca concentration
+    }
+
+    ASSIGNED {
+      ica (mA/cm2)       : Calcium current density
+      diam (um)          : Compartment diameter
+    }
+
+    STATE {
+      cai (mM)           : Internal calcium concentration in mM
+    }
+
+    INITIAL {
+      cai = cai0 * 1e-3  : Convert uM to mM for internal storage
+    }
+
+    BREAKPOINT {
+      SOLVE states METHOD cnexp
+    }
+
+    DERIVATIVE states {
+      : Units explanation:
+      : ica is mA/cm2 = mC/(cm2 ms)
+      : diam is um, convert surface/volume ratio accordingly
+      : Convert Ca conc to mM: 1e-3 * C0 and cai / 1e-3 for uM range
+
+      cai' = -(1e4)*2*ica/(FARADAY*diam) + (1e-3)*(C0 - (1e3)*cai)/tau
+    }
+
+Explanation of the Calcium Derivative Equation
+----------------------------------------------
+
+- The factor :code:`(1e4)*2/(FARADAY*diam)` converts current density to concentration change:
+
+  - :code:`1e4` converts from cm to μm to keep units consistent (:math:`1 \text{cm} = 10^{4} \mu m`),
+  - :code:`2` accounts for the valence of calcium ions (:math:`Ca^{2+}`),
+  - :code:`FARADAY` is Faraday's constant.
+
+- Concentrations in :code:`cai` are stored as mM internally, so scaling by :code:`1e-3` and :code:`1e3` converts between μM and mM as needed.
+
+Test Example Using Hoc
+----------------------
+
+The following hoc example sets the geometry and tests the mechanism using a custom calcium point process that injects a calcium current pulse:
+
+.. code-block:: hoc
+
+    load_file("nrngui.hoc")
+
+    create soma
+    access soma
+
+    soma {
+      diam = 16.695      : Derived from surface/volume ratios of AB cell soma
+      L = 17159          : Large length for calculated volume
+      insert cacumst
+      tau_cacumst = 1e9  : Large tau to effectively disable buffering/removal for testing
+      cai0_cacumst = 0.5 : Initial calcium concentration in uM
+      C0_cacumst = 0.5   : Background calcium in uM
+    }
+
+    objref capp
+    capp = new CaPP(0.5)   : Point process to inject calcium current
+    capp.del = 1          : Start time (ms)
+    capp.dur = 1          : Duration (ms)
+    capp.amp = -303       : Amplitude (nA), negative for inward current
+
+    finitialize(-65)
+    double c0 = soma.cai_cacumst
+    print "Initial cai (mM): ", c0
+
+    run()
+
+    double cfinal = soma.cai_cacumst
+    print "Final cai (mM): ", cfinal
+    print "Difference (uM): ", 1e3 * (cfinal - c0)
+
+    print "Soma capacitance (nF): ", area(0.5)*cm*1e-5
+
+Calcium Injection Point Process (CaPP.mod)
+------------------------------------------
+
+This point process injects a specified calcium current during a time window:
+
+.. code-block:: mod
+
+    NEURON {
+      POINT_PROCESS CaPP
+      USEION ca WRITE ica
+      RANGE del, dur, amp
+    }
+
+    UNITS {
+      (nA) = (nanoamp)
+    }
+
+    PARAMETER {
+      del (ms)
+      dur (ms)
+      amp (nA)  : Negative value means inward current
+    }
+
+    ASSIGNED {
+      ica (nA)
+    }
+
+    BREAKPOINT {
+      at_time(del)
+      at_time(del + dur)
+
+      if (t > del && t < del + dur) {
+        ica = amp
+      } else {
+        ica = 0
+      }
+    }
+
+Notes on Initialization of Calcium Concentration Parameters
+------------------------------------------------------------
+
+- Declaring :code:`RANGE cai0` in the mod file makes it accessible from hoc or Python, allowing different instances to have different initial calcium concentrations.
+
+- Parameters declared only in mod files are not visible to hoc unless marked :code:`RANGE`.
+
+- It is generally better to avoid multiple mod files duplicating the same initial concentration parameter; instead, control :code:`cai0` values from hoc/Python for each compartment/mechanism.
+
+- NEURON's built-in initialization via :meth:`h.finitialize()` will set :code:`cai` to :code:`cai0` as declared in the mod file's :code:`INITIAL` block. Avoid writing custom initialization procedures that manually advance time and change :code:`dt`, as these can lead to incorrect simulation states.
+
+Summary
+-------
+
+- Define all parameters controlling calcium concentration explicitly and with ranges where needed.
+- Use correct unit conversions and geometry-based scaling for current to concentration.
+- Set initial calcium concentrations in the :code:`INITIAL` block using :code:`cai0`.
+- Use NEURON's default initialization routines to avoid subtle bugs.
+- When porting models from other simulators, carefully recalculate compartment geometry and convert absolute currents to current densities.
+
+This approach ensures accurate, stable, and interpretable calcium dynamics in your NEURON simulations.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1272 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1272>`_

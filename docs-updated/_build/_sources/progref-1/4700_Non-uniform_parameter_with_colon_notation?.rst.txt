@@ -1,0 +1,64 @@
+Non-uniform Parameter Assignment in NEURON Python Without Colon Notation
+=========================================================================
+
+In legacy HOC code, it is possible to assign a range variable with a colon notation to specify a linear interpolation along a section, for example:
+
+.. code-block:: hoc
+
+    section diam(0:1) = 2.0:1.0
+
+This sets the diameter to vary linearly from 2.0 at the 0 end to 1.0 at the 1 end of the section.
+
+However, this colon notation is not supported in NEURON's Python interface and is generally discouraged even in HOC due to readability and maintainability concerns.
+
+Linear Interpolation of Range Variables in Python
+-------------------------------------------------
+
+The recommended and clear way to assign a linearly varying parameter along a section in Python is to explicitly loop over the segments and assign the value based on the normalized position `seg.x` (which ranges from 0 to 1):
+
+.. code-block:: python
+
+    val0 = 2.0  # value at the 0 end of the section
+    val1 = 1.0  # value at the 1 end of the section
+
+    for seg in section:
+        seg.diam = val0 + (val1 - val0) * seg.x
+
+Here, `seg.x` is the normalized distance of the segment center from the 0 end of the section.
+
+.. note::
+
+   You can factor out the interpolation into a function if you need to apply it to multiple sections:
+
+   .. code-block:: python
+
+       def linear_interpolate(section, varname, val0, val1):
+           for seg in section:
+               setattr(seg, varname, val0 + (val1 - val0) * seg.x)
+
+       # Usage:
+       linear_interpolate(section, 'diam', 2.0, 1.0)
+
+Readability and Maintainability
+-------------------------------
+
+- The explicit loop with interpolation formula is more readable and understandable to most users than the colon notation.
+- The colon notation is considered legacy and should be avoided in new code.
+- Python’s syntax encourages explicitness, which helps in debugging and code clarity.
+
+Summary
+-------
+
+- There is no direct equivalent of the HOC colon notation in NEURON Python.
+- Use explicit loops over segments with interpolation formulas to assign non-uniform parameters.
+- This approach is clearer, more maintainable, and recommended for new code.
+
+.. seealso::
+
+   - NEURON Python documentation on sections and segments
+   - NEURON forum discussions on range variables and parameter assignment
+
+Reference
+---------
+
+Original discussion thread: https://www.neuron.yale.edu/phpBB/viewtopic.php?f=3&t=4700

@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stimulating Multiple Axons with IClamp in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Stimulating Multiple Axons with IClamp in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3446_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="stimulating-multiple-axons-with-iclamp-in-neuron">
+<h1>Stimulating Multiple Axons with IClamp in NEURON<a class="headerlink" href="#stimulating-multiple-axons-with-iclamp-in-neuron" title="Link to this heading"></a></h1>
+<p>When stimulating multiple axons using <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> in NEURON, it is important to understand that an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> is a point process which can be attached to only one specific segment of one section. Thus, to stimulate multiple axons independently, each axon requires its own distinct <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> instance connected explicitly to that axon.</p>
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Point processes and target segments</strong>: An <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> delivers current only to the segment of the section it is attached to.</p></li>
+<li><p><strong>Specifying sections explicitly</strong>: When creating a point process, explicitly specify the target section using the <cite>sec=</cite> keyword argument to avoid ambiguity caused by the “currently accessed section”.</p></li>
+<li><p><strong>Naming conventions</strong>: Using consistent naming conventions for sections and their stimulators enhances code clarity and debugging.</p></li>
+</ul>
+</section>
+<section id="example-stimulating-two-axons-with-separate-iclamp-instances">
+<h2>Example: Stimulating Two Axons with Separate IClamp Instances<a class="headerlink" href="#example-stimulating-two-axons-with-separate-iclamp-instances" title="Link to this heading"></a></h2>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from neuron import h
+import numpy as np
+from matplotlib import pyplot as plt</p>
+<p>h.celsius = 33    # temperature (°C)
+h.tstop = 30      # simulation duration (ms)
+h.dt = 0.025      # integration time step (ms)</p>
+<p># Create two axons using hoc strings for clarity
+h(‘create axon0’)
+h(‘create axon1’)</p>
+<p>axon0 = h.axon0
+axon1 = h.axon1</p>
+<p># Set biophysical properties for both axons
+for axon in [axon0, axon1]:</p>
+<blockquote>
+<div><p>axon.L = 1000      # length (µm)
+axon.diam = 1      # diameter (µm)
+axon.nseg = 21     # number of segments (odd number recommended)
+axon.insert(‘hh’)  # Hodgkin-Huxley active conductances</p>
+</div></blockquote>
+<p># Create distinct IClamp instances for each axon, explicitly specifying the section
+stim0 = h.IClamp(0.5, sec=axon0)  # position 0.5 (middle of section)
+stim0.delay = 0.1
+stim0.dur = 0.1
+stim0.amp = 1</p>
+<p>stim1 = h.IClamp(0.5, sec=axon1)
+stim1.delay = 1.1
+stim1.dur = 0.1
+stim1.amp = 1</p>
+<p># Record membrane potentials at position 0 of each axon
+v0 = h.Vector().record(axon0(0)._ref_v)
+v1 = h.Vector().record(axon1(0)._ref_v)</p>
+<p># Record simulation time
+t = h.Vector().record(h._ref_t)</p>
+<p># Initialize and run simulation
+h.finitialize(-65)
+h.run()</p>
+<p># Convert recorded vectors to numpy arrays for plotting
+time = np.array(t)
+voltage_axon0 = np.array(v0)
+voltage_axon1 = np.array(v1)</p>
+<p># Plot results
+plt.plot(time, voltage_axon0, label=’Axon 0’)
+plt.plot(time, voltage_axon1, label=’Axon 1’)
+plt.xlabel(‘Time (ms)’)
+plt.ylabel(‘Membrane potential (mV)’)
+plt.title(‘Stimulation of multiple axons with separate IClamp’)
+plt.legend()
+plt.show()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When instantiating a point process like <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a>, always specify the section explicitly with <cite>sec=&lt;section&gt;</cite> to ensure it is attached to the intended section. Calling <code class="docutils literal notranslate"><span class="pre">h.IClamp(0,</span> <span class="pre">axon1)</span></code> without the <cite>sec=</cite> keyword argument leads NEURON to interpret the segment based on the currently accessed section, which may not be the axon you expect.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is recommended to use an odd number of segments (<code class="xref py py-attr docutils literal notranslate"><span class="pre">nseg</span></code>) to center the point process at the middle of a segment. The d_lambda rule can be used to calculate appropriate values of <code class="xref py py-attr docutils literal notranslate"><span class="pre">nseg</span></code> for accurate spatial discretization.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each axon (section) can have only one segment at a given 3D spatial location, but when creating multiple sections named differently (e.g., “axon0”, “axon1”) their segments are distinct objects, even if their numerical addresses appear similar at the Python interface level.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> — Point process for current injection
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.insert()</span></code> — Inserting ion channel mechanisms
+NEURON Book chapters 5 and 6 — Detailed explanation of sections and point processes</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>To stimulate multiple axons, create one <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> per axon.</p></li>
+<li><p>Use the <cite>sec=</cite> keyword argument explicitly to specify the target section when constructing point processes.</p></li>
+<li><p>Use consistent naming conventions for clarity.</p></li>
+<li><p>Run short simulations with reasonable <a class="reference internal" href="../progref-1/simctrl/programmatic.html#dt" title="dt"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dt</span></code></a> for efficient development and debugging.</p></li>
+<li><p>Use odd values for <code class="xref py py-attr docutils literal notranslate"><span class="pre">nseg</span></code> and consult the d_lambda rule for spatial accuracy.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3446">https://neuron.yale.edu/phpBB/viewtopic.php?t=3446</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

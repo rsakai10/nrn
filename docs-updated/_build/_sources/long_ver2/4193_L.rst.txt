@@ -1,0 +1,94 @@
+Synapse Position and Segment Discretization
+=============================================
+
+When inserting a synapse at a given location along a section, the reported location of the synapse via :meth:`Synapse.get_segment().x` or :meth:`Synapse.get_loc` may not exactly match the requested normalized position due to the sectional discretization defined by the number of segments (:attr:`Section.nseg`).
+
+How Segment Discretization Affects Synapse Location
+---------------------------------------------------
+
+By default, NEURON represents a section as a number of discrete segments. The location of a synapse is effectively snapped to the midpoint of the nearest segment. This means if you create a synapse at ``sec(0.77)``, but your section has few segments, the synapse will be placed at the nearest segment center, which might be at a location like 0.5.
+
+Example in Python:
+
+.. code-block:: python
+
+    from neuron import h
+
+    h.load_file('stdrun.hoc')
+
+    dend = h.Section(name='dend')
+    dend.L = 200
+
+    # Default number of segments (usually 1)
+    syn = h.ExpSyn(dend(0.77))
+    print(syn.get_segment().x)  # Outputs: 0.5 (nearest segment center)
+    print(syn.get_loc())         # Outputs: 0.5
+
+Increasing :attr:`Section.nseg` to Improve Accuracy
+----------------------------------------------------
+
+Increasing the number of segments in the section refines the discretization, allowing synapses to be placed closer to the requested location:
+
+.. code-block:: python
+
+    dend.nseg = 100
+    syn = h.ExpSyn(dend(0.77))
+    print(syn.get_segment().x)  # Outputs approximately: 0.775
+    print(syn.get_loc())         # Outputs approximately: 0.775
+
+.. note::
+
+    Although increasing :attr:`nseg` improves positional accuracy, very high values may be computationally expensive.
+
+Precise Synapse Placement Strategy
+----------------------------------
+
+If precise placement at an arbitrary position is essential, consider modeling the neurite using multiple connected sections. For example, split the neurite into two sections connected in series and place the synapse at the junction. This approach allows precise control of synapse location independent of segment discretization within each section.
+
+Using the d_lambda Rule for Choosing :attr:`nseg`
+-------------------------------------------------
+
+To balance accuracy and performance, use the d_lambda rule to set :attr:`Section.nseg`. The rule sets :attr:`nseg` such that each segment is a small fraction (e.g. 0.1) of the space constant (lambda) at a chosen signal frequency.
+
+.. note::
+
+    The d_lambda rule rationale and implementation are described by Hines and Carnevale (2001), _The Neuroscientist_ 7:123-135.
+
+To apply the d_lambda rule in NEURON with hoc code:
+
+.. code-block:: hoc
+
+    hoc> xopen("fixnseg.hoc")
+    hoc> geom_nseg()
+
+In Python, this can be used as:
+
+.. code-block:: python
+
+    h.xopen("fixnseg.hoc")
+    h.geom_nseg()
+
+If your model does not have a soma, comment out or disable the soma area reference in the :hoc:procedure ``geom_nseg()`` by changing
+
+.. code-block:: hoc
+
+    soma area(0.5)
+
+to
+
+.. code-block:: hoc
+
+    // soma area(0.5)
+
+Summary
+-------
+
+- Synapse positions are aligned to segment centers; increase :attr:`nseg` to improve positional accuracy.
+- For absolute positional precision, use multiple connected sections and place synapses at junctions.
+- Use the d_lambda rule to select a biologically justified :attr:`nseg` for accurate and efficient simulations.
+
+.. seealso::
+
+   :class:`Section`, :meth:`Section.nseg`, :meth:`PointProcess.get_segment`, :meth:`PointProcess.get_loc`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4193 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4193>`_

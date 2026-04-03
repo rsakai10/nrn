@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extending a Single-Compartment Model to a Multi-Compartment Model &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Extending a Single-Compartment Model to a Multi-Compartment Model</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4097_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="extending-a-single-compartment-model-to-a-multi-compartment-model">
+<h1>Extending a Single-Compartment Model to a Multi-Compartment Model<a class="headerlink" href="#extending-a-single-compartment-model-to-a-multi-compartment-model" title="Link to this heading"></a></h1>
+<p>When extending a single-compartment Hodgkin-Huxley (HH) model to a multi-compartment model, it is important to understand the roles of various section properties and inserted mechanisms, and how their combination affects the model behavior.</p>
+<section id="section-properties-and-their-roles">
+<h2>Section Properties and Their Roles<a class="headerlink" href="#section-properties-and-their-roles" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Ra</strong>: The axial resistance of the section, representing the cytoplasmic resistance to current flow along the neurite.</p></li>
+<li><p><strong>cm</strong>: The membrane capacitance per unit area, representing how much charge the membrane can store.</p></li>
+</ul>
+<p>These are <em>not</em> membrane mechanisms but properties of <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code> that must be assigned appropriately to each compartment to ensure correct passive electrical properties and axial coupling between sections.</p>
+</section>
+<section id="membrane-mechanisms">
+<h2>Membrane Mechanisms<a class="headerlink" href="#membrane-mechanisms" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>HH mechanism</strong>: Represents voltage-gated sodium and potassium channels used for action potential generation. Usually inserted in soma and axonal compartments.</p></li>
+<li><p><strong>pas mechanism</strong>: Represents passive leak conductance, typically inserted in dendritic compartments to model resting membrane properties and subthreshold behavior.</p></li>
+</ul>
+</section>
+<section id="typical-setup-example">
+<h2>Typical Setup Example<a class="headerlink" href="#typical-setup-example" title="Link to this heading"></a></h2>
+<p>For example, a multi-compartment model extending a single compartment HH model may be arranged as follows:</p>
+<ul class="simple">
+<li><p><strong>Soma</strong>: Set <cite>Ra</cite>, <cite>cm</cite> attributes and insert the modified HH mechanism with adjusted parameters.</p></li>
+<li><p><strong>Axon</strong>: Similarly, set <cite>Ra</cite>, <cite>cm</cite> and insert the same HH mechanism.</p></li>
+<li><p><strong>Apical and Basilar Dendrites</strong>: Set <cite>Ra</cite>, <cite>cm</cite> and insert the <cite>pas</cite> mechanism to represent passive properties.</p></li>
+</ul>
+</section>
+<section id="current-injection">
+<h2>Current Injection<a class="headerlink" href="#current-injection" title="Link to this heading"></a></h2>
+<p>Current stimulation is typically implemented by placing a <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code> (or another appropriate <code class="xref py py-class docutils literal notranslate"><span class="pre">PointProcess</span></code>) at the desired location to inject current into the model.</p>
+</section>
+<section id="resting-potential-and-initialization-considerations">
+<h2>Resting Potential and Initialization Considerations<a class="headerlink" href="#resting-potential-and-initialization-considerations" title="Link to this heading"></a></h2>
+<p>When combining mechanisms with different resting reversal potentials (e.g., HH default resting ~ -65 mV, passive leak with e_pas at -70 mV), the resulting model may not have a uniform resting potential. This causes the built-in initialization to not place the model in a steady resting state automatically.</p>
+<p><strong>Recommendation:</strong>
+Adjust reversal potentials consistently across compartments. For example, set <cite>e_pas</cite> to match the HH resting potential (e.g., -65 mV) in all dendritic compartments to avoid unstable or non-uniform resting potentials.</p>
+<p>Example HOC Initialization:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>hoc
+forall {</p>
+<blockquote>
+<div><p>Ra = 100     // axial resistance in Ohm-cm
+cm = 1       // membrane capacitance in uF/cm^2</p>
+</div></blockquote>
+<p>}</p>
+<dl class="simple">
+<dt>soma {</dt><dd><p>insert hh
+// Adjusted HH parameters if applicable</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>axon {</dt><dd><p>insert hh
+// Adjusted HH parameters if applicable</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>apical {</dt><dd><p>insert pas
+e_pas = -65  // Match the HH resting potential
+g_pas = 0.001</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>basal {</dt><dd><p>insert pas
+e_pas = -65
+g_pas = 0.001</p>
+</dd>
+</dl>
+<p>}</p>
+<p>// Insert current clamp at soma
+objref stim
+soma stim = new IClamp(0.5)
+stim.del = 100
+stim.dur = 500
+stim.amp = 0.1
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>Example Python Initialization:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+from neuron import h</p>
+<dl class="simple">
+<dt>for sec in h.allsec():</dt><dd><p>sec.Ra = 100      # Axial resistance in Ohm-cm
+sec.cm = 1        # Membrane capacitance in uF/cm2</p>
+</dd>
+</dl>
+<p>soma = h.soma[0]
+axon = h.axon[0]
+apical = h.apical[0]
+basal = h.basal[0]</p>
+<p># Insert HH channels in soma and axon
+for sec in [soma, axon]:</p>
+<blockquote>
+<div><p>sec.insert(‘hh’)
+# Adjust hh parameters if needed, e.g.:
+# sec.gnabar_hh = 0.12
+# sec.gkbar_hh = 0.036</p>
+</div></blockquote>
+<p># Insert passive mechanism in dendrites
+for sec in [apical, basal]:</p>
+<blockquote>
+<div><p>sec.insert(‘pas’)
+sec.e_pas = -65  # Set to HH resting potential to maintain uniform RMP
+sec.g_pas = 0.001</p>
+</div></blockquote>
+<p># Create current clamp at soma(0.5)
+stim = h.IClamp(soma(0.5))
+stim.delay = 100
+stim.dur = 500
+stim.amp = 0.1
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+</section>
+<section id="summary-and-best-practices">
+<h2>Summary and Best Practices<a class="headerlink" href="#summary-and-best-practices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Setting <cite>Ra</cite> and <cite>cm</cite> on each compartment models the neurite’s passive electrical properties and is essential for multi-compartment spatial modeling.</p></li>
+<li><p>Insert voltage-dependent mechanisms (e.g., HH channels) where active properties are required (often soma and axon).</p></li>
+<li><p>Insert passive leak (<cite>pas</cite>) in dendrites to appropriately model resting and subthreshold electrical behavior.</p></li>
+<li><p>Ensure consistent reversal potentials, especially for mechanisms like <cite>pas</cite>, to achieve a stable and uniform resting membrane potential across all compartments.</p></li>
+<li><p>Use current injection point processes such as <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code> to stimulate the model.</p></li>
+<li><p>Initialize the model with consideration of spatial heterogeneity to ensure physiological relevance.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Decisions on which mechanisms to include and their parameters should be guided by the scientific questions driving the modeling study. The complexity introduced by multi-compartmental structure should be justified by the necessity to answer these questions.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4097">https://neuron.yale.edu/phpBB/viewtopic.php?t=4097</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

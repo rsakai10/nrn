@@ -1,0 +1,62 @@
+Conditional Termination of a NEURON Simulation Based on Interspike Interval Convergence
+============================================================================================
+
+When simulating neurons with adaptation currents, it is sometimes desirable to stop the simulation automatically when the recent inter-spike intervals (ISIs) converge within a prescribed threshold. This can be implemented elegantly in Python with the :class:`h.NetCon` event callback and a simple global state maintenance.
+
+Example implementation:
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Define convergence tolerance (e.g., equal to time step)
+    TOL = h.dt
+
+    # Initialize tracking variables
+    count = 0         # spike count
+    isi = 0           # most recent ISI
+    previsi = 0       # previous ISI
+    tsp = 0           # time of last spike
+
+    # Custom initialization to reset variables before each run
+    def reset_variables():
+        global count, isi, previsi, tsp
+        count = 0
+        isi = 1e3          # large initial ISI
+        previsi = 2e3      # large initial previous ISI
+        tsp = 0
+
+    # Ensure reset_variables is called at simulation start
+    rc = h.FInitializeHandler(reset_variables)
+
+    # Setup NetCon to detect spikes (adjust threshold as needed)
+    nc = h.NetCon(h.soma(0.5)._ref_v, None)
+    nc.threshold = -10  # mV, example threshold
+
+    # Event callback to update ISI and stop simulation if convergence criterion met
+    def spike_callback():
+        global count, isi, previsi, tsp
+        count += 1
+        if count == 1:
+            tsp = h.t
+        else:
+            previsi = isi
+            isi = h.t - tsp
+            tsp = h.t
+            if abs(isi - previsi) < TOL:
+                h.stoprun = 1
+
+    nc.record(spike_callback)
+
+.. note::
+
+   The use of global variables is a practical and simple way to maintain state between callback events, suitable for interactive and scripting workflows. Alternatively, encapsulating state in a class or using closures can be considered for more complex use cases.
+
+.. note::
+
+   :class:`h.FInitializeHandler` ensures that variables are properly reset before each simulation run, which is especially useful when interactively using the GUI and running multiple simulations without restarting NEURON.
+
+.. seealso::
+
+   :class:`h.NetCon`, :class:`h.FInitializeHandler`, :meth:`h.NetCon.record`
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=4652

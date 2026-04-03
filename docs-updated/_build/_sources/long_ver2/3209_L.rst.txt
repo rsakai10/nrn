@@ -1,0 +1,93 @@
+Templates with a Variable Number of Sections
+=============================================
+
+When creating NEURON models using :class:`Template` in HOC, you might want to define a variable number of sections (e.g., dendrites) that can be changed between simulation runs. This is especially common when the simulation control is managed in Python, but the cell model itself is written in HOC templates.
+
+This section explains how to implement templates with a variable number of sections, overcoming the limitation that `create` statements must appear at the top level (outside of procedures) in HOC.
+
+How Section Creation Works in HOC
+--------------------------------
+
+In HOC, user-declared names (tokens) default to scalars unless declared otherwise using top-level statements such as:
+
+.. code-block:: hoc
+
+   strdef name        // Declares a string variable
+   double name[n]     // Declares an array of doubles
+   objref name        // Declares a reference to an object instance
+   create name        // Declares a Section named 'name'
+
+**Important:** These declarations must be at top level (outside of any :keyword:`proc` or :keyword:`func`).
+
+Declaring Arrays of Sections
+----------------------------
+
+You can declare an array of sections at the top level using :keyword:`create` with an array size:
+
+.. code-block:: hoc
+
+   create dend[1] // declares an array of sections, initially with one element: dend[0]
+
+This declares `dend` as an array of sections. The array size can be adjusted at runtime by calling `create` inside a procedure, but only after the initial declaration at top-level.
+
+Example Template with Variable Number of Sections
+-------------------------------------------------
+
+Below is an example of a template ``Foo`` that accepts the desired number of dendrites as a constructor argument. It declares an array of sections at top-level and dynamically resizes it inside the `init` procedure.
+
+.. code-block:: hoc
+
+   begintemplate Foo
+     public dend
+
+     // Declare an array of sections with initial size 1 at top-level
+     create dend[1]
+
+     proc init() { local i
+       // Resize the dendrite array to size given by first argument stored in $1
+       create dend[$1] 
+       
+       for i = 0, $1 - 1 {
+         // Now customize each dendrite section, for example:
+         dend[i].L = 100
+         dend[i].diam = 1
+         dend[i].nseg = 1
+         dend[i].insert("pas")
+       }
+     }
+   endtemplate
+
+Usage in Python and HOC
+-----------------------
+
+From Python, you can instantiate and use the template as follows:
+
+.. code-block:: python
+
+   from neuron import h
+
+   # Create an instance of Foo with 27 dendrites
+   bar = h.Foo(27)
+
+In HOC, you can create an instance similarly:
+
+.. code-block:: hoc
+
+   objref bar
+   bar = new Foo(27)
+
+This results in an object `bar` with 27 dendrites accessible as `bar.dend[0]` through `bar.dend[26]`.
+
+Notes
+-----
+
+- The first `create dend[1]` at top-level declares `dend` as an array of sections, which allows the later dynamic resizing with `create dend[$1]` inside the `init` procedure.
+- If you omit the top-level declaration, `create dend[$1]` inside `init` will result in a syntax error.
+- This approach lets you flexibly define variable numbers of sections per template instance.
+
+
+
+.. note::
+   Using :class:`List` objects is often more flexible for managing collections of objects, but for sections, the array approach shown here is straightforward and efficient.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3209 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3209>`_

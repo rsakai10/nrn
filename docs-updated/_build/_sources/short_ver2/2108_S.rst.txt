@@ -1,0 +1,28 @@
+.. rubric:: Creating NEURON Sections in Python
+
+In Python, the syntax ``h.Section()`` constructs and returns a new section instance. Here, ``h.Section`` acts as a callable, equivalent to the NEURON hoc class constructor.
+
+.. code-block:: python
+
+    # Create a new section instance
+    sec = h.Section()
+
+This is analogous to:
+
+.. code-block:: python
+
+    Section = h.Section    # assign the callable to a variable
+    sec = Section()       # create a Section instance
+
+In hoc, the equivalent code would be:
+
+.. code-block:: hoc
+
+    objref sec
+    sec = new Section()
+
+.. note::
+
+``h.Section`` is not just a class name but a callable factory for creating Section objects in Python via the NEURON hoc interface.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2108 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2108>`_

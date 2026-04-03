@@ -1,0 +1,32 @@
+.. note::
+   Currents declared in the WRITE clause of a :meth:`USEION` statement must use units of ``mA/cm2`` in NEURON. If you specify a current such as ``ica`` with units like ``nA/cm2`` in the :keyword:`ASSIGNED` block, NEURON expects the quantity to be in ``mA/cm2`` and does not override your units.
+
+.. code-block:: hoc
+   ASSIGNED {
+       ica (mA/cm2)
+       i (nA/cm2)
+   }
+   NEURON {
+       RANGE i
+       USEION ca WRITE ica
+   }
+
+.. code-block:: hoc
+   BREAKPOINT {
+       ica = expression_in_mA_per_cm2
+       i = ica * 1e6  // convert to nA/cm2
+   }
+
+.. code-block:: python
+   BREAKPOINT {
+       ica = expression_in_mA_per_cm2
+       i = ica * 1e6  # convert to nA/cm2
+   }
+
+.. note::
+   To use other units consistently, define a surrogate variable (e.g., ``i``) with the desired units and scale appropriately in :keyword:`BREAKPOINT`. Always verify unit consistency using the :external:program:`modlunit` tool.
+
+.. seealso::
+   :meth:`USEION` for ion current declarations and unit requirements.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1243 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1243>`_

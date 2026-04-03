@@ -1,0 +1,41 @@
+Multiple Runs and Reproducibility in NEURON Simulations
+=======================================================
+
+When performing multiple simulation runs with identical parameters in NEURON, differing results often indicate issues with model initialization or pseudorandom number generation.
+
+.. note::
+   Simply calling :meth:`run` or using the "Init & Run" button does not guarantee identical outcomes unless all state variables and random number seeds are correctly reset.
+
+Common causes of variability include:
+
+- **Improper initialization in mod files:** Ensure that all state variables and model parameters are properly initialized before each run.
+
+- **Unseeded pseudorandom generators:** When using stochastic elements like :class:`NetStim`, failure to reseed the random number generator before each run causes different event patterns.
+
+Example workflow to ensure reproducibility with NetStim objects::
+
+   NSNUM = 150
+   objref nsstvec, nsidvec, tnc
+   nsstvec = new Vector()
+   nsidvec = new Vector()
+   for ii=0, NSNUM-1 {
+     tnc = new NetCon(NetStim[ii], nil)
+     tnc.record(nsstvec, nsidvec, ii)
+   }
+
+.. code-block:: hoc
+
+   proc onerun() {
+     NetStim[0].seed(31)  // Seed the shared generator once
+     run()
+     save_data()
+   }
+
+.. note::
+   Seeding one :class:`NetStim` seeds all since they share the same random sequence by default.
+   
+If independent random streams per :class:`NetStim` are needed (e.g., for parallel simulations), associate each with its own random number generator. This preserves reproducibility and independence regardless of processor count.
+
+Refer to the :class:`NetStim` documentation for the :meth:`seed` method and best practices on managing randomness in models.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2747 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2747>`_

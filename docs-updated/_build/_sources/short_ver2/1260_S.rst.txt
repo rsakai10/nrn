@@ -1,0 +1,34 @@
+Arrays, Vectors, and objref Usage in hoc
+=========================================
+
+In hoc, an array of doubles is declared with::
+
+   double x[1]
+   x[0] = 10
+
+This creates an array of numerical (double precision) values. However, objref arrays differ::
+
+   objref y[1]
+   y[0] = 10  # ERROR
+
+Here, `y` is an array of object references, and cannot hold numeric values. Objrefs must point to NEURON objects.
+
+Key points:
+
+- Variables default to their first assigned type. For example, `y = 0.1` makes `y` a scalar double, not an array.
+- Objrefs are for objects only, not scalars. Assigning a double to an objref causes a type error.
+- hoc arrays (declared with `double`) hold scalars; objref arrays hold object pointers.
+- For flexible resizing and dynamic element addition, prefer :class:`Vector` over hoc arrays. Use :meth:`Vector.resize`, :meth:`Vector.append`, or :meth:`Vector.insert`.
+- For heterogeneous collections, use :class:`List`.
+
+Example in hoc::
+
+   double x[3]
+   x[0] = 10
+   objref v
+   v = new Vector(3)
+   v.set(0, 10)
+
+In Python, use :class:`h.Vector` for flexible numeric arrays.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1260 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1260>`_

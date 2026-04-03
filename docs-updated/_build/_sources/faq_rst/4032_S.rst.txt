@@ -1,0 +1,17 @@
+.. note::
+   In hoc, it is recommended to use an instance of the :class:`Vector` class for handling arrays of numerical data rather than raw C-style arrays. This simplifies assignment and manipulation of multiple values.
+
+.. code-block:: hoc
+
+   objref length_neuron
+   length_neuron = new Vector()
+   length_neuron.insrt(0, 40, 56, 64, 70)  // Inserts values starting at index 0
+   length_neuron.printf()  // Prints: 40	56	64	70	
+
+.. note::
+   The :meth:`Vector.insrt` method inserts multiple values in a single call, avoiding the need for explicit loops. Use :meth:`Vector.printf` to display vector contents.
+
+.. seealso::
+   :class:`Vector`, :meth:`Vector.insrt`, :meth:`Vector.printf`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4032 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4032>`_

@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play a Unique Vector into Each Model Segment &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Play a Unique Vector into Each Model Segment</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4623_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="play-a-unique-vector-into-each-model-segment">
+<h1>Play a Unique Vector into Each Model Segment<a class="headerlink" href="#play-a-unique-vector-into-each-model-segment" title="Link to this heading"></a></h1>
+<p>This section explains how to play a unique time-varying vector into a variable located in each segment of a neuron model using NEURON’s <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> method. It clarifies common pitfalls in the NEURON model definition and Python usage, and provides a working example.</p>
+<section id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
+<p>You want to assign and play a unique vector of values into an arbitrary variable (e.g., <cite>xx</cite>) in each segment of one or more Sections. Simply declaring the variable as a <cite>GLOBAL</cite> or using <cite>POINTER</cite> does not work for this purpose:</p>
+<ul class="simple">
+<li><p><cite>GLOBAL</cite> variables have the same value everywhere, so you cannot have segment-specific values.</p></li>
+<li><p><cite>POINTER</cite> variables reference values elsewhere and do not store unique local values.</p></li>
+<li><p>The variable must be declared as <cite>RANGE</cite> in the NMODL to enable distinct segment-level values.</p></li>
+</ul>
+<p>Additionally, when using <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a>, you must use a pointer reference to the variable (e.g., <cite>seg.playtest._ref_xx</cite>), not the variable itself (e.g., <cite>seg.playtest.xx</cite>).</p>
+</section>
+<section id="nmodl-mod-file-example">
+<h2>NMODL Mod File Example<a class="headerlink" href="#nmodl-mod-file-example" title="Link to this heading"></a></h2>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>neuron
+NEURON {</p>
+<blockquote>
+<div><p>SUFFIX playtest
+RANGE xx           : declare xx as RANGE for unique segment-specific values
+NONSPECIFIC_CURRENT ixi</p>
+</div></blockquote>
+<p>}</p>
+<dl class="simple">
+<dt>ASSIGNED {</dt><dd><p>xx (mA)
+ixi (mA)</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>INITIAL {</dt><dd><p>ixi = 0
+xx = 0</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>BREAKPOINT {</dt><dd><p>ixi = xx + 1</p>
+</dd>
+</dl>
+<section id="id5">
+<h3>}<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>Key points:</p>
+<ul class="simple">
+<li><p>Declare <cite>xx</cite> as <cite>RANGE</cite> to have unique values per segment.</p></li>
+<li><p>Use <cite>NONSPECIFIC_CURRENT</cite> in this example for a dummy current assignment.</p></li>
+<li><p>Initialize <cite>xx</cite> in the <cite>INITIAL</cite> block for clarity.</p></li>
+</ul>
+</section>
+</section>
+<section id="python-example-to-play-unique-vectors-into-each-segment">
+<h2>Python Example to Play Unique Vectors into Each Segment<a class="headerlink" href="#python-example-to-play-unique-vectors-into-each-segment" title="Link to this heading"></a></h2>
+<p>This example demonstrates inserting the mechanism into a cell, then playing the vector <cite>data</cite> into <cite>xx</cite> in each segment using <cite>data.play(seg.playtest._ref_xx, time, True)</cite>.</p>
+<p><a href="#id6"><span class="problematic" id="id7">``</span></a><a href="#id8"><span class="problematic" id="id9">`</span></a>python
+from neuron import h
+from neuron.units import mV, ms, um
+import matplotlib.pyplot as plt</p>
+<p>h.load_file(“stdrun.hoc”)</p>
+<p># Time and data vectors for the play operation
+data = h.Vector([0, 1, 5, 17, 2, 4, 38, 22, 43, 1, 1])
+time = h.Vector([1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])</p>
+<p># Create a section with multiple segments
+cell = h.Section(“neurite”)
+cell.nseg = 3  # use an odd number of segments
+cell.L = 30 * um  # set length (arbitrary units)
+cell.diam = 5 * um  # set diameter (arbitrary units)</p>
+<p># Insert the playtest mechanism into the cell and play data into each segment
+for sec in cell.wholetree():</p>
+<blockquote>
+<div><p>sec.insert(h.playtest)
+for seg in sec:</p>
+<blockquote>
+<div><p># Play the vector into the RANGE variable by passing pointer reference
+data.play(seg.playtest._ref_xx, time, True)</p>
+</div></blockquote>
+</div></blockquote>
+<p># Record time and xx values at two segment locations
+t = h.Vector().record(h._ref_t)
+xxp1 = h.Vector().record(cell(0.1).playtest._ref_xx)
+xxp2 = h.Vector().record(cell(0.9).playtest._ref_xx)</p>
+<p># Initialize and run the simulation
+h.finitialize(-65 * mV)
+h.continuerun(10 * ms)</p>
+<p># Plot results at two segments
+plt.plot(t, xxp1, label=”Segment 0.1”)
+plt.plot(t, xxp2, label=”Segment 0.9”)
+plt.legend()
+plt.show()
+<a href="#id10"><span class="problematic" id="id11">``</span></a><a href="#id12"><span class="problematic" id="id13">`</span></a></p>
+</section>
+<section id="important-details">
+<h2>Important Details<a class="headerlink" href="#important-details" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> with the pointer reference to a RANGE variable (<cite>seg.playtest._ref_xx</cite>), not just the variable attribute (<cite>seg.playtest.xx</cite>).</p></li>
+<li><p>Ensure the variable to be played into is declared as <cite>RANGE</cite> in the NMODL.</p></li>
+<li><p>Use <cite>cell.wholetree()</cite> to cover all segments in the cell and its child sections.</p></li>
+<li><p>Choose an odd number for <cite>nseg</cite> so that you can record and verify values at mid-segments.</p></li>
+<li><p>Recording must also use pointer references for the variable to correctly record time-varying values.</p></li>
+<li><p>Playing the vector for each segment can be done with the same vector or with different vectors for each segment by indexing or creating different <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> instances.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Declaring variables as <cite>GLOBAL</cite> or <cite>POINTER</cite> will not enable unique segment-specific values for <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a>. Use <cite>RANGE</cite> instead.</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To play unique time-varying inputs into a variable per segment:</p>
+<ol class="arabic simple">
+<li><p>Declare the variable as <cite>RANGE</cite> in the NMODL file.</p></li>
+<li><p>Access the variable through its pointer reference (<cite>_ref_var</cite>) in Python.</p></li>
+<li><p>Use <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> to input the vector to each segment’s pointer reference.</p></li>
+<li><p>Use <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a> similarly to record unique segment values.</p></li>
+</ol>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4623">https://neuron.yale.edu/phpBB/viewtopic.php?t=4623</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

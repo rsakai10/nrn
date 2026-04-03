@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Somatic Current Injection and Membrane Potential Initialization &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Somatic Current Injection and Membrane Potential Initialization</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/180_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="somatic-current-injection-and-membrane-potential-initialization">
+<h1>Somatic Current Injection and Membrane Potential Initialization<a class="headerlink" href="#somatic-current-injection-and-membrane-potential-initialization" title="Link to this heading"></a></h1>
+<p>When simulating the effect of somatic current injection in NEURON, it is important to understand the difference between directly setting the membrane potential and injecting current.</p>
+<section id="initialization-and-membrane-potential">
+<h2>Initialization and Membrane Potential<a class="headerlink" href="#initialization-and-membrane-potential" title="Link to this heading"></a></h2>
+<p>By default, NEURON uses a “global voltage clamp” initialization which sets the membrane potential (<code class="xref py py-attr docutils literal notranslate"><span class="pre">v</span></code>) throughout the entire model to a specified initial value (<code class="xref py py-attr docutils literal notranslate"><span class="pre">h.v_init</span></code>). This initialization also forces all voltage-dependent gating variables to their steady-state values corresponding to that voltage.</p>
+<p>However, this is not equivalent to injecting current into the soma as done experimentally. Injecting a hyperpolarizing current into a neuron alters the membrane potential locally and dynamically. Due to cable properties and cell morphology, the membrane potential does not reach the same level everywhere, especially in larger neurons.</p>
+</section>
+<section id="injecting-current-vs-setting-voltage">
+<h2>Injecting Current vs Setting Voltage<a class="headerlink" href="#injecting-current-vs-setting-voltage" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Current Injection:</strong> When you inject a negative DC current into the soma, the membrane potential changes over time and space depending on the cell’s biophysics and morphology. The time course of the voltage change depends on membrane and channel kinetics, some of which may be slow (e.g., certain potassium channels). This process is simulated using current clamps like <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code></p></li>
+<li><p><strong>Setting Membrane Potential Directly:</strong> Simply setting the membrane potential (e.g., <cite>h.v_init = -80</cite>) initializes all membrane segments to that voltage and sets gating variables to steady state at that voltage. This does not simulate the dynamics of current injection and may not reflect the actual physiological response unless the cell is very small and the current injection is sufficiently long to reach steady state everywhere.</p></li>
+</ul>
+<p>Therefore, <strong>changing :attr:`h.v_init` is generally not sufficient to mimic the effect of somatic current injection</strong>.</p>
+</section>
+<section id="example-of-injecting-negative-dc-current-in-python">
+<h2>Example of Injecting Negative DC Current in Python<a class="headerlink" href="#example-of-injecting-negative-dc-current-in-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mf">12.6157</span>  <span class="c1"># Approximately 500 µm^2 area</span>
+
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span>    <span class="c1"># Start at 0 ms</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">1000</span>   <span class="c1"># Duration in ms</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.1</span>   <span class="c1"># Hyperpolarizing current in nA</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">v_init</span> <span class="o">=</span> <span class="o">-</span><span class="mi">65</span>   <span class="c1"># Resting potential before stimulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">v_init</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>  <span class="c1"># Run simulation for 1000 ms</span>
+</pre></div>
+</div>
+</section>
+<section id="example-of-setting-initial-voltage-in-hoc">
+<h2>Example of Setting Initial Voltage in Hoc<a class="headerlink" href="#example-of-setting-initial-voltage-in-hoc" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+access soma
+soma {
+    L = 12.6157
+    diam = 12.6157
+}
+
+objref stim
+stim = new IClamp(0.5)
+stim.delay = 0
+stim.dur = 1000
+stim.amp = -0.1
+
+v_init = -65
+finitialize(v_init)
+run()
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Injecting somatic current with <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code> using negative amplitude simulates hyperpolarization realistically, including spatial and temporal dynamics.</p></li>
+<li><p>Simply setting the initial membrane potential (<code class="xref py py-attr docutils literal notranslate"><span class="pre">h.v_init</span></code>) initializes voltage to a uniform level and forces gating variables to steady state, which is not equivalent to current injection except for small cells under steady-state conditions.</p></li>
+<li><p>To simulate hyperpolarizing somatic current injection, use <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code> or equivalent current injection mechanisms rather than changing the initial membrane potential.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=180">https://neuron.yale.edu/phpBB/viewtopic.php?t=180</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

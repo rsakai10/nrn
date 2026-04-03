@@ -1,0 +1,56 @@
+Load balancing large networks with heterogeneous cell morphologies and synapse distributions can be approached as follows:
+
+.. note::
+   The simplest approach is to distribute cells (e.g. principal cells) evenly by round-robin without splitting if the number of cells is large and their complexity variance is small.
+
+A rough proxy for cell computational complexity is the number of states in each cell, which can be measured via :class:`h.LoadBalance.cell_complexity`. Multisplit is advantageous if:
+
+.. math::
+   \frac{\text{TotalNumberOfStatesForAllCells}}{n_{\text{host}}} < \max \{\text{NumberOfStatesOfEachCell}\}
+
+Example measuring cell complexity per rank (Python):
+
+.. code-block:: python
+
+    from neuron import h
+    pc = h.ParallelContext()
+    nhost = int(pc.nhost())
+    rank = int(pc.id())
+
+    h.load_file("loadbal.hoc")
+    lb = h.LoadBalance()
+
+    def cell_complexities():
+        cx = []
+        for sec in h.allsec():
+            if sec.parentseg() is None:  # root section of cell
+                cx.append(lb.cell_complexity(sec=sec))
+        max_cx = max(cx) if cx else 0.0
+        sum_cx = sum(cx)
+        max_cx = pc.allreduce(max_cx, 2)
+        sum_cx = pc.allreduce(sum_cx, 1)
+        if rank == 0:
+            print("max_cx = %g  average cx per rank = %g" % (max_cx, sum_cx/nhost))
+
+    cell_complexities()
+
+For improved proxies of complexity, use :meth:`h.LoadBalance.ExperimentalMechComplex` which runs parallel mechanism performance tests, generating an `mcomplex.dat` file. Load it later with :meth:`h.LoadBalance.read_mcomplex` for more accurate complexity estimates.
+
+For load balancing algorithms, a variant of the "least processing time" (LPT) heuristic can be applied:
+
+.. code-block:: text
+
+    REPEAT
+       assign the most complex cell to the host with the least total assigned complexity
+    UNTIL all cells are assigned
+
+This strategy can improve over round-robin balancing when cell complexity is heterogeneous.
+
+Example Python module using :class:`h.LoadBalance` to compute complexities and apply LPT balancing, returning expected load balances before and after reallocation, is provided for user adaptation.
+
+.. note::
+   It is often preferable to save and load the cell-to-host assignments from a file to separate balancing from simulation runs.
+
+Finally, load balance during simulation can be measured dynamically by timing computation and communication intervals using :meth:`h.ParallelContext.step_time` and barriers before spike exchange to incorporate spike handling overhead.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3628 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3628>`_

@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started with NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started with NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4409_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started-with-neuron">
+<h1>Getting Started with NEURON<a class="headerlink" href="#getting-started-with-neuron" title="Link to this heading"></a></h1>
+<section id="scope-and-domain-of-neuron">
+<h2>Scope and Domain of NEURON<a class="headerlink" href="#scope-and-domain-of-neuron" title="Link to this heading"></a></h2>
+<p>NEURON is a simulation environment designed primarily for the mechanistic modeling of biological neurons and neuronal networks. Its strength lies in representing the complex anatomical and biophysical properties of cells—including ion channels and cellular interconnections—that contribute to neural function.</p>
+<p>Models implemented with NEURON can range from detailed multicompartment representations with explicit morphology to simplified single-compartment (point neuron) models. It also supports dynamical abstractions such as Izhikevich, Morris-Lecar, adaptive exponential integrate-and-fire (AdEx), and standard integrate-and-fire neurons.</p>
+<p>The anatomical and model scale supported by NEURON spans:</p>
+<ul class="simple">
+<li><p>Subcellular structures: individual neurites, dendritic spines, cytoplasmic organelles.</p></li>
+<li><p>Intracellular and extracellular reaction-diffusion dynamics.</p></li>
+<li><p>Medium to very large scale network models amenable to parallelization.</p></li>
+</ul>
+<p>NEURON simulations can be run on single processors or leverage multithreading and MPI-based distributed computation for scalability.</p>
+</section>
+<section id="mathematical-foundations">
+<h2>Mathematical Foundations<a class="headerlink" href="#mathematical-foundations" title="Link to this heading"></a></h2>
+<p>NEURON implicitly solves the cable equation for electrically extended neuronal structures, sparing users from manually dealing with its numerical implementation. The cable equation governs voltage propagation and current flow along neuron morphologies modeled as connected cylindrical compartments.</p>
+<p>Additional dynamic processes are described by systems of ordinary differential equations (ODEs) representing:</p>
+<ul class="simple">
+<li><p>Ion channel kinetics using Hodgkin-Huxley-style formulations.</p></li>
+<li><p>State transition Markov models of channel gating and ligand-receptor interactions.</p></li>
+<li><p>Synaptic dynamics and other intracellular biochemical mechanisms.</p></li>
+</ul>
+<p>The modeling of such mechanisms is facilitated by NEURON’s NMODL language and Channel Builder tool, allowing users to define custom ion channels, synapses, and pharmacological interactions.</p>
+</section>
+<section id="learning-resources-and-recommended-reading">
+<h2>Learning Resources and Recommended Reading<a class="headerlink" href="#learning-resources-and-recommended-reading" title="Link to this heading"></a></h2>
+<p>For foundational understanding of NEURON’s modeling approaches, the following are recommended:</p>
+<ul class="simple">
+<li><p><em>The NEURON Book</em> (especially chapters 1–9): Introduces fundamental concepts, model representations, and coding examples primarily in HOC. While HOC code is used traditionally, Python is now the recommended interface due to its modern capabilities and robust introspection features.</p></li>
+<li><p>Articles and publication collections related to NEURON’s development and applications provide deeper mathematical and biological context.</p></li>
+<li><p>Standard textbooks covering cellular neurophysiology and computational neuroscience such as:
+- Johnston and Wu, <em>Fundamentals of Cellular Neurophysiology</em>
+- Hammond, <em>Cellular and Molecular Neurophysiology</em></p></li>
+<li><p>Research articles on specialized topics like reaction-diffusion modeling and stochastic synaptic mechanisms for advanced study.</p></li>
+</ul>
+</section>
+<section id="code-interface-examples">
+<h2>Code Interface Examples<a class="headerlink" href="#code-interface-examples" title="Link to this heading"></a></h2>
+<p><strong>Python example creating a multicompartment NEURON model:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="c1"># Create a section (compartment)</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># length in microns</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># diameter in microns</span>
+
+<span class="c1"># Insert Hodgkin-Huxley channels</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="c1"># Stimulate with a current clamp</span>
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1"># Set up recording vectors</span>
+<span class="n">v_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">)</span>
+<span class="n">t_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+
+<span class="c1"># Run simulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="c1"># Plot results (requires matplotlib)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_vec</span><span class="p">,</span> <span class="n">v_vec</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Voltage (mV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Equivalent HOC code snippet:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+soma {
+    length = 20
+    diameter = 20
+    insert hh
+}
+
+objref stim
+stim = new IClamp(0.5)
+stim.delay = 5
+stim.dur = 1
+stim.amp = 0.1
+
+objref vvec, tvec
+vvec = new Vector()
+tvec = new Vector()
+vvec.record(&amp;soma.v(0.5))
+tvec.record(&amp;t)
+
+init(-65)
+run(40)
+
+vvec.plot(tvec)
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Begin modeling projects using the Python interface to NEURON for improved code clarity and access to modern libraries.</p></li>
+<li><p>Familiarize yourself with the concepts and mathematical background in the early chapters of <em>The NEURON Book</em>.</p></li>
+<li><p>Explore and modify example models to connect theoretical understanding with practical implementation.</p></li>
+<li><p>Consider reading source code and related literature to deepen insight into numerical methods and model components.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The cable equation and associated numerical methods are internally handled by NEURON, so users do not typically implement these directly but rather work with compartmental models and channel kinetics.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">nrn.Section</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.finitialize()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.continuerun()</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4409">https://neuron.yale.edu/phpBB/viewtopic.php?t=4409</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

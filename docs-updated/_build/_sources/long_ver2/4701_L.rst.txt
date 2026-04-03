@@ -1,0 +1,223 @@
+.. _chunked_simulation_with_frecord_init_and_multiprocessing:
+
+Chunked Simulation with :meth:`h.frecord_init` and Python Multiprocessing
+========================================================================
+
+When running long simulations in NEURON while recording many variables, a common approach is to break the simulation into multiple time chunks to manage memory usage and data handling. This section addresses advanced usage of :meth:`h.frecord_init` in chunked simulations, especially in combination with Python multiprocessing for parallel data processing.
+
+Chunked Simulation Workflow with :meth:`h.frecord_init`
+------------------------------------------------------
+
+The standard approach to run a simulation in chunks using NEURON's Python interface is:
+
+1. Create a dictionary mapping variable names to :class:`Vector` objects that record the desired variables.
+
+2. For each chunk, run the simulation until the end time of that chunk using :meth:`h.continuerun`.
+
+3. After the chunk finishes, save or process the current data.
+
+4. Call :meth:`h.frecord_init` to resize the recording vectors to hold only the amount of data for the next chunk, reducing memory usage.
+
+Example pseudo-code in Python:
+
+.. code-block:: python
+
+    # rec_dict: dict of variable names -> h.Vector recordings
+    # chunk_end_times: list of simulation times to run up to for each chunk
+    for chunk_end_time in chunk_end_times:
+        h.continuerun(chunk_end_time)
+        
+        # Save or process current chunk data here...
+        
+        # Resize recording buffers for next chunk
+        h.frecord_init()
+
+Using Python Multiprocessing for Parallel Data Processing
+---------------------------------------------------------
+
+To improve performance, data processing and saving can be parallelized using Python's multiprocessing module. The idea is to let the main process run the NEURON simulation, while one or more worker processes handle data extracted from :class:`Vector` recordings, and a separate process writes data to disk asynchronously.
+
+Example multiprocessing usage pattern:
+
+.. code-block:: python
+
+    import multiprocessing as mp
+
+    rec_dict = create_rec_dict(section_list)
+    
+    with mp.Manager() as manager:
+        data_queue = manager.Queue()
+        
+        data_writer = mp.Process(target=data_writer_func, args=(data_queue, ...))
+        data_writer.start()
+        
+        with mp.Pool() as pool:
+            for chunk_end_time in chunk_end_times:
+                h.continuerun(chunk_end_time)
+                
+                time_array = rec_dict["Time"].as_numpy()
+                
+                for var, vec in rec_dict.items():
+                    if var == "Time":
+                        continue
+                    var_array = vec.as_numpy()
+                    
+                    # Problematic: as_numpy() shares memory with vec
+                    
+                    # Pass array for processing asynchronously
+                    pool.apply_async(target=data_processor, args=(var, var_array, time_array))
+                
+                h.frecord_init()
+        
+        data_writer.join()
+
+Potential Pitfall: Shared Memory Between :meth:`Vector.as_numpy` and :meth:`h.frecord_init`
+--------------------------------------------------------------------------------------------
+
+The method :meth:`Vector.as_numpy` returns a NumPy array that shares the same underlying memory with the NEURON :class:`Vector`. Calling :meth:`h.frecord_init` after dispatching worker processes that have not yet started execution causes the NEURON vectors to be resized **and** changes the contents of the NumPy arrays held by the workers, since they reference the now-resized buffers.
+
+As a result, workers may receive truncated or corrupted data, leading to incorrect analyses such as flat or constant traces.
+
+Workarounds to avoid this issue:
+
+- Introduce a delay (e.g., :func:`time.sleep`) before calling :meth:`h.frecord_init` to allow worker processes to start and copy data.
+
+- Explicitly create deep copies of the data before passing to worker processes:
+
+  .. code-block:: python
+
+      var_array = vec.as_numpy().copy()
+
+  or
+
+  .. code-block:: python
+
+      var_array = list(vec)
+
+  Note that copying data is an *O(n)* operation in time and memory.
+
+Sampling with Variable Time Step Integration and Different Sampling Intervals
+-----------------------------------------------------------------------------
+
+When using variable time step integration with :class:`CVode`, smooth and consistent recording can be achieved by:
+
+- Using the :meth:`Vector.record` method with a specified sampling interval or time vector.
+
+- NEURON will perform linear interpolation to sample variables at fixed time points, even when the underlying solver operates at adaptively chosen times.
+
+Example recording fixed timestep data with variable timestep integration:
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file("stdrun.hoc")
+    
+    # Create a section and insert HH channels
+    sec = h.Section(name="sec")
+    sec.insert("hh")
+    
+    # Setup simulation parameters
+    run_time = 500.0  # ms
+    dt = 0.1          # desired sampling interval in ms
+    
+    # Create a time vector with fixed intervals
+    time_vec = h.Vector().indgen(0, run_time, dt)
+    
+    # Enable variable time step integration
+    cvode = h.CVode()
+    cvode.active(True)
+    
+    # Record time at fixed intervals using prespecified time vector
+    t_vec = h.Vector().record(h._ref_t, time_vec)
+    
+    # Record membrane potential at fixed intervals
+    v_vec = h.Vector().record(sec(0.5)._ref_v, time_vec)
+    
+    h.finitialize()
+    h.continuerun(run_time)
+    
+    # t_vec.size() == v_vec.size(), data sampled at fixed dt.
+
+Ensuring Simulation Time Consistency When Running in Chunks
+-----------------------------------------------------------
+
+When running simulations in chunks with :class:`CVode` active, one may want to ensure simulation times align precisely with chunk boundaries to:
+
+- Guarantee recording vectors have consistent length.
+
+- Avoid off-by-one errors and ease data concatenation across chunks.
+
+Recommended approach:
+
+1. At the start of each chunk, if current simulation time differs from the intended chunk start time by more than the sampling interval `dt`, set `h.t` explicitly to the chunk start time and call `CVode.re_init()` to reinitialize the solver.
+
+2. Use :meth:`CVode.event` to schedule an event at the chunk end time — this instructs the solver to stop precisely at chunk boundaries.
+
+3. Run the simulation with :meth:`h.continuerun(chunk_end_time)`.
+
+Example code snippet illustrating this approach:
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file("stdrun.hoc")
+
+    use_cvode = True
+    num_chunks = 5
+    chunk_size = 5000  # in ms
+    dt = 0.1
+
+    soma = h.Section("soma")
+    t = h.Vector().record(h._ref_t)
+    h.CVode().active(use_cvode)
+
+    h.finitialize(-65)
+
+    for chunk_num in range(num_chunks):
+        chunk_start_time = chunk_num * chunk_size
+        chunk_stop_time = (chunk_num + 1) * chunk_size
+
+        if use_cvode:
+            # Allow small numerical tolerance to avoid segmentation faults
+            if abs(h.t - chunk_start_time) > dt:
+                h.t = chunk_start_time
+                h.CVode().re_init()
+            
+            h.CVode().event(chunk_stop_time)
+
+        h.continuerun(chunk_stop_time)
+
+        # Process and save current chunk data here...
+        save_chunk_data()
+
+        h.frecord_init()
+
+Notes and Caveats
+-----------------
+
+- The event scheduled with :meth:`CVode.event` does not always guarantee simulation stops exactly at that time, particularly when times are within floating point precision limits of one another.
+
+- Recording vectors may occasionally have one more or fewer data points than expected per chunk due to interpolation and solver behavior.
+
+- It may be necessary to implement small post-processing fixes to handle inconsistent vector lengths.
+
+- Passing a `dt` or fixed time vector to :meth:`Vector.record` is a convenient way to sample variables at fixed intervals when using variable time step integration, eliminating the need for manual resampling.
+
+Summary
+-------
+
+- Use :meth:`h.frecord_init` after each chunk to reset the recording buffers to avoid excessive memory use.
+
+- When combining with Python multiprocessing, ensure data passed to worker processes is fully copied (e.g., via `.copy()`) to avoid data corruption due to shared memory with NEURON vectors.
+
+- To record slowly changing variables efficiently, use different sampling intervals by specifying `dt` or a time vector in :meth:`Vector.record`.
+
+- When running simulations in chunks with :class:`CVode` active, ensure correct alignment of simulation time and chunk boundaries by resetting `h.t` as needed and scheduling stop events with :meth:`CVode.event`.
+
+- Be aware that edge cases may require custom handling of recording vector sizes and timings.
+
+.. seealso::
+
+   :meth:`h.frecord_init`, :meth:`Vector.record`, :class:`CVode`, :meth:`h.continuerun`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4701 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4701>`_

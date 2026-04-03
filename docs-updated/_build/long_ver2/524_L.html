@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Initialization with the Init button &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Initialization with the Init button</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/524_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="initialization-with-the-init-button">
+<h1>Initialization with the Init button<a class="headerlink" href="#initialization-with-the-init-button" title="Link to this heading"></a></h1>
+<p>When modeling a neuron in NEURON, the “Init (mV)” control in the RunControl panel performs a steady-state initialization of the model under <em>voltage clamp</em> conditions rather than current clamp. It sets the entire cell’s membrane potential to the specified value and computes the steady-state values of all voltage-dependent gating variables corresponding to that potential.</p>
+<section id="how-init-works">
+<h2>How Init works<a class="headerlink" href="#how-init-works" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Clicking the <strong>Init</strong> button clamps the model cell’s membrane potential to the value shown next to it (e.g., -65 mV).</p></li>
+<li><p>NEURON computes the steady-state values for all voltage-dependent state variables (such as gating variables for ion channels) at that potential.</p></li>
+<li><p>This held state approximates the condition of having the entire cell clamped at the Init voltage until it reaches equilibrium.</p></li>
+<li><p>After initialization, the membrane potential and gating variables are set to these values, but the model is not running dynamically.</p></li>
+<li><p>Clicking <strong>Init &amp; Run</strong> will do this initialization and <em>then</em> release the clamp, allowing the cell to evolve freely.</p></li>
+</ul>
+</section>
+<section id="interpretation-of-different-init-values">
+<h2>Interpretation of different Init values<a class="headerlink" href="#interpretation-of-different-init-values" title="Link to this heading"></a></h2>
+<p>Consider the following simple model HOC code snippet:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+access soma
+insert hh
+soma.nseg = 1
+</pre></div>
+</div>
+<p>If you plot <cite>soma.v(0.5)</cite>:</p>
+<ul class="simple">
+<li><p>At <strong>Init(mV) = -65</strong>, the membrane potential stays approximately constant because <cite>-65 mV</cite> is near the Hodgkin-Huxley (hh) model resting potential.</p></li>
+<li><p>At <strong>Init(mV) = -90</strong>, after release from the voltage clamp the membrane may exhibit anode break excitation leading to an action potential. This is because holding the membrane hyperpolarized de-inactivates Na⁺ channels, causing rebound excitation on release.</p></li>
+<li><p>At <strong>Init(mV) = -40</strong>, voltage-dependent Na⁺ channels inactivate and K⁺ channels activate during the voltage clamp period. When released, the cell rapidly hyperpolarizes near the K⁺ reversal potential and then slowly depolarizes back.</p></li>
+</ul>
+<p>This behavior highlights that the Init voltage sets <em>both</em> membrane potential and the gating variables to the steady state of that potential, which is not the same as simply setting <cite>v</cite> to a value without adjusting gating variables.</p>
+</section>
+<section id="comparison-to-current-injection">
+<h2>Comparison to current injection<a class="headerlink" href="#comparison-to-current-injection" title="Link to this heading"></a></h2>
+<p>Setting a holding current in a patch clamp experiment or in a current clamp simulation is different:</p>
+<ul class="simple">
+<li><p>Under current clamp, the voltage will settle to a new steady state based on the injected current and ion channel kinetics.</p></li>
+<li><p>Under voltage clamp initialization with Init, the cell is assumed to be fixed at that voltage long enough for gating variables to equilibrate at that value.</p></li>
+</ul>
+<p>If you want to simulate current clamp behavior, you should insert a point process like an IClamp to inject current, not rely on Init.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <strong>Init</strong> button does a voltage clamp initialization of the <em>entire cell</em>, setting membrane potential and gating variables to steady-state values consistent with that voltage. This differs fundamentally from fixing initial membrane potential without adjusting gating variables, or from current injection via IClamp.</p>
+</div>
+<p>For workflow:</p>
+<ol class="arabic simple">
+<li><p>Insert mechanisms (e.g., <cite>insert hh</cite>) into your sections.</p></li>
+<li><p>Use <strong>Init</strong> to set the initial equilibrium state at your chosen membrane potential.</p></li>
+<li><p>Click <strong>Init &amp; Run</strong> to initialize and then simulate the free evolution.</p></li>
+<li><p>For current clamp experiments, insert a current clamp point process like <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> and set its amplitude instead of relying on Init.</p></li>
+</ol>
+</section>
+<section id="further-customization">
+<h2>Further customization<a class="headerlink" href="#further-customization" title="Link to this heading"></a></h2>
+<p>Advanced initialization strategies can be employed for models that:</p>
+<ul class="simple">
+<li><p>Have spontaneous activity</p></li>
+<li><p>Require setting resting potentials not dictated by inserted mechanisms</p></li>
+<li><p>Include ionic concentrations and advanced mechanisms requiring initialization of ion dynamics</p></li>
+</ul>
+<p>These are discussed in detail in NEURON documentation and <em>The NEURON Book</em>, Chapter 9.</p>
+</section>
+<section id="example-python-usage">
+<h2>Example: Python usage<a class="headerlink" href="#example-python-usage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="p">(</span><span class="s1">&#39;create soma&#39;</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">h</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span>
+
+<span class="c1"># Set the voltage for initialization</span>
+<span class="n">init_voltage</span> <span class="o">=</span> <span class="o">-</span><span class="mf">65.0</span>
+<span class="n">h</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">v_init</span> <span class="o">=</span> <span class="n">init_voltage</span>
+<span class="n">h</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To perform voltage clamp initialization programmatically, you can set <cite>h.v_init</cite> before calling <cite>h.finitialize()</cite> (equivalent internally to Init) and then run the model freely with <cite>h.continuerun()</cite>.</p>
+<p>This clarifies that Init sets the <em>starting equilibrium state</em> of voltage and gating variables, enabling meaningful simulation from a known point of departure.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=524">https://neuron.yale.edu/phpBB/viewtopic.php?t=524</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

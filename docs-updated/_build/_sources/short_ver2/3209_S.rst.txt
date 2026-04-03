@@ -1,0 +1,45 @@
+Variable Number of Sections in Templates
+=========================================
+
+You can define templates with a variable number of sections by declaring an array of sections at the top level and resizing it inside an :meth:`init` procedure. Because hoc requires section arrays to be declared outside procedures, create the array with an initial size and then recreate it to the desired size based on a parameter.
+
+Example hoc template:
+
+.. code-block:: hoc
+
+   begintemplate Foo
+     public dend
+     create dend[1]    // declare array of sections (initial size 1)
+     proc init() { local i
+       create dend[$1]  // resize the array to desired number of sections
+       for i=0,$1-1 {
+         dend[i] {
+           // specify properties for dend[i], e.g. L, diam, insert mechanisms
+           L = 100
+           diam = 1
+         }
+       }
+     }
+   endtemplate
+
+Usage in hoc:
+
+.. code-block:: hoc
+
+   objref cell
+   cell = new Foo(5)   // creates 5 dend sections: cell.dend[0]..cell.dend[4]
+
+Because the array is declared at top level, hoc knows dend is an array of sections, and resizing it inside :meth:`init` is allowed.
+
+Python control can then create or recreate instances with different numbers of sections by calling
+
+.. code-block:: python
+
+   from neuron import h
+   cell = h.Foo(10)   # 10 sections in cell.dend
+
+.. note::
+
+  Managing collections of sections using hoc :objref:`List` objects is also recommended for flexible models.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3209 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3209>`_

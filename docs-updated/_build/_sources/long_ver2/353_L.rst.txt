@@ -1,0 +1,178 @@
+Calculating and Plotting Average Synaptic Currents
+==================================================
+
+This section describes how to compute and plot the instantaneous average postsynaptic synaptic current from a population of synapses in a NEURON network model. Two methods are provided: one stores and processes recorded data after the simulation (fast but memory intensive), and the other calculates the average incrementally during simulation (memory efficient but slower).
+
+Definitions
+-----------
+- **Instantaneous average current**: The average synaptic current across all synapses at each simulation time step.
+- **Synaptic current**: Current through synaptic mechanisms only (not including other transmembrane or ionic currents).
+
+Prerequisites
+-------------
+Ensure you have:
+- Created synapse mechanisms (e.g. :class:`ExpSyn` or :class:`Exp2Syn`) for the neurons in your population.
+- A global fixed time step integration (:meth:`fadvance`) or variable time step integration with special considerations (see below).
+
+Method 1: Postprocessing Using Vectors and Lists
+------------------------------------------------
+
+This method records each synaptic current into a separate :class:`Vector`, then sums and averages them after simulation.
+
+1. **Create a Vector to record time**:
+
+.. code-block:: hoc
+
+    objref tvec
+    tvec = new Vector()
+    tvec.record(&t)
+
+2. **Create Lists to hold synapses and their recorded currents**:
+
+.. code-block:: hoc
+
+    objref synlist, veclist
+    synlist = new List()
+    veclist = new List()
+
+3. **When creating synapses, call a procedure to:**
+
+- Create a synapse at a specified location
+- Append the synapse object to `synlist`
+- Create a Vector to record the synaptic current `.i`
+- Append the Vector to `veclist`
+
+.. code-block:: hoc
+
+    proc setsyn() { localobj tempsyn, tempvec
+        tempsyn = new ExpSyn($1)  // $1 is the 1D position on section
+        // set kinetics, e.g.:
+        // tempsyn.tau = 2
+        synlist.append(tempsyn)
+        tempvec = new Vector()
+        tempvec.record(&tempsyn.i)
+        veclist.append(tempvec)
+    }
+
+4. **Run simulation with a custom run procedure that postprocesses averages:**
+
+.. code-block:: hoc
+
+    objref avgisyn
+    
+    proc postprocess() { local i
+        avgisyn = new Vector()
+        avgisyn = veclist.object(0).c  // copy first vector
+        for i=1, veclist.count()-1 {
+            avgisyn.add(veclist.object(i))
+        }
+        avgisyn.div(veclist.count())  // divide by number of synapses
+    }
+    
+    proc run() {
+        stdinit()
+        continuerun(tstop)
+        postprocess()
+    }
+
+At the end of the run, `avgisyn` contains the instantaneous average synaptic current at each recorded time point, and `tvec` contains the corresponding times.
+
+**Using variable time step integration (CVode):**  
+Vector recording with fixed time step is not directly compatible. Instead, use the :class:`CVode` class's :meth:`record` method for synaptic currents and time vectors for each cell. After the run, interpolate the recorded currents onto a common time base before summing and averaging.
+
+Plotting after the run can be done with :meth:`Vector.plot` in HOC or using matplotlib in Python by exporting the recorded data.
+
+Method 2: Incremental Averaging During Simulation
+------------------------------------------------
+
+This method calculates the average synaptic current on-the-fly during each integration step by iterating over the synapse objects.
+
+1. **Initialize the average current variable:**
+
+.. code-block:: hoc
+
+    double avgisyn = 0
+
+2. **Create the list of synapses as in Method 1, but without recording Vectors:**
+
+Only call the procedure appending synapses to `synlist`.
+
+3. **Create custom `init()` and `advance()` procedures that perform initialization and stepping with averaging:**
+
+.. code-block:: hoc
+
+    proc init() {
+        finitialize(v_init)
+        avgisyn = 0
+        if (cvode.active()) {
+            cvode.re_init()
+        } else {
+            fcurrent()
+        }
+        frecord_init()
+    }
+    
+    proc advance() { local i, total_i
+        fadvance()
+        total_i = 0
+        for i=0, synlist.count()-1 {
+            total_i += synlist.object(i).i
+        }
+        avgisyn = total_i / synlist.count()
+    }
+
+4. **During the simulation loop, calling `advance()` will step the simulation one time step and update `avgisyn`.**
+
+This method allows plotting or logging `avgisyn` in real time, but may slow down simulations with many synapses.
+
+Notes
+-----
+
+- For large populations, Method 1 is recommended for speed and simpler postprocessing.
+- If you require time-resolved instantaneous averages (e.g., for GUI plotting) and memory constraints are minor, Method 1 is convenient.
+- For interactive or debugging purposes, Method 2 may be preferable despite computational overhead.
+- This approach focuses on synaptic currents `.i` at synapses; adapt if you want membrane or ionic currents.
+
+Example Python Snippet for Method 1 (conceptual)
+
+.. code-block:: python
+
+    from neuron import h
+    import matplotlib.pyplot as plt
+    
+    synlist = h.List()
+    veclist = h.List()
+    tvec = h.Vector()
+    tvec.record(h._ref_t)
+    
+    def setsyn(sec, loc):
+        syn = h.ExpSyn(sec(loc))
+        synlist.append(syn)
+        vec = h.Vector()
+        vec.record(syn._ref_i)
+        veclist.append(vec)
+        return syn
+    
+    # Create synapses using setsyn(...)
+    # After simulation:
+    n_syn = veclist.count()
+    avgisyn = veclist.object(0).copy()
+    for i in range(1, n_syn):
+        avgisyn.add(veclist.object(i))
+    avgisyn.div(n_syn)
+    
+    plt.plot(tvec, avgisyn)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Average Synaptic Current (nA)')
+    plt.show()
+
+See Also
+--------
+
+- :class:`Vector.record`  
+- :meth:`fadvance`  
+- :class:`CVode` and :meth:`CVode.record`  
+- :class:`List` in HOC  
+- :class:`ExpSyn`, :class:`Exp2Syn`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=353 <https://neuron.yale.edu/phpBB/viewtopic.php?t=353>`_

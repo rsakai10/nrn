@@ -1,0 +1,129 @@
+IClamp and Its Effect on Membrane Potential When the Amplitude Is Zero
+=======================================================================
+
+When using :class:`IClamp` to deliver current stimuli in simulations, it may be observed that even when the amplitude (`amp`) parameter is set to zero, changes in the stimulus duration (`dur`) can cause slight differences in the recorded membrane potential. This behavior is especially noticeable when using variable time step integration (adaptive integration) via CVODE.
+
+Cause of the Effect
+-------------------
+
+This effect arises because :class:`IClamp` objects trigger re-initialization of the variable time step integrator at the onset (`t == del`) and offset (`t == del + dur`) of the stimulus. These re-initializations occur regardless of whether the amplitude is zero. The re-initialization changes the solver's internal state and the precise times at which the solution is sampled, thereby slightly perturbing the numerical trajectory of the solution.
+
+Key points:
+
+- Adaptive integration controls error by dynamically changing step sizes.
+- Discontinuities in system parameters (such as current injection onset and offset) force the solver to reset step sizes and re-initialize.
+- Even a zero-amplitude :class:`IClamp` constitutes a parameter discontinuity due to its on/off times, causing solver resets.
+- The changes in solution timing are small and typically do not qualitatively affect simulation outcomes, but may alter quantitative results such as phase response curve (PRC) calculations.
+
+Numerical Details
+-----------------
+
+- The perturbation is related to the solver's absolute error tolerance, which defaults to `atol=1e-3`.
+- The solver treats any change in parameters at discontinuity times as potential events to trigger re-initialization.
+- Attempts to optimize by skipping re-initialization when amplitude is zero would be error-prone, because amplitudes below floating point epsilon (see `float_epsilon` in NEURON’s Programmer's Reference) would inconsistently apply this logic.
+  
+Recommendations
+---------------
+
+To mitigate or avoid this effect, consider the following strategies:
+
+1. **Use Fixed Time Step Integration**  
+   Replace adaptive integration with fixed time steps when precise repeatability is needed. This can be done by not activating CVODE or by calling `cvode.active(0)` in HOC or `h.cvode.active(0)` in Python.
+
+   .. code-block:: python
+
+      from neuron import h
+      h.cvode.active(0)  # disable variable time step integration
+
+   or in HOC:
+
+   .. code-block:: hoc
+
+      cvode.active(0)
+
+2. **Adjust CVODE Error Tolerances**  
+   Reduce the absolute error tolerance of CVODE to decrease numerical perturbations:
+
+   .. code-block:: python
+
+      h.cvode.atol(1e-6)  # default is 1e-3, use smaller for more accuracy
+
+3. **Use atolscale for State Variables**  
+   Apply scaled tolerances on different state variables with `cvode.atolscale()`. See the Programmer's Reference for guidance.
+
+4. **Warmup and Save State**  
+   If using fixed time steps, simulations can be slow. To speed repeated runs:
+
+   - Run a single warm-up simulation until the model reaches a steady state.
+   - Use :class:`SaveState` to capture and save the model state at this point.
+   - Restore the state in future simulations instead of rerunning the full warm-up each time.
+
+5. **Evaluate Impact Relative to Other Error Sources**  
+   Remember that all experimental and computational PRC estimation methods have inherent approximations. Consider whether the perturbation introduced by adaptive integration is significant compared to:
+
+   - Model parameter uncertainties
+   - Numerical integration errors
+   - Experimental measurement noise
+
+   A useful computational experiment is:
+
+   - Generate PRCs using fixed time steps for several decreasing values of `dt`.
+   - Generate a PRC using adaptive integration.
+   - Compare results to assess convergence and relative differences.
+
+Summary
+-------
+
+- Variable time step integration causes slight perturbations at :class:`IClamp` on/off times, even if :attr:`amp` is zero.
+- This is expected behavior due to solver re-initialization at discontinuities.
+- You can eliminate or reduce disturbances by switching to fixed time steps or tuning solver tolerances.
+- Consider trade-offs in simulation speed and numerical accuracy when selecting integration methods.
+- Use :class:`SaveState` to efficiently manage initialization if needing many repeated runs.
+
+Example: Disabling variable time step integration in Python
+------------------------------------------------------------
+
+.. code-block:: python
+
+   from neuron import h, gui
+
+   # Disable adaptive integration
+   h.cvode.active(0)
+
+   # Create an IClamp with zero amplitude
+   stim = h.IClamp(h.soma(0.5))
+   stim.delay = 100    # ms
+   stim.dur = 10       # ms
+   stim.amp = 0        # nA (zero amplitude)
+
+   # Run simulation
+   h.tstop = 200
+   h.finitialize(-65)
+   while h.t < h.tstop:
+       h.fadvance()
+
+Example: Enabling variable time step integration with reduced tolerance
+----------------------------------------------------------------------
+
+.. code-block:: python
+
+   from neuron import h, gui
+
+   h.cvode.active(1)    # enable adaptive integration
+   h.cvode.atol(1e-6)   # set tighter absolute tolerance
+
+   stim = h.IClamp(h.soma(0.5))
+   stim.delay = 100
+   stim.dur = 10
+   stim.amp = 0
+
+   h.tstop = 200
+   h.finitialize(-65)
+   while h.t < h.tstop:
+       h.fadvance()
+
+.. note::
+
+   This explanation specifically applies when using :class:`IClamp` objects and CVODE with adaptive time stepping. The behavior of other stim types or solvers may differ.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3294 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3294>`_

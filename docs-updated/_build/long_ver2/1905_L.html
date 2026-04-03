@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setting the Basal Level of Intracellular Calcium Concentration (cai) with Calcium Accumulation Mechanisms &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setting the Basal Level of Intracellular Calcium Concentration (cai) with Calcium Accumulation Mechanisms</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1905_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="setting-the-basal-level-of-intracellular-calcium-concentration-cai-with-calcium-accumulation-mechanisms">
+<h1>Setting the Basal Level of Intracellular Calcium Concentration (cai) with Calcium Accumulation Mechanisms<a class="headerlink" href="#setting-the-basal-level-of-intracellular-calcium-concentration-cai-with-calcium-accumulation-mechanisms" title="Link to this heading"></a></h1>
+<p>When modeling intracellular calcium dynamics using mechanisms such as the <em>cdp.mod</em> calcium diffusion and pump mechanism, it is often necessary to set or adjust the basal (resting) intracellular calcium concentration, <em>cai</em>, to a specific value (e.g., 116 nM) for physiological relevance.</p>
+<p>This section describes issues encountered and recommended strategies for setting the basal <em>cai</em> in the presence of complex calcium accumulation mechanisms, with example code and practical advice.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Inserting multiple calcium accumulation mechanisms (e.g., <em>cdp.mod</em> and <em>cad.mod</em>) that use the same calcium ion (<a href="#id1"><span class="problematic" id="id2">:ion:`ca`</span></a>) with WRITE permissions simultaneously in the same section leads to conflicts and meaningless results because each mechanism attempts to update the same <code class="xref py py-class docutils literal notranslate"><span class="pre">cai</span></code> state independently. Choose one mechanism per section.</p>
+</div>
+<section id="principle-difficulties">
+<h2>Principle Difficulties<a class="headerlink" href="#principle-difficulties" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Interference among multiple calcium mechanisms</strong>: Ensure only one calcium accumulation mechanism with <cite>WRITE cai</cite> per section.</p></li>
+<li><p><strong>Initialization of buffers and pump states</strong>: The internal calcium buffering and pump states in <em>cdp.mod</em> affect resting <em>cai</em>. These variables require consistent initialization.</p></li>
+<li><p><strong>Nonlinear interdependence of parameters</strong>: The desired basal <em>cai</em> depends on model parameters such as pump rate constants and membrane calcium currents; altering these to fix basal <em>cai</em> may change model dynamics.</p></li>
+<li><p><strong>Balancing calcium fluxes at rest</strong>: Achieving the desired resting <em>cai</em> requires balancing calcium influx and efflux sources, which may include voltage-gated calcium currents, pumps, buffers, and constant calcium sources.</p></li>
+</ol>
+</section>
+<section id="using-a-constant-calcium-source-to-set-basal-textit-cai">
+<h2>Using a Constant Calcium Source to Set Basal (textit{cai})<a class="headerlink" href="#using-a-constant-calcium-source-to-set-basal-textit-cai" title="Link to this heading"></a></h2>
+<p>A practical strategy is to include in your model a custom density mechanism that acts as a constant calcium source or sink. This mechanism compensates for net calcium currents, maintaining the desired resting <em>cai</em> without altering pump or channel parameters.</p>
+<p><strong>NMODL mechanism for constant calcium source (`casrc.mod`):</strong></p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX casrc
+  USEION ca WRITE ica
+  NONSPECIFIC_CURRENT ix
+  RANGE amp
+}
+
+UNITS {
+  (mA) = (milliamp)
+}
+
+PARAMETER {
+  amp (mA/cm2)
+}
+
+ASSIGNED {
+  ica (mA/cm2)
+  ix (mA/cm2)
+}
+
+BREAKPOINT {
+  ica = amp
+  ix = -ica
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The use of <cite>NONSPECIFIC_CURRENT ix</cite> ensures charge balance by cancelling the ionic current contribution to membrane potential.</p>
+</div>
+<p><strong>Integrating the constant calcium source into your model:</strong></p>
+<ol class="arabic">
+<li><p>Insert the <cite>casrc</cite> mechanism into sections that contain mechanisms writing calcium current (<cite>ica</cite>), e.g.:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forall if (ismembrane(&quot;ca_ion&quot;)) insert casrc
+</pre></div>
+</div>
+</li>
+<li><p>Define a custom initialization procedure that:</p>
+<ul class="simple">
+<li><p>Sets the initial resting calcium concentration via <cite>cai0_ca_ion</cite>.</p></li>
+<li><p>Initializes <cite>amp_casrc = 0</cite> so the source initially contributes no current.</p></li>
+<li><p>Computes <cite>amp_casrc</cite> in each segment to counterbalance other calcium currents, effectively enforcing zero net calcium flux.</p></li>
+</ul>
+</li>
+</ol>
+<p>Example implementation of the custom initialization procedure in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc init() {
+  cai0_ca_ion = 116e-6  // Set basal cai to 116 nM (in mM)
+  forall if (ismembrane(&quot;casrc&quot;)) amp_casrc = 0   // Disable casrc initially
+  finitialize(v_init)    // Initialize voltage and ions
+
+  // Adjust casrc amplitude to balance calcium currents segment-wise
+  forall if (ismembrane(&quot;ca_ion&quot;)) {
+    for (x,0) {
+      amp_casrc(x) = -ica(x)
+    }
+  }
+
+  if (cvode.active()) {
+    cvode.re_init()
+  } else {
+    fcurrent()
+  }
+}
+</pre></div>
+</div>
+<p>Important Details:
+- Use <cite>cai0_ca_ion</cite> (not <cite>ca0_ca_ion</cite>), the NEURON internal variable that sets the initial intracellular calcium concentration.
+- Set <cite>amp_casrc</cite> for each segment after <cite>finitialize()</cite> to negate net calcium currents.
+- Use this initialization function before <cite>run()</cite> calls.
+- Test this initialization approach first on simplified “toy” models (e.g., single compartment with <em>cdp.mod</em>, <em>ca.mod</em>, and <cite>casrc</cite>) before applying to complex morphologies.
+- Avoid having multiple conflicting calcium accumulation mechanisms (e.g., both <em>cdp</em> and <em>cad</em> inserted in the same section).
+- Use odd number of segments (<cite>nseg</cite>) in sections to avoid numerical issues.</p>
+</section>
+<section id="troubleshooting-tips">
+<h2>Troubleshooting Tips<a class="headerlink" href="#troubleshooting-tips" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>If encountering convergence errors in mechanisms like <em>cdp.mod</em> when simulating small compartments, try increasing compartment size (length or diameter) or increasing segment size.</p></li>
+<li><p>Calling <cite>ion_style()</cite> to fix ionic concentrations or reversal potentials might interfere with proper calcium dynamics during initialization; omit or adapt accordingly.</p></li>
+<li><p>Ordering of procedure calls matters: call mechanism insertions and set biophysical parameters before defining custom initialization procedures.</p></li>
+<li><p>Persistent basal <em>cai</em> values (e.g., 50 nM) despite adjustments may result from internal steady states in the pump and buffer kinetics; the custom calcium source mechanism helps enforce the desired resting concentration.</p></li>
+<li><p>Carefully verify the compilation of the <cite>casrc.mod</cite> mechanism; declare all assigned variables (e.g., <cite>ix</cite>) properly to avoid compiler warnings.</p></li>
+<li><p>When adding longitudinal diffusion in calcium mechanisms, ensure consistency of units in the COMPARTMENT statement, volume definitions, and diffusion constants as outlined in the NEURON model code and compiler messages.</p></li>
+</ul>
+</section>
+<section id="example-toy-model-initialization-sequence-hoc">
+<h2>Example Toy Model Initialization Sequence (HOC)<a class="headerlink" href="#example-toy-model-initialization-sequence-hoc" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>load_file(&quot;nrngui.hoc&quot;)
+create soma
+soma { nseg = 3 diam = 15 L = 40 }
+
+proc init_cell() {
+  soma {
+    insert pas
+    Ra = 150
+    cm = 0.75
+    g_pas = 1/30000
+    e_pas = -70
+    insert ca
+    insert cdp
+  }
+  forall if (ismembrane(&quot;ca_ion&quot;)) {
+    eca = 140
+    ion_style(&quot;ca_ion&quot;,0,1,0,0,0)
+  }
+  forall if (ismembrane(&quot;ca_ion&quot;)) insert casrc
+}
+
+proc init() {
+  cai0_ca_ion = 116e-6
+  forall if(ismembrane(&quot;casrc&quot;)) amp_casrc = 0
+  finitialize(-70)
+  forall if(ismembrane(&quot;ca_ion&quot;)) for (x,0) {
+    amp_casrc(x) = -ica(x)
+  }
+  if (cvode.active()) {
+    cvode.re_init()
+  } else {
+    fcurrent()
+  }
+}
+
+init_cell()
+init()
+run()
+</pre></div>
+</div>
+</section>
+<section id="reference-and-further-notes">
+<h2>Reference and Further Notes<a class="headerlink" href="#reference-and-further-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The <em>cdp.mod</em> mechanism models calcium diffusion, buffering, and pump kinetics with volume and membrane area compartments.</p></li>
+<li><p>Proper initialization of <em>cai</em> requires balancing inward and outward calcium fluxes, which often involves adjusting model parameters or including additional compensation currents.</p></li>
+<li><p>This approach falls into general methods for <em>initialization to desired steady state</em> and can be generalized to other ion species and accumulation mechanisms.</p></li>
+<li><p>For detailed understanding of <em>cdp.mod</em>, refer to its NMODL source comments and the NEURON book chapter on calcium dynamics.</p></li>
+<li><p>Ensure that all quantitative parameters (pump densities, buffering rates, etc.) are physiologically consistent before imposing forced set points for <em>cai</em>.</p></li>
+<li><p>When fitting pump or buffer parameters to experimental data, use tools such as NEURON’s <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleRunFitter</span></code>.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To set a desired basal intracellular calcium concentration when using ion accumulation mechanisms like <em>cdp.mod</em>:</p>
+<ul class="simple">
+<li><p>Avoid inserting multiple conflicting calcium accumulation mechanisms.</p></li>
+<li><p>Use a custom constant calcium source/sink mechanism (<cite>casrc</cite>) that compensates for net calcium fluxes.</p></li>
+<li><p>Initialize <cite>cai0_ca_ion</cite> to the desired resting concentration.</p></li>
+<li><p>Adjust <cite>amp_casrc</cite> currents during initialization to balance inward and outward calcium currents.</p></li>
+<li><p>Apply and test this procedure first in simple model configurations.</p></li>
+<li><p>Take care with units, compartment sizes, and method ordering to ensure numerical stability and physiological correctness.</p></li>
+</ul>
+<p>This method helps maintain targeted resting <em>cai</em> without disrupting the model’s calcium dynamics or pump kinetics.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1905">https://neuron.yale.edu/phpBB/viewtopic.php?t=1905</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

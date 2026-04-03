@@ -1,0 +1,26 @@
+.. rubric:: Managing Point Processes
+
+It is not possible to automatically retrieve Python variable names of point process objects once created. A recommended approach is to track all point processes explicitly by appending them to a list upon creation. Then, when needed, all can be removed by clearing this list to release references.
+
+.. code-block:: python
+
+    doomed = []
+    doomed.append(h.IClamp(soma(0.5)))
+    doomed.append(h.IClamp(dend(0.1)))
+
+    # Later, to remove all
+    doomed = []
+
+Using :meth:`h.allobjects` with a class name can inspect existing instances and their reference counts, but does not expose Python variable names.
+
+.. code-block:: python
+
+    h.allobjects("IClamp")
+
+This disciplined reference management avoids undesired persistence of point process instances and is preferable to attempting to discover and remove all point processes retrospectively.
+
+.. note::
+
+    Sections have a :meth:`sec.psection` dictionary that lists point processes on that section, but this does not provide variable references to manipulate or delete objects directly.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4389 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4389>`_

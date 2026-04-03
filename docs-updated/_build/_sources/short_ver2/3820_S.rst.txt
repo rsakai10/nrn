@@ -1,0 +1,52 @@
+.. note::
+   The sign convention for currents in :class:`NONSPECIFIC_CURRENT` point processes in NEURON follows standard neurophysiological conventions: **inward (depolarizing) currents are negative**, and outward (hyperpolarizing) currents are positive.  
+   
+   In other words, if the current `i` from a point process is positive, it hyperpolarizes the cell, so the membrane equation for a one-compartment model reads:
+   
+   .. math::
+   
+      c_m \frac{dV}{dt} = -I_{ion} - I_{syn}
+   
+   where :math:`I_{syn} = i`.  
+   
+   This contrasts with :class:`ELECTRODE_CURRENT` objects, for which injected depolarizing current is positive.
+
+.. code-block:: hoc
+
+    NEURON {
+        POINT_PROCESS Gfluct
+        RANGE g_e, g_i, E_e, E_i
+        NONSPECIFIC_CURRENT i
+    }
+    
+    BREAKPOINT {
+        SOLVE oup
+        i = g_e * (v - E_e) + g_i * (v - E_i)
+    }
+
+.. note::
+   For Ornstein-Uhlenbeck fluctuating conductance models that simulate synaptic bombardment, calls to random number generators must be placed inside a :meth:`PROCEDURE` (e.g., ``oup``) called by :keyword:`SOLVE`, or in a :keyword:`BEFORE BREAKPOINT` block. This prevents incorrect calculation of the Jacobian, which requires that expressions involving membrane voltage be deterministic within each timestep.
+
+.. code-block:: hoc
+
+    PROCEDURE oup() {
+        if (tau_e == 0) {
+            g_e = g_e0 + std_e * normrand(0,1)
+        } else {
+            g_e1 = exp_e * g_e1 + amp_e * normrand(0,1)
+            g_e = g_e0 + g_e1
+        }
+        if (g_e < 0) { g_e = 0 }
+        if (tau_i == 0) {
+            g_i = g_i0 + std_i * normrand(0,1)
+        } else {
+            g_i1 = exp_i * g_i1 + amp_i * normrand(0,1)
+            g_i = g_i0 + g_i1
+        }
+        if (g_i < 0) { g_i = 0 }
+    }
+
+.. seealso::
+   :class:`NONSPECIFIC_CURRENT`, :meth:`normrand`, :keyword:`SOLVE`, :keyword:`BEFORE BREAKPOINT`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3820 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3820>`_

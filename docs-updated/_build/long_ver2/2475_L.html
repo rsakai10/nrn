@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synaptic Conductance Driven by a Prescribed Waveform &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Synaptic Conductance Driven by a Prescribed Waveform</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2475_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="synaptic-conductance-driven-by-a-prescribed-waveform">
+<h1>Synaptic Conductance Driven by a Prescribed Waveform<a class="headerlink" href="#synaptic-conductance-driven-by-a-prescribed-waveform" title="Link to this heading"></a></h1>
+<p>Modeling a synapse by dynamically changing the membrane conductance (instead of injecting a current) according to a predefined waveform can be achieved using a custom point process in NEURON. The example below illustrates a simple conductance clamp (<cite>GClamp</cite>) mechanism and explains how to load and play a time-varying conductance vector into it both via GUI and hoc scripting.</p>
+<section id="gclamp-nmodl-mechanism">
+<h2>GClamp NMODL Mechanism<a class="headerlink" href="#gclamp-nmodl-mechanism" title="Link to this heading"></a></h2>
+<p>This NMODL defines a point process that injects a membrane current proportional to a time-varying conductance <cite>g</cite> and a reversal potential <cite>e</cite>. The current <cite>i</cite> is computed as:</p>
+<div class="math notranslate nohighlight">
+\[i = g \times (v - e)\]</div>
+<p>where <span class="math notranslate nohighlight">\(v\)</span> is the membrane potential at the clamp site.</p>
+<p>The mechanism uses a <code class="xref py py-meth docutils literal notranslate"><span class="pre">NONSPECIFIC_CURRENT()</span></code> to correctly represent a membrane current with the correct sign and stability properties.</p>
+<div class="highlight-neuron notranslate"><div class="highlight"><pre><span></span>NEURON {
+   POINT_PROCESS GClamp
+   RANGE g, i, e
+   NONSPECIFIC_CURRENT i
+}
+
+UNITS {
+   (mV) = (millivolt)
+   (uS) = (micromho)
+   (nA) = (nanoamp)
+}
+
+PARAMETER {
+   g (micromho)
+   e (millivolt)
+   v (millivolt)
+}
+
+ASSIGNED {
+   i (nanoamp)
+}
+
+INITIAL {
+   i = g*(v - e)
+}
+
+BREAKPOINT {
+   i = g*(v - e)
+}
+</pre></div>
+</div>
+</section>
+<section id="key-implementation-notes">
+<h2>Key Implementation Notes<a class="headerlink" href="#key-implementation-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <cite>NONSPECIFIC_CURRENT i</cite> instead of <cite>ELECTRODE_CURRENT i</cite> for membrane conductances to ensure simulation stability.</p></li>
+<li><p>The current is defined as <cite>i = g*(v - e)</cite> which corresponds to a membrane conductance.</p></li>
+<li><p>Setting <cite>ELECTRODE_CURRENT i</cite> with the same current formula can cause positive feedback and simulation instability.</p></li>
+<li><p>The reversal potential <cite>e</cite> (in mV) must be set according to the ion species or driving force of the conductance.</p></li>
+<li><p>The conductance <cite>g</cite> is a range variable and its value is typically time-varying, loaded from external data.</p></li>
+</ul>
+</section>
+<section id="loading-and-playing-a-conductance-waveform-using-python-or-hoc">
+<h2>Loading and Playing a Conductance Waveform Using Python or hoc<a class="headerlink" href="#loading-and-playing-a-conductance-waveform-using-python-or-hoc" title="Link to this heading"></a></h2>
+<p>To simulate a synaptic conductance waveform, you need to load the conductance trace (and optionally corresponding times) into NEURON vectors and play them into the <cite>g</cite> parameter of the GClamp instance.</p>
+<p>### Step 1: Load waveform data from a file</p>
+<p>Assuming your conductance waveform file has two columns: time (ms) and conductance (microsiemens), load it into two <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> objects (e.g. <cite>tvec</cite> and <cite>gvec</cite>).</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref tvec, gvec, f
+tvec = new Vector()
+gvec = new Vector()
+f = new File()
+f = new File(&quot;gclamp_waveform.txt&quot;)
+tvec.resize(0)
+gvec.resize(0)
+while (f.good()) {
+    tvec.append(f.scanf())
+    gvec.append(f.scanf())
+}
+f.close()
+</pre></div>
+</div>
+<p>Or in Python with NEURON:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">tvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">gvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">times</span><span class="p">,</span> <span class="n">gvalues</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;gclamp_waveform.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">gvalues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="n">tvec</span><span class="o">.</span><span class="n">from_python</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+<span class="n">gvec</span><span class="o">.</span><span class="n">from_python</span><span class="p">(</span><span class="n">gvalues</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>### Step 2: Create and attach the GClamp point process</p>
+<p>Attach the <cite>GClamp</cite> point process to a desired location on a section (e.g., soma(0.5)) and set reversal potential <cite>e</cite>.</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref gclamp
+soma gclamp = new GClamp(0.5)
+gclamp.e = 0  // reversal potential (e.g. 0 mV for excitatory synapse)
+</pre></div>
+</div>
+<p>Or in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">gclamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">GClamp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">soma</span><span class="p">)</span>
+<span class="n">gclamp</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># reversal potential in mV</span>
+</pre></div>
+</div>
+<p>### Step 3: Play the conductance waveform into GClamp.g</p>
+<p>Use the <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> method to drive the <cite>g</cite> variable of your <cite>gclamp</cite> point process with the loaded conductance vector. Supply the time vector as the second argument to specify when each conductance value applies.</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>gvec.play(&amp;gclamp.g, tvec, 1)  // The &quot;1&quot; enables continuous interpolation between points
+</pre></div>
+</div>
+<p>Or in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gvec</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">gclamp</span><span class="o">.</span><span class="n">_ref_g</span><span class="p">,</span> <span class="n">tvec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># continuous interpolation enabled</span>
+</pre></div>
+</div>
+</section>
+<section id="additional-recommendations-and-troubleshooting">
+<h2>Additional Recommendations and Troubleshooting<a class="headerlink" href="#additional-recommendations-and-troubleshooting" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong>Avoid negative conductance values.</strong> Negative conductance is biophysically implausible and can cause simulation instability or “blowing up” voltage traces. If your waveform data contains small negative values (noise or baseline fluctuations), clip them to zero before playing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">clip</span> <span class="pre">negative</span> <span class="pre">values</span> <span class="pre">to</span> <span class="pre">zero</span>
+<span class="pre">gvalues_clipped</span> <span class="pre">=</span> <span class="pre">[max(g,</span> <span class="pre">0)</span> <span class="pre">for</span> <span class="pre">g</span> <span class="pre">in</span> <span class="pre">gvalues]</span>
+<span class="pre">gvec.from_python(gvalues_clipped)</span>
+<span class="pre">`</span></code></p>
+</li>
+<li><p><strong>Initialization of membrane potential and reversal potentials:</strong> Ensure the initial membrane potential (<cite>v_init</cite>) is consistent with passive reversal potentials (<cite>e_pas</cite>) to avoid initial transients or drifting baseline voltage. For a passive model with <cite>e_pas = -70 mV</cite>, set <cite>v_init</cite> to <cite>-70 mV</cite> in the RunControl panel or via</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forall e_pas = v_init
+</pre></div>
+</div>
+</li>
+<li><p><strong>Integration method:</strong> <cite>GClamp</cite> does not require special integration methods. <cite>cnexp</cite> or variable timestep integrators can be used as usual, but stability hinges on the correct <cite>NONSPECIFIC_CURRENT</cite> declaration and avoiding negative conductances.</p></li>
+<li><p><strong>Dynamic clamp alternative:</strong> Although the simple <cite>GClamp</cite> can be used, NEURON’s built-in synaptic mechanisms like <cite>AlphaSynapse</cite> or <cite>ExpSyn</cite> can be driven by playing vectors into their conductance-related parameters. However, these have parameters (e.g., <cite>tau</cite>) defining kinetics, which make direct waveform playback less straightforward.</p></li>
+</ul>
+</section>
+<section id="example-combined-hoc-code">
+<h2>Example Combined hoc Code<a class="headerlink" href="#example-combined-hoc-code" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Load waveform data
+objref tvec, gvec, f
+tvec = new Vector()
+gvec = new Vector()
+f = new File(&quot;gclamp_waveform.txt&quot;)
+while (f.good()) {
+    tvec.append(f.scanf())
+    gvec.append(f.scanf())
+}
+f.close()
+
+// Create cell and attach GClamp
+create soma
+access soma
+objref gclamp
+soma gclamp = new GClamp(0.5)
+gclamp.e = 0     // reversal potential in mV
+
+// Play conductance waveform into GClamp
+gvec.play(&amp;gclamp.g, tvec, 1)
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use a custom point process with <cite>NONSPECIFIC_CURRENT i</cite> and <cite>i = g*(v - e)</cite> for stable conductance-driven synapses.</p></li>
+<li><p>Load time and conductance data into NEURON <cite>Vector</cite> objects and play conductance into the mechanism’s <cite>g</cite> variable.</p></li>
+<li><p>Avoid negative conductance values to ensure biophysical plausibility and numerical stability.</p></li>
+<li><p>Initialize membrane potentials and parameters consistently to avoid drift.</p></li>
+<li><p>Use <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> to play time-varying conductance waveforms either in hoc or Python.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Vector</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hoc.HocObject</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector.play</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.AlphaSynapse</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2475">https://neuron.yale.edu/phpBB/viewtopic.php?t=2475</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

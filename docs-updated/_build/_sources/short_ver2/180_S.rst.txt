@@ -1,0 +1,32 @@
+Somatic Current Injection vs. Setting Membrane Potential
+---------------------------------------------------------
+
+When simulating hyperpolarization by somatic current injection, directly setting the membrane potential (e.g., `v = -80` mV) is generally *not* equivalent to injecting a negative current.
+
+.. note::
+   NEURON’s default initialization acts as a "global voltage clamp": it sets the membrane potential uniformly to `v_init` and forces all voltage-dependent variables to their steady state at that voltage. This differs from physiological current injection, where:
+
+   - The voltage does **not** fall uniformly throughout the neuron unless it is very small.
+   - Voltage-gated mechanisms may not reach steady state if the current injection is brief.
+
+Therefore, to simulate somatic current injection, use an `IClamp` at the soma instead of setting `v` manually:
+
+.. code-block:: python
+
+    stim = h.IClamp(soma(0.5))
+    stim.delay = 0
+    stim.dur = 1000  # ms
+    stim.amp = -0.1  # nA (negative for hyperpolarization)
+
+.. code-block:: hoc
+
+    objref stim
+    stim = new IClamp(soma(0.5))
+    stim.del = 0
+    stim.dur = 1000  // ms
+    stim.amp = -0.1  // nA
+
+.. seealso::
+   :class:`h.IClamp`, :meth:`h.init`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=180 <https://neuron.yale.edu/phpBB/viewtopic.php?t=180>`_

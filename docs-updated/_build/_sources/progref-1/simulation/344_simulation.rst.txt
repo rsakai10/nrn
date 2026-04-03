@@ -1,0 +1,21 @@
+Current Balance and Small Non-Zero Residuals in Fixed Time Step Simulations
+=============================================================================
+
+When summing membrane currents (e.g., capacitive, passive, and stimulus currents) in a simple model using fixed time step integration, the result may not be exactly zero but instead show small residuals on the order of picoamps. This discrepancy also appears in more complex models with multiple conductances.
+
+.. note::
+
+   This small "current balance violation" arises because during fixed step integration, currents and conductances computed in the BREAKPOINT block correspond to the midpoint time (told + dt/2), whereas voltages and state variables are updated at the end of the step (told + dt). Hence, the currents do not precisely sum to zero at the updated voltage.
+
+This error is proportional to the time step size (dt) and vanishes when :class:`CVode` adaptive integration is used. Although the discrepancy does not affect voltage or state computations, it may be relevant when analyzing small current differences.
+
+To reduce or eliminate this effect:
+
+- Use a smaller fixed time step (:math:`dt`).
+- Add :meth:`FUNCTION`s to channel mechanisms to compute consistent first-order current estimates at the current time and states.
+- Switch to :class:`CVode` adaptive integration.
+
+.. seealso::
+
+   :class:`IClamp`, :meth:`fcurrent`, :class:`CVode`
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=344

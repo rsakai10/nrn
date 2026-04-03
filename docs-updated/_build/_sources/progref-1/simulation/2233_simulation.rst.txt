@@ -1,0 +1,23 @@
+Displaying Injected Current Pulses from an IClamp
+==================================================
+
+To visualize the injected current pulses from an :class:`IClamp` in NEURON, it is important to plot the actual current delivered by the stimulus device rather than summing membrane currents manually.
+
+.. note::
+   The :class:`IClamp` object provides a variable that records the injected current amplitude over time.
+
+To plot this current in the GUI:
+
+1. Create a "Current axis" graph.
+2. Open the "Plot what?" window.
+3. Click the "Show" button and select "Objects".
+4. Scroll to find the :class:`IClamp` instance (e.g., IClamp_[index]).
+5. Select the variable representing the delivered current from the list of public members.
+6. Confirm the expression created in the edit field before accepting.
+
+This procedure ensures correct sign conventions and accurate visualization of the stimulus current waveform.
+
+.. seealso::
+   :class:`IClamp`  
+   :meth:`h.PlotShape`
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=2233

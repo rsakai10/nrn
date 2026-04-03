@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitting Data Sampled at Irregular Intervals Using MRF &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fitting Data Sampled at Irregular Intervals Using MRF</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3112_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fitting-data-sampled-at-irregular-intervals-using-mrf">
+<h1>Fitting Data Sampled at Irregular Intervals Using MRF<a class="headerlink" href="#fitting-data-sampled-at-irregular-intervals-using-mrf" title="Link to this heading"></a></h1>
+<p>When using the Multiple Run Fitter (<code class="xref py py-class docutils literal notranslate"><span class="pre">MRF</span></code>) in NEURON to fit model output to experimental or simulated data sampled at irregular time intervals, there are important considerations regarding how the fitness (error) is evaluated, integration method choice, and data handling. This document summarizes key insights and procedures based on practical experimentation and code inspection.</p>
+<section id="how-does-mrf-evaluate-error-with-irregularly-sampled-data">
+<h2>1. How Does MRF Evaluate Error with Irregularly Sampled Data?<a class="headerlink" href="#how-does-mrf-evaluate-error-with-irregularly-sampled-data" title="Link to this heading"></a></h2>
+<ul>
+<li><p>The data to be fitted consists of pairs of time (<cite>t</cite>) and voltage (<cite>v</cite>) values, often unevenly spaced.</p></li>
+<li><p>When evaluating the fitness (error) during optimization, MRF:</p>
+<ul class="simple">
+<li><p>Interpolates the model’s simulated trajectory (voltage vs. time) to the <em>exact time points</em> where data is available.</p></li>
+<li><p>Uses linear interpolation of the model’s results at these data points if the simulation output times do not align with the data timestamps.</p></li>
+<li><p>Calculates the error only at these data points, <em>not</em> at arbitrary interpolated points along the data intervals.</p></li>
+</ul>
+</li>
+<li><p>The error calculation performed in MRF corresponds to a weighted mean squared error over defined time <em>regions</em>, each associated with particular data subsets. The error value reported is computed as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Error} = \frac{\sum_{i=1}^N w_i \frac{e_i}{s_i}}{\sum_{i=1}^N \frac{w_i}{s_i}}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p>( N ) is the number of regions,</p></li>
+<li><p>( w_i ) is the weight assigned to region ( i ),</p></li>
+<li><p>( e_i ) is the sum of squared errors between model and data in region ( i ),</p></li>
+<li><p>( s_i ) is the size (duration) of region ( i ).</p></li>
+</ul>
+</li>
+<li><p>The weights enable combining multiple generators or adjusting relative influence of data subsets.</p></li>
+<li><p>Example: For three data points across three regions,</p>
+<ul class="simple">
+<li><p>Region 1 weight (w_1 = 1), size (s_1), error sum (e_1),</p></li>
+<li><p>Region 2 weight (w_2 = 1), size (s_2), error sum (e_2),</p></li>
+<li><p>Region 3 weight (w_3 = 1), size (s_3), error sum (e_3),</p></li>
+</ul>
+<p>the overall error is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">error_value</span> <span class="o">=</span> <span class="p">((</span><span class="n">w1</span><span class="o">*</span><span class="n">e1</span><span class="o">/</span><span class="n">s1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">w2</span><span class="o">*</span><span class="n">e2</span><span class="o">/</span><span class="n">s2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">w3</span><span class="o">*</span><span class="n">e3</span><span class="o">/</span><span class="n">s3</span><span class="p">))</span> <span class="o">/</span> <span class="p">((</span><span class="n">w1</span><span class="o">/</span><span class="n">s1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">w2</span><span class="o">/</span><span class="n">s2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">w3</span><span class="o">/</span><span class="n">s3</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>In practice, error values computed match manual calculations when normalizing by region sizes and considering weights.</p></li>
+</ul>
+</section>
+<section id="checking-mrfs-error-calculation-with-a-toy-model">
+<h2>2. Checking MRF’s Error Calculation with a Toy Model<a class="headerlink" href="#checking-mrfs-error-calculation-with-a-toy-model" title="Link to this heading"></a></h2>
+<p>To confirm MRF’s error evaluation behavior:</p>
+<ol class="arabic simple">
+<li><p>Create a simple model, e.g., a single compartment with passive properties or Hodgkin-Huxley channels.</p></li>
+<li><p>Generate simulated voltage traces sampled at irregular time points (e.g., 3–5 points).</p></li>
+<li><p>Load these points as “experimental” data into MRF.</p></li>
+<li><p>Verify that the error value reported by MRF matches the sum of squared differences <em>only</em> at those time points, adjusted by region weights and durations.</p></li>
+<li><p>Inspect the plot in MRF’s generator window: after an error evaluation, the simulated data points shown match the data timestamps.</p></li>
+<li><p>Note that MRF treats segments between data points as piecewise linear for plotting but error is computed discretely at data points.</p></li>
+</ol>
+</section>
+<section id="considerations-for-integration-method-in-model-generation">
+<h2>3. Considerations for Integration Method in Model Generation<a class="headerlink" href="#considerations-for-integration-method-in-model-generation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Differences in model voltage traces obtained using fixed step integration vs. variable step (adaptive) integration can lead to different best-fit parameters when using MRF.</p></li>
+<li><p>Since adaptive integration may produce voltage values at non-uniform time points, MRF performs linear interpolation to map simulation output to data timestamps.</p></li>
+<li><p>To minimize discrepancies, you can:</p>
+<ul>
+<li><p>Record model outputs at fixed time steps during adaptive integration using <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a> with a specified fixed time vector or interval.</p></li>
+<li><p>Resample or interpolate your experimental data to regular time intervals if uniform sampling is desirable.</p></li>
+<li><p>Choose the integration method based on simulation accuracy and stability appropriate for the model and data.</p></li>
+</ul>
+</li>
+<li><p>When digitizing experimental data from figures (rather than using raw data), it is especially important to judge the adequacy of fit qualitatively and consider uncertainty inherent in the digitization process.</p></li>
+</ul>
+</section>
+<section id="practical-recommendations">
+<h2>4. Practical Recommendations<a class="headerlink" href="#practical-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always confirm if raw experimental data is available for fitting; this is preferable to digitized figure data.</p></li>
+<li><p>Use the <a class="reference internal" href="../progref-1/programming/math/vector.html#id0" title="Vector.interpolate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.interpolate()</span></code></a> method in NEURON to handle irregular sampling as necessary.</p></li>
+<li><p>Define error evaluation regions thoughtfully within MRF to weigh contributions according to experimental relevance.</p></li>
+<li><p>Check your error calculations manually by inspecting data points and model interpolation at those points to ensure consistency.</p></li>
+<li><p>Be mindful that using mean squared error may not always capture the qualitative aspects important for action potential shapes or other electrophysiological features; consider alternative error metrics if appropriate.</p></li>
+</ul>
+</section>
+<section id="example-python-code-snippet-for-fixed-time-vector-recording">
+<h2>5. Example: Python Code Snippet for Fixed Time Vector Recording<a class="headerlink" href="#example-python-code-snippet-for-fixed-time-vector-recording" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1"># Set up fixed time vector for recording</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.025</span>  <span class="c1"># ms</span>
+<span class="n">tstop</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">times</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tstop</span> <span class="o">+</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dt</span><span class="p">))</span>
+<span class="n">v_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+
+<span class="c1"># Record voltage at fixed times during adaptive integration</span>
+<span class="n">v_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">tstop</span> <span class="o">=</span> <span class="n">tstop</span>
+<span class="n">h</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+<span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Enable variable step integration</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">tstop</span><span class="p">)</span>
+
+<span class="c1"># Now v_vec contains voltage at fixed regular intervals for fitting with MRF</span>
+</pre></div>
+</div>
+</section>
+<section id="additional-notes-on-the-mrf-error-calculation-implementation">
+<h2>6. Additional Notes on the MRF Error Calculation Implementation<a class="headerlink" href="#additional-notes-on-the-mrf-error-calculation-implementation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Error calculation is implemented in the hoc file: <cite>nrn/lib/hoc/mulfit/e_norm.hoc</cite>.</p></li>
+<li><p>The function <cite>efun()</cite> calculates the means squared error using weighted regions.</p></li>
+<li><p>The model output is interpolated to data times using <cite>set_modelx()</cite> before error computation.</p></li>
+<li><p>User-defined weights and regions affect the aggregate error used by MRF during optimization.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The MRF fitness function assumes continuity and linear interpolation between model time points but calculates errors only at discrete data sampling times to reflect the actual data fidelity.</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>When fitting data sampled at irregular intervals with <code class="xref py py-class docutils literal notranslate"><span class="pre">MRF</span></code> in NEURON:</p>
+<ul class="simple">
+<li><p>The fitness evaluation interpolates model output values to the data sample times.</p></li>
+<li><p>Error is computed only at provided data points but weighted by time regions.</p></li>
+<li><p>Differences between fixed and adaptive integration can affect parameter estimation; record at regular times if possible.</p></li>
+<li><p>Use careful region and weight definitions and manual checks to confirm error calculations.</p></li>
+<li><p>Prefer raw experimental data over digitized figure data for robust fitting.</p></li>
+</ul>
+<p>This approach ensures meaningful and consistent data fitting while accommodating irregular sampling inherent in many experimental electrophysiological recordings.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3112">https://neuron.yale.edu/phpBB/viewtopic.php?t=3112</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

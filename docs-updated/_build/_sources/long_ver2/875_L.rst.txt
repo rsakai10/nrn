@@ -1,0 +1,87 @@
+NetCon Event Scheduling and Initialization
+==========================================
+
+When using the :class:`NetCon` method :meth:`NetCon.event` in NEURON to schedule synaptic events at specific simulation times, it is important to understand how NEURON’s initialization system affects event scheduling.
+
+.. note::
+   Calling :meth:`NetCon.event` before the simulation is initialized will **not** schedule the event as expected because the event queue is cleared during initialization.
+
+Explanation
+-----------
+
+NEURON’s initialization procedure (invoked by :func:`finitialize`) resets the simulation time `t` to 0 and clears the event queue, discarding any events previously scheduled. This means that any :meth:`NetCon.event` calls made before the call to :func:`finitialize` (or implicitly by :meth:`run`) do not persist into the simulation run.
+
+This behavior is described in *The NEURON Book* (Section 8.2 Basic Initialization):
+
+- The event queue is cleared at the start of initialization.
+- Any events scheduled prior to initialization are lost.
+
+Solution: Schedule Events During Initialization
+-----------------------------------------------
+
+To ensure that events are properly queued, schedule :meth:`NetCon.event` calls during the initialization process. The recommended approach is to use an :class:`FInitializeHandler` object, which lets you specify a callback to execute *after* the simulation time and environment have been reset but *before* simulation advances.
+
+Example in HOC
+--------------
+
+The following HOC snippet illustrates correct event scheduling for a :class:`NetCon` named `nc`:
+
+.. code-block:: hoc
+
+    // Assume 'nc' is an existing NetCon object
+    objref fih
+    fih = new FInitializeHandler("nc.event(2.5)")
+
+This code creates an :class:`FInitializeHandler` object that will call `nc.event(2.5)` automatically during initialization, ensuring the event is placed on the event queue and will be delivered at 2.5 ms simulation time.
+
+Complete Example
+----------------
+
+.. code-block:: hoc
+
+    load_file("nrngui.hoc")
+
+    proc morpho_passive_init () {
+        nseg = 1
+        diam = 20
+        L = 20
+        insert pas
+        e_pas = -50
+        g_pas = 10 * 1e-3 / cm
+    }
+
+    objref biexcit, nc, fih
+
+    create soma
+    soma morpho_passive_init()
+    soma {
+        biexcit = new ExpSyn(0.5)
+        biexcit.tau = 1
+    }
+
+    // Create a NetCon with no source (nil) targeting the synapse 'biexcit'
+    nc = new NetCon(nil, biexcit)
+    nc.weight = 0.5
+    nc.delay = 0
+
+    // Schedule the NetCon event during initialization to deliver at t=2.5 ms
+    fih = new FInitializeHandler("nc.event(2.5)")
+
+    v_init = -60
+
+    nrncontrolmenu()
+    newPlotV()
+
+Implementation Notes
+--------------------
+
+- Avoid calling :meth:`NetCon.event` before initialization completes.
+- Use :class:`FInitializeHandler` to register any special setup code that must run after the simulation environment is reset.
+- This approach generalizes to multiple events or other setup that depend on the simulation state at initialization.
+- If scheduling multiple events, place all related calls within a dedicated procedure, then invoke that procedure from the :class:`FInitializeHandler`.
+
+.. seealso::
+
+   :class:`NetCon`, :meth:`NetCon.event`, :class:`FInitializeHandler`, :func:`finitialize`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=875 <https://neuron.yale.edu/phpBB/viewtopic.php?t=875>`_

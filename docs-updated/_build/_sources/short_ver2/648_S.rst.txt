@@ -1,0 +1,58 @@
+Accessing and Iterating Over Sections in Complex Morphologies
+===============================================================
+
+When working with cells that have multiple branches and sections named like ``dend1[0]``, ``dend1[1]``, ..., ``dend10[n10]``, you may want to:
+
+- Determine how many branches (e.g., dend1, dend2, ...) exist  
+- Determine how many sections each branch contains  
+- Access every section conveniently for parameter modification or computation  
+
+Some useful methods and approaches follow:
+
+1. Listing all section names:
+
+.. code-block:: hoc
+
+    forall {
+        print secname()
+    }
+
+2. Creating a :class:`SectionList` containing all sections whose name matches a pattern:
+
+.. code-block:: hoc
+
+    objref dendriticSections
+    dendriticSections = new SectionList()
+    forsec "dend" {  // adds all sections with "dend" in their name
+        dendriticSections.append()
+    }
+
+3. Iterating over the :class:`SectionList` to access or modify sections:
+
+.. code-block:: hoc
+
+    forsec dendriticSections {
+        diam = 2 * x // example modification using hoc variable x
+    }
+
+4. Defining and calling a function on each section:
+
+.. code-block:: hoc
+
+    func myfunc() {
+        return diam
+    }
+
+    forsec dendriticSections {
+        print myfunc()
+    }
+
+Notes
+-----
+
+- The ``topology()`` function prints connection and section layout details for complex morphologies.  
+- The statement ``forsec "dend1"`` matches sections named "dend1", "dend10", "dend11", so be cautious with substring matching.  
+- You can rename sections manually or create your own indexing scheme for convenience.  
+- Use :meth:`forsec` and :class:`SectionList` objects for flexible looping over arbitrary sets of sections.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=648 <https://neuron.yale.edu/phpBB/viewtopic.php?t=648>`_

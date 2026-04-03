@@ -1,0 +1,144 @@
+Calcium Diffusion in Multiple Radial Shells
+============================================
+
+When modeling intracellular calcium dynamics with radial diffusion, calcium concentration is often represented within multiple concentric shells beneath the membrane. This approach is used, for example, in the calcium diffusion pool (cdp) model from Example 9.8 of the NEURON Book.
+
+Local vs. Average Calcium Concentration
+---------------------------------------
+
+- The calcium concentration variable exposed to mechanisms via `USEION` in NMODL (commonly named `cai`) corresponds specifically to the concentration in the outermost shell (the shell immediately adjacent to the membrane).
+- This value is *not* the average calcium concentration inside the cell volume.
+- The rationale is that membrane mechanisms (channels, pumps, buffers) detect and respond to local calcium concentration near the membrane, not a spatial average.
+- Therefore, `cai` and extracellular concentration `cao` represent *local* concentrations used to calculate electrochemical gradients or gating of calcium-dependent channels.
+
+Comparison with Experimental Calcium Imaging
+--------------------------------------------
+
+- Experimentally measured calcium signals, such as calcium-bound dye fluorescence, typically represent an *average concentration* over the imaged volume, not just near the membrane.
+- Calibration procedures convert fluorescence changes to estimates of free calcium concentration averaged over the measurement volume.
+- To compare model output with experimental calcium signals, it is generally more appropriate to use a volume-weighted average calcium concentration across all radial shells.
+
+Considerations for Model-Experiment Comparison
+-----------------------------------------------
+
+- The dye's distribution, affinity, and kinetics affect the relationship between free calcium and the fluorescence signal.
+- The dye may bind calcium and alter calcium buffering, changing amplitude and time course of calcium transients.
+- If the dye distribution and properties are known and assumed uniform over the cytoplasm, the optical signal corresponds roughly to the volume-weighted average of calcium-bound dye concentration.
+- If dye kinetics or buffering effects are significant, a nonlinear transformation from free calcium to calcium-bound dye complex concentration is required.
+
+Calculating Volume-Weighted Average Calcium Concentration in HOC
+-----------------------------------------------------------------
+
+1. **Record calcium concentrations in each shell:**
+
+   ```hoc
+   // $1: number of radial shells
+   // $2: segment location (0 to 1)
+   // Must be called with the section of interest accessed.
+
+   obfunc mkcaveclist() {
+       local i localobj tmpvec, tmplist
+       tmplist = new List()
+       for i=0, $1-1 {
+           tmpvec = new Vector()
+           tmpvec.record(&ca[i]_cadifus($2))
+           tmplist.append(tmpvec)
+       }
+       return tmplist
+   }
+
+   objref cavecs, tvec
+   tvec = new Vector()
+   tvec.record(&t)
+   // Example: record from the middle (0.5) of a dendritic section with numshells shells
+   cavecs = mkcaveclist(numshells, 0.5)
+   ```
+
+2. **Define weights for each shell based on relative volumes:**
+
+   For a cylindrical shell with normalized inner radius `r_i` and outer radius `r_o`, relative volume ∝ `r_o² - r_i²`.
+
+   ```hoc
+   objref weights
+   weights = new Vector(numshells)
+
+   // Example assignment (you must fill this based on your shell radii):
+   // weights.x[0] = r_o0^2 - r_i0^2
+   // weights.x[1] = r_o1^2 - r_i1^2
+   // ...
+   ```
+
+3. **Sum weighted contributions of each shell to get average concentration:**
+
+   ```hoc
+   // $o1: List of recorded shell calcium vectors
+   // $o2: Vector of shell weights
+
+   obfunc wtsum() {
+       local i localobj tmpsum, tobj
+       tmpsum = new Vector($o1.o(0).count(), 0) // Initialize to zero
+       for i=0, $o2.count()-1 {
+           tobj = $o1.o(i).c // copy ith shell Vector
+           tobj.mul($o2.x[i]) // weight by volume
+           tmpsum.add(tobj)
+       }
+       return tmpsum
+   }
+
+   objref meanca
+   meanca = wtsum(cavecs, weights)
+   // meanca now contains the time course of average free calcium concentration
+   ```
+
+Transforming Free Calcium to Calcium-Bound Dye Concentration
+------------------------------------------------------------
+
+If calcium buffering by the dye is significant and dye kinetics are known, calculate calcium-bound dye concentration from free calcium as follows:
+
+1. **Define a function `f` in HOC or as a HOC procedure** that maps free calcium concentration `ca` to calcium-bound dye concentration assuming steady state:
+
+   ```
+   ca + dye <-> ca*dye complex
+   ```
+
+   The function `f` uses initial free calcium and dye concentrations and returns equilibrium bound dye concentration.
+
+2. **Apply `f` to each recorded shell calcium vector:**
+
+   ```hoc
+   dye0 = 0 // global initial dye concentration (set as appropriate)
+
+   obfunc xformcai() {
+       local i localobj tmpvec, tmplist
+       tmplist = new List()
+       for i=0, $o1.count()-1 {
+           tmpvec = $o1.o(i).c
+           tmpvec.apply("f")  // apply function f elementwise
+           tmplist.append(tmpvec)
+       }
+       return tmplist
+   }
+
+   objref cadyevecs
+   cadyevecs = xformcai(cavecs, 0.15)  // e.g., dye0=0.15 µM
+   ```
+
+3. **Compute weighted sum of calcium-bound dye concentrations:**
+
+   ```hoc
+   objref meancadye
+   meancadye = wtsum(cadyevecs, weights)
+   ```
+
+Summary
+-------
+
+- The variable `cai` used by mechanisms represents local calcium concentration in the shell adjacent to the membrane, essential for channel gating and flux calculations.
+- To compare simulations with experimentally measured volume-averaged calcium signals (e.g. fluorescence from calcium indicators), compute the volume-weighted average over all radial shells.
+- If dye buffering is important, transform free calcium concentrations to calcium-bound dye concentrations before averaging.
+- Use `Vector.record` in HOC to obtain shell concentrations, then apply volume weights to obtain averages.
+- Precise comparisons require knowledge of dye properties, distribution, and region of experimental measurement.
+
+This approach ensures an accurate and interpretable link between modeled intracellular calcium dynamics and experimental calcium imaging data.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3422 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3422>`_

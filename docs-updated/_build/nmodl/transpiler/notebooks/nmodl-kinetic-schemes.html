@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMODL Kinetic Scheme &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="NMODL SympySolver - cnexp" href="nmodl-sympy-solver-cnexp.html" />
+    <link rel="prev" title="NMODL integration of ODEs" href="nmodl-odes-overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">NMODL Kinetic Scheme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Reaction-Kinetics">Reaction Kinetics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Law-of-Mass-Action">Law of Mass Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#KINETIC-block-format">KINETIC block format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Other-types-of-reaction-statement">Other types of reaction statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#f_flux-/-b_flux-variables">f_flux / b_flux variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#[TODO]-CONSERVE">[TODO] CONSERVE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-2">Ex. 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-3">Ex. 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-4">Ex. 4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-5">Ex. 5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">NMODL Kinetic Scheme</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/nmodl/transpiler/notebooks/nmodl-kinetic-schemes.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="NMODL-Kinetic-Scheme">
+<h1>NMODL Kinetic Scheme<a class="headerlink" href="#NMODL-Kinetic-Scheme" title="Link to this heading"></a></h1>
+<p>This notebook describes the reaction kinetics &amp; mass action laws that apply within <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks, and the implementation of the <code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> in NMODL which transforms <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks into <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks containing an equivalent system of ODEs.</p>
+<p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
+<p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
+<hr class="docutils" />
+<section id="Reaction-Kinetics">
+<h2>Reaction Kinetics<a class="headerlink" href="#Reaction-Kinetics" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>We consider a set of reaction species <span class="math notranslate nohighlight">\(A_j\)</span>, with corresponding Molar concentrations <span class="math notranslate nohighlight">\(Y_j\)</span></p></li>
+<li><p>They react according to a set of reaction equations:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\sum_j \nu_{ij}^L A_j \overset{k_i}{\rightarrow} \sum_j \nu_{ij}^R A_j\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(k_i\)</span> is the rate coefficient</p></li>
+<li><p><span class="math notranslate nohighlight">\(\nu_{ij}^L\)</span>, <span class="math notranslate nohighlight">\(\nu_{ij}^R\)</span> are stoichiometric coefficients - must be positive integers (including zero)</p></li>
+</ul>
+</section>
+<section id="Law-of-Mass-Action">
+<h2>Law of Mass Action<a class="headerlink" href="#Law-of-Mass-Action" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This allows us to convert these reaction equations to a set of ODEs</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} r_i\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[r_i = k_i \prod_j Y_j^{\nu_{ij}^R}\]</div>
+</section>
+<section id="KINETIC-block-format">
+<h2>KINETIC block format<a class="headerlink" href="#KINETIC-block-format" title="Link to this heading"></a></h2>
+<p>A reaction equation is specifed in the mod file as</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ A0 + 3A1 + 2A2 + ... &lt;-&gt; 2A0 + A1 + ... (kf, kb)
+</pre></div>
+</div>
+<p>where</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">A0</span></code> etc are the species <span class="math notranslate nohighlight">\(A_j\)</span></p></li>
+<li><p>the integer preceeding a species (with or without a space) is the corresponding stochiometric coefficient <span class="math notranslate nohighlight">\(\nu_{ij}\)</span> (implicitly 1 if not specified)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kf</span></code> is the forwards reaction rate <span class="math notranslate nohighlight">\(k^{(f)}_j\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kb</span></code> is the backwards reaction rate <span class="math notranslate nohighlight">\(k^{(b)}_j\)</span>, i.e. the reaction rate for the same reaction with the LHS and RHS exchanged *** We can convert these statements to a system of ODEs using the law of Mass Action:</p>
+<div class="math notranslate nohighlight">
+\[\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} (r^{(f)}_i - r^{(b)}_i)\]</div>
+</li>
+</ul>
+<p>where <span class="math notranslate nohighlight">\(\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+r^{(f)}_i &amp;= k^{(f)}_i \prod_j Y_j^{\nu_{ij}^{L}} \\
+r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
+\end{aligned}\end{split}\]</div>
+<p>***</p>
+</section>
+<section id="Other-types-of-reaction-statement">
+<h2>Other types of reaction statement<a class="headerlink" href="#Other-types-of-reaction-statement" title="Link to this heading"></a></h2>
+<p>There is also have a reaction statement of the form</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ h &lt;&lt; (a)
+</pre></div>
+</div>
+<p>where the LHS must be a state variable, and the RHS is an expression inside parentheses.</p>
+<p>The meaning of this statement is to add <code class="docutils literal notranslate"><span class="pre">a</span></code> to the differential equation for <code class="docutils literal notranslate"><span class="pre">h</span></code>, i.e.</p>
+<div class="math notranslate nohighlight">
+\[\frac{dh}{dt} += a\]</div>
+<p>*** Finally there is a statement of the form</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ x + 2y + ... -&gt; (a)
+</pre></div>
+</div>
+<p>which is a one-way reaction statement with no reaction products.</p>
+<p>This is just syntactic sugar for a special case of the standard <code class="docutils literal notranslate"><span class="pre">&lt;-&gt;</span></code> reaction equation, where the backwards rate is set to zero and there are no states on the RHS of the reaction, so the above is equivalent to</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ x + 2y + ... &lt;-&gt; (a, 0)
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="f_flux-/-b_flux-variables">
+<h2>f_flux / b_flux variables<a class="headerlink" href="#f_flux-/-b_flux-variables" title="Link to this heading"></a></h2>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block in the MOD file, the user can make use of the <code class="docutils literal notranslate"><span class="pre">f_flux</span></code> and <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables, which refer to the forwards <span class="math notranslate nohighlight">\(r^{(f)}\)</span> and backwards <span class="math notranslate nohighlight">\(r^{(b)}\)</span> fluxes of the preceeding reaction statement.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> substitutes the current expression for these fluxes for these variables within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block.</p>
+<p>If these variables are referenced before a reaction statement then they are assumed to be zero.</p>
+<hr class="docutils" />
+</section>
+<section id="[TODO]-CONSERVE">
+<h2>[TODO] CONSERVE<a class="headerlink" href="#[TODO]-CONSERVE" title="Link to this heading"></a></h2>
+<p>Converse statement allows specification of a conservation law, e.g.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CONSERVE h + m + z = 1
+</pre></div>
+</div>
+<p>In NEURON, the ODE for the last state variable on the rhs of this expression is replaced with this algebraic expression, so in this case instead of replacing <span class="math notranslate nohighlight">\(z' = ...\)</span> with the forwards or backwards Euler equation, it would be replaced with <span class="math notranslate nohighlight">\(z = 1 - h - m\)</span></p>
+<p>In order to be consistent with NEURON, in particular the way <code class="docutils literal notranslate"><span class="pre">STEADYSTATE</span></code> is implemented, we should do this in the same way. *** #### Implementation Tests</p>
+<ul class="simple">
+<li><p>The unit tests may be helpful to understand what these functions are doing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> tests are located in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/nmodl/transpiler/unit/visitor/kinetic_block.cpp">test/nmodl/transpiler/unit/visitor/kinetic_block.cpp</a></p></li>
+</ul>
+</section>
+<section id="Examples">
+<h2>Examples<a class="headerlink" href="#Examples" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">neuron</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">neuron.nmodl.dsl</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nmodl</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_kinetic_visitor_and_return_derivative</span><span class="p">(</span><span class="n">mod_string</span><span class="p">):</span>
+    <span class="c1"># parse NMDOL file (supplied as a string) into AST</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+    <span class="n">AST</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+    <span class="c1"># run SymtabVisitor to generate Symbol Table</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># constant folding, inlining &amp; local variable renaming passes</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">ConstantFolderVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">InlineVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">LocalVarRenameVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># run KINETIC block visitor</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">KineticBlockVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># return new DERIVATIVE block</span>
+    <span class="k">return</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span>
+        <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">AST</span><span class="p">,</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DERIVATIVE_BLOCK</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Ex.-1">
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Link to this heading"></a></h3>
+<p>Given the following KINETIC statement</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ h &lt;-&gt; m (a,b)
+</pre></div>
+</div>
+<p>We have 2 state variables, and 1 reaction statement, so</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(i = \{0\}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(j = \{0, 1\}\)</span></p></li>
+</ul>
+<p>i.e.</p>
+<ul>
+<li><p>the state vector <span class="math notranslate nohighlight">\(Y\)</span> has 2 elements</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Y = \left(
+\begin{aligned}
+h \\
+m
+\end{aligned}
+\right)\end{split}\]</div>
+</li>
+<li><p>the stoichiometric coefficients are 1x2 matrices</p>
+<div class="math notranslate nohighlight">
+\[\nu^L = \left(
+\begin{aligned}
+1 &amp;&amp; 0
+\end{aligned}
+\right)\]</div>
+<div class="math notranslate nohighlight">
+\[\nu^R = \left(
+\begin{aligned}
+0 &amp;&amp; 1
+\end{aligned}
+\right)\]</div>
+</li>
+<li><p>the rate vectors contain 1 element:</p>
+<div class="math notranslate nohighlight">
+\[k^{(f)} = a\]</div>
+<div class="math notranslate nohighlight">
+\[k^{(b)} = b\]</div>
+</li>
+</ul>
+<p>Using these we can construct the forwards and blackwards fluxes:</p>
+<div class="math notranslate nohighlight">
+\[r^{(f)} = a h\]</div>
+<div class="math notranslate nohighlight">
+\[r^{(b)} = b m\]</div>
+<p>and finally we find the ODEs in matrix form:</p>
+<div class="math notranslate nohighlight">
+\[\frac{dY}{dt} =
+\left(
+\begin{aligned}
+-1 &amp;&amp; 1
+\end{aligned}
+\right)
+(ah - bm)\]</div>
+<p>which in terms of the state variables can be written:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\frac{dh}{dt} &amp;= bm - ah \\
+\frac{dm}{dt} &amp;= ah - bm
+\end{aligned}\end{split}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    h m</span>
+<span class="s2">}</span>
+<span class="s2">KINETIC kin {</span>
+<span class="s2">    ~ h &lt;-&gt; m (a,b)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_kinetic_visitor_and_return_derivative</span><span class="p">(</span><span class="n">ex1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE kin {
+    h&#39; = (-1*(a*h-b*m))
+    m&#39; = (1*(a*h-b*m))
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-2">
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Link to this heading"></a></h3>
+<p>Annihilation reaction statement</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    x</span>
+<span class="s2">}</span>
+<span class="s2">KINETIC kin {</span>
+<span class="s2">    ~ x -&gt; (a)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_kinetic_visitor_and_return_derivative</span><span class="p">(</span><span class="n">ex2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE kin {
+    x&#39; = (-1*(a*x))
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-3">
+<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> reaction statement</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex3</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    x</span>
+<span class="s2">}</span>
+<span class="s2">KINETIC kin {</span>
+<span class="s2">    ~ x &lt;&lt; (a)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_kinetic_visitor_and_return_derivative</span><span class="p">(</span><span class="n">ex3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE kin {
+    x&#39; = (a)
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-4">
+<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Link to this heading"></a></h3>
+<p>Annihilation &amp; <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> reaction statement for the same state variable</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex4</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    x</span>
+<span class="s2">}</span>
+<span class="s2">KINETIC kin {</span>
+<span class="s2">    ~ x &lt;&lt; (a)</span>
+<span class="s2">    ~ x -&gt; (b)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_kinetic_visitor_and_return_derivative</span><span class="p">(</span><span class="n">ex4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE kin {
+    x&#39; = (a)+(-1*(b*x))
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-5">
+<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Link to this heading"></a></h3>
+<p>Reaction statements and use of <code class="docutils literal notranslate"><span class="pre">f_flux</span></code>, <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex5</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    x y z</span>
+<span class="s2">}</span>
+<span class="s2">KINETIC kin {</span>
+<span class="s2">    ~ x &lt;-&gt; y (a,b)</span>
+<span class="s2">    f = f_flux - b_flux</span>
+<span class="s2">    ~ z -&gt; (c)</span>
+<span class="s2">    g = f_flux</span>
+<span class="s2">    h = b_flux</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_kinetic_visitor_and_return_derivative</span><span class="p">(</span><span class="n">ex5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE kin {
+    f = a*x-b*y
+    g = c*z
+    h = 0
+    x&#39; = (-1*(a*x-b*y))
+    y&#39; = (1*(a*x-b*y))
+    z&#39; = (-1*(c*z))
+}
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nmodl-odes-overview.html" class="btn btn-neutral float-left" title="NMODL integration of ODEs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nmodl-sympy-solver-cnexp.html" class="btn btn-neutral float-right" title="NMODL SympySolver - cnexp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

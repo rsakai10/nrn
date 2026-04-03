@@ -1,0 +1,37 @@
+Stylized Model in NEURON and Building New Neurons
+==================================================
+
+When exploring the "stylized" model from the NEURON demo:
+
+- The corresponding hoc file is not straightforward to identify, as demo models involve administrative code beyond the model description.
+- To examine the model's structure, at the `oc>` prompt use:
+
+  .. code-block:: hoc
+  
+     topology()
+     forall psection()
+
+- Use `topology()` to see section architecture, and `forall psection()` to print hoc statements that define anatomical and biophysical properties.
+- The Model View tool (accessible via NEURON Main Menu / Tools / Model View) provides a user-friendly interface to inspect model parameters.
+
+Regarding building a new neuron:
+
+- A hoc file can suffice if it fully defines section geometry and biophysics.
+- Ensure the hoc file includes code to create sections, assign properties, and optionally connect graphical components.
+- Loading a hoc file that lacks these elements may not produce an operational model.
+
+On model parameter choice:
+
+- Values are selected based on the model's purpose, balancing biological realism and simplicity.
+- The conceptual model is a hypothesis focusing only on relevant features.
+- Parameters usually reflect ranges observed experimentally, chosen for plausibility rather than exact matching.
+
+.. note::
+
+   To build and simulate neurons effectively, keep the conceptual model clear, then implement accordingly with complete hoc (or Python) code defining morphology and mechanisms.
+
+.. seealso::
+
+   :class:`Section`, :meth:`Section.connect`, :meth:`Section.insert`, :func:`topology`, :func:`forall`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=579 <https://neuron.yale.edu/phpBB/viewtopic.php?t=579>`_

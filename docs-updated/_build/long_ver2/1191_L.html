@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SectionList Access and Indexed Execution of Commands in HOC &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SectionList Access and Indexed Execution of Commands in HOC</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1191_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sectionlist-access-and-indexed-execution-of-commands-in-hoc">
+<h1>SectionList Access and Indexed Execution of Commands in HOC<a class="headerlink" href="#sectionlist-access-and-indexed-execution-of-commands-in-hoc" title="Link to this heading"></a></h1>
+<p>When working with a <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> in NEURON that contains many sections (e.g., more than 50), you might want to iterate over subsets of the sections (such as the first 10, the second 10, etc.) and execute different commands for each subset. However, a <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> does not provide direct indexed access to its elements by default, which requires some workarounds.</p>
+<section id="iterating-over-sections-with-an-auxiliary-index">
+<h2>Iterating Over Sections with an Auxiliary Index<a class="headerlink" href="#iterating-over-sections-with-an-auxiliary-index" title="Link to this heading"></a></h2>
+<p>You can use an auxiliary integer variable to track the position within the <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> during a <a href="#id1"><span class="problematic" id="id2">:hoc:`forsec`</span></a> iteration and execute different statements depending on the index range:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>ii = 0
+forsec seclist {
+    if (ii &lt; 10) {
+        // Statement 1
+    } else if (ii &lt; 20) {
+        // Statement 2
+    } else {
+        // Additional statements...
+    }
+    ii += 1
+}
+</pre></div>
+</div>
+</section>
+<section id="improving-code-manageability-using-command-strings-and-the-string-class">
+<h2>Improving Code Manageability Using Command Strings and the String Class<a class="headerlink" href="#improving-code-manageability-using-command-strings-and-the-string-class" title="Link to this heading"></a></h2>
+<p>Having multiple <cite>if</cite> conditions can quickly become unwieldy. A more maintainable approach uses:</p>
+<ul class="simple">
+<li><p>The standard <code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code> class defined in NEURON’s run library to hold command strings.</p></li>
+<li><p>A helper procedure that executes a command selected by an index.</p></li>
+</ul>
+<p>This method emulates the behavior of indexed strings containing commands.</p>
+<p>Example implementation:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Number of command cases
+NUMCMDS = 3
+objref command[NUMCMDS]
+for ii = 0, NUMCMDS - 1 {
+    command[ii] = new String()
+}
+
+// Define the commands as hoc statements inside strings
+command[0].s = &quot;x = PI&quot;
+command[1].s = &quot;x = sqrt(2)&quot;
+command[2].s = &quot;x = exp(-1)&quot;
+
+// Procedure to execute the command by index
+proc docmd() { local idx
+    idx = $1
+    execute(command[idx].s)
+}
+
+// Example of usage
+for ii = 0, NUMCMDS - 1 {
+    docmd(ii)
+    print &quot;command &quot;, ii, &quot; sets x to &quot;, x
+}
+</pre></div>
+</div>
+<p>Integration with SectionList iteration:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>ii = 0
+forsec seclist {
+    docmd(int(ii / 10))  // Runs command 0 for first 10 sections, command 1 for next 10, etc.
+    ii += 1
+}
+</pre></div>
+</div>
+</section>
+<section id="guidelines-on-using-forsec-with-section-name-patterns">
+<h2>Guidelines on Using forsec with Section Name Patterns<a class="headerlink" href="#guidelines-on-using-forsec-with-section-name-patterns" title="Link to this heading"></a></h2>
+<p>When you write:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forsec &quot;den&quot; {
+    // code
+}
+</pre></div>
+</div>
+<p>the loop iterates over all sections whose names start with <cite>“den”</cite>. However, the iteration order corresponds to the order in which the sections were created (creation order), not alphabetical order.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The exact order over which <a href="#id3"><span class="problematic" id="id4">:hoc:`forsec &quot;prefix&quot;`</span></a> iterates is not guaranteed by the NEURON API and may change between versions. Relying on this implicit ordering can lead to fragile code.</p>
+</div>
+</section>
+<section id="best-practice-use-explicit-sectionlist-for-ordered-access">
+<h2>Best Practice: Use Explicit SectionList for Ordered Access<a class="headerlink" href="#best-practice-use-explicit-sectionlist-for-ordered-access" title="Link to this heading"></a></h2>
+<p>If the order of iterating over sections is important for your application, explicitly create and fill a <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> with sections in the desired order:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref ordered_seclist
+ordered_seclist = new SectionList()
+
+// Append sections in the order you want
+ordered_seclist.append(sec1)
+ordered_seclist.append(sec2)
+// ...
+</pre></div>
+</div>
+<p>Then iterate explicitly over <cite>ordered_seclist</cite>:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>ii = 0
+forsec ordered_seclist {
+    // your code here
+    ii += 1
+}
+</pre></div>
+</div>
+<p>This practice ensures:</p>
+<ul class="simple">
+<li><p>Robustness against changes in section creation order.</p></li>
+<li><p>Portability of your model to other simulators.</p></li>
+<li><p>Easier maintenance and debugging.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> cannot be directly indexed like a vector of strings, so use an auxiliary counter during <a href="#id5"><span class="problematic" id="id6">:hoc:`forsec`</span></a>.</p></li>
+<li><p>Use the <code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code> class to store executable command strings and index them for cleaner command dispatch.</p></li>
+<li><p>Avoid relying on the undocumented order of <a href="#id7"><span class="problematic" id="id8">:hoc:`forsec &quot;name_prefix&quot;`</span></a>; instead, explicitly build ordered :class:<a href="#id9"><span class="problematic" id="id10">`</span></a>SectionList`s.</p></li>
+<li><p>This approach increases code clarity, robustness, and maintenance ease.</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></p></li>
+<li><p><a href="#id11"><span class="problematic" id="id12">:hoc:`forsec`</span></a></p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList.append" title="SectionList.append"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SectionList.append()</span></code></a></p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1191">https://neuron.yale.edu/phpBB/viewtopic.php?t=1191</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

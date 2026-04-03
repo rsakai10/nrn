@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choosing a Random Section from a SectionList for Synapse Placement &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Choosing a Random Section from a SectionList for Synapse Placement</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/245_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="choosing-a-random-section-from-a-sectionlist-for-synapse-placement">
+<h1>Choosing a Random Section from a SectionList for Synapse Placement<a class="headerlink" href="#choosing-a-random-section-from-a-sectionlist-for-synapse-placement" title="Link to this heading"></a></h1>
+<p>When working with a <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> containing dendritic sections, a common task is to randomly select one or more sections for synapse placement. Because <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> does not provide direct indexing or counting methods like a Python list, some additional steps are required.</p>
+<section id="random-selection-algorithm-overview">
+<h2>Random Selection Algorithm Overview<a class="headerlink" href="#random-selection-algorithm-overview" title="Link to this heading"></a></h2>
+<p>The goal is to select a dendritic section at random and attach a synapse at a random location, possibly multiple times. There are two common approaches depending on whether synapses should be equally likely per section or proportional to surface area.</p>
+<ol class="arabic simple">
+<li><p><strong>Random section with equal probability</strong></p>
+<ul class="simple">
+<li><p>Count the number of sections in the <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> by iterating through it.</p></li>
+<li><p>Generate a random integer in <cite>[0, count-1]</cite>.</p></li>
+<li><p>Iterate again to select the “lucky” section corresponding to that index.</p></li>
+<li><p>Choose a random position along that section at which to place the synapse.</p></li>
+</ul>
+</li>
+<li><p><strong>Random synapse placement proportional to section surface area</strong></p>
+<ul class="simple">
+<li><p>Compute a cumulative sum of segment surface areas for all sections.</p></li>
+<li><p>Generate a random floating point value in <cite>[0, total surface area]</cite>.</p></li>
+<li><p>Map this number to a specific segment by finding the interval it falls within.</p></li>
+<li><p>Place the synapse at the corresponding location within the selected segment.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="algorithm-details-and-implementation-suggestions">
+<h2>Algorithm Details and Implementation Suggestions<a class="headerlink" href="#algorithm-details-and-implementation-suggestions" title="Link to this heading"></a></h2>
+<p>### 1. Counting and Random Section Selection</p>
+<p>Because <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> lacks <cite>.count()</cite> and <cite>.object()</cite> methods, the number of sections can be determined by iteration:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref seclist
+seclist = new SectionList()
+// Fill seclist with dendrite sections
+
+// Count sections
+i = 0
+forsec seclist {
+  i += 1
+}
+count = i
+
+// Pick a random integer
+objref ran
+ran = new Random()
+ran.MCellRan4(0)
+lucky_section = int(ran.uniform(0, count))
+
+// Select the lucky section
+whichone = 0
+forsec seclist {
+  if (whichone == lucky_section) {
+    // attach synapse at random location on this section
+    loc = ran.repick()  // or ran.uniform(0, 1)
+    // create synapse at `loc` on current section
+    break
+  }
+  whichone += 1
+}
+</pre></div>
+</div>
+<p>### 2. Random Selection Weighted by Surface Area</p>
+<p>This method creates a continuous mapping of all segments across all sections onto a line representing total surface area.</p>
+<p><strong>Steps:</strong></p>
+<ul class="simple">
+<li><p>Create a vector of cumulative surface areas for all segments.</p></li>
+<li><p>Generate one uniform random number in <cite>[0, total area]</cite>.</p></li>
+<li><p>Find the segment where this number falls.</p></li>
+<li><p>Calculate relative position (<cite>x</cite>) inside the found segment.</p></li>
+<li><p>Attach synapse at that position.</p></li>
+</ul>
+<p>Example in HOC (assuming spatial discretization is done):</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref seclist, cum_area, ran
+seclist = new SectionList()
+// fill seclist with dendrites
+
+// Vector to hold cumulative surface area per segment
+cum_area = new Vector()
+cum_area.resize(0)
+total_area = 0
+
+forsec seclist {
+  for (x, 0) {
+    segment_area = area(x)
+    total_area += segment_area
+    cum_area.append(total_area)
+  }
+}
+
+ran = new Random()
+ran.MCellRan4(0)
+
+// Number of segments total
+nsegs = cum_area.size()
+
+// Generate a random value in [0, total_area]
+rand_val = ran.uniform(0, total_area)
+
+// Find index of segment where rand_val fits
+segment_index = cum_area.uind(0, nsegs-1, func(){ return cum_area.x[i] &gt;= rand_val })
+
+// Find segment and corresponding section from segment_index
+// (This requires bookkeeping the mapping of segments to sections)
+
+// Calculate relative position inside segment
+if segment_index == 0
+    loc_in_segment = rand_val / cum_area.x[0]
+else
+    loc_in_segment = (rand_val - cum_area.x[segment_index-1]) / (cum_area.x[segment_index] - cum_area.x[segment_index-1])
+
+// Attach synapse to section at loc_in_segment within segment[segment_index]
+</pre></div>
+</div>
+<p><strong>Note:</strong> Efficiently mapping segment indices back to sections may require maintaining a parallel structure.</p>
+</section>
+<section id="using-sectionref-and-list-to-access-sections-by-index">
+<h2>Using <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/secref.html#SectionRef" title="SectionRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionRef</span></code></a> and <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> to Access Sections by Index<a class="headerlink" href="#using-sectionref-and-list-to-access-sections-by-index" title="Link to this heading"></a></h2>
+<p>Since <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a> does not support indexing, a common workaround is to use <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/secref.html#SectionRef" title="SectionRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionRef</span></code></a>, which acts as a wrapper for individual sections and can be stored in a <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> that supports methods like <cite>.count()</cite> and <cite>.object()</cite>/.o() for indexed access.</p>
+<p>Example in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref srlist
+srlist = new List()
+
+// Suppose seclist is your SectionList of dendrites
+forsec seclist {
+    srlist.append(new SectionRef())
+}
+
+printf(&quot;Number of sections: %d\n&quot;, srlist.count())
+
+// Access the i-th section
+i = 0
+objref sec_ref
+sec_ref = srlist.o(i)
+printf(&quot;Section name: %s\n&quot;, sec_ref.sec.name())
+</pre></div>
+</div>
+<p>Python equivalent using NEURON’s Python interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">seclist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SectionList</span><span class="p">()</span>
+<span class="c1"># Fill seclist with dendrite sections</span>
+
+<span class="n">srlist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">seclist</span><span class="p">:</span>
+    <span class="n">srlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">SectionRef</span><span class="p">(</span><span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">))</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="n">srlist</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>  <span class="c1"># create 50 synapses</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sec_ref</span> <span class="o">=</span> <span class="n">srlist</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">sec</span> <span class="o">=</span> <span class="n">sec_ref</span><span class="o">.</span><span class="n">sec</span>
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="n">syn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Exp2Syn</span><span class="p">(</span><span class="n">sec</span><span class="p">(</span><span class="n">loc</span><span class="p">))</span>
+    <span class="c1"># Further synapse configuration here...</span>
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>To randomly select sections from a <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a>, convert the list of sections into a <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> of <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/secref.html#SectionRef" title="SectionRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionRef</span></code></a> objects which support indexing and counting.</p></li>
+<li><p>For uniform synapse placement proportional to surface area, precompute cumulative segment areas and sample accordingly.</p></li>
+<li><p>Attach synapses at random locations along the chosen sections.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When mapping synapse density proportional to surface area, ensure your model’s spatial discretization (<code class="xref py py-attr docutils literal notranslate"><span class="pre">nseg</span></code>) is set appropriately beforehand, as synapses are placed on segments.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/secref.html#SectionRef" title="SectionRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionRef</span></code></a>, <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=245">https://neuron.yale.edu/phpBB/viewtopic.php?t=245</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

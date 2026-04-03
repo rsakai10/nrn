@@ -1,0 +1,123 @@
+Getting Started with NEURON
+===========================
+
+Scope and Domain of NEURON
+--------------------------
+NEURON is a simulation environment designed primarily for the mechanistic modeling of biological neurons and neuronal networks. Its strength lies in representing the complex anatomical and biophysical properties of cells—including ion channels and cellular interconnections—that contribute to neural function.  
+
+Models implemented with NEURON can range from detailed multicompartment representations with explicit morphology to simplified single-compartment (point neuron) models. It also supports dynamical abstractions such as Izhikevich, Morris-Lecar, adaptive exponential integrate-and-fire (AdEx), and standard integrate-and-fire neurons.
+
+The anatomical and model scale supported by NEURON spans:
+
+- Subcellular structures: individual neurites, dendritic spines, cytoplasmic organelles.  
+- Intracellular and extracellular reaction-diffusion dynamics.  
+- Medium to very large scale network models amenable to parallelization.
+
+NEURON simulations can be run on single processors or leverage multithreading and MPI-based distributed computation for scalability.
+
+Mathematical Foundations
+------------------------
+NEURON implicitly solves the cable equation for electrically extended neuronal structures, sparing users from manually dealing with its numerical implementation. The cable equation governs voltage propagation and current flow along neuron morphologies modeled as connected cylindrical compartments.
+
+Additional dynamic processes are described by systems of ordinary differential equations (ODEs) representing:
+
+- Ion channel kinetics using Hodgkin-Huxley-style formulations.  
+- State transition Markov models of channel gating and ligand-receptor interactions.  
+- Synaptic dynamics and other intracellular biochemical mechanisms.
+
+The modeling of such mechanisms is facilitated by NEURON's NMODL language and Channel Builder tool, allowing users to define custom ion channels, synapses, and pharmacological interactions.
+
+Learning Resources and Recommended Reading
+------------------------------------------
+For foundational understanding of NEURON's modeling approaches, the following are recommended:
+
+- *The NEURON Book* (especially chapters 1–9): Introduces fundamental concepts, model representations, and coding examples primarily in HOC. While HOC code is used traditionally, Python is now the recommended interface due to its modern capabilities and robust introspection features.  
+
+- Articles and publication collections related to NEURON's development and applications provide deeper mathematical and biological context.
+
+- Standard textbooks covering cellular neurophysiology and computational neuroscience such as:  
+  - Johnston and Wu, *Fundamentals of Cellular Neurophysiology*  
+  - Hammond, *Cellular and Molecular Neurophysiology*  
+
+- Research articles on specialized topics like reaction-diffusion modeling and stochastic synaptic mechanisms for advanced study.
+
+Code Interface Examples
+-----------------------
+
+**Python example creating a multicompartment NEURON model:**
+
+.. code-block:: python
+
+    from neuron import h, gui
+
+    # Create a section (compartment)
+    soma = h.Section(name='soma')
+    soma.L = 20  # length in microns
+    soma.diam = 20  # diameter in microns
+
+    # Insert Hodgkin-Huxley channels
+    soma.insert('hh')
+
+    # Stimulate with a current clamp
+    stim = h.IClamp(soma(0.5))
+    stim.delay = 5
+    stim.dur = 1
+    stim.amp = 0.1
+
+    # Set up recording vectors
+    v_vec = h.Vector().record(soma(0.5)._ref_v)
+    t_vec = h.Vector().record(h._ref_t)
+
+    # Run simulation
+    h.finitialize(-65)
+    h.continuerun(40)
+
+    # Plot results (requires matplotlib)
+    import matplotlib.pyplot as plt
+    plt.plot(t_vec, v_vec)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Voltage (mV)')
+    plt.show()
+
+**Equivalent HOC code snippet:**
+
+.. code-block:: hoc
+
+    create soma
+    soma {
+        length = 20
+        diameter = 20
+        insert hh
+    }
+
+    objref stim
+    stim = new IClamp(0.5)
+    stim.delay = 5
+    stim.dur = 1
+    stim.amp = 0.1
+
+    objref vvec, tvec
+    vvec = new Vector()
+    tvec = new Vector()
+    vvec.record(&soma.v(0.5))
+    tvec.record(&t)
+
+    init(-65)
+    run(40)
+
+    vvec.plot(tvec)
+
+Best Practices
+--------------
+- Begin modeling projects using the Python interface to NEURON for improved code clarity and access to modern libraries.  
+- Familiarize yourself with the concepts and mathematical background in the early chapters of *The NEURON Book*.  
+- Explore and modify example models to connect theoretical understanding with practical implementation.  
+- Consider reading source code and related literature to deepen insight into numerical methods and model components.  
+
+.. note::
+   The cable equation and associated numerical methods are internally handled by NEURON, so users do not typically implement these directly but rather work with compartmental models and channel kinetics.
+
+.. seealso::
+   :class:`h.Section`, :mod:`nrn.Section`, :meth:`h.finitialize`, :meth:`h.continuerun`, :class:`h.IClamp`, :class:`h.Vector`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4409 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4409>`_

@@ -1,0 +1,126 @@
+.. _recording_synaptic_currents_lfp:
+
+Recording Synaptic Currents for LFP Approximation
+==================================================
+
+To record synaptic currents (e.g. GABA, AMPA, NMDA) from a cell population in NEURON as an approximation to the local field potential (LFP), synaptic mechanisms are typically implemented as point processes with transmembrane currents (units: nA). Use :class:`Vector` recording of these currents.
+
+Example in HOC::
+
+    create soma
+    objref syn, tvec, ivec
+    soma syn = new ExpSyn(0.5)
+    tvec = new Vector()
+    tvec.record(&t)
+    ivec = new Vector()
+    ivec.record(&syn.i)
+
+For multiple synapses with different current variables (e.g., igaba, inmda, iampa), mark synapses with a :keyword:`RANGE` variable (e.g., `isampa`) to identify mechanism type::
+
+    NEURON {
+        POINT_PROCESS MySyn
+        RANGE i, isampa
+    }
+    ASSIGNED {
+        i (nA)
+        isampa
+    }
+    PARAMETER {
+        isampa = 1  : AMPA synapse, 0 for GABA
+    }
+    BREAKPOINT {
+        i = iampa + inmda   : or i = igaba
+    }
+
+Then create lists of Vectors recording each synaptic current type::
+
+    objref ampaivecs, nmdaivecs, gabaivecs
+    ampaivecs = new List()
+    nmdaivecs = new List()
+    gabaivecs = new List()
+
+    proc makeiveclists() {
+        local i, tmpvec, tmpobj
+        ampaivecs = new List()
+        nmdaivecs = new List()
+        gabaivecs = new List()
+        for i=0, synlist.count()-1 {
+            tmpobj = synlist.o(i)
+            if (tmpobj.isampa == 1) {
+                tmpvec = new Vector()
+                tmpvec.record(&tmpobj.iampa)
+                ampaivecs.append(tmpvec)
+                tmpvec = new Vector()
+                tmpvec.record(&tmpobj.inmda)
+                nmdaivecs.append(tmpvec)
+            } else {
+                tmpvec = new Vector()
+                tmpvec.record(&tmpobj.igaba)
+                gabaivecs.append(tmpvec)
+            }
+        }
+    }
+    makeiveclists()
+
+.. note::
+    Define currents as a RANGE variable `i` in synaptic mod files and compute it in the :keyword:`BREAKPOINT` block to ensure correct integration and consistent current recording.
+
+For memory-efficient LFP approximation by summing absolute synaptic currents, record currents in segments (intervals) rather than every timestep, then sum offline::
+
+    proc segrun() {
+        local i, interval, count, t2, lastpass
+        localobj segtvec, tvec, tmpvec, isynvecs, segsumabsisyn, sumabsisyn
+        interval = total_time / num_intervals
+        tvec = new Vector()
+        sumabsisyn = new Vector()
+        segtvec = new Vector()
+        segtvec.record(&t)
+        isynvecs = new List()
+        for i=0, synlist.count()-1 {
+            tmpvec = new Vector()
+            tmpvec.record(&synlist.o(i).i)
+            isynvecs.append(tmpvec)
+        }
+        count = 0
+        lastpass = 0
+        stdinit()
+        while (t < total_time) {
+            t2 = t + interval
+            if (t2 >= total_time) {
+                t2 = total_time
+                lastpass = 1
+            }
+            continuerun(t2)
+            tvec.append(segtvec)
+            segsumabsisyn = sumabsvecs(isynvecs)
+            sumabsisyn.append(segsumabsisyn)
+            if (lastpass == 0) {
+                tvec.remove(tvec.size() - 1)
+                sumabsisyn.remove(sumabsisyn.size() -1)
+            }
+            frecord_init()
+            count += 1
+        }
+    }
+
+.. code-block:: hoc
+
+    obfunc sumabsvecs() {
+        local i
+        localobj tmpvec, tmpsum
+        tmpsum = new Vector($o1.o(0).size)
+        for i=0,$o1.count()-1 {
+            tmpvec = $o1.o(i).c
+            tmpvec.abs()
+            tmpsum.add(tmpvec)
+        }
+        return tmpsum
+    }
+
+.. note::
+    This segmented recording approach avoids excessive memory use and utilizes efficient vectorized operations. For parallel simulations, gathering recorded data from all nodes is necessary post-simulation.
+
+.. seealso::
+    :class:`Vector`, :meth:`Vector.record`, :func:`fadvance`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3428 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3428>`_

@@ -1,0 +1,92 @@
+Save and Reload Graph Data for Later Analysis
+==============================================
+
+When running computationally intensive NEURON models, it can be time-consuming to regenerate graphs after each simulation run. To facilitate later analysis without rerunning the model, you can save the underlying data used to create graphs, then reload and visualize this data as needed.
+
+Using :class:`h.Vector` and Its :meth:`h.Vector.record` Method
+-------------------------------------------------------------
+
+The recommended approach is to record the simulation variables of interest using the :meth:`h.Vector.record` method of the :class:`h.Vector` class during the simulation. After the run completes, save these recorded vectors to plain text files. Later, you can read these files and recreate the graphs without rerunning the model.
+
+Steps to Save Graph Data
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. **Set up vectors to record variables** you want to plot (e.g., membrane potential, time).
+
+2. **Call the simulation run**.
+
+3. **Write the recorded vectors to disk** using methods such as :meth:`h.Vector.printf` or Python file I/O.
+
+4. **Reload the data** from the saved files later to plot and zoom without running the simulation again.
+
+Example in Python
+~~~~~~~~~~~~~~~~~
+
+```python
+from neuron import h
+
+# Create vectors to record time and membrane voltage
+t = h.Vector()
+v = h.Vector()
+
+# Assume 'soma' is a section with an inserted mechanism producing voltage
+soma = h.Section(name='soma')
+
+t.record(h._ref_t)           # record time
+v.record(soma(0.5)._ref_v)   # record voltage at soma(0.5)
+
+h.finitialize(-65)
+h.continuerun(100)
+
+# Save recorded vectors to text files
+t.printf("time.dat")
+v.printf("voltage.dat")
+```
+
+Reading data back for visualization:
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the data from text files
+time = np.loadtxt("time.dat")
+voltage = np.loadtxt("voltage.dat")
+
+# Plot and interactively zoom without rerunning simulation
+plt.plot(time, voltage)
+plt.xlabel("Time (ms)")
+plt.ylabel("Membrane potential (mV)")
+plt.show()
+```
+
+Example in HOC
+~~~~~~~~~~~~~~
+
+```
+objref t, v
+create soma
+
+t = new Vector()
+v = new Vector()
+
+access soma
+t.record(&t)  ;// time is a predefined variable in NEURON HOC
+v.record(&v(0.5).v(0))  ;// record membrane voltage at soma(0.5)
+
+finitialize(-65)
+continue(100)
+
+t.printf("time.dat")
+v.printf("voltage.dat")
+```
+
+.. note::
+
+   You can use any preferred format or method to save and load the recorded data, including writing with Python file I/O or saving in binary formats.
+
+.. seealso::
+
+   :class:`h.Vector`, :meth:`h.Vector.record`, :meth:`h.Vector.printf`, :meth:`h.Vector.scan`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2683 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2683>`_

@@ -1,0 +1,45 @@
+.. _noise_mod_best_practice:
+
+Using Random Number Generators in NMODL BREAKPOINT Blocks
+=========================================================
+
+When implementing noisy currents via random number generators (RNGs) such as :func:`normrand` in the :code:`BREAKPOINT` block, calling the RNG directly there leads to incorrect voltage behavior. This occurs because NEURON evaluates the :code:`BREAKPOINT` block twice each time step to estimate the conductance derivative (di/dv), causing inconsistent and spurious discontinuities.
+
+.. note::
+   The call to the RNG must be moved into a separate :code:`PROCEDURE` and invoked with a :code:`SOLVE` statement inside the :code:`BREAKPOINT` block to ensure it executes only once per step.
+
+Example fix for an Ornstein–Uhlenbeck noise current mod file:
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS Inoise2
+        RANGE tau, amp
+        NONSPECIFIC_CURRENT i
+    }
+
+    PARAMETER {
+        dt (ms)
+        amp = 0.01 (nA)
+        tau = 30 (ms)
+    }
+
+    ASSIGNED {
+        i (nA)
+    }
+
+    BREAKPOINT {
+        SOLVE noise
+    }
+
+    PROCEDURE noise() {
+        i = i - (dt * i) / tau + amp * normrand(0, 1)
+    }
+
+.. seealso::
+
+   :meth:`NMODL BREAKPOINT` block definition, :func:`normrand`, and :meth:`SOLVE` statement.
+
+This approach avoids corrupting the Jacobian matrix and eliminates artificial voltage jumps. Note that the resulting noise current becomes smoother, so the amplitude parameter may need adjustment for desired noise intensity.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3455 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3455>`_

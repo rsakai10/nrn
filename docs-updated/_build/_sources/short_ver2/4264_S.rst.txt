@@ -1,0 +1,82 @@
+Action Potential Propagation and Intracellular Voltage Calculation
+==================================================================
+
+1. Point vs. cable models
+-------------------------
+NEURON models are generally based on cable theory using one or more sections, but you can simulate point models by using a single compartment (e.g. `nseg = 1`). Alternatively, built-in artificial cells like :class:`IntFire` or custom `ARTIFICIAL_CELL` types can implement simpler integrate-and-fire models.
+
+2. Propagation delay and discretization
+---------------------------------------
+Setting `axon.nseg = 1` means the axon is a single compartment, so voltage at any point along it will be identical with no measurable delay. Increase `nseg` (e.g. to 101), reduce axon diameter (e.g. to 2 µm), and shorten stimulus duration to observe spike propagation delays between different locations on the axon.
+
+.. code-block:: python
+
+    from neuron import h
+    import matplotlib.pyplot as plt
+    h.load_file('stdrun.hoc')
+
+    soma = h.Section(name='soma')
+    axon = h.Section(name='axon')
+    axon.connect(soma(0))
+
+    soma.nseg = 1
+    soma.diam = soma.L = 18.8
+
+    axon.nseg = 101
+    axon.diam = 2
+    axon.L = 500
+
+    stim = h.IClamp(soma(0.5))
+    stim.delay = 100
+    stim.dur = 1
+    stim.amp = 0.9
+
+    for sec in [soma, axon]:
+        sec.Ra = 123
+        sec.insert('hh')
+
+    t = h.Vector().record(h._ref_t)
+    v1 = h.Vector().record(axon(0.1)._ref_v)
+    v2 = h.Vector().record(axon(0.9)._ref_v)
+
+    h.finitialize(-65)
+    h.continuerun(300)
+
+    plt.plot(t, v1, label='axon(0.1)')
+    plt.plot(t, v2, label='axon(0.9)')
+    plt.xlim(99, 110)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Voltage (mV)')
+    plt.legend()
+    plt.show()
+
+3. Computing intracellular voltage with extracellular mechanism
+----------------------------------------------------------------
+If the `extracellular` mechanism is inserted, the extracellular potential `vext[0](x)` at a location `x` is defined relative to ground. The intracellular potential relative to ground is then:
+
+.. code-block:: none
+
+    Vi = Vm + Ve
+
+where `Vm` is membrane voltage (:attr:`Section(x).v`) and `Ve` is extracellular potential (:attr:`Section(x).vext[0]`).
+
+In Python, record both during simulation:
+
+.. code-block:: python
+
+    vm_vec = h.Vector()
+    ve_vec = h.Vector()
+    vm_vec.record(sec(x)._ref_v)
+    ve_vec.record(sec(x).vext[0])
+
+After simulation:
+
+.. code-block:: python
+
+    h.run()
+    vintracell = vm_vec + ve_vec
+
+.. note::
+    Recording vectors and summing post-simulation is more efficient than recalculating intracellular voltage continuously inside the simulation code.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4264 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4264>`_

@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neuron MODelling Language &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Neuron MODelling Language</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/nmodl/NMODL_language.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Neuron-MODelling-Language">
+<h1>Neuron MODelling Language<a class="headerlink" href="#Neuron-MODelling-Language" title="Link to this heading"></a></h1>
+<p>Intro about NMODLanguage similar to <a class="reference external" href="https://nrn.readthedocs.io/en/latest/hoc/modelspec/programmatic/mechanisms/nmodl.html">https://nrn.readthedocs.io/en/latest/hoc/modelspec/programmatic/mechanisms/nmodl.html</a>, <a class="reference external" href="https://nrn.readthedocs.io/en/latest/hoc/modelspec/programmatic/mechanisms/nmodl2.html">https://nrn.readthedocs.io/en/latest/hoc/modelspec/programmatic/mechanisms/nmodl2.html</a></p>
+<p>Organization:</p>
+<ul class="simple">
+<li><p>Top level code blocks (NEURON, BREAKPOINT, etc)</p>
+<ul>
+<li><p>Code block specific keywords/operators/variable types</p></li>
+</ul>
+</li>
+<li><p>Other functionality</p></li>
+</ul>
+<section id="Compiling-example-mod-files">
+<h2>Compiling example mod files<a class="headerlink" href="#Compiling-example-mod-files" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">capture</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">display</span>
+<span class="err">!</span><span class="n">nrnivmodl</span> <span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="NMODL-Code-Blocks">
+<h2>NMODL Code Blocks<a class="headerlink" href="#NMODL-Code-Blocks" title="Link to this heading"></a></h2>
+<section id="DEFINE">
+<h3>DEFINE<a class="headerlink" href="#DEFINE" title="Link to this heading"></a></h3>
+</section>
+<section id="INCLUDE">
+<h3>INCLUDE<a class="headerlink" href="#INCLUDE" title="Link to this heading"></a></h3>
+</section>
+<section id="NEURON">
+<h3>NEURON<a class="headerlink" href="#NEURON" title="Link to this heading"></a></h3>
+<section id="SUFFIX">
+<h4>SUFFIX<a class="headerlink" href="#SUFFIX" title="Link to this heading"></a></h4>
+</section>
+<section id="POINT_PROCESS">
+<h4>POINT_PROCESS<a class="headerlink" href="#POINT_PROCESS" title="Link to this heading"></a></h4>
+</section>
+<section id="THREADSAFE">
+<h4>THREADSAFE<a class="headerlink" href="#THREADSAFE" title="Link to this heading"></a></h4>
+</section>
+<section id="ELECTRODE_CURRENT">
+<h4>ELECTRODE_CURRENT<a class="headerlink" href="#ELECTRODE_CURRENT" title="Link to this heading"></a></h4>
+</section>
+<section id="Example-mod-file">
+<h4>Example mod file<a class="headerlink" href="#Example-mod-file" title="Link to this heading"></a></h4>
+<p>Following example showcases the IClamp mechanism. It makes use of the <code class="docutils literal notranslate"><span class="pre">ELECTRODE_CURRENT</span></code> and <code class="docutils literal notranslate"><span class="pre">IF-ELSE</span></code> statement.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">nrnoc</span><span class="o">/</span><span class="n">stim</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Functionality-example">
+<h4>Functionality example<a class="headerlink" href="#Functionality-example" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">iclamp</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="NONSPECIFIC_CURRENT">
+<h4>NONSPECIFIC_CURRENT<a class="headerlink" href="#NONSPECIFIC_CURRENT" title="Link to this heading"></a></h4>
+</section>
+<section id="USEION">
+<h4>USEION<a class="headerlink" href="#USEION" title="Link to this heading"></a></h4>
+<section id="READ">
+<h5>READ<a class="headerlink" href="#READ" title="Link to this heading"></a></h5>
+</section>
+<section id="WRITE">
+<h5>WRITE<a class="headerlink" href="#WRITE" title="Link to this heading"></a></h5>
+</section>
+<section id="VALENCE">
+<h5>VALENCE<a class="headerlink" href="#VALENCE" title="Link to this heading"></a></h5>
+</section>
+<section id="REPRESENTS">
+<h5>REPRESENTS<a class="headerlink" href="#REPRESENTS" title="Link to this heading"></a></h5>
+</section>
+</section>
+<section id="Example-snippet">
+<h4>Example snippet<a class="headerlink" href="#Example-snippet" title="Link to this heading"></a></h4>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NEURON {
+    SUFFIX hh
+    REPRESENTS NCIT:C17145   : sodium channel
+    REPRESENTS NCIT:C17008   : potassium channel
+...
+}
+</pre></div>
+</div>
+</section>
+<section id="NMODL-Variable-Types">
+<h4>NMODL Variable Types<a class="headerlink" href="#NMODL-Variable-Types" title="Link to this heading"></a></h4>
+</section>
+<section id="id1">
+<h4>Example mod file<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<p>Following example showcases all the various NMODL variable types (<code class="docutils literal notranslate"><span class="pre">GLOBAL</span></code>, <code class="docutils literal notranslate"><span class="pre">RANGE</span></code>, <code class="docutils literal notranslate"><span class="pre">POINTER</span></code>, <code class="docutils literal notranslate"><span class="pre">BBCOREPOINTER</span></code>, <code class="docutils literal notranslate"><span class="pre">EXTERNAL</span></code>, <code class="docutils literal notranslate"><span class="pre">PARAMETER</span></code>, <code class="docutils literal notranslate"><span class="pre">ASSIGNED</span></code>)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">mod</span><span class="o">/</span><span class="n">variabletypes</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="UNITS">
+<h3>UNITS<a class="headerlink" href="#UNITS" title="Link to this heading"></a></h3>
+</section>
+<section id="PARAMETER">
+<h3>PARAMETER<a class="headerlink" href="#PARAMETER" title="Link to this heading"></a></h3>
+</section>
+<section id="ASSIGNED">
+<h3>ASSIGNED<a class="headerlink" href="#ASSIGNED" title="Link to this heading"></a></h3>
+</section>
+<section id="CONSTANT">
+<h3>CONSTANT<a class="headerlink" href="#CONSTANT" title="Link to this heading"></a></h3>
+</section>
+<section id="NET_RECEIVE">
+<h3>NET_RECEIVE<a class="headerlink" href="#NET_RECEIVE" title="Link to this heading"></a></h3>
+<section id="Example-mod-files">
+<h4>Example mod files<a class="headerlink" href="#Example-mod-files" title="Link to this heading"></a></h4>
+<p>Following example showcases the ExpSyn mechanism. It makes use of the <code class="docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> block and <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> and <code class="docutils literal notranslate"><span class="pre">DEFINE</span></code> statements.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">mod</span><span class="o">/</span><span class="n">hhwatch</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h4>Functionality example<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>A functionality example for the above mod file can be found <a class="reference external" href="https://github.com/neuronsimulator/testcorenrn/blob/master/testwatch.hoc">here</a>.</p>
+<p>Following example showcases the usage of <code class="docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> with <code class="docutils literal notranslate"><span class="pre">FOR_NETCONS</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">mod</span><span class="o">/</span><span class="n">fornetcon</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Functionality-Example">
+<h3>Functionality Example<a class="headerlink" href="#Functionality-Example" title="Link to this heading"></a></h3>
+<p>A functionality example for the above mod file can be found <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/coreneuron/test_fornetcon.py">here</a>.</p>
+</section>
+<section id="CONSTRUCTOR">
+<h3>CONSTRUCTOR<a class="headerlink" href="#CONSTRUCTOR" title="Link to this heading"></a></h3>
+</section>
+<section id="DESTRUCTOR">
+<h3>DESTRUCTOR<a class="headerlink" href="#DESTRUCTOR" title="Link to this heading"></a></h3>
+</section>
+<section id="INITIAL">
+<h3>INITIAL<a class="headerlink" href="#INITIAL" title="Link to this heading"></a></h3>
+</section>
+<section id="STATE">
+<h3>STATE<a class="headerlink" href="#STATE" title="Link to this heading"></a></h3>
+</section>
+<section id="BREAKPOINT">
+<h3>BREAKPOINT<a class="headerlink" href="#BREAKPOINT" title="Link to this heading"></a></h3>
+<section id="SOLVE">
+<h4>SOLVE<a class="headerlink" href="#SOLVE" title="Link to this heading"></a></h4>
+</section>
+<section id="METHOD">
+<h4>METHOD<a class="headerlink" href="#METHOD" title="Link to this heading"></a></h4>
+</section>
+</section>
+<section id="DERIVATIVE">
+<h3>DERIVATIVE<a class="headerlink" href="#DERIVATIVE" title="Link to this heading"></a></h3>
+</section>
+<section id="KINETIC">
+<h3>KINETIC<a class="headerlink" href="#KINETIC" title="Link to this heading"></a></h3>
+<p>See description in <a class="reference external" href="https://neuronsimulator.github.io/nrn/hoc/modelspec/programmatic/mechanisms/nmodl.html#kinetic">NMODL documentation</a></p>
+<section id="id4">
+<h4>Example mod file<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>Following example showcases calcium ion accumulation with longitudinal and radial diffusion. Speicifically showcases the use of <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code>, <code class="docutils literal notranslate"><span class="pre">COMPARTMENT</span></code> and <code class="docutils literal notranslate"><span class="pre">LONGITUDINAL_DIFFUSION</span></code> keywords.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">mod</span><span class="o">/</span><span class="n">cadif</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h4>Functionality example<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">kinetic</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">run</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">kinetic</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="CONSERVE">
+<h4>CONSERVE<a class="headerlink" href="#CONSERVE" title="Link to this heading"></a></h4>
+<p>TODO: add example</p>
+</section>
+</section>
+<section id="FUNCTION">
+<h3>FUNCTION<a class="headerlink" href="#FUNCTION" title="Link to this heading"></a></h3>
+</section>
+<section id="PROCEDURE">
+<h3>PROCEDURE<a class="headerlink" href="#PROCEDURE" title="Link to this heading"></a></h3>
+</section>
+<section id="LINEAR">
+<h3>LINEAR<a class="headerlink" href="#LINEAR" title="Link to this heading"></a></h3>
+</section>
+<section id="NONLINEAR">
+<h3>NONLINEAR<a class="headerlink" href="#NONLINEAR" title="Link to this heading"></a></h3>
+</section>
+<section id="LOCAL">
+<h3>LOCAL<a class="headerlink" href="#LOCAL" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="Other-NMODL-constructs">
+<h2>Other NMODL constructs<a class="headerlink" href="#Other-NMODL-constructs" title="Link to this heading"></a></h2>
+<section id="TABLE">
+<h3>TABLE<a class="headerlink" href="#TABLE" title="Link to this heading"></a></h3>
+<p>Short description for TABLE keyword</p>
+<section id="FROM">
+<h4>FROM<a class="headerlink" href="#FROM" title="Link to this heading"></a></h4>
+</section>
+<section id="TO">
+<h4>TO<a class="headerlink" href="#TO" title="Link to this heading"></a></h4>
+</section>
+<section id="WITH">
+<h4>WITH<a class="headerlink" href="#WITH" title="Link to this heading"></a></h4>
+</section>
+<section id="DEPEND">
+<h4>DEPEND<a class="headerlink" href="#DEPEND" title="Link to this heading"></a></h4>
+</section>
+<section id="id6">
+<h4>Example mod file<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">mod</span><span class="o">/</span><span class="n">table</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h4>Functionality example<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">table</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">run</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">table</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="FUNCTION_TABLE">
+<h3>FUNCTION_TABLE<a class="headerlink" href="#FUNCTION_TABLE" title="Link to this heading"></a></h3>
+<p>See description in <a class="reference external" href="https://neuronsimulator.github.io/nrn/hoc/modelspec/programmatic/mechanisms/nmodl.html#function-table">NMODL documentation</a></p>
+<section id="id8">
+<h4>Example mod file<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">mod</span><span class="o">/</span><span class="n">k3st</span><span class="o">.</span><span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id9">
+<h4>Functionality example<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">cat</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">function_table</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">run</span> <span class="n">python_scripts</span><span class="o">/</span><span class="n">function_table</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="BEFORE">
+<h3>BEFORE<a class="headerlink" href="#BEFORE" title="Link to this heading"></a></h3>
+</section>
+<section id="AFTER">
+<h3>AFTER<a class="headerlink" href="#AFTER" title="Link to this heading"></a></h3>
+</section>
+<section id="FOR_NETCONS">
+<h3>FOR_NETCONS<a class="headerlink" href="#FOR_NETCONS" title="Link to this heading"></a></h3>
+</section>
+<section id="PROTECT">
+<h3>PROTECT<a class="headerlink" href="#PROTECT" title="Link to this heading"></a></h3>
+</section>
+<section id="MUTEXLOCK-/-MUTEXUNLOCK">
+<h3>MUTEXLOCK / MUTEXUNLOCK<a class="headerlink" href="#MUTEXLOCK-/-MUTEXUNLOCK" title="Link to this heading"></a></h3>
+</section>
+<section id="VERBATIM">
+<h3>VERBATIM<a class="headerlink" href="#VERBATIM" title="Link to this heading"></a></h3>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

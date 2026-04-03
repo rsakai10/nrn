@@ -1,0 +1,52 @@
+.. _mrf_fitting_irregular_intervals:
+
+Fitting Data Sampled at Irregular Intervals with MRF
+----------------------------------------------------
+
+When using the Multiple Run Fitter (:class:`MRF`) in NEURON to fit voltage-versus-time data sampled at irregular intervals, consider the following:
+
+- The fitness evaluation compares model output only at the data time points provided (loaded from file). To achieve this, the model trajectory is linearly interpolated at these specific timestamps if needed.
+
+- The error value reported by :class:`MRF` corresponds to a weighted, normalized sum of squared differences between the interpolated model voltage and data voltage at each sampled point. Weights and normalization depend on defined time regions.
+
+- To verify this behavior, set up a toy model with sparse irregular data points, and compare the computed error with manual sum-of-squared-errors at those points.
+
+- For adaptive integration, since simulation time points do not match data times, :meth:`Vector.interpolate` is internally used to estimate model voltages at data times.
+
+- :meth:`Vector.record` with a regular time vector can be used to obtain simulation results at fixed intervals even when using adaptive integration. In that case, a custom error function matching these regularly sampled model values to data is necessary.
+
+- When defining multiple time regions with weights, the overall error returned by MRF is computed as:
+
+  .. math::
+
+     \text{Error Value} = \frac{\sum_{i=1}^N w_i \frac{e_i}{s_i}}{\sum_{i=1}^N \frac{w_i}{s_i}}
+
+  where :math:`w_i` is the weight, :math:`e_i` the sum of squared errors in region :math:`i`, :math:`s_i` the size of the region, and :math:`N` the number of regions.
+
+Example HOC snippet to check model interpolation at data points:
+
+.. code-block:: hoc
+
+    // Assume data times and voltages are loaded into vectors tdat and vdat
+    // Model voltage recorded at fine resolution during simulation into vec_v, timestamps in vec_t
+    // Interpolate model voltage at data times:
+    objref model_v_at_data
+    model_v_at_data = new Vector()
+    model_v_at_data.interpolate(vec_t, vec_v)
+    // model_v_at_data will now contain interpolated voltages at each tdat
+
+Example Python snippet to record at fixed intervals with adaptive integrator:
+
+.. code-block:: python
+
+    from neuron import h
+    tvec = h.Vector()
+    vvec = h.Vector()
+    tvec.record(h._ref_t)
+    vvec.record(h.soma(0.5)._ref_v, 0.025)  # records voltage every 0.025 ms
+
+.. note::
+
+   When digitizing data from figures for fitting, it is best to obtain original raw data if possible. Use careful interpolation and judgment about reasonable fits when working with irregular or sparse data.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3112 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3112>`_

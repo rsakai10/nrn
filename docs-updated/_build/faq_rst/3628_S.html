@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq_rst/3628_S.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>Load balancing large networks with heterogeneous cell morphologies and synapse distributions can be approached as follows:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The simplest approach is to distribute cells (e.g. principal cells) evenly by round-robin without splitting if the number of cells is large and their complexity variance is small.</p>
+</div>
+<p>A rough proxy for cell computational complexity is the number of states in each cell, which can be measured via <code class="xref py py-class docutils literal notranslate"><span class="pre">h.LoadBalance.cell_complexity</span></code>. Multisplit is advantageous if:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{TotalNumberOfStatesForAllCells}}{n_{\text{host}}} &lt; \max \{\text{NumberOfStatesOfEachCell}\}\]</div>
+<p>Example measuring cell complexity per rank (Python):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">pc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ParallelContext</span><span class="p">()</span>
+<span class="n">nhost</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">nhost</span><span class="p">())</span>
+<span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;loadbal.hoc&quot;</span><span class="p">)</span>
+<span class="n">lb</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">LoadBalance</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">cell_complexities</span><span class="p">():</span>
+    <span class="n">cx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">allsec</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">parentseg</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># root section of cell</span>
+            <span class="n">cx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="o">.</span><span class="n">cell_complexity</span><span class="p">(</span><span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">))</span>
+    <span class="n">max_cx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span> <span class="k">if</span> <span class="n">cx</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">sum_cx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span>
+    <span class="n">max_cx</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">max_cx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sum_cx</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">sum_cx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;max_cx = </span><span class="si">%g</span><span class="s2">  average cx per rank = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">max_cx</span><span class="p">,</span> <span class="n">sum_cx</span><span class="o">/</span><span class="n">nhost</span><span class="p">))</span>
+
+<span class="n">cell_complexities</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For improved proxies of complexity, use <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.ExperimentalMechComplex()</span></code> which runs parallel mechanism performance tests, generating an <cite>mcomplex.dat</cite> file. Load it later with <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.read_mcomplex()</span></code> for more accurate complexity estimates.</p>
+<p>For load balancing algorithms, a variant of the “least processing time” (LPT) heuristic can be applied:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REPEAT
+   assign the most complex cell to the host with the least total assigned complexity
+UNTIL all cells are assigned
+</pre></div>
+</div>
+<p>This strategy can improve over round-robin balancing when cell complexity is heterogeneous.</p>
+<p>Example Python module using <code class="xref py py-class docutils literal notranslate"><span class="pre">h.LoadBalance</span></code> to compute complexities and apply LPT balancing, returning expected load balances before and after reallocation, is provided for user adaptation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is often preferable to save and load the cell-to-host assignments from a file to separate balancing from simulation runs.</p>
+</div>
+<p>Finally, load balance during simulation can be measured dynamically by timing computation and communication intervals using <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.ParallelContext.step_time()</span></code> and barriers before spike exchange to incorporate spike handling overhead.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3628">https://neuron.yale.edu/phpBB/viewtopic.php?t=3628</a></p>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

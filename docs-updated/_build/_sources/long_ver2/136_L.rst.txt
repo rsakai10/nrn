@@ -1,0 +1,101 @@
+Variable Step Size and Integration Method in NEURON
+====================================================
+
+When solving differential equations, such as membrane voltage dynamics, it is important to understand the numerical integration scheme NEURON employs by default.
+
+Example Scenario
+----------------
+Consider a simple model with the following setup:
+
+- A single section with one segment having total membrane capacitance: 1 pF.
+- A point process injecting a NONSPECIFIC_CURRENT `i` defined as `i = g * v`, where `v` is the membrane potential.
+- Initial membrane voltage `v_init = 10 mV`.
+- Conductance `g = 1 S` (very large).
+- Fixed time step `dt = 0.1 ms`.
+
+One might expect that after one time step of 0.1 ms, the voltage \( v \) would drastically drop (e.g., to approximately -1 MV) by simply assuming \( v \) remains constant over the entire interval. However, NEURON computes the solution correctly, solving the equation
+
+\[
+C \frac{dv}{dt} = -g v(t)
+\]
+
+and obtains \( v = 0 \, mV \) after 0.1 ms.
+
+How NEURON Integration Works
+----------------------------
+
+- NEURON uses an implicit integration method by default, specifically the **backward Euler method**.
+- The backward Euler method solves the system implicitly at each time step, so it does not assume the state variables remain constant over the time interval.
+- This implicit method is stable even when the time step \( dt \) is relatively large compared to the system's time constants.
+- For passive membrane models, if the time step is larger than the membrane time constant, the state variables reach their asymptotic (steady-state) values in one step.
+- NEURON does **not** use forward Euler (explicit Euler) by default, because forward Euler is conditionally stable and could lead to numerical inaccuracies or instability for stiff equations common in neuronal modeling.
+
+.. note::
+
+   Because NEURON uses implicit backward Euler integration by default, users may observe that large conductances and large time steps do not cause the expected numerical instability, and membrane potentials approach steady states correctly within a single integration step.
+
+Example Python code illustrating the concept:
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Create a section
+    sec = h.Section()
+    sec.L = sec.diam = 1  # so total capacitance ~1 pF
+
+    # Insert a point process that injects current i = g*v
+    # We'll define a nonsense "NONSPECIFIC_CURRENT" here conceptually as an example
+    # In practice, use a LinearMechanism or custom MOD file
+    # For demonstration, inject a linear current at voltage v with g=1 S
+
+    # Set initial voltage
+    h.v_init = 10  # mV
+
+    # Use fixed time step
+    h.dt = 0.1  # ms
+
+    # Set up a linear current i = g*v with g = 1 S (example using a linear mechanism)
+    # This can be done with a built-in linear mechanism or a custom implementation
+
+    # Run simulation for 0.1 ms
+    h.finitialize(h.v_init)
+    h.continuerun(0.1)
+
+    print(f"Voltage after 0.1 ms: {sec(0.5).v} mV")
+
+Similarly in HOC:
+
+.. code-block:: hoc
+
+    create soma
+    soma {
+        L = 1
+        diam = 1  // total capacitance ~ 1 pF
+    }
+
+    // Suppose a mechanism that injects current i = g*v with g=1
+    // For demonstration, here is how to set initial conditions and time step
+    v_init = 10
+    dt = 0.1
+
+    // Initialize and run
+    finitialize(v_init)
+    fcurrent()
+    fadvance()  // advance by dt
+
+    printf("Voltage after %.1f ms: %g mV\n", dt, soma.v(0.5))
+
+Summary
+-------
+
+- NEURON’s default solver is implicit backward Euler.
+- This method integrates stiff systems robustly and allows large time steps without instability.
+- Voltage and other state variables approach their steady-state values accurately within one time step if \( dt \) exceeds the smallest time constant.
+- NEURON does not use explicit forward Euler integration by default.
+
+.. seealso::
+
+   :class:`h.Dt` for setting fixed time step size, :meth:`h.finitialize` and :meth:`h.continuerun` for controlling simulation execution.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=136 <https://neuron.yale.edu/phpBB/viewtopic.php?t=136>`_

@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Save and Reload Graph Data for Later Analysis &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Save and Reload Graph Data for Later Analysis</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2683_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="save-and-reload-graph-data-for-later-analysis">
+<h1>Save and Reload Graph Data for Later Analysis<a class="headerlink" href="#save-and-reload-graph-data-for-later-analysis" title="Link to this heading"></a></h1>
+<p>When running computationally intensive NEURON models, it can be time-consuming to regenerate graphs after each simulation run. To facilitate later analysis without rerunning the model, you can save the underlying data used to create graphs, then reload and visualize this data as needed.</p>
+<section id="using-h-vector-and-its-h-vector-record-method">
+<h2>Using <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector</span></code> and Its <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.record()</span></code> Method<a class="headerlink" href="#using-h-vector-and-its-h-vector-record-method" title="Link to this heading"></a></h2>
+<p>The recommended approach is to record the simulation variables of interest using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.record()</span></code> method of the <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector</span></code> class during the simulation. After the run completes, save these recorded vectors to plain text files. Later, you can read these files and recreate the graphs without rerunning the model.</p>
+<section id="steps-to-save-graph-data">
+<h3>Steps to Save Graph Data<a class="headerlink" href="#steps-to-save-graph-data" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Set up vectors to record variables</strong> you want to plot (e.g., membrane potential, time).</p></li>
+<li><p><strong>Call the simulation run</strong>.</p></li>
+<li><p><strong>Write the recorded vectors to disk</strong> using methods such as <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.printf()</span></code> or Python file I/O.</p></li>
+<li><p><strong>Reload the data</strong> from the saved files later to plot and zoom without running the simulation again.</p></li>
+</ol>
+</section>
+<section id="example-in-python">
+<h3>Example in Python<a class="headerlink" href="#example-in-python" title="Link to this heading"></a></h3>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from neuron import h</p>
+<p># Create vectors to record time and membrane voltage
+t = h.Vector()
+v = h.Vector()</p>
+<p># Assume ‘soma’ is a section with an inserted mechanism producing voltage
+soma = h.Section(name=’soma’)</p>
+<p>t.record(h._ref_t)           # record time
+v.record(soma(0.5)._ref_v)   # record voltage at soma(0.5)</p>
+<p>h.finitialize(-65)
+h.continuerun(100)</p>
+<p># Save recorded vectors to text files
+t.printf(“time.dat”)
+v.printf(“voltage.dat”)
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>Reading data back for visualization:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+import numpy as np
+import matplotlib.pyplot as plt</p>
+<p># Load the data from text files
+time = np.loadtxt(“time.dat”)
+voltage = np.loadtxt(“voltage.dat”)</p>
+<p># Plot and interactively zoom without rerunning simulation
+plt.plot(time, voltage)
+plt.xlabel(“Time (ms)”)
+plt.ylabel(“Membrane potential (mV)”)
+plt.show()
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+</section>
+<section id="example-in-hoc">
+<h3>Example in HOC<a class="headerlink" href="#example-in-hoc" title="Link to this heading"></a></h3>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a>`
+objref t, v
+create soma</p>
+<p>t = new Vector()
+v = new Vector()</p>
+<p>access soma
+t.record(&amp;t)  ;// time is a predefined variable in NEURON HOC
+v.record(&amp;v(0.5).v(0))  ;// record membrane voltage at soma(0.5)</p>
+<p>finitialize(-65)
+continue(100)</p>
+<p>t.printf(“time.dat”)
+v.printf(“voltage.dat”)
+<a href="#id19"><span class="problematic" id="id20">``</span></a><a href="#id21"><span class="problematic" id="id22">`</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use any preferred format or method to save and load the recorded data, including writing with Python file I/O or saving in binary formats.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.record()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.printf()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.scan()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2683">https://neuron.yale.edu/phpBB/viewtopic.php?t=2683</a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

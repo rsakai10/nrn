@@ -1,0 +1,19 @@
+Converting Strings to Integers in HOC
+=====================================
+
+In HOC, use the :func:`sscanf` function to convert strings to integers. This function parses formatted input similarly to the C `sscanf`.
+
+Example::
+
+    strdef s
+    double x[3]
+
+    sscanf("0xff 010 25", "%i%i%i", &x[0], &x[1], &x[2])
+    print x[0], x[1], x[2]  # Outputs: 255 8 25
+
+The format specifier "%i" automatically recognizes hexadecimal, octal, and decimal formats.
+
+.. note::
+    The :func:`sscanf` function is preferable over external C functions like `atoi` for string conversion within HOC code.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=585 <https://neuron.yale.edu/phpBB/viewtopic.php?t=585>`_

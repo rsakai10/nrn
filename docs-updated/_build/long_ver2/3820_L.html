@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Direction of Current in a Point Process &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Direction of Current in a Point Process</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3820_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="direction-of-current-in-a-point-process">
+<h1>Direction of Current in a Point Process<a class="headerlink" href="#direction-of-current-in-a-point-process" title="Link to this heading"></a></h1>
+<p>When implementing a point process in NEURON that produces a transmembrane current, the sign convention follows standard neurophysiological practice:</p>
+<ul class="simple">
+<li><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">NONSPECIFIC_CURRENT</span></code> (as used in this Ornstein-Uhlenbeck fluctuating conductance model) represents a transmembrane ionic current.</p></li>
+<li><p><strong>Depolarizing currents are negative</strong> (inward positive charge flow into the cell).</p></li>
+<li><p><strong>Hyperpolarizing currents are positive</strong> (outward positive charge flow out of the cell).</p></li>
+</ul>
+<p>Therefore, if <cite>i</cite> is the current contributed by the point process, the membrane equation for a single compartment can be written as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}c_m \\frac{dV}{dt} = -I_{ion} - I_{syn}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(I_{syn} = i\)</span>. Here, a <strong>negative</strong> value of <cite>i</cite> depolarizes the cell, consistent with the reversal potentials defined in the model.</p>
+<p>Note that currents injected by an electrode mechanism (<cite>ELECTRODE_CURRENT</cite>) obey the opposite sign convention: depolarizing electrode currents are positive.</p>
+<section id="fluctuating-conductance-model-ornstein-uhlenbeck-process">
+<h2>Fluctuating Conductance Model (Ornstein-Uhlenbeck Process)<a class="headerlink" href="#fluctuating-conductance-model-ornstein-uhlenbeck-process" title="Link to this heading"></a></h2>
+<p>This model implements synaptic bombardment as stochastic fluctuations of excitatory and inhibitory conductances, <em>g_e(t)</em> and <em>g_i(t)</em>, each governed by an Ornstein-Uhlenbeck process with parameters estimated from experimental data.</p>
+<p>The synaptic current is computed as:</p>
+<div class="math notranslate nohighlight">
+\[I_{syn} = g_e(t)(V - E_e) + g_i(t)(V - E_i)\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_e\)</span>, <span class="math notranslate nohighlight">\(E_i\)</span> are reversal potentials,</p></li>
+<li><p><span class="math notranslate nohighlight">\(g_e\)</span>, <span class="math notranslate nohighlight">\(g_i\)</span> are total excitatory and inhibitory conductances.</p></li>
+</ul>
+<p>The time evolution of conductances obeys stochastic differential equations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\\frac{dg_e}{dt} = -\\frac{(g_e - g_{e0})}{\\tau_e} + \\sqrt{D_e} F_t \\
+\\frac{dg_i}{dt} = -\\frac{(g_i - g_{i0})}{\\tau_i} + \\sqrt{D_i} F_t\end{split}\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(g_{e0}\)</span>, <span class="math notranslate nohighlight">\(g_{i0}\)</span> are mean conductances,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\\tau_e\)</span>, <span class="math notranslate nohighlight">\(\\tau_i\)</span> are time constants,</p></li>
+<li><p><span class="math notranslate nohighlight">\(D_e\)</span>, <span class="math notranslate nohighlight">\(D_i\)</span> are diffusion coefficients,</p></li>
+<li><p><span class="math notranslate nohighlight">\(F_t\)</span> is Gaussian white noise.</p></li>
+</ul>
+</section>
+<section id="numerical-integration-scheme">
+<h2>Numerical Integration Scheme<a class="headerlink" href="#numerical-integration-scheme" title="Link to this heading"></a></h2>
+<p>The mechanism uses Gillespie’s exact update formula for OU processes, which is stable and independent of integration step size <span class="math notranslate nohighlight">\(dt\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}x(t+dt) = x(t) e^{-dt/\\tau} + A N(0,1)\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \\sqrt{D\\tau/2 (1 - e^{-2dt/\\tau})}\end{split}\]</div>
+<p>and <span class="math notranslate nohighlight">\(N(0,1)\)</span> a standard normal random variable.</p>
+</section>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The mechanism is defined as a <code class="xref py py-class docutils literal notranslate"><span class="pre">POINT_PROCESS</span></code> with a <code class="xref py py-class docutils literal notranslate"><span class="pre">NONSPECIFIC_CURRENT</span> <span class="pre">i</span></code>.</p></li>
+<li><p>Conductances <cite>g_e</cite> and <cite>g_i</cite> are constrained to be non-negative.</p></li>
+<li><p>When <span class="math notranslate nohighlight">\(\\tau_e\)</span> or <span class="math notranslate nohighlight">\(\\tau_i\)</span> are zero, the conductances behave as white noise with instantaneous fluctuations.</p></li>
+<li><p>Calls to the random number generator (<code class="xref py py-func docutils literal notranslate"><span class="pre">normrand()</span></code>) are placed inside a <code class="xref py py-meth docutils literal notranslate"><span class="pre">PROCEDURE()</span></code> called by <code class="xref py py-meth docutils literal notranslate"><span class="pre">BREAKPOINT</span> <span class="pre">SOLVE()</span></code> to ensure consistent solutions and correct calculation of the Jacobian matrix during variable time step integration.</p></li>
+</ul>
+</section>
+<section id="example-neuron-nmodl-code-python-syntax-adaptation-shown-below">
+<h2>Example NEURON NMODL Code (Python syntax adaptation shown below)<a class="headerlink" href="#example-neuron-nmodl-code-python-syntax-adaptation-shown-below" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>NEURON {
+  POINT_PROCESS Gfluct
+  RANGE g_e, g_i, E_e, E_i, g_e0, g_i0, std_e, std_i, tau_e, tau_i
+  NONSPECIFIC_CURRENT i
+}
+
+UNITS {
+  (nA) = (nanoamp)
+  (mV) = (millivolt)
+  (umho) = (micromho)
+}
+
+PARAMETER {
+  dt (ms)
+  E_e = 0 (mV)
+  E_i = -75 (mV)
+  g_e0 = 0.0121 (umho)
+  g_i0 = 0.0573 (umho)
+  std_e = 0.0030 (umho)
+  std_i = 0.0066 (umho)
+  tau_e = 2.728 (ms)
+  tau_i = 10.49 (ms)
+}
+
+ASSIGNED {
+  v (mV)
+  i (nA)
+  g_e (umho)
+  g_i (umho)
+  g_e1 (umho)
+  g_i1 (umho)
+  D_e (umho*umho/ms)
+  D_i (umho*umho/ms)
+  exp_e
+  exp_i
+  amp_e (umho)
+  amp_i (umho)
+}
+
+INITIAL {
+  g_e1 = 0
+  g_i1 = 0
+  if(tau_e != 0) {
+    D_e = 2*std_e*std_e / tau_e
+    exp_e = exp(-dt/tau_e)
+    amp_e = std_e * sqrt(1 - exp(-2*dt/tau_e))
+  }
+  if(tau_i != 0) {
+    D_i = 2*std_i*std_i / tau_i
+    exp_i = exp(-dt/tau_i)
+    amp_i = std_i * sqrt(1 - exp(-2*dt/tau_i))
+  }
+}
+
+BREAKPOINT {
+  SOLVE oup
+  i = g_e*(v - E_e) + g_i*(v - E_i)
+}
+
+PROCEDURE oup() {
+  if (tau_e == 0) {
+    g_e = g_e0 + std_e * normrand(0,1)
+  } else {
+    g_e1 = exp_e * g_e1 + amp_e * normrand(0,1)
+    g_e = g_e0 + g_e1
+  }
+  if (g_e &lt; 0) { g_e = 0 }
+
+  if (tau_i == 0) {
+    g_i = g_i0 + std_i * normrand(0,1)
+  } else {
+    g_i1 = exp_i * g_i1 + amp_i * normrand(0,1)
+    g_i = g_i0 + g_i1
+  }
+  if (g_i &lt; 0) { g_i = 0 }
+}
+</pre></div>
+</div>
+<p>Python usage example integrating this mechanism on a section:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Create a section and insert the fluctuating conductance point process</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">gfluct</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Gfluct</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">soma</span><span class="p">)</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">E_e</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">E_i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">75</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">g_e0</span> <span class="o">=</span> <span class="mf">0.0121</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">g_i0</span> <span class="o">=</span> <span class="mf">0.0573</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">std_e</span> <span class="o">=</span> <span class="mf">0.0030</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">std_i</span> <span class="o">=</span> <span class="mf">0.0066</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">tau_e</span> <span class="o">=</span> <span class="mf">2.728</span>
+<span class="n">gfluct</span><span class="o">.</span><span class="n">tau_i</span> <span class="o">=</span> <span class="mf">10.49</span>
+
+<span class="c1"># Set dt for the simulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mf">0.025</span>
+
+<span class="c1"># Run simulation, current i injected by Gfluct will be applied automatically</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Calls to random number generators are placed in the <code class="xref py py-meth docutils literal notranslate"><span class="pre">PROCEDURE</span> <span class="pre">oup()</span></code>, not directly in <code class="xref py py-meth docutils literal notranslate"><span class="pre">BREAKPOINT()</span></code>, to ensure consistent time stepping and correct Jacobian calculation during variable time step integration.</p></li>
+<li><p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">tau_e</span></code> or <code class="xref py py-attr docutils literal notranslate"><span class="pre">tau_i</span></code> equal zero, the conductances behave as white noise.</p></li>
+<li><p>Negative conductance values after fluctuation are clipped to zero.</p></li>
+</ul>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">POINT_PROCESS</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NONSPECIFIC_CURRENT</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">normrand()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">PROCEDURE()</span></code></p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">BREAKPOINT()</span></code></p></li>
+<li><p>NEURON simulation environment examples with fluctuating synaptic conductances</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3820">https://neuron.yale.edu/phpBB/viewtopic.php?t=3820</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

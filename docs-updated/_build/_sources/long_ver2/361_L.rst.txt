@@ -1,0 +1,65 @@
+Stochastic Single Channel Simulations in NEURON
+================================================
+
+NEURON supports stochastic simulations of single ion channels by modeling their random opening and closing events based on specified rate constants. For example, the "Stochastic single channel: HH" demo included in NEURON illustrates this behavior by simulating a single Hodgkin-Huxley channel, where the membrane voltage exhibits transient changes corresponding to channel openings.
+
+Randomness and Reproducibility
+------------------------------
+
+The stochastic behavior in NEURON simulations relies on pseudo-random number generators (PRNGs) that control channel state transitions. By default, if multiple instances of a simulation use the same PRNG seed, they will produce identical sequences of random numbers, resulting in identical channel opening patterns and therefore identical voltage traces for corresponding simulation runs.
+
+To achieve independent stochastic behavior across different simulation instances or runs, it is essential to use different random seeds for each case. This ensures that each simulation generates a unique sequence of random events and thus reflects true stochastic variability.
+
+Setting Random Seeds in NEURON
+------------------------------
+
+You can control the random number streams and seeds in both HOC and Python:
+
+- **HOC Example:**
+
+  .. code-block:: hoc
+
+     // Create a Random object and set a unique seed
+     objref rng
+     rng = new Random()
+     rng.Random123(0, 1, unique_seed)   // Use a unique_seed value for each instance/run
+
+     // Use 'rng' for stochastic channel gating or other random processes
+
+- **Python Example:**
+
+  .. code-block:: python
+
+     from neuron import h
+
+     rng = h.Random()
+     unique_seed = 12345  # Assign a different seed per simulation run
+     rng.Random123(0, 1, unique_seed)
+
+     # Use rng in stochastic mechanisms as appropriate
+
+Strategies for Managing Seeds
+-----------------------------
+
+- Pre-generate a list of random seeds for multiple simulation runs to ensure reproducibility.
+- Record and log the seed values alongside the simulation parameters to facilitate debugging and result replication.
+- When running multiple instances or batch simulations, assign different seeds systematically (e.g., using run index or process ID).
+
+.. note::
+
+   Merely sampling multiple sweeps from a single simulation run without changing the random seed will not produce independent stochastic outcomes. To observe diverse stochastic trajectories reflecting the channel randomness, vary seeds between runs.
+
+Summary
+-------
+
+To obtain truly stochastic single channel simulation results in NEURON:
+
+- Always use a different random seed for each simulation instance and/or run.
+- Create and manage seeds explicitly via :class:`h.Random` and its methods such as :meth:`Random.Random123`.
+- Log seed values and other parameters for reproducibility and analysis.
+
+.. seealso::
+
+   :class:`h.Random`, :meth:`Random.Random123`, stochastic channel demo ("Stochastic single channel: HH") in NEURON examples
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=361 <https://neuron.yale.edu/phpBB/viewtopic.php?t=361>`_

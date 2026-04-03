@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>White Noise Current Injection in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">White Noise Current Injection in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2055_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="white-noise-current-injection-in-neuron">
+<span id="white-noise-current-injection"></span><h1>White Noise Current Injection in NEURON<a class="headerlink" href="#white-noise-current-injection-in-neuron" title="Link to this heading"></a></h1>
+<p>This section explains how to implement a current injection with additive white Gaussian noise in a NEURON point process mechanism using NMODL. It discusses common pitfalls and provides a robust example implementation.</p>
+<section id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
+<p>You may want to model an external current input of the form:</p>
+<div class="math notranslate nohighlight">
+\[I(t) = f(t) + D \cdot n(t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(f(t)\)</span> is a deterministic function of time, and <span class="math notranslate nohighlight">\(n(t)\)</span> is white Gaussian noise with zero mean and standard deviation <span class="math notranslate nohighlight">\(D\)</span>. A common naive approach is to use the built-in NMODL function <code class="xref py py-func docutils literal notranslate"><span class="pre">normrand()</span></code> inside the <code class="code docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block, e.g.,</p>
+<div class="highlight-neuron notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+    if (t &gt;= del &amp;&amp; t &lt;= del + dur) {
+        noise = normrand(0, std)
+        amp = f(t)
+        i = amp + noise + bias
+    } else {
+        i = 0
+    }
+}
+</pre></div>
+</div>
+<p>However, this approach can cause numerical instability and warnings like
+<code class="docutils literal notranslate"><span class="pre">exp(###)</span> <span class="pre">out</span> <span class="pre">of</span> <span class="pre">range,</span> <span class="pre">returning</span> <span class="pre">exp(700)</span></code>, leading to unrealistic membrane potentials. This is due to the fact that the <code class="code docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block is executed twice per time step to calculate derivatives, causing multiple calls to <code class="xref py py-func docutils literal notranslate"><span class="pre">normrand()</span></code>, which introduces large, abrupt fluctuations in the injected current and its effective conductance, destabilizing the model.</p>
+</section>
+<section id="correct-implementation-using-before-breakpoint-and-net-receive">
+<h2>Correct Implementation Using BEFORE BREAKPOINT and NET_RECEIVE<a class="headerlink" href="#correct-implementation-using-before-breakpoint-and-net-receive" title="Link to this heading"></a></h2>
+<p>To avoid this, compute the noisy current once per time step in the <code class="code docutils literal notranslate"><span class="pre">BEFORE</span> <span class="pre">BREAKPOINT</span></code> block, and use NEURON’s event delivery system along with a state variable to control when the current injection is active. The <code class="code docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block only assigns the previously computed current value to <code class="code docutils literal notranslate"><span class="pre">i</span></code>.</p>
+<p>Below is a full example of a noise current clamp point process with delayed onset and finite duration, where the deterministic component smoothly varies, and the noise has standard deviation <code class="code docutils literal notranslate"><span class="pre">std</span></code>.</p>
+<div class="highlight-neuron notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS IClampNoise
+    RANGE i, del, dur, f0, f1, r, torn, std, bias
+    ELECTRODE_CURRENT i
+}
+
+UNITS {
+    (nA) = (nanoamp)
+}
+
+PARAMETER {
+    del = 50    (ms)     : delay before current starts
+    dur = 200   (ms)     : duration of current injection
+    torn = 500  (ms)     : time of transition in amp(t)
+    std = 0.2   (nA)     : noise standard deviation
+    f0 = 0.2    (nA)     : lower bound of deterministic amp
+    f1 = 0.8    (nA)     : upper bound of deterministic amp
+    r = 60                 : smoothing parameter (ms)
+    bias = 0    (nA)     : constant bias current
+}
+
+ASSIGNED {
+    ival (nA)    : intermediate current value
+    i (nA)       : electrode current
+    amp (nA)     : deterministic amplitude at time t
+    noise (nA)   : noise value sampled
+    on (1)       : state flag for current injection on/off
+}
+
+INITIAL {
+    i = 0
+    on = 0
+    net_send(del, 1)   : schedule event to start
+}
+
+PROCEDURE seed(x) {
+    : Set random seed from hoc at initialization, e.g.:
+    : objref rng
+    : rng = new Random()
+    : rng.MCellRan4(x, 0)
+    set_seed(x)
+}
+
+BEFORE BREAKPOINT {
+    if (on == 1) {
+        noise = normrand(0, std * 1(/nA)) * 1(nA) : generate noise with units
+        amp = f0 + 0.5 * (f1 - f0) * (tanh((t - torn) / (r / 3) - 3) + 1)
+        ival = amp + noise + bias
+    } else {
+        ival = 0
+    }
+}
+
+BREAKPOINT {
+    i = ival
+}
+
+NET_RECEIVE(flag) {
+    if (flag == 1) {
+        if (on == 0) {
+            on = 1
+            net_send(dur, 1)   : schedule event to stop after duration
+        } else {
+            on = 0
+        }
+    }
+}
+</pre></div>
+</div>
+</section>
+<section id="explanation">
+<h2>Explanation<a class="headerlink" href="#explanation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The <code class="code docutils literal notranslate"><span class="pre">INITIAL</span></code> block initializes <code class="code docutils literal notranslate"><span class="pre">i</span></code> and turns the current injection off (<code class="code docutils literal notranslate"><span class="pre">on</span> <span class="pre">=</span> <span class="pre">0</span></code>). It schedules a self-event after <code class="code docutils literal notranslate"><span class="pre">del</span></code> milliseconds to turn the current on.</p></li>
+<li><p>The <code class="code docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> block toggles the state variable <code class="code docutils literal notranslate"><span class="pre">on</span></code> between 0 and 1 each time a self-event arrives, implementing a state machine that controls the injection time window.</p></li>
+<li><p>The <code class="code docutils literal notranslate"><span class="pre">BEFORE</span> <span class="pre">BREAKPOINT</span></code> block executes once per time step before the <code class="code docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> and generates a new noise value using <code class="xref py py-func docutils literal notranslate"><span class="pre">normrand()</span></code>. The deterministic amplitude <code class="code docutils literal notranslate"><span class="pre">amp</span></code> smoothly transitions according to a scaled hyperbolic tangent function.</p></li>
+<li><p>Noise intensity <code class="code docutils literal notranslate"><span class="pre">std</span></code> is scaled carefully with units to avoid unit mismatch.</p></li>
+<li><p>The <code class="code docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block assigns the precomputed total current <code class="code docutils literal notranslate"><span class="pre">ival</span></code> to the output <code class="code docutils literal notranslate"><span class="pre">i</span></code>. This avoids multiple noise samples per time step, stabilizing the simulation.</p></li>
+</ul>
+</section>
+<section id="usage-notes">
+<h2>Usage Notes<a class="headerlink" href="#usage-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use the provided <code class="xref py py-meth docutils literal notranslate"><span class="pre">seed()</span></code> procedure to initialize the random number generator seed for reproducibility.</p></li>
+<li><p>Avoid calling random number generators directly in <code class="code docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> blocks because they are executed multiple times per time step.</p></li>
+<li><p>Control injection timing with NEURON’s event delivery system (<code class="code docutils literal notranslate"><span class="pre">net_send</span></code>) instead of deprecated functions like <code class="code docutils literal notranslate"><span class="pre">at_time()</span></code>.</p></li>
+<li><p>The variable <code class="code docutils literal notranslate"><span class="pre">on</span></code> acts as a binary switch for current injection.</p></li>
+</ul>
+</section>
+<section id="example-hoc-initialization">
+<h2>Example Hoc Initialization<a class="headerlink" href="#example-hoc-initialization" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref iclamp
+iclamp = new IClampNoise(0.5)
+iclamp.del = 100
+iclamp.dur = 500
+iclamp.std = 0.1
+iclamp.bias = 0
+iclamp.seed(1234)  : sets random seed for reproducibility
+</pre></div>
+</div>
+</section>
+<section id="discussion-parameters-torn-and-r">
+<h2>Discussion: Parameters <code class="code docutils literal notranslate"><span class="pre">torn</span></code> and <code class="code docutils literal notranslate"><span class="pre">r</span></code><a class="headerlink" href="#discussion-parameters-torn-and-r" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">torn</span></code> specifies the center time of the transition in the deterministic current amplitude.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">r</span></code> controls the smoothness of the transition; larger values broaden the transition time.</p></li>
+<li><p>The deterministic amplitude <code class="code docutils literal notranslate"><span class="pre">amp</span></code> is generated using a scaled hyperbolic tangent function to smoothly ramp from <code class="code docutils literal notranslate"><span class="pre">f0</span></code> to <code class="code docutils literal notranslate"><span class="pre">f1</span></code>.</p></li>
+</ul>
+</section>
+<section id="additional-example-noisy-conductance-based-synapse">
+<h2>Additional Example: Noisy Conductance-Based Synapse<a class="headerlink" href="#additional-example-noisy-conductance-based-synapse" title="Link to this heading"></a></h2>
+<p>A similar approach applies to conductance-based synapses with noise, where noise generation is moved to <code class="code docutils literal notranslate"><span class="pre">BEFORE</span> <span class="pre">BREAKPOINT</span></code>, and current updates are controlled via event scheduling and state variables. For example:</p>
+<div class="highlight-neuron notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS Alpha2SynNoise
+    RANGE tau1, tau2, e, i, mean, stddev, del, dur, g, on
+    NONSPECIFIC_CURRENT i
+}
+
+UNITS {
+    (nA) = (nanoamp)
+    (mV) = (millivolt)
+    (uS) = (microsiemens)
+}
+
+PARAMETER {
+    tau1 = 0.1 (ms) &lt;1e-9,1e9&gt;
+    tau2 = 10 (ms) &lt;1e-9,1e9&gt;
+    e = 0 (mV)
+    del = 0 (ms)
+    dur = 0 (ms)
+    mean = 1
+    stddev = 0.2
+}
+
+ASSIGNED {
+    v (mV)
+    i (nA)
+    g (uS)
+    factor
+    gnoise
+    on
+}
+
+STATE {
+    A (uS)
+    B (uS)
+}
+
+INITIAL {
+    if (tau1/tau2 &gt; 0.9999) {
+        tau1 = 0.9999 * tau2
+    }
+    A = 0
+    B = 0
+    LOCAL tp
+    tp = (tau1 * tau2) / (tau2 - tau1) * log(tau2 / tau1)
+    factor = -exp(-tp / tau1) + exp(-tp / tau2)
+    factor = 1 / factor
+    on = 1            : must be initialized ON to avoid segmentation fault
+    net_send(del, 1)
+}
+
+PROCEDURE seed(x) {
+    set_seed(x)
+}
+
+BEFORE BREAKPOINT {
+    if (on == 1) {
+        gnoise = normrand(mean, stddev)
+    } else {
+        gnoise = 0
+    }
+}
+
+BREAKPOINT {
+    SOLVE state METHOD cnexp
+    g = (B - A) * gnoise
+    i = g * (v - e)
+}
+
+DERIVATIVE state {
+    A&#39; = -A / tau1
+    B&#39; = -B / tau2
+}
+
+NET_RECEIVE(weight (uS)) {
+    A = A + weight * factor
+    B = B + weight * factor
+
+    if (flag == 1) {
+        if (on == 0) {
+            on = 1
+            net_send(dur, 1)
+        } else {
+            on = 0
+        }
+    }
+}
+</pre></div>
+</div>
+<p>Note that in this example, initializing <code class="code docutils literal notranslate"><span class="pre">on</span> <span class="pre">=</span> <span class="pre">1</span></code> in the <code class="code docutils literal notranslate"><span class="pre">INITIAL</span></code> block avoids segmentation faults related to the noise calculation before the event scheduling.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Always ensure state variables controlling noise generation are valid at simulation start to avoid crashes.</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use the <code class="code docutils literal notranslate"><span class="pre">BEFORE</span> <span class="pre">BREAKPOINT</span></code> block for noise generation to ensure one random draw per integration step.</p></li>
+<li><p>Use NEURON’s event system (<code class="code docutils literal notranslate"><span class="pre">net_send</span></code> and <code class="code docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code>) to schedule current onset and offset.</p></li>
+<li><p>Avoid deprecated functions like <code class="code docutils literal notranslate"><span class="pre">at_time()</span></code>.</p></li>
+<li><p>Initialize all state variables properly.</p></li>
+<li><p>Use <code class="xref py py-meth docutils literal notranslate"><span class="pre">seed()</span></code> to control randomness and reproducibility.</p></li>
+</ul>
+<p>This approach produces stable, physically plausible noisy current injections suitable for modeling stochastic synaptic inputs or fluctuating current injections in biophysical neuron models.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2055">https://neuron.yale.edu/phpBB/viewtopic.php?t=2055</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

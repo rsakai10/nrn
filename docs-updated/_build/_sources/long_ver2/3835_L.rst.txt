@@ -1,0 +1,144 @@
+Tracking Synaptic Currents from a Dendritic Bouton to the Soma
+===============================================================
+
+When simulating biophysically realistic neurons with distributed synaptic inputs in NEURON, a common question is how to determine the contribution of a particular synapse or synaptic population (e.g., boutons from CA3 or PV interneurons) to the synaptic current measured at the soma. This section explains the conceptual and practical considerations involved and methods to quantify such contributions.
+
+Conceptual Background
+---------------------
+
+1. **Synaptic Currents and Membrane Potentials**
+
+   Each synapse modeled as a conductance change (e.g., `AlphaSynapse`, `ExpSyn`) injects current locally, which alters the membrane potential of the compartment it resides on. The local change in membrane potential then spreads electrotonically along the cable structure of the neuron, affecting neighboring compartments, including the soma. 
+
+2. **Why You Cannot Directly "Track" Synaptic Currents**
+
+   The synaptic current entering at a bouton compartment becomes part of the total membrane current of that compartment immediately and is no longer distinguishable as originating from that synapse. Intracellular ionic currents do not physically flow across the entire cell as discrete packets; rather, changes in local membrane potential change how charge redistributes through the cable.
+
+   NEURON solves the cable equations numerically by calculating changes in transmembrane voltages and currents at each compartment over time with no inherent label linking current at the soma back to individual synapses.
+
+3. **Nonlinear Interactions and Conductance Effects**
+
+   - Conductance-based synapses alter local membrane conductance, which influences the driving force (difference between membrane potential and synaptic reversal potential) for all synapses and affects the current flow pattern.
+   - Increased local conductance can shunt currents from other synapses, causing nonlinear interactions between synaptic inputs.
+   - These effects mean synaptic contributions to somatic current depend on the entire spatial and temporal pattern of synaptic activity and are not strictly additive.
+
+Naive Approach to Estimating Synapse Contribution
+--------------------------------------------------
+
+Given these complexities, a simple method to estimate the contribution of a particular synapse or synaptic group to somatic current is as follows:
+
+1. Run a simulation with all synapses active and record the somatic membrane current (`i_soma_control`).
+
+2. Run another simulation in which the synapse (or synaptic population) of interest is not activated and record the somatic membrane current (`i_soma_test`).
+
+3. Compute the difference:
+
+   .. code-block:: python
+
+      i_synapse_contribution = i_soma_control - i_soma_test
+
+This difference approximates the contribution of that synapse or synaptic population to the somatic current during the simulated period.
+
+Limitations of the Naive Approach
+---------------------------------
+
+- The method requires multiple simulations per synapse or synaptic group, which is computationally expensive for large numbers of inputs.
+- The estimate is an approximation because:
+
+  - Synaptic currents interact nonlinearly through changes in membrane potential and local conductance.
+  - The result depends on the specific spatiotemporal pattern of synaptic activation.
+  
+- Many repetitions with different activity patterns may be needed for meaningful statistics.
+
+Practical Implementation in NEURON
+----------------------------------
+
+Below is an outline of how to implement this approach using Python and NEURON:
+
+1. **Model Setup**
+
+   - Create your neuron morphology and biophysics.
+   - Place synapses at desired locations (e.g., distribute CA3 synapses on proximal apical segments).
+   - Assign synaptic parameters (`gmax`, `tau`, etc.) per literature.
+   - Set up NetStim or other stimuli to control activation timing.
+
+2. **Recording Somatic Current**
+
+   In Python, record the somatic transmembrane current:
+
+   .. code-block:: python
+
+      from neuron import h
+      soma = h.section(name='soma')[0]  # example soma section
+      i_soma_vec = h.Vector()
+      t_vec = h.Vector()
+      
+      # Record soma transmembrane current (Im)
+      i_soma_vec.record(soma(0.5)._ref_i_membrane_)
+      t_vec.record(h._ref_t)
+
+3. **Control Simulation (All Synapses Active)**
+
+   - Activate all synapses.
+   - Run the simulation, save `i_soma_control` from `i_soma_vec`.
+
+4. **Test Simulation (Synapse X Inactive)**
+
+   - Deactivate synapse X or synaptic population (e.g., by disabling its NetCon or setting `gmax=0`).
+   - Run the simulation, save `i_soma_test`.
+
+5. **Calculate Approximate Contribution**
+
+   .. code-block:: python
+
+      import numpy as np
+
+      i_synapse_contribution = np.array(i_soma_control) - np.array(i_soma_test)
+
+6. **Repeat for Other Synapses or Conditions**
+
+   - Run several such paired simulations for different synapses or groups.
+   - Aggregate contributions to identify population effects at the soma.
+
+Example HOC Code Snippet to Record Somatic Current
+-------------------------------------------------
+
+.. code-block:: hoc
+
+      objref i_soma_vec, t_vec
+      i_soma_vec = new Vector()
+      t_vec = new Vector()
+
+      // Record soma membrane current at 0.5 location
+      i_soma_vec.record(&soma(0.5).i_membrane_)
+      t_vec.record(&t)
+
+      run()
+
+Key Points to Understand About NEURON Simulations
+-------------------------------------------------
+
+- Synaptic current entering a compartment adds to the charge and changes local membrane potential; it does not propagate as a labeled current.
+- NEURON numerically solves the compartmentalized cable equation accounting for all conductance changes and ionic currents.
+- Interaction between synaptic inputs is nonlinear when conductance changes and voltage-dependent mechanisms are considered.
+- Assumptions of spatial and temporal linearity (valid for low-rate activation and subthreshold membrane potential ranges) can simplify interpretations but should be validated.
+
+Summary
+-------
+
+- Directly tracking synaptic current from a dendritic bouton to the soma as a unique, traceable quantity is not possible in NEURON.
+- Approximate estimation of synapse-specific somatic current can be performed by comparative simulations (with and without the synapse activated).
+- Interpret results cautiously due to nonlinear and context-dependent interactions of conductance-based synapses.
+- For more detailed quantitative analyses of linear integration, foundational theoretical work by Jaffe and Carnevale (1999) and others can be consulted.
+
+.. note::
+
+   This explanation is based on fundamental principles of cable theory and NEURON's numerical methods as described by Hines and Carnevale (1997). Understanding these principles is essential for realistic simulation and interpretation of synaptic integration in neurons.
+
+.. seealso::
+
+   :class:`AlphaSynapse`, :meth:`Section.insert`, :meth:`Vector.record`, :func:`h.run`
+
+
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3835 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3835>`_

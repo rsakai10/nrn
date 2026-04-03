@@ -1,0 +1,234 @@
+Na and Persistent NaP Channels with Separate NMODL Mechanisms
+==============================================================
+
+When modeling multiple sodium currents such as a fast-activating Na channel and a persistent NaP channel in the same neuron, it is recommended to implement each current as a separate NMODL mechanism in distinct `.mod` files. This approach facilitates software maintenance, modularity, and allows for individual access and plotting of each channel's conductance and current.
+
+Implementation Details
+----------------------
+
+### Separate Mechanism Files
+
+- **Fast Na channel (`nat.mod`)**  
+  Define a mechanism with SUFFIX `nat` that reads the sodium reversal potential (`ena`) and writes to the sodium ionic current (`ina`). The activation and inactivation gates (e.g., `m` and `h`) are updated through typical Hodgkin-Huxley type kinetics. For example:
+
+  .. code-block:: mod
+  
+     NEURON {
+       SUFFIX nat
+       USEION na READ ena WRITE ina
+       RANGE gbar, i, g
+     }
+     STATE { m h }
+     ASSIGNED { v ena i g minf hinf }
+     PARAMETER { gbar = 0.12 }
+     
+     BREAKPOINT {
+       SOLVE states METHOD cnexp
+       g = gbar * m*m * h
+       i = g * (v - ena)
+       ina = i
+     }
+     
+     INITIAL {
+       rates(v)
+       m = minf
+       h = hinf
+     }
+     
+     PROCEDURE rates(v(mV)) {
+       ...  // define malpha, mbeta, halpha, hbeta; calculate minf, hinf
+     }
+     
+  You should define or import appropriate rate functions for activation and inactivation gating variables.
+
+- **Persistent NaP channel (`nap.mod`)**  
+  Similarly, define a mechanism with SUFFIX `nap` to represent the persistent sodium current characterized by a non-inactivating gating variable (typically only activation gate `m`):
+
+  .. code-block:: mod
+  
+     NEURON {
+       SUFFIX nap
+       USEION na READ ena WRITE ina
+       RANGE gbar, i, g
+     }
+     STATE { m }
+     ASSIGNED { v ena i g minf }
+     PARAMETER { gbar = 0.01 }
+     
+     BREAKPOINT {
+       SOLVE states METHOD cnexp
+       g = gbar * m*m*m  // e.g. m^3 activation
+       i = g * (v - ena)
+       ina = i
+     }
+     
+     INITIAL {
+       rates(v)
+       m = minf
+     }
+     
+     PROCEDURE rates(v(mV)) {
+       ... // define malpha, mbeta; compute minf
+     }
+  
+### Ionic Current Summation
+
+Both mechanisms write independently to the sodium current variable `ina`. NEURON automatically sums these contributions, so the total sodium current in a neuron segment is the sum of `ina` from all inserted sodium mechanisms.
+
+Accessing and Plotting Individual Channel Currents
+--------------------------------------------------
+
+Each mechanism has its own current variable (e.g., `i`), and these can be exposed for plotting or further analysis by declaring them with the `RANGE` keyword in the NEURON block and properly assigning values in the BREAKPOINT block.
+
+However, by default, when multiple mechanisms write to the same ionic current variable (e.g., `ina`), the individual component currents are not directly accessible from hoc or Python objects using suffix-specific attributes like `ina_nat`.
+
+To enable access to per-mechanism currents, follow these steps in each `.mod` file:
+
+1. Add the current variable to the `RANGE` variables in the NEURON block, e.g.:
+
+   .. code-block:: mod
+   
+      NEURON {
+        SUFFIX nat
+        USEION na READ ena WRITE ina
+        RANGE gbar, i, g, ina_component
+      }
+   
+2. In the `ASSIGNED` block, declare the variable type and units:
+
+   .. code-block:: mod
+   
+      ASSIGNED {
+        v (mV)
+        ena (mV)
+        i (mA/cm2)
+        ina_component (mA/cm2)
+        g (mho/cm2)
+      }
+   
+3. In the `BREAKPOINT` block, assign the computed current to both the ionic variable and the component variable:
+
+   .. code-block:: mod
+   
+      BREAKPOINT {
+        SOLVE states METHOD cnexp
+        g = gbar * m*m * h
+        i = g * (v - ena)
+        ina = i
+        ina_component = i
+      }
+
+4. After recompiling the mechanisms with `nrnivmodl` or `mknrndll`, you can access the individual current `ina_component` in hoc or Python by suffix, for example:
+
+   **Python example:**
+
+   .. code-block:: python
+   
+      # Assuming `sec` is a Section where nat mechanism is inserted
+      ivalue = sec(0.5).ina_component_nat  # individual current of nat mechanism
+
+Note that the exact variable name in hoc or Python corresponds to the variable name with suffix appended as `variable_suffix`. For example, if the variable is `ina_component` and suffix is `nat`, then it is accessed as `ina_component_nat`.
+
+Plotting Example for Multiple K Currents
+----------------------------------------
+
+If you have multiple potassium current mechanisms, such as standard Hodgkin-Huxley K channel and an M-type K channel with suffix `im`, each writing to `ik` ionic current, then by default their contributions sum into `ik`. To access individual currents from these mechanisms, the same approach applies: expose individual ionic currents as `RANGE` variables with distinct names per mechanism.
+
+Example modification for M-current:
+
+.. code-block:: mod
+
+   NEURON {
+     SUFFIX im
+     USEION k READ ek WRITE ik
+     RANGE gbar, i_m, g
+   }
+   
+   ASSIGNED {
+     v (mV)
+     ek (mV)
+     i_m (mA/cm2)
+     g (mho/cm2)
+   }
+   
+   BREAKPOINT {
+     SOLVE states METHOD cnexp
+     g = gbar * m*m*m
+     i_m = g * (v - ek)
+     ik = i_m
+   }
+
+Then from hoc/Python:
+
+.. code-block:: python
+
+   # To access M-current component of potassium current
+   ik_M_current = cell.soma[0].i_m(0.5)
+
+Temperature Dependence Using Q10
+--------------------------------
+
+To incorporate temperature dependence in channel kinetics, you can scale rate constants by a temperature factor derived from Q10 values according to the formula:
+
+.. math::
+
+   \text{temperature\_factor} = Q_{10}^{\frac{T - T_{\text{ref}}}{10}}
+
+where:
+
+- :math:`T` is the experimental temperature in °C,
+- :math:`T_{\text{ref}}` is the reference temperature at which original rate constants are defined,
+- :math:`Q_{10}` is the temperature coefficient.
+
+Practical implementation in NMODL:
+
+1. Define `celsius`, `q10`, and `q10_factor` variables:
+
+   .. code-block:: mod
+   
+      NEURON {
+        ...
+        RANGE q10, q10_factor
+      }
+      ASSIGNED {
+        celsius (degC)
+        q10
+        q10_factor
+      }
+
+2. Calculate `q10_factor` in the `INITIAL` or `BREAKPOINT` block:
+
+   .. code-block:: mod
+   
+      INITIAL {
+        q10_factor = pow(q10, (celsius - Tref)/10)
+        ...
+      }
+
+3. Modify rate calculations by multiplying rate constants with `q10_factor`.
+
+Example:
+
+.. code-block:: mod
+
+   PROCEDURE rates(v(mV)) {
+     alpha_m = malpha(v) * q10_factor
+     beta_m = mbeta(v) * q10_factor
+     ...
+   }
+
+This approach aligns channel kinetics to the simulation temperature with respect to a baseline temperature.
+
+Summary
+-------
+
+- Implement each sodium current mechanism (fast Na and persistent NaP) in separate `.mod` files with distinct SUFFIXes.
+- Use independent ionic current variables with `RANGE` declared to access and plot individual currents.
+- Remember to assign these variables properly inside the BREAKPOINT block.
+- For temperature adjustment, use a `q10` factor to scale channel rate functions according to simulation temperature.
+
+.. seealso::
+
+   :mod:`NMODL` programming documentation, the :class:`Section` class for model construction and current access, and the temperature scaling concepts in channel kinetics.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=346 <https://neuron.yale.edu/phpBB/viewtopic.php?t=346>`_

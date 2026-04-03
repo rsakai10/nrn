@@ -1,0 +1,218 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation Time Step Restrictions and How to Set Larger Time Steps &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Simulation Time Step Restrictions and How to Set Larger Time Steps</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3693_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="simulation-time-step-restrictions-and-how-to-set-larger-time-steps">
+<h1>Simulation Time Step Restrictions and How to Set Larger Time Steps<a class="headerlink" href="#simulation-time-step-restrictions-and-how-to-set-larger-time-steps" title="Link to this heading"></a></h1>
+<p>When simulating biological neuron models in NEURON, you may encounter situations where attempting to set the integration time step (<cite>dt</cite>) to a value larger than 0.025 ms results in NEURON automatically resetting <cite>dt</cite> back to 0.025 ms during the simulation. This behavior can be confusing when you want to use a larger time step for faster simulations.</p>
+<section id="cause">
+<h2>Cause<a class="headerlink" href="#cause" title="Link to this heading"></a></h2>
+<p>Certain models or built-in mechanisms in NEURON internally control the simulation time step by setting the variable <cite>steps_per_ms</cite>. This variable defines how many integration steps occur in one millisecond and constrains the allowed values of <cite>dt</cite>. Because</p>
+<div class="math notranslate nohighlight">
+\[dt = \frac{1}{steps\_per\_ms}\]</div>
+<p>setting <cite>steps_per_ms</cite> will override any manual assignment of <cite>dt</cite> if they are inconsistent.</p>
+</section>
+<section id="setting-a-larger-time-step-properly">
+<h2>Setting a Larger Time Step Properly<a class="headerlink" href="#setting-a-larger-time-step-properly" title="Link to this heading"></a></h2>
+<p>To use a larger time step (e.g., dt = 0.05 ms), you must update both <cite>dt</cite> and <cite>steps_per_ms</cite> in a consistent manner. The following relationship should hold:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">desired_dt</span>           <span class="c1"># e.g., 0.05</span>
+<span class="n">h</span><span class="o">.</span><span class="n">steps_per_ms</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">h</span><span class="o">.</span><span class="n">dt</span> <span class="c1"># e.g., 20</span>
+</pre></div>
+</div>
+<p>This ensures that NEURON uses the specified <cite>dt</cite> during the simulation and does not override it automatically.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<p>In Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">desired_dt</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># ms, a time step larger than 0.025 ms</span>
+<span class="n">h</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">desired_dt</span>
+<span class="n">h</span><span class="o">.</span><span class="n">steps_per_ms</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">desired_dt</span>
+
+<span class="c1"># Proceed with model setup and simulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># run simulation for 100 ms</span>
+</pre></div>
+</div>
+<p>In HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref h
+h = new NEURONObject
+desired_dt = 0.05
+dt = desired_dt   // Set dt
+steps_per_ms = 1.0 / dt  // Set steps_per_ms accordingly
+
+finitialize()
+continue(100)  // run simulation for 100 ms
+</pre></div>
+</div>
+</section>
+<section id="note">
+<h2>Note<a class="headerlink" href="#note" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always ensure that <cite>h.steps_per_ms</cite> matches the inverse of <cite>h.dt</cite>.</p></li>
+<li><p>If <cite>steps_per_ms</cite> is not updated accordingly, NEURON will reset <cite>dt</cite> to match the pre-existing <cite>steps_per_ms</cite> value, often 0.025 ms.</p></li>
+<li><p>Setting smaller time steps (<cite>dt &lt;= 0.025 ms</cite>) generally does not cause this issue because the default <cite>steps_per_ms</cite> can accommodate these values.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">h.dt</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">h.steps_per_ms</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.finitialize()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.continuerun()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3693">https://neuron.yale.edu/phpBB/viewtopic.php?t=3693</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

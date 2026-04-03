@@ -1,0 +1,57 @@
+Default Parameters in NEURON
+=============================
+
+When creating a new section in NEURON, the default biophysical parameters are set based on classical experimental preparations, primarily the squid giant axon. Understanding these defaults helps in interpreting simulations and adapting models for specific cell types.
+
+Default Section Parameters
+--------------------------
+
+- **Diameter:** The default diameter of a newly created section corresponds to that of the squid giant axon.
+- **Specific Membrane Capacitance (cm):** Set to values measured in squid giant axon experiments.
+- **Cytoplasmic Resistivity (Ra):** Also based on squid giant axon data.
+
+Hodgkin-Huxley Mechanism Parameters
+-----------------------------------
+
+The built-in Hodgkin-Huxley mechanism (:class:`hh`) parameters reflect the seminal work by Hodgkin and Huxley on the squid giant axon.
+
+Example in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section(name='axon')
+    print("Default diameter:", sec.diam)
+    print("Default membrane capacitance (cm):", sec.cm)
+    print("Default cytoplasmic resistivity (Ra):", sec.Ra)
+
+    hh_mech = sec.insert("hh")
+    print("hh.gnabar_hh (sodium conductance):", hh_mech.gnabar_hh)
+    print("hh.gkbar_hh (potassium conductance):", hh_mech.gkbar_hh)
+    print("hh.gl_hh (leak conductance):", hh_mech.gl_hh)
+    print("hh.el_hh (leak reversal potential):", hh_mech.el_hh)
+
+Equivalent HOC code:
+
+.. code-block:: hoc
+
+    create axon
+    print "Default diameter: ", axon.diam
+    print "Default membrane capacitance (cm): ", axon.cm
+    print "Default cytoplasmic resistivity (Ra): ", axon.Ra
+
+    axon insert hh
+    print "hh.gnabar_hh (sodium conductance): ", axon.gnabar_hh
+    print "hh.gkbar_hh (potassium conductance): ", axon.gkbar_hh
+    print "hh.gl_hh (leak conductance): ", axon.gl_hh
+    print "hh.el_hh (leak reversal potential): ", axon.el_hh
+
+.. note::
+
+    The default parameters are intended to model the squid giant axon as studied in the original Hodgkin-Huxley papers. For simulating other species or cell types, it is recommended to adjust these parameters to values obtained from relevant experimental data.
+
+.. seealso::
+
+    :class:`Section`, :class:`hh` membrane mechanism, :meth:`Section.insert`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4561 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4561>`_

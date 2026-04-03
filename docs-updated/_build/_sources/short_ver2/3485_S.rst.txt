@@ -1,0 +1,76 @@
+Spatial Discretization for Radial Diffusion of Ca
+=================================================
+
+When modeling calcium dynamics using radial shells with mechanisms such as calcium accumulation and BK channels, the shell thickness varies with section diameter, affecting calcium concentration signals seen by membrane channels.
+
+Key recommendations for discretization:
+
+- There is no direct analog to the *d_lambda* rule for radial diffusion discretization; empirical testing is advised.
+
+- Use a simplified model cell (e.g., single section, length ~10 μm) where shell thickness is a fixed fraction of the radius. Compare versions with different numbers of shells (e.g., 4, 2, 10, 50, 250 shells) to find discretization that balances accuracy and efficiency.
+
+- The outermost shell should be half as thick as the others to ensure second-order spatial accuracy at the membrane surface where BK channels reside.
+
+- To model BK channel activation by calcium, use the calcium concentration in the outermost shell or at a fixed radial depth; discrepancies between these approaches should be evaluated for functional significance.
+
+- Assess differences in BK channel conductance and current integrals over relevant timescales to determine if discretization changes produce meaningful effects, considering biological variability in channel densities.
+
+Example snippet calculating shell volumes with varying thicknesses (from `cabpump.mod`):
+
+.. code-block:: hoc
+
+    PROCEDURE coord() {
+        LOCAL r, dr2
+        r = 1/2                : half diameter (start at outer radius)
+        dr2 = r/(NANN)         : full thickness of each annulus
+        vol[0] = 0
+        frat[0] = 2*r
+        FROM i=0 TO NANN-1 {
+            vol[i] = PI*(r^2 - (r - dr2)^2)*1    : shell volume for unit length
+            frat[i] = 2*PI*r / dr2                : outer edge circumference / shell thickness
+            r = r - dr2
+        }
+    }
+
+On alternative equal-thickness shells, note that the second-order central difference scheme favors an outer shell half-thickness for spatial accuracy as explained in *The NEURON Book*, to correctly position the calcium concentration at the membrane.
+
+Modeling Calcium and ER Compartments
+------------------------------------
+
+To represent cytoplasmic and ER volumes within shells, use :keyword:`COMPARTMENT` in the kinetic block with volume fractions:
+
+.. code-block:: mod
+
+    KINETIC state {
+        COMPARTMENT ii, (1 + bbr) * diam * diam * vol[ii] * 0.83 { ca }   : cytoplasm volume fraction with buffer binding ratio bbr
+        COMPARTMENT jj, diam * diam * vol[jj] * 0.17 { caer }             : ER volume fraction
+
+        : Example SERCA pump flux affecting both compartments:
+        FROM i=0 TO NANN-1 {
+            dsqvol = diam * diam * vol[i] * 0.83
+            dsqvoler = diam * diam * vol[i] * 0.17
+
+            jserca[i] = (-vmaxsr * ca[i]^2 / (ca[i]^2 + kpsr^2))
+            ~ ca[i] << (dsqvol * jserca[i])
+            ~ caer[i] << (-dsqvoler * jserca[i])
+        }
+    }
+
+Ensure that :var:`caer` is declared as a state variable and initialized appropriately in the :keyword:`INITIAL` block.
+
+.. note::
+
+   Validate implementation correctness by running simple simulations, perturbing parameters such as buffering, and verifying biologically plausible calcium dynamics.
+
+References
+----------
+
+.. seealso::
+
+   :mod:`cabpump` example for calcium dynamics implementation,
+
+   :ref:`kinetic-schemes`,
+
+   :class:`h.SEClamp`, :class:`h.Section` for simulation setup and stimulus application.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3485 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3485>`_

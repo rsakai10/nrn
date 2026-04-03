@@ -1,0 +1,26 @@
+.. rubric:: HOC Argument Notation: $o1 vs $1
+
+In HOC procedures or functions, argument variables are referenced using the `$` symbol followed by a number. The difference between `$1` and `$o1` is:
+
+- ``$1`` refers to the first argument when it is a scalar value.
+- ``$o1`` refers to the first argument when it is an object reference.
+
+For example:
+
+.. code-block:: hoc
+
+    proc init() {
+        netstimA = $o1  // Assign first argument, an object, to netstimA
+    }
+
+This notation allows HOC to distinguish between scalar and object-type arguments passed into functions or procedures.
+
+.. note::
+
+   This is a HOC language syntax feature for argument access within functions or procedures.
+
+.. seealso::
+
+   :class:`Object`, HOC procedural syntax documentation
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3418 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3418>`_

@@ -1,0 +1,583 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StringFunctions (String Manipulation Class) &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">StringFunctions (String Manipulation Class)</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/matlab/programming/strfun.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><dl class="docutils"><dt><a href="#StringFunctions" title="Link to this definition">StringFunctions</a></dt><dd><a href="#StringFunctions.alias" title="Link to this definition">alias</a> &middot; <a href="#StringFunctions.alias_list" title="Link to this definition">alias_list</a> &middot; <a href="#StringFunctions.head" title="Link to this definition">head</a> &middot; <a href="#StringFunctions.is_artificial" title="Link to this definition">is_artificial</a> &middot; <a href="#StringFunctions.is_name" title="Link to this definition">is_name</a> &middot; <a href="#StringFunctions.is_point_process" title="Link to this definition">is_point_process</a> &middot; <a href="#StringFunctions.left" title="Link to this definition">left</a> &middot; <a href="#StringFunctions.len" title="Link to this definition">len</a> &middot; <a href="#StringFunctions.references" title="Link to this definition">references</a> &middot; <a href="#StringFunctions.right" title="Link to this definition">right</a> &middot; <a href="#StringFunctions.substr" title="Link to this definition">substr</a> &middot; <a href="#StringFunctions.tail" title="Link to this definition">tail</a></dd></dl></p><section id="stringfunctions-string-manipulation-class">
+<span id="strfun"></span><h1>StringFunctions (String Manipulation Class)<a class="headerlink" href="#stringfunctions-string-manipulation-class" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="StringFunctions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StringFunctions</span></span><a class="headerlink" href="#StringFunctions" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>Description:</dt><dd><p>The StringFunctions class contains functions which you can apply to a <code class="docutils literal notranslate"><span class="pre">strdef</span></code>.  This class
+exists purely for the utility of preventing pollution of name space with string operations.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.len">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.len" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="nb">length</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">len</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Return the length of a string. Works with both NEURON string references and
+regular Python strings.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="nb">length</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">len</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="nb">length</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is approximately equivalent to <code class="docutils literal notranslate"><span class="pre">len(s)</span></code> for Python strings
+and to <code class="docutils literal notranslate"><span class="pre">len(s[0])</span></code> for references to NEURON strings, but it uses
+the same syntax for both types of strings.</p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.substr">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">substr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.substr" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Return the index into <code class="docutils literal notranslate"><span class="pre">s1</span></code> of the first occurrence of <code class="docutils literal notranslate"><span class="pre">s2</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">s2</span></code> isn’t a substring then the return value is -1.
+The arguments can be either NEURON string references or regular Python strings.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;allowed&quot;</span><span class="p">);</span>
+<span class="n">s2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;low&quot;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When working with pure Python strings (not NEURON string references), the return value is the same as
+<code class="docutils literal notranslate"><span class="pre">s1.find(s2)</span></code>. e.g., <code class="docutils literal notranslate"><span class="pre">sf.substr(&quot;allowed&quot;,</span> <span class="pre">&quot;low&quot;)</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">&quot;allowed&quot;.find(&quot;low&quot;)</span></code> and
+both return <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.head">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">head</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.head" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="s">&#39;str&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;regexp&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>The result contains the head of the string
+up to but not including the <em>regexp</em>. returns index of
+last char.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;hello world&quot;</span><span class="p">);</span>
+<span class="n">s2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[e]&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s2</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Python’s regular expression module <code class="docutils literal notranslate"><span class="pre">re</span></code>.</p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.tail">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">tail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.tail" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">tail</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;regexp&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>The result contains the tail of the string
+from the char following <em>regexp</em> to the end of the string.
+return index of first char.</p>
+<p>Other functions can be added as needed,
+e.g., <code class="docutils literal notranslate"><span class="pre">index(s1,</span> <span class="pre">c1)</span></code>, <code class="docutils literal notranslate"><span class="pre">char(s1,</span> <span class="pre">i)</span></code>, etc.
+without polluting the global name space. In recent versions
+functions can return strings.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;hello world&quot;</span><span class="p">);</span>
+<span class="n">s2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">tail</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[e]&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s2</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.right">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">right</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.right" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="p">.</span><span class="n">right</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Removes first n characters from the NEURON string <code class="docutils literal notranslate"><span class="pre">str</span></code> and puts the result
+back in <code class="docutils literal notranslate"><span class="pre">str</span></code>. This cannot be used with regular Python strings
+because they are immutable.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">sf</span><span class="p">.</span><span class="n">right</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% prints: &quot;lo&quot;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is approximately equivalent to <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">s[n:]</span></code> for Python strings
+except that it modifies the NEURON string in place. That is, <code class="docutils literal notranslate"><span class="pre">sf.right(s,</span> <span class="pre">3)</span></code>
+always changes the value of <code class="docutils literal notranslate"><span class="pre">s</span></code>, while <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">s[n:]</span></code> creates a new string
+and assigns it to <code class="docutils literal notranslate"><span class="pre">s</span></code>, but it could be assigned to any other variable and
+leave the original string unchanged.</p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.left">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">left</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.left" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">.</span><span class="n">left</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div><p>Removes all but the first n characters from the NEURON string <code class="docutils literal notranslate"><span class="pre">str</span></code> and puts
+the result back in <code class="docutils literal notranslate"><span class="pre">str</span></code>. This cannot be used with regular Python strings
+because they are immutable.</p>
+</div></blockquote>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">sf</span><span class="p">.</span><span class="n">left</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% prints &quot;hel&quot;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is approximately equivalent to <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">s[:n]</span></code> for Python strings
+except that it modifies the NEURON string in place. That is, <code class="docutils literal notranslate"><span class="pre">sf.left(s,</span> <span class="pre">3)</span></code>
+always changes the value of <code class="docutils literal notranslate"><span class="pre">s</span></code>, while <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">s[:n]</span></code> creates a new string
+and assigns it to <code class="docutils literal notranslate"><span class="pre">s</span></code>, but it could be assigned to any other variable and
+leave the original string unchanged.</p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.is_name">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">is_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.is_name" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="p">.</span><span class="n">is_name</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <code class="docutils literal notranslate"><span class="pre">item</span></code> is the name of a symbol, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.
+This is so useful that the same thing is available with the top level
+<a class="reference internal" href="internals.html#name_declared" title="name_declared"><code class="xref py py-func docutils literal notranslate"><span class="pre">name_declared()</span></code></a> function (except that returns 1 or 0 instead of True
+or False).</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&quot;hello world&quot;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">is_name</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Here is an example with one string that works,
+and another that does not:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="c">% valid name</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_name</span><span class="p">(</span><span class="s">&quot;xvalue&quot;</span><span class="p">));</span>
+<span class="c">% invalid name</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_name</span><span class="p">(</span><span class="s">&quot;xsquiggle&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is approximately equivalent to <code class="docutils literal notranslate"><span class="pre">item</span> <span class="pre">in</span> <span class="pre">dir(h)</span></code> but the Python module
+<code class="docutils literal notranslate"><span class="pre">h</span></code> contains additional names that are not NEURON symbols per se.</p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.alias">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">alias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.alias" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="p">.</span><span class="n">alias</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">_ref_var2</span><span class="p">);</span>
+
+<span class="n">sf</span><span class="p">.</span><span class="n">alias</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">obj2</span><span class="p">);</span>
+
+<span class="n">sf</span><span class="p">.</span><span class="n">alias</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;name&#39;</span><span class="p">);</span>
+
+<span class="n">sf</span><span class="p">.</span><span class="n">alias</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>“name” becomes a public variable for obj and points to the
+scalar pointed at by <code class="docutils literal notranslate"><span class="pre">_ref_var2</span></code> or object obj2. obj.name may be used anywhere the var2 or obj2 may
+be used. With no third arg, the “name” is removed from the objects
+alias list. With no second arg, the objects alias list is cleared.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">v</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">Vector</span><span class="p">();</span>
+<span class="n">sf</span><span class="p">.</span><span class="n">alias</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">_ref_t</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">([</span><span class="s">&#39;v.t = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">num2str</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">t</span><span class="p">)]);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="nb">disp</span><span class="p">([</span><span class="s">&#39;v.t = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">num2str</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">t</span><span class="p">)]);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.alias_list">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">alias_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.alias_list" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">listobj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">alias_list</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>Description:</dt><dd><p>Return a new List object containing String objects which contain
+the alias names.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The String class is not a built-in class. It generally gets declared when
+<code class="docutils literal notranslate"><span class="pre">gui</span></code> is imported or <code class="docutils literal notranslate"><span class="pre">stdrun.hoc</span></code> is loaded.
+Note that the String class must exist and its
+constructor must allow a single strdef argument. Minimally:</p>
+</div>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">n</span><span class="p">.</span><span class="n">load_file</span><span class="p">(</span><span class="s">&#39;stdrun.hoc&#39;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">v</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">Vector</span><span class="p">();</span>
+<span class="n">al</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">alias_list</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">al</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.references">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">references</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.references" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="p">.</span><span class="n">references</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Prints the number of references to the object and all objref names
+that reference that object (including references via
+<a class="reference internal" href="gui/layout.html#HBox" title="HBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">HBox</span></code></a>, <a class="reference internal" href="gui/layout.html#VBox" title="VBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">VBox</span></code></a>, and <a class="reference internal" href="gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>). It also prints the number of references found.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">soma</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">Section</span><span class="p">(</span><span class="s">&#39;soma&#39;</span><span class="p">);</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">sf</span><span class="p">.</span><span class="n">references</span><span class="p">(</span><span class="n">soma</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.is_point_process">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">is_point_process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.is_point_process" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">is_point_process</span><span class="p">(</span><span class="n">object</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Returns 0 if the object is not a POINT_PROCESS. Otherwise
+returns the point type (which is always 1 greater than the index into the
+<a class="reference internal" href="../modelspec/programmatic/mechtype.html#MechanismType" title="MechanismType"><code class="xref py py-func docutils literal notranslate"><span class="pre">MechanismType(1)</span></code></a> list). In particular, the return
+value is an integer, not a boolean, because it indicates position in a list.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">n</span><span class="p">.</span><span class="n">load_file</span><span class="p">(</span><span class="s">&#39;stdrun.hoc&#39;</span><span class="p">);</span>
+<span class="n">s1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">Section</span><span class="p">(</span><span class="s">&#39;soma&#39;</span><span class="p">);</span>
+<span class="n">syn</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ExpSyn</span><span class="p">(</span><span class="n">s1</span><span class="p">(</span><span class="mf">0.5</span><span class="p">));</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="c">% not point process</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_point_process</span><span class="p">(</span><span class="n">s1</span><span class="p">));</span>
+<span class="c">% point process</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_point_process</span><span class="p">(</span><span class="n">syn</span><span class="p">));</span>
+<span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">IntFire1</span><span class="p">();</span>
+<span class="c">% point process</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_point_process</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py method">
+<dt class="sig sig-object py" id="StringFunctions.is_artificial">
+<span class="sig-prename descclassname"><span class="pre">StringFunctions.</span></span><span class="sig-name descname"><span class="pre">is_artificial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringFunctions.is_artificial" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sf</span><span class="p">.</span><span class="n">is_artificial</span><span class="p">(</span><span class="n">object</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Returns 0 if the object is not an ARTIFICIAL_CELL. Otherwise
+returns the point type (which is always 1 greater than the index into the
+<a class="reference internal" href="../modelspec/programmatic/mechtype.html#MechanismType" title="MechanismType"><code class="xref py py-func docutils literal notranslate"><span class="pre">MechanismType(1)</span></code></a> list). In particular, the return
+value is an integer, not a boolean, because it indicates position in a list.</p>
+</dd>
+<dt>Example:</dt><dd><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">n</span><span class="p">.</span><span class="n">load_file</span><span class="p">(</span><span class="s">&#39;stdrun.hoc&#39;</span><span class="p">);</span>
+<span class="n">s1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">Section</span><span class="p">(</span><span class="s">&#39;soma&#39;</span><span class="p">);</span>
+<span class="n">syn</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ExpSyn</span><span class="p">(</span><span class="n">s1</span><span class="p">(</span><span class="mf">0.5</span><span class="p">));</span>
+<span class="c">% initiate string function</span>
+<span class="n">sf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">StringFunctions</span><span class="p">();</span>
+<span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">IntFire1</span><span class="p">();</span>
+<span class="c">% artificial</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_artificial</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+<span class="c">% not artificial</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">sf</span><span class="p">.</span><span class="n">is_artificial</span><span class="p">(</span><span class="n">syn</span><span class="p">));</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

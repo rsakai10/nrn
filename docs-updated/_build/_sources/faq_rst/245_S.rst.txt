@@ -1,0 +1,75 @@
+Choosing a Random Dendrite Section for Synapse Placement
+==========================================================
+
+When selecting a random dendrite from a :class:`SectionList` to place synapses, recall that a :class:`SectionList` does not support direct indexing or counting. However, you can use the following strategies:
+
+1. **Random Section Selection by Counting Sections**
+
+   Iterate over the sections to count them, then select a random index within that range and iterate again to find the section matching the index.
+
+   .. code-block:: hoc
+
+      objref sl  // your SectionList of dendrites
+      int count, whichone, lucky_section
+      count = 0
+      forsec sl count += 1
+
+      // choose a random integer between 0 and count-1
+      lucky_section = floor(uniform(0, count))
+
+      whichone = 0
+      forsec sl {
+          if (whichone == lucky_section) {
+              // attach synapse somewhere on this section
+              // e.g., syn = new ExpSyn()
+              // syn.loc(.5)
+          }
+          whichone += 1
+      }
+
+2. **Weighted Random Section Selection Proportional to Surface Area**
+
+   Map all sections along a cumulative surface area line, then choose a random position along that line to find the section and location.
+
+3. **Using SectionRef and List for Random Access**
+
+   Wrap sections in a :class:`SectionRef` and store them in a :class:`List` which supports counting and indexed access:
+
+   .. code-block:: hoc
+
+      objref srlist
+      srlist = new List()
+      forsec sl srlist.append(new SectionRef())
+
+      // Now pick random index
+      int n = srlist.count()
+      int idx = floor(uniform(0, n))
+      Section sec = srlist.o(idx).sec
+
+      // attach synapse to random location in sec
+
+4. **Python Example**
+
+   .. code-block:: python
+
+      from neuron import h
+      import random
+
+      sl = h.SectionList()
+      # Assume sl is populated with dendrite sections
+
+      srlist = h.List()
+      for sec in sl:
+          srlist.append(h.SectionRef(sec=sec))
+
+      n = srlist.count()
+      idx = random.randint(0, n-1)
+      sec = srlist.object(idx).sec
+      loc = random.uniform(0, 1)
+      syn = h.ExpSyn(sec(loc))
+
+.. note::
+
+   To place multiple synapses randomly, repeat the selection process and positioning; weighting placements by segment surface area can better approximate synaptic density per membrane area. The :class:`Vector` class may assist in managing cumulative sums for area-based sampling after model discretization.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=245 <https://neuron.yale.edu/phpBB/viewtopic.php?t=245>`_

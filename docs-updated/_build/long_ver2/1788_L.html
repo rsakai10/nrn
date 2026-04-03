@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Making a NetCon-Triggered Conductance Modulation in NMODL &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Making a NetCon-Triggered Conductance Modulation in NMODL</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1788_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="making-a-netcon-triggered-conductance-modulation-in-nmodl">
+<h1>Making a NetCon-Triggered Conductance Modulation in NMODL<a class="headerlink" href="#making-a-netcon-triggered-conductance-modulation-in-nmodl" title="Link to this heading"></a></h1>
+<p>This section explains how to implement a sodium channel conductance that is transiently set to zero following an action potential (AP) in a NEURON model. It addresses the question of how a mechanism can identify the cell (segment/process) that triggered a NetCon event, and provides an idiomatic NMODL solution using <em>self-events</em> and the <cite>WATCH</cite> statement within a point process mechanism.</p>
+<section id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading"></a></h2>
+<p>Set the sodium channel maximal conductance (<cite>gbar</cite>) to zero for a specified duration immediately following a spike, then restore it automatically after that interval, all within a single mechanism without additional external NetCons.</p>
+</section>
+<section id="background-and-challenges">
+<h2>Background and Challenges<a class="headerlink" href="#background-and-challenges" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The classical approach of using an external NetCon to detect spikes and invoking a function with an argument identifying the source cell is awkward because NetCon event arguments are not evaluated immediately.</p></li>
+<li><p>Density mechanisms (i.e., classic HH channels) do not have <cite>NET_RECEIVE</cite> blocks, so they cannot receive events directly.</p></li>
+<li><p>Point process mechanisms <em>can</em> have <cite>NET_RECEIVE</cite> blocks and utilize NEURON’s event delivery system, including <cite>WATCH</cite> statements and self-events, allowing mechanisms to internally detect spikes and schedule delayed events.</p></li>
+</ul>
+</section>
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Self-events</strong>: Events sent by a mechanism to itself using <code class="xref py py-meth docutils literal notranslate"><span class="pre">net_send()</span></code>. They do not require external NetCon objects.</p></li>
+<li><p><strong>WATCH statement</strong>: A special statement to detect voltage threshold crossings inside the mechanism in the <cite>NET_RECEIVE</cite> block.</p></li>
+<li><p><strong>flag argument</strong>: An implicit integer argument in <cite>NET_RECEIVE</cite> handlers representing the type of event, set when a self-event is sent via <code class="xref py py-meth docutils literal notranslate"><span class="pre">net_send()</span></code>.</p></li>
+</ul>
+</section>
+<section id="implementing-a-sodium-conductance-with-spike-triggered-shutoff">
+<h2>Implementing a Sodium Conductance with Spike-Triggered Shutoff<a class="headerlink" href="#implementing-a-sodium-conductance-with-spike-triggered-shutoff" title="Link to this heading"></a></h2>
+<p>The approach involves defining a point process mechanism that:</p>
+<ul class="simple">
+<li><p>Detects spikes by placing a <cite>WATCH (v &gt; thresh)</cite> statement in <cite>NET_RECEIVE</cite>.</p></li>
+<li><p>On detection of a threshold crossing event, sets the sodium conductance <cite>gm</cite> to zero and schedules a self-event after a delay <cite>toff</cite> to restore the conductance.</p></li>
+<li><p>Manages re-triggering during the off period by postponing the restoration event.</p></li>
+</ul>
+</section>
+<section id="example-nmodl-code-snippet">
+<h2>Example NMODL Code Snippet<a class="headerlink" href="#example-nmodl-code-snippet" title="Link to this heading"></a></h2>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS NaShutoff
+    RANGE gbar, gm, thresh, toff
+}
+
+PARAMETER {
+    gbar = 0.12 (S/cm2)   : maximal conductance density
+    thresh = 10 (mV)     : spike detection threshold
+    toff = 1 (ms)        : duration to shut off conductance
+}
+
+ASSIGNED {
+    area (um2)
+    gmax (uS)            : maximal conductance scaled by segment area
+    gm (uS)              : current effective conductance (0 or gmax)
+    v (mV)
+    t (ms)
+}
+
+INITIAL {
+    gmax = gbar * area * 1e-8  : convert S/cm2 * um2 to uS; adjust scale as needed
+    gm = gmax
+    net_send(0, 3)             : initialize WATCH with a self-event flag=3
+}
+
+NET_RECEIVE (flag) {
+    if (flag == 3) {
+        WATCH (v &gt; thresh) 2   : detect spike, trigger event with flag=2
+    }
+    else if (flag == 2) {       : spike detected: shut conductance off
+        if (gm &gt; 0) {
+            gm = 0
+            net_send(toff, 1)  : schedule restoration with flag=1
+        } else {
+            net_move(t + toff)  : postpone restoration if already off
+        }
+    }
+    else if (flag == 1) {       : scheduled restoration time reached
+        gm = gmax
+    }
+}
+</pre></div>
+</div>
+</section>
+<section id="notes-on-implementation">
+<h2>Notes on Implementation<a class="headerlink" href="#notes-on-implementation" title="Link to this heading"></a></h2>
+<ul>
+<li><p><cite>net_send(delay, flag)</cite> schedules a self-event at <cite>t + delay</cite> with the given <cite>flag</cite>.</p></li>
+<li><p><cite>net_move(newtime)</cite> moves the pending self-event with the specified flag to <cite>newtime</cite>. It only applies to <em>one</em> outstanding event per flag value (only for flag=1 in this example).</p></li>
+<li><p>The initial call to <cite>net_send(0, 3)</cite> in <cite>INITIAL</cite> ensures the <cite>WATCH</cite> statement is activated before simulation starts.</p></li>
+<li><p>The <cite>flag</cite> argument to <cite>NET_RECEIVE</cite> is implicit and represents event identity; it corresponds to the second argument of <cite>net_send</cite>.</p></li>
+<li><p>Conductance units must be converted correctly between local variables:</p>
+<p>Typically, density conductances <cite>gbar</cite> in S/cm² multiplied by segment area in µm² require unit conversion to obtain <cite>gmax</cite> in µS (microSiemens). The factor <cite>1e-8</cite> converts µm² to cm²; adjust if necessary.</p>
+</li>
+<li><p>This mechanism can be attached directly to the compartment segments where gNa is to be modulated. No external NetCon needs to be created.</p></li>
+<li><p>Using a delay before shutting off the conductance (e.g., via flag==4 event) can help prevent AP truncation and preserve afterhyperpolarization shape, by scheduling the shutoff slightly after threshold crossing.</p></li>
+</ul>
+</section>
+<section id="example-enhanced-net-receive-with-delay-before-shutoff">
+<h2>Example Enhanced NET_RECEIVE with Delay Before Shutoff<a class="headerlink" href="#example-enhanced-net-receive-with-delay-before-shutoff" title="Link to this heading"></a></h2>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NET_RECEIVE (flag) {
+    if (flag == 3) {
+        WATCH (v &gt; thresh) 2
+    }
+    else if (flag == 2) {
+        net_send(delay, 4)    : delay before shutoff
+    }
+    else if (flag == 4) {
+        if (gm &gt; 0) {
+            gm = 0
+            net_send(toff, 1) : schedule conductance restoration
+        } else {
+            net_move(t + toff) : extend restoration delay if already off
+        }
+    }
+    else if (flag == 1) {
+        gm = gmax              : restore conductance
+    }
+}
+</pre></div>
+</div>
+</section>
+<section id="usage-summary">
+<h2>Usage Summary<a class="headerlink" href="#usage-summary" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Define a point process mechanism with parameters for conductance, threshold, and durations.</p></li>
+<li><p>In <cite>INITIAL</cite>, scale maximal conductance by segment area, initialize conductance state, and launch the WATCH self-event.</p></li>
+<li><p>Use <cite>WATCH</cite> inside <cite>NET_RECEIVE</cite> to detect spikes.</p></li>
+<li><p>On threshold crossing, schedule events to shut off and later restore sodium conductance.</p></li>
+<li><p>Attach the mechanism to relevant segments; no external NetCons are necessary for this functionality.</p></li>
+</ol>
+</section>
+<section id="common-pitfalls-and-tips">
+<h2>Common Pitfalls and Tips<a class="headerlink" href="#common-pitfalls-and-tips" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Forgetting to initialize the WATCH statement by sending a self-event (e.g., <cite>net_send(0, 3)</cite>) in <cite>INITIAL</cite> will make <cite>WATCH</cite> statements inactive.</p></li>
+<li><p><cite>net_move</cite> only works with an outstanding self-event of a given flag. Attempting to move an event without one causes errors.</p></li>
+<li><p>Use <cite>else if</cite> to ensure mutually exclusive logic when switching conductance states and scheduling events, to avoid wasted computations and future bugs.</p></li>
+<li><p>Watch out for units mismatches when computing <cite>gmax</cite> (segment area scaling).</p></li>
+<li><p>Test the mechanism with voltage clamps and current injections to verify correct timing and behavior of conductance modulation.</p></li>
+<li><p>The <cite>flag</cite> identifier allows multiplexing different event types (threshold detection, conductance shutoff, restoration) within the same mechanism.</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">net_send()</span></code> and the use of event flags</p></li>
+<li><p><cite>WATCH</cite> statements usage in <cite>NET_RECEIVE</cite></p></li>
+<li><p>Self-event scheduling and management in NMODL</p></li>
+<li><p>Point process mechanisms and how to attach them to sections</p></li>
+</ul>
+<p>This idiomatic use of <cite>WATCH</cite> combined with self-events provides a clean, internally consistent way to achieve spike-triggered conductance modulation without external orchestration, perfect for modeling activity-dependent channel dynamics in biophysical neuron simulations.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1788">https://neuron.yale.edu/phpBB/viewtopic.php?t=1788</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

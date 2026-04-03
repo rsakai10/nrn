@@ -1,0 +1,113 @@
+Reproducing QUB Ion Channel Models in NEURON
+================================================
+
+When importing kinetic state models of ion channels from QUB to NEURON, discrepancies in state probabilities can arise due to initialization and transition rate definitions.
+
+Key Points
+----------
+
+- **Initialization voltage (`v_init`) governs the initial steady state** of channel states in NEURON. It must match the initial clamp command potential (e.g. `amp1` in `SEClamp`) for consistent starting probabilities.
+
+- **State transition syntax in NMODL** uses:
+  
+  .. code-block:: neuron
+
+     ~ A <-> B (kAB, kBA)
+  
+  where `kAB` is the forward rate from state A to B, and `kBA` is the backward rate. Ensure assigned parameters correctly correspond to forward and backward directions.
+
+- **State probabilities are initialized with**:
+
+  .. code-block:: neuron
+
+     INITIAL {
+         SOLVE states STEADYSTATE sparse
+     }
+
+  which solves for steady state at the set initial voltage.
+
+Example: Two-State Channel NMODL Fragment
+-----------------------------------------
+
+.. code-block:: neuron
+
+    NEURON {
+        SUFFIX QUB_K_CHANNEL2
+        USEION k READ ek WRITE ik
+        RANGE gbar, gk, ik, k0_C1_O1, k1_C1_O1, k0_O1_C1, k1_O1_C1
+    }
+
+    STATE { O1 C1 }
+
+    ASSIGNED { v (mV) ek (mV) ik (mA/cm2) gk (pS/um2) C1O1 (/ms) O1C1 (/ms) }
+
+    KINETIC states {
+        rates(v)
+        CONSERVE O1 + C1 = 1
+        ~ C1 <-> O1 (C1O1, O1C1)
+    }
+
+    PROCEDURE rates(v(millivolt)) {
+        C1O1 = k0_C1_O1 * exp(k1_C1_O1 * v)
+        O1C1 = k0_O1_C1 * exp(k1_O1_C1 * v)
+    }
+
+Python Example: Ensuring `v_init` Matches Clamp
+------------------------------------------------
+
+.. code-block:: python
+
+    from neuron import h
+    h.v_init = -20  # match holding potential in SEClamp
+    seclamp = h.SEClamp(h.soma(0.5))
+    seclamp.amp1 = -20  # first step amplitude
+    seclamp.dur1 = 100
+
+    h.finitialize(h.v_init)
+    h.continuerun(500)
+
+Matlab Correspondence for Steady State Calculation
+-------------------------------------------------
+
+Use matrix methods to solve for steady state state probabilities `p` at holding voltage `V`:
+
+.. code-block:: matlab
+
+    % Create transition matrix Q at voltage V
+    for i=1:nstates
+      for j=1:nstates
+        if i ~= j
+          Q(i,j) = k0(i,j) * exp(k1(i,j)*V);
+        end
+      end
+      Q(i,i) = -sum(Q(:,i));
+    end
+    % Solve steady state: p such that Q'*p = 0 and sum(p)=1
+    A = [Q'; ones(1, nstates)];
+    b = [zeros(nstates,1); 1];
+    p = A \ b;
+
+.. note::
+
+  Verify that forward and backward rates in NMODL and Matlab match directionality. Mislabeling transition rates causes discrepancies in state probabilities.
+
+Debugging Tips
+--------------
+
+- To debug NMODL code, use `printf()` statements:
+
+  .. code-block:: neron
+
+     PROCEDURE rates(v(millivolt)) {
+         printf("v=%.2f C1O1=%.6g O1C1=%.6g\n", v, C1O1, O1C1)
+         ...
+     }
+
+- Always ensure `v_init` in NEURON matches the initial command potential of your clamp to accurately reproduce steady state channel states from other simulators.
+
+Summary
+-------
+
+Proper initialization (`v_init`), correct labeling of transition rates, and consistent voltage clamp settings are critical for matching kinetic channel models translated from QUB or Matlab to NEURON simulations.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2459 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2459>`_

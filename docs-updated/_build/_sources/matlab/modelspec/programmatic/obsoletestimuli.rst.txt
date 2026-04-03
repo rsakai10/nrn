@@ -1,0 +1,114 @@
+Obsolete Stimuli
+----------------
+
+.. function:: fstim
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            n.fstim();
+
+
+    Description:
+        Consider this obsolete.  Nevertheless, it does work. See the old NEURON reference 
+        manual. 
+
+         
+
+----
+
+
+
+.. function:: fstimi
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            n.fstimi();
+
+
+    Description:
+        Obsolete 
+
+         
+
+
+----
+
+
+
+.. function:: fclamp
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            n.fclamp();
+
+
+    Description:
+        obsolete. Use the :class:`VClamp` or :class:`SEClamp` point process. 
+
+         
+
+----
+
+
+
+.. function:: fclampi
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            n.fclampi();
+
+
+    Description:
+        obsolete. Use the :class:`VClamp` or :class:`SEClamp` point process. 
+
+         
+
+----
+
+
+
+.. function:: fclampv
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            n.fclampv();
+
+
+    Description:
+        obsolete. Use the :class:`VClamp` or :class:`SEClamp` point process. 
+
+         
+
+----
+
+
+
+.. function:: prstim
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            n.prstim();
+
+
+    Description:
+        obsolete. Print the info about ``fstim``, ``fclamp``, and ``fsyn`` 
+
+

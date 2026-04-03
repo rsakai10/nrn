@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programmatically Changing Temperature and Other Parameters in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Programmatically Changing Temperature and Other Parameters in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/162_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="programmatically-changing-temperature-and-other-parameters-in-neuron">
+<h1>Programmatically Changing Temperature and Other Parameters in NEURON<a class="headerlink" href="#programmatically-changing-temperature-and-other-parameters-in-neuron" title="Link to this heading"></a></h1>
+<p>Changing temperature or other parameters during a simulation can be accomplished in NEURON using hoc scripting and event delivery without modifying NMODL code to directly assign to special variables like <cite>celsius</cite>. The following sections describe recommended methods, including interpolated ramps and event-driven discrete parameter changes.</p>
+<section id="changing-temperature-over-time">
+<h2>Changing Temperature Over Time<a class="headerlink" href="#changing-temperature-over-time" title="Link to this heading"></a></h2>
+<p>The built-in variable <cite>celsius</cite> represents the system temperature but <strong>cannot be assigned directly</strong> in NMODL code. Attempting to assign to <cite>celsius</cite> in a mechanism’s <cite>BREAKPOINT</cite> block results in an error:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    SUFFIX TClamp
+    RANGE del, dur, temp1, temp2
+}
+
+PARAMETER {
+    del = 100 (ms)
+    dur = 300 (ms)
+    temp1 = 35 (degC)
+    temp2 = 20 (degC)
+}
+
+ASSIGNED {
+    celsius (degC)
+}
+
+BREAKPOINT {
+    at_time(del)
+    at_time(del+dur)
+
+    if (t &lt; del + dur &amp;&amp; t &gt; del) {
+        celsius = temp2  // ERROR: celsius cannot be assigned
+    } else {
+        celsius = temp1
+    }
+}
+</pre></div>
+</div>
+<p>Instead, use hoc <cite>Vector.play()</cite> to drive <cite>celsius</cite> as a function of time from hoc:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref tempvec, tvec
+tempvec = new Vector(3)
+tvec = new Vector(3)
+
+tempvec.x[0] = 6.3  // deg C start temperature
+tvec.x[0] = 0
+
+tempvec.x[1] = 20   // deg C at 100 ms
+tvec.x[1] = 100
+
+tempvec.x[2] = 20   // deg C long after ramp ends
+tvec.x[2] = 1e9
+
+// The 3rd argument (1) enables interpolation between points (linear ramp)
+tempvec.play(&amp;celsius, tvec, 1)
+</pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>If your NMODL mechanism uses temperature-dependent kinetics, it must declare <cite>DEPEND celsius</cite> in a TABLE statement so that rate tables update automatically when <cite>celsius</cite> changes (see <cite>hh.mod</cite> for example).</p></li>
+<li><p>Continuous changes to <cite>celsius</cite> (e.g., ramp) cause recalculation of rate tables at every time step, which slows simulation.</p></li>
+<li><p>Once <cite>celsius</cite> becomes constant, simulation speed returns to normal.</p></li>
+</ul>
+</section>
+<section id="abrupt-parameter-changes-using-cvode-event">
+<h2>Abrupt Parameter Changes Using cvode.event()<a class="headerlink" href="#abrupt-parameter-changes-using-cvode-event" title="Link to this heading"></a></h2>
+<p>For abrupt jumps in parameters (e.g., temperature, current amplitude, NetCon weight), use the <cite>cvode.event()</cite> method with an event delivery procedure. This approach avoids writing new NMODL mechanisms to handle parameter changes.</p>
+<p>Example: Generating a sequence of current pulses by controlling an <cite>IClamp</cite> amplitude:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref stim
+stim = new IClamp(0.5)
+
+// Parameters for pulse sequence
+: duration of each pulse (ms)
+define DUR 0.1
+: pulse amplitude (nA)
+define AMP 0.1
+: time of first pulse (ms)
+define START 5
+: interval between pulse starts (ms)
+define INTERVAL 25
+// DUR &lt; INTERVAL assumed
+
+objref fih
+fih = new FInitializeHandler(&quot;initi()&quot;)
+
+// State variable to track pulse on/off
+STIMON = 0
+
+proc initi() {
+    STIMON = 0
+    stim.del = 0           // control amp from 0 ms
+    stim.dur = 1e9        // duration long enough to cover all pulses
+    cvode.event(START, &quot;seti()&quot;)  // schedule first event
+}
+
+proc seti() {
+    if (STIMON == 0) {
+        STIMON = 1
+        stim.amp = AMP      // turn pulse on
+        cvode.event(t + DUR, &quot;seti()&quot;)      // schedule pulse off
+        cvode.event(t + INTERVAL, &quot;seti()&quot;) // schedule next pulse on
+    } else {
+        STIMON = 0
+        stim.amp = 0       // turn pulse off
+    }
+    // Reinitialize CVode or compute current after parameter change
+    if (cvode.active()) {
+        cvode.re_init()
+    } else {
+        fcurrent()
+    }
+}
+</pre></div>
+</div>
+<p><strong>Key points:</strong></p>
+<ul class="simple">
+<li><p>The <cite>FInitializeHandler</cite> starts the event-driven control during simulation initialization.</p></li>
+<li><p><cite>cvode.event(time, “procedure()”)</cite> schedules procedure calls at specified simulation times.</p></li>
+<li><p>After abrupt parameter changes, it is good practice to call <cite>cvode.re_init()</cite> if variable time step integration is active, or <cite>fcurrent()</cite> otherwise, to update the computation consistently.</p></li>
+</ul>
+</section>
+<section id="changing-parameters-like-netcon-weights">
+<h2>Changing Parameters Like NetCon Weights<a class="headerlink" href="#changing-parameters-like-netcon-weights" title="Link to this heading"></a></h2>
+<p>You can change parameters such as NetCon weights at specified times using a similar event-driven approach:</p>
+<ul class="simple">
+<li><p>Use an <cite>FInitializeHandler</cite> to schedule a <cite>cvode.event()</cite> that triggers a hoc procedure changing the weight(s).</p></li>
+<li><p>Unlike the current pulse example, the procedure might simply assign new weights without conditionals.</p></li>
+<li><p>Including the <cite>cvode.re_init()</cite> or <cite>fcurrent()</cite> call after changing parameters is recommended but may not always be necessary, depending on the parameter type.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Do not assign `celsius` inside NMODL mechanisms.</strong></p></li>
+<li><p>Use hoc <cite>Vector.play()</cite> to smoothly vary temperature (<cite>celsius</cite>) during simulation.</p></li>
+<li><p>Use <cite>cvode.event()</cite> and <cite>FInitializeHandler</cite> for abrupt/discrete changes in parameters such as temperature jumps, current amplitudes, or synaptic weights.</p></li>
+<li><p>Re-initialize CVode integration with <cite>cvode.re_init()</cite> after abrupt changes when using variable time step integration.</p></li>
+<li><p>Declare <cite>DEPEND celsius</cite> in NMODL TABLE statements for temperature-dependent rate recalculations.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">cvode.event()</span></code>, <a class="reference internal" href="../progref-1/simctrl/programmatic.html#FInitializeHandler" title="FInitializeHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">FInitializeHandler</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fcurrent" title="fcurrent"><code class="xref py py-func docutils literal notranslate"><span class="pre">fcurrent()</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=162">https://neuron.yale.edu/phpBB/viewtopic.php?t=162</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

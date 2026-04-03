@@ -1,0 +1,64 @@
+Parallel assignment of large arrays in NMODL mechanisms
+=========================================================
+
+When multiple instances of a mechanism need to share the **same large array** of values efficiently, avoid assigning the array values repeatedly in Python. Instead, use a shared memory approach with :class:`POINTER` and :func:`neuron.numpy_element_ref`.
+
+Example NMODL mechanism using a pointer to a shared array:
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS ARRAY_TEST
+        POINTER foo
+        RANGE val
+    }
+
+    UNITS {
+        (mV) = (millivolt)
+    }
+
+    ASSIGNED {
+        v           (mV)
+        foo
+        val         (1)
+    }
+
+    BREAKPOINT {
+        VERBATIM
+        val = _p_foo[(int) _v + 100];
+        ENDVERBATIM
+    }
+
+Minimal Python usage demonstrating shared array assignment to multiple instances:
+
+.. code-block:: python
+
+    import numpy as np
+    from neuron import h, numpy_element_ref
+
+    soma = h.Section(name='soma')
+    dend = h.Section(name='dend')
+
+    pps = [h.ARRAY_TEST(seg) for seg in [soma(0.5), dend(0.5)]]
+
+    data = np.random.random(200)  # large shared array
+    ptr = numpy_element_ref(data, 0)  # pointer to numpy array data
+
+    # Assign pointer to each mechanism instance (requires NEURON 7.7.2+)
+    for pp in pps:
+        pp._ref_foo = ptr
+
+.. note::
+
+   For older NEURON versions, use :meth:`h.setpointer` instead of direct attribute assignment:
+
+   .. code-block:: python
+
+       for pp in pps:
+           h.setpointer(ptr, 'foo', pp)
+
+.. seealso::
+
+   :class:`POINTER`, :func:`neuron.numpy_element_ref`, :meth:`h.setpointer`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4167 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4167>`_

@@ -1,0 +1,116 @@
+Play a Unique Vector into Each Model Segment
+============================================
+
+This section explains how to play a unique time-varying vector into a variable located in each segment of a neuron model using NEURON's :meth:`Vector.play` method. It clarifies common pitfalls in the NEURON model definition and Python usage, and provides a working example.
+
+Problem Description
+-------------------
+
+You want to assign and play a unique vector of values into an arbitrary variable (e.g., `xx`) in each segment of one or more Sections. Simply declaring the variable as a `GLOBAL` or using `POINTER` does not work for this purpose:
+
+- `GLOBAL` variables have the same value everywhere, so you cannot have segment-specific values.
+- `POINTER` variables reference values elsewhere and do not store unique local values.
+- The variable must be declared as `RANGE` in the NMODL to enable distinct segment-level values.
+
+Additionally, when using :meth:`Vector.play`, you must use a pointer reference to the variable (e.g., `seg.playtest._ref_xx`), not the variable itself (e.g., `seg.playtest.xx`).
+
+NMODL Mod File Example
+----------------------
+
+```neuron
+NEURON {
+    SUFFIX playtest
+    RANGE xx           : declare xx as RANGE for unique segment-specific values
+    NONSPECIFIC_CURRENT ixi
+}
+
+ASSIGNED {
+    xx (mA)
+    ixi (mA)
+}
+
+INITIAL {
+    ixi = 0
+    xx = 0
+}
+
+BREAKPOINT {
+    ixi = xx + 1
+}
+```
+
+Key points:
+
+- Declare `xx` as `RANGE` to have unique values per segment.
+- Use `NONSPECIFIC_CURRENT` in this example for a dummy current assignment.
+- Initialize `xx` in the `INITIAL` block for clarity.
+
+Python Example to Play Unique Vectors into Each Segment
+------------------------------------------------------
+
+This example demonstrates inserting the mechanism into a cell, then playing the vector `data` into `xx` in each segment using `data.play(seg.playtest._ref_xx, time, True)`.
+
+```python
+from neuron import h
+from neuron.units import mV, ms, um
+import matplotlib.pyplot as plt
+
+h.load_file("stdrun.hoc")
+
+# Time and data vectors for the play operation
+data = h.Vector([0, 1, 5, 17, 2, 4, 38, 22, 43, 1, 1])
+time = h.Vector([1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+# Create a section with multiple segments
+cell = h.Section("neurite")
+cell.nseg = 3  # use an odd number of segments
+cell.L = 30 * um  # set length (arbitrary units)
+cell.diam = 5 * um  # set diameter (arbitrary units)
+
+# Insert the playtest mechanism into the cell and play data into each segment
+for sec in cell.wholetree():
+    sec.insert(h.playtest)
+    for seg in sec:
+        # Play the vector into the RANGE variable by passing pointer reference
+        data.play(seg.playtest._ref_xx, time, True)
+
+# Record time and xx values at two segment locations
+t = h.Vector().record(h._ref_t)
+xxp1 = h.Vector().record(cell(0.1).playtest._ref_xx)
+xxp2 = h.Vector().record(cell(0.9).playtest._ref_xx)
+
+# Initialize and run the simulation
+h.finitialize(-65 * mV)
+h.continuerun(10 * ms)
+
+# Plot results at two segments
+plt.plot(t, xxp1, label="Segment 0.1")
+plt.plot(t, xxp2, label="Segment 0.9")
+plt.legend()
+plt.show()
+```
+
+Important Details
+-----------------
+
+- Use :meth:`Vector.play` with the pointer reference to a RANGE variable (`seg.playtest._ref_xx`), not just the variable attribute (`seg.playtest.xx`).
+- Ensure the variable to be played into is declared as `RANGE` in the NMODL.
+- Use `cell.wholetree()` to cover all segments in the cell and its child sections.
+- Choose an odd number for `nseg` so that you can record and verify values at mid-segments.
+- Recording must also use pointer references for the variable to correctly record time-varying values.
+- Playing the vector for each segment can be done with the same vector or with different vectors for each segment by indexing or creating different :class:`Vector` instances.
+
+.. note::
+   Declaring variables as `GLOBAL` or `POINTER` will not enable unique segment-specific values for :meth:`Vector.play`. Use `RANGE` instead.
+
+Summary
+-------
+
+To play unique time-varying inputs into a variable per segment:
+
+1. Declare the variable as `RANGE` in the NMODL file.
+2. Access the variable through its pointer reference (`_ref_var`) in Python.
+3. Use :meth:`Vector.play` to input the vector to each segment's pointer reference.
+4. Use :meth:`Vector.record` similarly to record unique segment values.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4623 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4623>`_

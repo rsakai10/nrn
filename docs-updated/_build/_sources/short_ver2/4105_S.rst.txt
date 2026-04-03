@@ -1,0 +1,93 @@
+.. _custom_mechanism_current_recognition:
+
+Custom Mechanism Current Recognition in NEURON
+==============================================
+
+When implementing a custom mechanism that produces a current, the :class:`Section` only "sees" that current if it is properly declared and computed within the mechanism's NMODL code.
+
+Key points to ensure current is recognized by the section:
+
+- Declare the current as a :keyword:`NONSPECIFIC_CURRENT` in the ``NEURON`` block:
+
+  .. code-block:: mod
+
+     NEURON {
+       POINT_PROCESS mysyn
+       RANGE i
+       NONSPECIFIC_CURRENT i
+     }
+
+- Include a :keyword:`BREAKPOINT` block assigning the current variable:
+
+  .. code-block:: mod
+
+     ASSIGNED {
+       i (nA)
+       amp (nA)
+     }
+     PARAMETER {
+       amp0 = 0 (nA)
+       delta = -0.01 (nA)
+     }
+     INITIAL {
+       amp = amp0
+     }
+     BREAKPOINT {
+       i = amp
+     }
+     NET_RECEIVE(weight (uS)) {
+       amp = amp + delta
+     }
+
+- Ensure units are declared accordingly in the ``UNITS`` block:
+
+  .. code-block:: mod
+
+     UNITS {
+       (nA) = (nanoamp)
+       (uS) = (microsiemens)
+     }
+
+Without a :keyword:`BREAKPOINT` block assigning the current, the mechanism does not contribute to the membrane current balance and thus the :class:`Section` does not register it.
+
+Example of recording the current from a synaptic mechanism and the section in Python:
+
+.. code-block:: python
+
+   from neuron import h
+   import matplotlib.pyplot as plt
+
+   h.load_file("stdrun.hoc")
+   s0 = h.Section()
+   s0.insert('pas')
+
+   syn = h.Exp2Syn(s0(0.5))
+
+   h.tstop = 10000
+   h.dt = 0.1
+
+   times = h.Vector([200, 1200, 7000])
+   stim = h.VecStim()
+   stim.play(times)
+
+   nc = h.NetCon(stim, syn)
+   nc.weight[0] = 1
+
+   i_syn = h.Vector()
+   i_syn.record(syn._ref_i)
+
+   i_sec = h.Vector()
+   i_sec.record(s0(0.5)._ref_i_pas)
+
+   h.run()
+
+   plt.plot(i_syn, label="Synaptic current")
+   plt.plot(i_sec, label="Section current")
+   plt.legend()
+   plt.show()
+
+.. note::
+
+   To expose your custom mechanism's current to the :class:`Section`, the current variable must be assigned within the :keyword:`BREAKPOINT` block and declared as :keyword:`NONSPECIFIC_CURRENT`. Simply declaring the current variable without assigning it in the computation step will result in it not affecting the section current.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4105 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4105>`_

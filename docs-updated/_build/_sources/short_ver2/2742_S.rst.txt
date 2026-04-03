@@ -1,0 +1,39 @@
+Getting GUI Recognition for Mechanism Parameters
+=================================================
+
+When a mechanism uses a `:useion:` statement (e.g., `USEION cl`), NEURON automatically inserts an associated ion mechanism (e.g., `cl_ion`). Parameters declared in the `PARAMETER` block are global by default and do not appear as editable fields in GUI tools like CellBuilder or Section Parameter dialogs.
+
+.. note::
+   To make a parameter appear as a button and editable field in the GUI, declare it as a :keyword:`RANGE` variable in the :keyword:`NEURON` block. For example:
+
+   .. code-block:: mod
+
+      NEURON {
+          RANGE cli0
+          USEION cl READ cli WRITE cli
+      }
+
+This creates a per-segment variable accessible in CellBuilder and other GUI tools.
+
+If you keep `cli0` global (default), access to it is via the menu:
+
+.. code-block:: text
+
+    Tools / Distributed Mechanisms / Viewers / Mechanisms (Globals)
+
+For point processes, the same applies: parameters must be declared :keyword:`RANGE` to appear in the Point Process Manager GUI. Typos in :keyword:`RANGE` statements often cause parameters not to show.
+
+Example HOC snippet to view RANGE parameters:
+
+.. code-block:: hoc
+
+    forall print cli0
+
+Example Python snippet:
+
+.. code-block:: python
+
+    for sec in h.allsec():
+        print(sec.cli0)
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2742 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2742>`_

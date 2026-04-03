@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Units Checking and Fixing Common Errors in MOD Files &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Units Checking and Fixing Common Errors in MOD Files</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3260_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="units-checking-and-fixing-common-errors-in-mod-files">
+<h1>Units Checking and Fixing Common Errors in MOD Files<a class="headerlink" href="#units-checking-and-fixing-common-errors-in-mod-files" title="Link to this heading"></a></h1>
+<p>When using <code class="xref py py-func docutils literal notranslate"><span class="pre">mknrndll()</span></code> or the NEURON GUI’s unit checking facility (modlunit) to verify units consistency in MOD files, it is common to encounter errors related to unit declarations and compatibility. This document explains typical error messages, how to diagnose their causes, and how to fix them, illustrated with explicit examples from the Morgan/Santhakumar 2007 model’s MOD files.</p>
+<section id="general-recommendations-for-using-modlunit">
+<h2>General Recommendations for Using modlunit<a class="headerlink" href="#general-recommendations-for-using-modlunit" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Iterative correction:</strong>
+The unit checker stops at the first error it finds in a MOD file. Run modlunit repeatedly: fix the first error, then rerun until no errors remain.</p></li>
+<li><p><strong>Distinguish between apparent and true errors:</strong>
+Some errors stem from missing or unknown unit declarations rather than actual unit mismatches; the numerical results might still be correct. However, other errors involve inconsistent units that can cause incorrect simulation behavior.</p></li>
+<li><p><strong>Familiarize yourself with recognized unit names:</strong>
+NEURON recognizes a standard set of units and their abbreviations (e.g. <cite>mV</cite>, <cite>mM</cite>, <cite>degC</cite>, <cite>umho</cite>). Use these exact spellings in the <code class="code docutils literal notranslate"><span class="pre">UNITS</span></code> block and variable declarations. For example, use <cite>degC</cite> instead of <cite>DegC</cite> (case sensitive) to avoid unrecognized unit errors.</p></li>
+</ol>
+</section>
+<section id="common-errors-and-how-to-fix-them">
+<h2>Common Errors and How to Fix Them<a class="headerlink" href="#common-errors-and-how-to-fix-them" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Unknown or undeclared units in UNITS block</strong></p>
+<p>Example error:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Need declaration in UNITS block of the form:
+        (mM)    (units)
+Cannot recognize the units: mM at line 18 in file ./tca.mod
+        cai (mM)&lt;&lt;ERROR&gt;&gt;
+</pre></div>
+</div>
+<p><strong>Fix:</strong></p>
+<ol class="loweralpha simple">
+<li><p>Add a corresponding entry to the <code class="code docutils literal notranslate"><span class="pre">UNITS</span></code> block if missing:</p></li>
+</ol>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>UNITS {
+    (mM) = (milli/liter)
+    ...
+}
+</pre></div>
+</div>
+<ol class="loweralpha simple" start="2">
+<li><p>Verify that the declared unit text matches NEURON’s recognized unit names exactly.</p></li>
+</ol>
+</li>
+<li><p><strong>Incorrect unit declarations for dimensionless variables</strong></p>
+<p>Example error in <em>ppsyn.mod</em>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>units:  1-09 sec2-coul2/m2-kg
+units:  1-06 sec-coul2/m2-kg
+The units of the previous two expressions are not conformable
+ at line 40 in file ./ppsyn.mod
+gs=gsbar * on&lt;&lt;ERROR&gt;&gt;
+</pre></div>
+</div>
+<p>Investigation shows <cite>gs</cite> and <cite>gsbar</cite> are conductances (units: umho), but <cite>on</cite> is incorrectly declared with units <cite>ms</cite>. Since it is a dimensionless gating variable, it should have unit <cite>(1)</cite> (unitless).</p>
+<p><strong>Fix:</strong></p>
+<p>Change the unit declaration:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>on (1)
+</pre></div>
+</div>
+<p>Also, declare <cite>on</cite> in the correct <code class="code docutils literal notranslate"><span class="pre">ASSIGNED</span></code> block rather than <code class="code docutils literal notranslate"><span class="pre">PARAMETER</span></code> if it appears on the left side of assignment statements.</p>
+</li>
+<li><p><strong>Unit name case sensitivity</strong></p>
+<p>Example error for temperature units:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Need declaration in UNITS block of the form:
+        (DegC)  (units)
+Cannot recognize the units: DegC at line 75 in file ./LcaMig.mod
+FUNCTION KTF(celsius (DegC)&lt;&lt;ERROR&gt;&gt;) (mV) {
+</pre></div>
+</div>
+<p><strong>Fix:</strong></p>
+<p>Use lowercase <cite>degC</cite> since NEURON recognizes it:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>UNITS {
+    (degC) = (celsius)
+}
+</pre></div>
+</div>
+<p>Replace all occurrences of <cite>(DegC)</cite> with <cite>(degC)</cite> in the code.</p>
+</li>
+<li><p><strong>Ensuring unit compatibility in FUNCTION return values</strong></p>
+<p>Example error in <em>LcaMig.mod</em> with the <cite>KTF</cite> function:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>units:  1 K
+units:  0.001 m2-kg/sec2-coul
+The units of the previous two expressions are not conformable
+at line 76 in file ./LcaMig.mod
+KTF = ((25./293.15)*(celsius + 273.15))&lt;&lt;ERROR&gt;&gt;
+</pre></div>
+</div>
+<p><strong>Cause and Fix:</strong></p>
+<p>The right-hand side expression mixes units incompatibly. To fix, explicitly declare units for numeric literals in the expression to assist modlunit’s parser:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>FUNCTION KTF(celsius (degC)) (mV) {
+    KTF = ((25. (mV)/293.15 (degC))*(celsius + 273.15 (degC)))
+}
+</pre></div>
+</div>
+<p>Explanation:
+- <cite>celsius</cite> has units <cite>degC</cite>. Adding <cite>273.15 (degC)</cite> ensures dimensionally correct addition.
+- <cite>25.</cite> is assigned units <cite>mV</cite> consistent with the function return type/mV.
+- <cite>293.15</cite> is assigned units <cite>degC</cite>.</p>
+<p>This declaration respects unit algebra and satisfies modlunit.</p>
+</li>
+<li><p><strong>Dimensionless ratios</strong></p>
+<p>In the function <cite>ghk</cite>:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>FUNCTION ghk(v (mV), ci (mM), co (mM)) (mV) {
+    LOCAL nu, f
+    f = KTF(celsius)/2
+    nu = v/f
+    ghk = -f*(1. - (ci/co)*exp(nu))*efun(nu)
+}
+</pre></div>
+</div>
+<p>The variable <cite>nu</cite> must be dimensionless since it appears inside the exponential. Since <cite>v</cite> has units mV, ensure that <cite>f</cite> also has units mV for <cite>nu = v/f</cite> to be dimensionless. This depends on <cite>KTF</cite> correctly returning units mV as shown above.</p>
+</li>
+<li><p><strong>Additional notes on code style</strong></p>
+<ul class="simple">
+<li><p>Use the <code class="code docutils literal notranslate"><span class="pre">ASSIGNED</span></code> block for variables that are assigned in the code rather than <code class="code docutils literal notranslate"><span class="pre">PARAMETER</span></code>.</p></li>
+<li><p>Avoid multiple <code class="code docutils literal notranslate"><span class="pre">PARAMETER</span></code> blocks; combine them if needed.</p></li>
+<li><p>The <code class="code docutils literal notranslate"><span class="pre">INDEPENDENT</span></code> declaration is rarely needed in NMODL and can be removed unless required.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="cleaning-up-temporary-or-hidden-files-on-windows">
+<h2>Cleaning Up Temporary or Hidden Files on Windows<a class="headerlink" href="#cleaning-up-temporary-or-hidden-files-on-windows" title="Link to this heading"></a></h2>
+<p>Sometimes compilation issues are caused by hidden or temporary files in the source directory (e.g., files starting with <cite>~$</cite>).</p>
+<p>On Windows, such files may not be visible in the Explorer GUI but appear in terminal listings (e.g., Cygwin). The shell may interpret special characters (like <cite>$</cite>) as variable substitution and make removal difficult.</p>
+<p>To delete such files in Cygwin or a bash shell, escape the special character:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>~<span class="se">\$</span>bgka.mod
+</pre></div>
+</div>
+<p>This command treats the <cite>$</cite> literally rather than as a variable substitution.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always run modlunit repeatedly, fixing errors one at a time.</p></li>
+<li><p>Use only recognized unit names and declare units explicitly in the <code class="code docutils literal notranslate"><span class="pre">UNITS</span></code> block.</p></li>
+<li><p>For dimensionless variables, use <cite>(1)</cite> as unit.</p></li>
+<li><p>Make sure function return units are compatible with expressions inside the function.</p></li>
+<li><p>Use proper blocks (<cite>ASSIGNED</cite>, <cite>PARAMETER</cite>) to reflect variable usage.</p></li>
+<li><p>To fix compilation issues, ensure no hidden temporary files remain in the directory.</p></li>
+</ul>
+<p>By following these steps you can ensure that your MOD files pass NEURON’s unit checking without errors and simulations produce valid results.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3260">https://neuron.yale.edu/phpBB/viewtopic.php?t=3260</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

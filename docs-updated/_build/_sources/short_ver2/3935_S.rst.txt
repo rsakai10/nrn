@@ -1,0 +1,22 @@
+.. note::
+   When a section's geometry is defined using 3D points (:meth:`Section.pt3dadd`), the method :meth:`Segment.area` returns the surface area computed as the sum of truncated cones (frusta) between adjacent 3D points. 
+   This takes into account changes in diameter along the segment and the 3D geometry, unlike the simplified formula `sec.L * sec.diam * h.PI` which assumes a perfect cylinder with uniform diameter.
+
+.. code-block:: python
+
+   from neuron import h
+
+   sec1 = h.Section()
+   h.pt3dadd(0.0, 0.0, 0.0, 60.0, sec=sec1)
+   h.pt3dadd(7.0, 0.0, 0.0, 10.0, sec=sec1)
+   print(sec1.L, sec1.diam)
+   print(sec1.L * sec1.diam * h.PI)        # Simplified cylindrical area
+   print(sec1(0.5).area())                  # Accurate frustum-based area
+
+.. note::
+   In contrast, when section geometry is set in the stylized way (e.g., by setting :attr:`Section.L` and :attr:`Section.diam` directly), both formulas agree because the section is a perfect cylinder.
+
+.. note::
+   The surface area returned by :meth:`Segment.area` is the correct value NEURON uses for transmembrane current calculations, reflecting actual 3D morphology and diameter tapering.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3935 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3935>`_

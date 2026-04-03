@@ -1,0 +1,52 @@
+.. note::
+
+   In NEURON, variables defined at the top level (outside templates) are not accessible within templates by default. For example, if you set::
+
+      tstop = 100
+
+   at the top level, and then use ``tstop`` inside a template::
+
+      begintemplate SE_NetStim
+      public pp
+      objref pp
+      proc init() {
+        pp = new NetStim()
+        pp.interval = $1
+        pp.number = $1 * tstop * 2  // ERROR: tstop undefined here
+        pp.start = $2
+        pp.noise = 1
+      }
+      endtemplate
+
+   you will get an error: ``nrniv: undefined variable tstop``.
+
+   To access such a top level variable inside a template, declare it as ``external`` in the template scope::
+
+      external tstop
+
+.. seealso::
+
+   :ref:`templates`, :ref:`variable_scope`
+
+.. code-block:: hoc
+
+   tstop = 100
+
+   begintemplate SE_NetStim
+   public pp
+   objref pp
+   external tstop
+   proc init() {
+     pp = new NetStim()
+     pp.interval = $1
+     pp.number = $1 * tstop * 2
+     pp.start = $2
+     pp.noise = 1
+   }
+   endtemplate
+
+.. note::
+
+   The ``external`` keyword allows variables defined outside templates to be visible inside; conversely, variables defined inside templates must be declared ``public`` to be accessible externally.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1724 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1724>`_

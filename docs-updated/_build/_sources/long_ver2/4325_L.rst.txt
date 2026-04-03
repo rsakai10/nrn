@@ -1,0 +1,159 @@
+Calcium Ion Concentration Initialization with Point Processes
+==============================================================
+
+When modeling neurons with calcium dynamics and synapses that read or write calcium concentrations, initialization of internal (`cai`) and external (`cao`) calcium ion concentrations must be handled carefully. This section explains common issues and recommended solutions when using :class:`h.ion_style`, calcium dynamics mechanisms, and calcium-dependent synaptic point processes.
+
+Problem Description
+-------------------
+
+In models where a :class:`POINT_PROCESS` synapse reads and writes calcium via a USEION statement (e.g., `USEION ca READ cai,cao WRITE ica`), initial calcium concentrations provided programmatically may be unexpectedly overwritten during the call to :meth:`h.finitialize`.
+
+Specifically, the built-in NEURON defaults `h.cai0_ca_ion` and `h.cao0_ca_ion` (defaulting to 5.0e-5 mM and 2.0 mM respectively) override previously assigned segment values of `cai` and `cao` in segments with such synapses attached. This behavior may happen even if ion concentrations were set explicitly beforehand.
+
+Cause
+-----
+
+- Ionic concentrations are initialized based on NEURON's internal default constants unless the mechanism’s NMODL code explicitly initializes the ions.
+- Many calcium dynamics mechanisms (e.g., `CaDynamics_E2.mod`) often have no :keyword:`INITIAL` block that assigns initial values to `cai` or `cao`.
+- The `USEION ca` statement in these mechanisms often only :keyword:`WRITE`s `cai` but not `cao`, leaving `cao` controlled by the default constant.
+- Use of :func:`h.ion_style` with a `cinit` parameter attempts to initialize internal ion concentrations, but later insertion of a mechanism that reads or writes the ion can *promote* the ion style, resulting in re-initialization according to defaults.
+
+Recommendations for Proper Initialization
+-----------------------------------------
+
+1. **Set Default Extracellular Calcium Concentration Globally**
+
+   You can globally assign the default external calcium concentration by setting:
+
+   .. code-block:: python
+
+      h.cao0_ca_ion = 1.2  # desired extracellular calcium concentration in mM
+
+   Place this in your main script outside of any cell class definitions (e.g., after class definitions but before simulation). This sets the default initial value for `cao` in all segments where it is not explicitly controlled by a mechanism.
+
+2. **Modify Calcium Dynamics Mechanism to Initialize `cai` and `cao`**
+
+   Edit your `CaDynamics_E2.mod` (or equivalent) as follows: 
+
+   - Add a new parameter for initial internal calcium concentration:
+
+     .. code-block:: diff
+
+        PARAMETER {
+        +    cai0 = 1e-3 (mM)
+             ...
+        }
+
+   - Add an :keyword:`INITIAL` block to initialize internal and external calcium concentrations:
+
+     .. code-block:: diff
+
+        INITIAL {
+        +    cai = cai0
+        +    cao = cao0
+        }
+
+   - Declare `cao0` as a new parameter with a default, e.g., 1.2 mM:
+
+     .. code-block:: diff
+
+        PARAMETER {
+            ...
+        +    cao0 = 1.2 (mM)
+        }
+
+   - Add `cao` as a :keyword:`STATE` variable, and add a zero-derivative to keep it constant:
+
+     .. code-block:: diff
+
+        STATE {
+        +    cao (mM)
+            ...
+        }
+
+        DERIVATIVE state {
+        +    cao' = 0
+            ...
+        }
+
+   - Modify the `USEION ca` statement to write both internal and external ion concentrations:
+
+     .. code-block:: diff
+
+        NEURON {
+        -    USEION ca READ ica WRITE cai
+        +    USEION ca READ ica WRITE cai,cao
+            ...
+        }
+
+   - In the :keyword:`BREAKPOINT` block, change the numerical method from `cnexp` to `derivimplicit` for stability.
+
+3. **Remove Redundant Calls to `ion_style`**
+
+   If you modify the mechanism as above, remove or avoid using :func:`h.ion_style` calls in your Python or HOC code, as they may cause unwanted ion style promotion and re-initialization. For example, remove code such as:
+
+   .. code-block:: python
+
+      for secname in self.sections:
+          if secname == "axon":
+              continue
+          h.ion_style("ca_ion", 3, 2, 1, 1, 0, sec=self.sections[secname])
+          self.sections[secname].cao = 1.2
+          for seg in self.sections[secname]:
+              seg.cai = 0.001
+
+4. **Attach Synapses and Initialize the Model**
+
+   Attach synapses reading calcium ion concentrations to segments normally:
+
+   .. code-block:: python
+
+      xsyn = h.AMPAandNMDAplastic(0.5, sec=apical_section)
+
+   Then run:
+
+   .. code-block:: python
+
+      h.finitialize()
+      h.fcurrent()
+      h.frecord_init()
+
+   Internal and external calcium concentrations will now remain as assigned, without unexpected changes in individual segments.
+
+Background and Explanation of :func:`h.ion_style` Promotion Rules
+-----------------------------------------------------------------
+
+The `ion_style` function controls how NEURON treats ion concentrations internally for each section. The internal "promotion" rules determine whether calcium concentrations are treated as parameters, assigned variables, or state variables, based on the collection of inserted mechanisms.
+
+- Ion style promotion occurs when new mechanisms are inserted after calling `ion_style`.
+- If a mechanism uses the ion as a :keyword:`STATE` variable, NEURON promotes the ion style accordingly.
+- Such promotion may also toggle internal flags that cause re-initialization of `cai` and `cao` during :meth:`h.finitialize`.
+- This can cause localized discrepancies where only particular segments have ion concentrations reset to default constants, making bugs difficult to detect.
+
+Therefore, it is recommended to: 
+
+- Define initial calcium concentrations explicitly in the mechanisms that WRITE to the ions.
+- Avoid `ion_style` manipulations that might be overridden by later inserted mechanisms.
+- Control extracellular calcium as a parameter within the calcium dynamics mechanism instead of relying on external defaults.
+
+Summary
+-------
+
+To ensure consistent initialization of calcium concentrations in models with calcium-dependent synapses:
+
+- Set `h.cao0_ca_ion` in your script to change default extracellular calcium for all segments.
+- Modify calcium dynamics mechanisms (e.g., `CaDynamics_E2.mod`) to include proper :keyword:`PARAMETER`, :keyword:`INITIAL`, :keyword:`STATE`, and :keyword:`DERIVATIVE` blocks to initialize and maintain intracellular (`cai`) and extracellular (`cao`) calcium.
+- Remove or avoid unnecessary use of :func:`h.ion_style` to prevent unexpected re-initialization caused by ion style promotion.
+- After attaching synapses and mechanisms, run :meth:`h.finitialize` normally.
+
+This approach provides a robust and maintainable way to manage calcium ion concentration initialization so that values assigned in code will persist after model initialization.
+
+.. note::
+
+   These recommendations assume extracellular calcium concentration (`cao`) is fixed during simulations. If you require dynamic `cao`, additional modifications to the mechanisms are needed.
+
+.. seealso::
+
+   :func:`h.finitialize`, :func:`h.ion_style`, :class:`POINT_PROCESS` with :keyword:`USEION`, NEURON NMODL `INITIAL` and `DERIVATIVE` blocks.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4325 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4325>`_

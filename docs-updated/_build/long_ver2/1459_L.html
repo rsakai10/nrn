@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Action Potential Amplitude Variability in Single Compartment Models &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Action Potential Amplitude Variability in Single Compartment Models</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1459_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="action-potential-amplitude-variability-in-single-compartment-models">
+<h1>Action Potential Amplitude Variability in Single Compartment Models<a class="headerlink" href="#action-potential-amplitude-variability-in-single-compartment-models" title="Link to this heading"></a></h1>
+<p>When simulating action potentials (APs) in single compartment models with Hodgkin-Huxley type channels (<code class="xref py py-class docutils literal notranslate"><span class="pre">hh</span></code>), the amplitude of APs can vary significantly depending on model parameters such as geometry and channel densities. It is a common misconception that the AP amplitude must remain constant both during a spike train and across different parameter sets. However, the model’s ionic current balances fundamentally determine the AP peak voltage.</p>
+<section id="explanation-of-ap-peak-voltage">
+<h2>Explanation of AP Peak Voltage<a class="headerlink" href="#explanation-of-ap-peak-voltage" title="Link to this heading"></a></h2>
+<p>For a single electrically compact compartment, membrane voltage dynamics satisfy the equation:</p>
+<div class="math notranslate nohighlight">
+\[C \frac{dV}{dt} = \sum_x I_x\]</div>
+<p>where <span class="math notranslate nohighlight">\(C\)</span> is the membrane capacitance and <span class="math notranslate nohighlight">\(I_x\)</span> are ionic currents for species <span class="math notranslate nohighlight">\(x\)</span>. At the peak of an AP, <span class="math notranslate nohighlight">\(dV/dt = 0\)</span>, so the sum of ionic currents is zero:</p>
+<div class="math notranslate nohighlight">
+\[0 = \sum_x g_x (V - E_x)\]</div>
+<p>where <span class="math notranslate nohighlight">\(g_x\)</span> and <span class="math notranslate nohighlight">\(E_x\)</span> are the conductance and reversal potential of ionic species <span class="math notranslate nohighlight">\(x\)</span>, respectively. Rearranging:</p>
+<div class="math notranslate nohighlight">
+\[V = \frac{\sum_x g_x E_x}{\sum_x g_x}\]</div>
+<p>This means the AP peak voltage is a conductance-weighted average of ionic reversal potentials at the spike peak. The relative magnitudes of sodium, potassium, and leak conductances at the peak determine the AP amplitude.</p>
+<p>Consequently:</p>
+<ul class="simple">
+<li><p>An increase in potassium conductance (<span class="math notranslate nohighlight">\(g_K\)</span>) or a decrease in sodium conductance (<span class="math notranslate nohighlight">\(g_{Na}\)</span>) at the spike peak reduces AP amplitude.</p></li>
+<li><p>Channel gating dynamics during repetitive spiking, such as sodium inactivation and potassium activation, can reduce the maximum AP amplitude across spikes.</p></li>
+</ul>
+</section>
+<section id="parameter-effects-on-single-compartment-models">
+<h2>Parameter Effects on Single Compartment Models<a class="headerlink" href="#parameter-effects-on-single-compartment-models" title="Link to this heading"></a></h2>
+<p>Given a single compartment model created as:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create A
+A {
+  L = 10
+  diam = 10
+  insert hh
+}
+</pre></div>
+</div>
+<p>and injecting current clamp (<a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a>) with parameters such as <cite>del=200</cite>, <cite>dur=100</cite>, and <cite>amp=0.02</cite>, different spike counts and amplitudes are observed.</p>
+<p>If the compartment diameter is decreased (e.g., <cite>A.diam=1</cite>), the input resistance increases, causing more spikes to fire. However, the first spike amplitude can remain large (~42 mV peak), but subsequent spikes may have drastically smaller amplitudes (near 0 mV).</p>
+<p>Adjusting maximal conductances (e.g., <span class="math notranslate nohighlight">\(\bar{g}_{Na}\)</span>, <span class="math notranslate nohighlight">\(\bar{g}_{K}\)</span>) changes excitability and amplitude. For example:</p>
+<ul class="simple">
+<li><p>Increasing sodium conductance (<code class="xref py py-meth docutils literal notranslate"><span class="pre">gnabar_hh()</span></code>) increases excitability and can cause spontaneous firing.</p></li>
+<li><p>The leak conductance generally has little impact on AP amplitude.</p></li>
+<li><p>Changes in membrane capacitance affect the speed but less so the amplitude of spikes.</p></li>
+</ul>
+</section>
+<section id="strategies-to-attain-consistent-ap-amplitudes">
+<h2>Strategies to Attain Consistent AP Amplitudes<a class="headerlink" href="#strategies-to-attain-consistent-ap-amplitudes" title="Link to this heading"></a></h2>
+<p>To generate APs with similar amplitudes across cells or compartments of different sizes:</p>
+<ol class="arabic simple">
+<li><p>Adjust maximal ionic conductance densities (<span class="math notranslate nohighlight">\(\bar{g}_{Na}\)</span>, <span class="math notranslate nohighlight">\(\bar{g}_{K}\)</span>) rather than absolute conductances.</p></li>
+<li><p>Small compartments typically require higher channel densities to achieve the same ionic currents and thus similar AP amplitudes.</p></li>
+<li><p>Use tools such as the Multiple Run Fitter to automatically tune parameters to achieve desired electrophysiological behavior.</p></li>
+<li><p>Consider the presence of additional compartments or branches which may act as electrical loads reducing apparent amplitude.</p></li>
+</ol>
+</section>
+<section id="code-example-python-and-hoc">
+<h2>Code Example: Python and HOC<a class="headerlink" href="#code-example-python-and-hoc" title="Link to this heading"></a></h2>
+<p>Here is a simple example creating a single compartment model with Hodgkin-Huxley channels, applying current clamp, and observing APs:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+soma {
+  L = 10
+  diam = 10
+  insert hh
+}
+objref stim
+stim = new IClamp(0.5)
+stim.del = 200
+stim.dur = 100
+stim.amp = 0.02
+
+proc run_sim() {
+    tstop = 400
+    run()
+}
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.02</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">tstop</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">h</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The maximum voltage during a spike depends on the balance of ionic conductances and their gating variables at spike peak.</p></li>
+<li><p>During repetitive firing, sodium channel inactivation and potassium channel activation lead to reduced AP amplitude.</p></li>
+<li><p>Cell size scaling requires adjusting ion channel densities for consistent electrophysiological properties.</p></li>
+<li><p>Leak channels contribute less to spike amplitude, but important for resting membrane potential.</p></li>
+<li><p>For complex morphologies with dendritic branches, passive or active loads may modify soma spike amplitude.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Monitoring gating variables during simulation can provide insight into changes in conductances underlying AP amplitude variations.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">hh</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.run()</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1459">https://neuron.yale.edu/phpBB/viewtopic.php?t=1459</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+Stochastic Simulation of Single Channels
+========================================
+
+NEURON’s stochastic single channel simulations rely on random number generators seeded at initialization. If multiple simulation instances or runs use the same random seed, they will produce identical sequences of channel openings and thus identical voltage responses.
+
+.. note::
+   To ensure truly independent stochastic behavior across simulations or repeated runs, set a different random seed before each run.
+
+Example in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    import random
+
+    # Set a different seed for each run (e.g., based on run number or time)
+    h.Random().Random123(0, 1, 1)  # Initialize a Random with a unique seed here
+
+Example in HOC:
+
+.. code-block:: hoc
+
+    objref r
+    r = new Random()
+    r.MCellRan4(x, y)  // x, y: different seeds each run
+
+.. note::
+   Pre-generating and recording a list of seeds for each run improves reproducibility and tracking of simulation parameters.
+
+.. seealso::
+   :class:`h.Random`, :meth:`h.Random.MCellRan4`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=361 <https://neuron.yale.edu/phpBB/viewtopic.php?t=361>`_

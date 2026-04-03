@@ -1,0 +1,83 @@
+.. _template_instance_performance:
+
+Using Templates and Stimulus Objects Efficiently to Avoid Slowdowns
+====================================================================
+
+When creating many instances of a cell :class:`template` with external stimulus in NEURON, certain design choices can cause severe slowdowns:
+
+- Using many instances of GUI-oriented tools like ``PointProcessManager`` and ``VectorPlay`` dramatically slows model setup and execution, as these are meant for interactive use with few instances.
+- Instead, create :class:`IClamp` objects directly; they are lightweight and suitable for delivering current injections.
+- Use the :meth:`Vector.play` method to drive the :attr:`IClamp.amp` directly, eliminating the need for ``VectorPlay``.
+- Avoid mixing instrumentation and control code inside cell :class:`template` definitions. Keep templates focused on morphology and biophysics; add stimuli and control externally for modularity and easier debugging.
+
+Example HOC code creating many cells efficiently::
+
+    rowsTCN = 30
+    colsTCN = 30
+    slabsTCN = 2
+    objref TCN[colsTCN][rowsTCN][slabsTCN]
+    for col=0, colsTCN-1 for row=0, rowsTCN-1 for slab=0, slabsTCN-1 {
+        TCN[col][row][slab] = new tpTCN()
+        // Attach lightweight IClamp stimuli here, not PointProcessManager
+        print "created TCN[",col,"][",row,"][",slab,"]"
+    }
+
+To efficiently deliver sinusoidal current stimuli with per-cell delays and phases, it is best to implement a custom :file:`.mod` point process rather than trying to delay vector play or generate many stimulus vectors.
+
+Example :file:`isin.mod` implementing sinusoidal current injection::
+
+    NEURON {
+      POINT_PROCESS Isin
+      RANGE del, dur, f, phi, amp, i
+      ELECTRODE_CURRENT i
+    }
+    
+    PARAMETER {
+      del (ms)
+      dur (ms) <0, 1e9>
+      f (Radian/ms) <0, 1e9>
+      phi (Radian)
+      amp (nA)
+    }
+    
+    ASSIGNED {
+      i (nA)
+      on (1)
+    }
+    
+    INITIAL {
+      i = 0
+      on = 0
+      net_send(del, 1)
+    }
+    
+    FUNCTION fsin(t (ms)) {
+      fsin = sin(f*(t - del) + phi)
+    }
+    
+    BREAKPOINT {
+      i = on * amp * fsin(t)
+    }
+    
+    NET_RECEIVE (w) {
+      if (flag == 1) {
+        if (on == 0) {
+          on = 1
+          net_send(dur, 1)
+        } else {
+          on = 0
+        }
+      }
+    }
+
+This approach reduces memory and computation overhead and permits straightforward parameterization of frequency, phase, delay, duration, and amplitude per cell.
+
+.. note::
+
+   When simulating large populations with varied stimulus timing, modularizing the code and avoiding heavy GUI-based objects significantly improves performance. Using NMODL point processes for stimuli is preferable to multiple ``PointProcessManager`` or ``VectorPlay`` instances.
+
+.. seealso::
+
+   :class:`IClamp`, :class:`Vector`, :meth:`Vector.play`, NMODL :file:`.mod` writing, and the NEURON Programmer's Reference for advanced event delivery concepts like :meth:`net_send` and :meth:`NET_RECEIVE`.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1522 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1522>`_

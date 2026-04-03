@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Non-uniform Parameter Assignment in NEURON Python Without Colon Notation &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Non-uniform Parameter Assignment in NEURON Python Without Colon Notation</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/progref-1/4700_Non-uniform_parameter_with_colon_notation?.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="non-uniform-parameter-assignment-in-neuron-python-without-colon-notation">
+<h1>Non-uniform Parameter Assignment in NEURON Python Without Colon Notation<a class="headerlink" href="#non-uniform-parameter-assignment-in-neuron-python-without-colon-notation" title="Link to this heading"></a></h1>
+<p>In legacy HOC code, it is possible to assign a range variable with a colon notation to specify a linear interpolation along a section, for example:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>section diam(0:1) = 2.0:1.0
+</pre></div>
+</div>
+<p>This sets the diameter to vary linearly from 2.0 at the 0 end to 1.0 at the 1 end of the section.</p>
+<p>However, this colon notation is not supported in NEURON’s Python interface and is generally discouraged even in HOC due to readability and maintainability concerns.</p>
+<section id="linear-interpolation-of-range-variables-in-python">
+<h2>Linear Interpolation of Range Variables in Python<a class="headerlink" href="#linear-interpolation-of-range-variables-in-python" title="Link to this heading"></a></h2>
+<p>The recommended and clear way to assign a linearly varying parameter along a section in Python is to explicitly loop over the segments and assign the value based on the normalized position <cite>seg.x</cite> (which ranges from 0 to 1):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">val0</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># value at the 0 end of the section</span>
+<span class="n">val1</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># value at the 1 end of the section</span>
+
+<span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">section</span><span class="p">:</span>
+    <span class="n">seg</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="n">val0</span> <span class="o">+</span> <span class="p">(</span><span class="n">val1</span> <span class="o">-</span> <span class="n">val0</span><span class="p">)</span> <span class="o">*</span> <span class="n">seg</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<p>Here, <cite>seg.x</cite> is the normalized distance of the segment center from the 0 end of the section.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can factor out the interpolation into a function if you need to apply it to multiple sections:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">linear_interpolate</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">val0</span><span class="p">,</span> <span class="n">val1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">section</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">val0</span> <span class="o">+</span> <span class="p">(</span><span class="n">val1</span> <span class="o">-</span> <span class="n">val0</span><span class="p">)</span> <span class="o">*</span> <span class="n">seg</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Usage:</span>
+<span class="n">linear_interpolate</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="s1">&#39;diam&#39;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="readability-and-maintainability">
+<h2>Readability and Maintainability<a class="headerlink" href="#readability-and-maintainability" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The explicit loop with interpolation formula is more readable and understandable to most users than the colon notation.</p></li>
+<li><p>The colon notation is considered legacy and should be avoided in new code.</p></li>
+<li><p>Python’s syntax encourages explicitness, which helps in debugging and code clarity.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>There is no direct equivalent of the HOC colon notation in NEURON Python.</p></li>
+<li><p>Use explicit loops over segments with interpolation formulas to assign non-uniform parameters.</p></li>
+<li><p>This approach is clearer, more maintainable, and recommended for new code.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>NEURON Python documentation on sections and segments</p></li>
+<li><p>NEURON forum discussions on range variables and parameter assignment</p></li>
+</ul>
+</div>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Link to this heading"></a></h2>
+<p>Original discussion thread: <a class="reference external" href="https://www.neuron.yale.edu/phpBB/viewtopic.php?f=3&amp;t=4700">https://www.neuron.yale.edu/phpBB/viewtopic.php?f=3&amp;t=4700</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

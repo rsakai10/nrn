@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chunked Simulation with h.frecord_init() and Python Multiprocessing &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Chunked Simulation with <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> and Python Multiprocessing</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4701_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="chunked-simulation-with-h-frecord-init-and-python-multiprocessing">
+<span id="chunked-simulation-with-frecord-init-and-multiprocessing"></span><h1>Chunked Simulation with <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> and Python Multiprocessing<a class="headerlink" href="#chunked-simulation-with-h-frecord-init-and-python-multiprocessing" title="Link to this heading"></a></h1>
+<p>When running long simulations in NEURON while recording many variables, a common approach is to break the simulation into multiple time chunks to manage memory usage and data handling. This section addresses advanced usage of <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> in chunked simulations, especially in combination with Python multiprocessing for parallel data processing.</p>
+<section id="chunked-simulation-workflow-with-h-frecord-init">
+<h2>Chunked Simulation Workflow with <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code><a class="headerlink" href="#chunked-simulation-workflow-with-h-frecord-init" title="Link to this heading"></a></h2>
+<p>The standard approach to run a simulation in chunks using NEURON’s Python interface is:</p>
+<ol class="arabic simple">
+<li><p>Create a dictionary mapping variable names to <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> objects that record the desired variables.</p></li>
+<li><p>For each chunk, run the simulation until the end time of that chunk using <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.continuerun()</span></code>.</p></li>
+<li><p>After the chunk finishes, save or process the current data.</p></li>
+<li><p>Call <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> to resize the recording vectors to hold only the amount of data for the next chunk, reducing memory usage.</p></li>
+</ol>
+<p>Example pseudo-code in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># rec_dict: dict of variable names -&gt; h.Vector recordings</span>
+<span class="c1"># chunk_end_times: list of simulation times to run up to for each chunk</span>
+<span class="k">for</span> <span class="n">chunk_end_time</span> <span class="ow">in</span> <span class="n">chunk_end_times</span><span class="p">:</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">chunk_end_time</span><span class="p">)</span>
+
+    <span class="c1"># Save or process current chunk data here...</span>
+
+    <span class="c1"># Resize recording buffers for next chunk</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">frecord_init</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="using-python-multiprocessing-for-parallel-data-processing">
+<h2>Using Python Multiprocessing for Parallel Data Processing<a class="headerlink" href="#using-python-multiprocessing-for-parallel-data-processing" title="Link to this heading"></a></h2>
+<p>To improve performance, data processing and saving can be parallelized using Python’s multiprocessing module. The idea is to let the main process run the NEURON simulation, while one or more worker processes handle data extracted from <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> recordings, and a separate process writes data to disk asynchronously.</p>
+<p>Example multiprocessing usage pattern:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+
+<span class="n">rec_dict</span> <span class="o">=</span> <span class="n">create_rec_dict</span><span class="p">(</span><span class="n">section_list</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Manager</span><span class="p">()</span> <span class="k">as</span> <span class="n">manager</span><span class="p">:</span>
+    <span class="n">data_queue</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+    <span class="n">data_writer</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">data_writer_func</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">data_queue</span><span class="p">,</span> <span class="o">...</span><span class="p">))</span>
+    <span class="n">data_writer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk_end_time</span> <span class="ow">in</span> <span class="n">chunk_end_times</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">chunk_end_time</span><span class="p">)</span>
+
+            <span class="n">time_array</span> <span class="o">=</span> <span class="n">rec_dict</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_numpy</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="n">rec_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;Time&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">var_array</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">as_numpy</span><span class="p">()</span>
+
+                <span class="c1"># Problematic: as_numpy() shares memory with vec</span>
+
+                <span class="c1"># Pass array for processing asynchronously</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">var_array</span><span class="p">,</span> <span class="n">time_array</span><span class="p">))</span>
+
+            <span class="n">h</span><span class="o">.</span><span class="n">frecord_init</span><span class="p">()</span>
+
+    <span class="n">data_writer</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="potential-pitfall-shared-memory-between-vector-as-numpy-and-h-frecord-init">
+<h2>Potential Pitfall: Shared Memory Between <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.as_numpy" title="Vector.as_numpy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.as_numpy()</span></code></a> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code><a class="headerlink" href="#potential-pitfall-shared-memory-between-vector-as-numpy-and-h-frecord-init" title="Link to this heading"></a></h2>
+<p>The method <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.as_numpy" title="Vector.as_numpy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.as_numpy()</span></code></a> returns a NumPy array that shares the same underlying memory with the NEURON <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>. Calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> after dispatching worker processes that have not yet started execution causes the NEURON vectors to be resized <strong>and</strong> changes the contents of the NumPy arrays held by the workers, since they reference the now-resized buffers.</p>
+<p>As a result, workers may receive truncated or corrupted data, leading to incorrect analyses such as flat or constant traces.</p>
+<p>Workarounds to avoid this issue:</p>
+<ul>
+<li><p>Introduce a delay (e.g., <code class="xref py py-func docutils literal notranslate"><span class="pre">time.sleep()</span></code>) before calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> to allow worker processes to start and copy data.</p></li>
+<li><p>Explicitly create deep copies of the data before passing to worker processes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">var_array</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">as_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">var_array</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that copying data is an <em>O(n)</em> operation in time and memory.</p>
+</li>
+</ul>
+</section>
+<section id="sampling-with-variable-time-step-integration-and-different-sampling-intervals">
+<h2>Sampling with Variable Time Step Integration and Different Sampling Intervals<a class="headerlink" href="#sampling-with-variable-time-step-integration-and-different-sampling-intervals" title="Link to this heading"></a></h2>
+<p>When using variable time step integration with <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a>, smooth and consistent recording can be achieved by:</p>
+<ul class="simple">
+<li><p>Using the <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a> method with a specified sampling interval or time vector.</p></li>
+<li><p>NEURON will perform linear interpolation to sample variables at fixed time points, even when the underlying solver operates at adaptively chosen times.</p></li>
+</ul>
+<p>Example recording fixed timestep data with variable timestep integration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;stdrun.hoc&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a section and insert HH channels</span>
+<span class="n">sec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sec&quot;</span><span class="p">)</span>
+<span class="n">sec</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;hh&quot;</span><span class="p">)</span>
+
+<span class="c1"># Setup simulation parameters</span>
+<span class="n">run_time</span> <span class="o">=</span> <span class="mf">500.0</span>  <span class="c1"># ms</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>          <span class="c1"># desired sampling interval in ms</span>
+
+<span class="c1"># Create a time vector with fixed intervals</span>
+<span class="n">time_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">indgen</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">run_time</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="c1"># Enable variable time step integration</span>
+<span class="n">cvode</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">CVode</span><span class="p">()</span>
+<span class="n">cvode</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Record time at fixed intervals using prespecified time vector</span>
+<span class="n">t_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">,</span> <span class="n">time_vec</span><span class="p">)</span>
+
+<span class="c1"># Record membrane potential at fixed intervals</span>
+<span class="n">v_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">sec</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="n">time_vec</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">run_time</span><span class="p">)</span>
+
+<span class="c1"># t_vec.size() == v_vec.size(), data sampled at fixed dt.</span>
+</pre></div>
+</div>
+</section>
+<section id="ensuring-simulation-time-consistency-when-running-in-chunks">
+<h2>Ensuring Simulation Time Consistency When Running in Chunks<a class="headerlink" href="#ensuring-simulation-time-consistency-when-running-in-chunks" title="Link to this heading"></a></h2>
+<p>When running simulations in chunks with <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a> active, one may want to ensure simulation times align precisely with chunk boundaries to:</p>
+<ul class="simple">
+<li><p>Guarantee recording vectors have consistent length.</p></li>
+<li><p>Avoid off-by-one errors and ease data concatenation across chunks.</p></li>
+</ul>
+<p>Recommended approach:</p>
+<ol class="arabic simple">
+<li><p>At the start of each chunk, if current simulation time differs from the intended chunk start time by more than the sampling interval <cite>dt</cite>, set <cite>h.t</cite> explicitly to the chunk start time and call <cite>CVode.re_init()</cite> to reinitialize the solver.</p></li>
+<li><p>Use <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode.event" title="CVode.event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CVode.event()</span></code></a> to schedule an event at the chunk end time — this instructs the solver to stop precisely at chunk boundaries.</p></li>
+<li><p>Run the simulation with <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.continuerun(chunk_end_time)()</span></code>.</p></li>
+</ol>
+<p>Example code snippet illustrating this approach:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;stdrun.hoc&quot;</span><span class="p">)</span>
+
+<span class="n">use_cvode</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">num_chunks</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">5000</span>  <span class="c1"># in ms</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="s2">&quot;soma&quot;</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">CVode</span><span class="p">()</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="n">use_cvode</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">chunk_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_chunks</span><span class="p">):</span>
+    <span class="n">chunk_start_time</span> <span class="o">=</span> <span class="n">chunk_num</span> <span class="o">*</span> <span class="n">chunk_size</span>
+    <span class="n">chunk_stop_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">chunk_num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">chunk_size</span>
+
+    <span class="k">if</span> <span class="n">use_cvode</span><span class="p">:</span>
+        <span class="c1"># Allow small numerical tolerance to avoid segmentation faults</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">chunk_start_time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">dt</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">chunk_start_time</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">CVode</span><span class="p">()</span><span class="o">.</span><span class="n">re_init</span><span class="p">()</span>
+
+        <span class="n">h</span><span class="o">.</span><span class="n">CVode</span><span class="p">()</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">chunk_stop_time</span><span class="p">)</span>
+
+    <span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">chunk_stop_time</span><span class="p">)</span>
+
+    <span class="c1"># Process and save current chunk data here...</span>
+    <span class="n">save_chunk_data</span><span class="p">()</span>
+
+    <span class="n">h</span><span class="o">.</span><span class="n">frecord_init</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="notes-and-caveats">
+<h2>Notes and Caveats<a class="headerlink" href="#notes-and-caveats" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The event scheduled with <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode.event" title="CVode.event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CVode.event()</span></code></a> does not always guarantee simulation stops exactly at that time, particularly when times are within floating point precision limits of one another.</p></li>
+<li><p>Recording vectors may occasionally have one more or fewer data points than expected per chunk due to interpolation and solver behavior.</p></li>
+<li><p>It may be necessary to implement small post-processing fixes to handle inconsistent vector lengths.</p></li>
+<li><p>Passing a <cite>dt</cite> or fixed time vector to <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a> is a convenient way to sample variables at fixed intervals when using variable time step integration, eliminating the need for manual resampling.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code> after each chunk to reset the recording buffers to avoid excessive memory use.</p></li>
+<li><p>When combining with Python multiprocessing, ensure data passed to worker processes is fully copied (e.g., via <cite>.copy()</cite>) to avoid data corruption due to shared memory with NEURON vectors.</p></li>
+<li><p>To record slowly changing variables efficiently, use different sampling intervals by specifying <cite>dt</cite> or a time vector in <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a>.</p></li>
+<li><p>When running simulations in chunks with <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a> active, ensure correct alignment of simulation time and chunk boundaries by resetting <cite>h.t</cite> as needed and scheduling stop events with <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode.event" title="CVode.event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CVode.event()</span></code></a>.</p></li>
+<li><p>Be aware that edge cases may require custom handling of recording vector sizes and timings.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">h.frecord_init()</span></code>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.continuerun()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4701">https://neuron.yale.edu/phpBB/viewtopic.php?t=4701</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

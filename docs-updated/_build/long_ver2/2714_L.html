@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Single Compartment Models of Neurons &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Single Compartment Models of Neurons</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2714_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="single-compartment-models-of-neurons">
+<h1>Single Compartment Models of Neurons<a class="headerlink" href="#single-compartment-models-of-neurons" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Single compartment neuron models approximate the entire cell membrane as a single isopotential compartment. They are often used as simplified models to study ionic mechanisms, membrane properties, or as components of networks when morphology is not critical. Such models are analogous to experimental preparations like Xenopus oocytes expressing ion channels, and are useful testbeds for developing and evaluating membrane mechanisms coded in NMODL or implemented via <code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBuilder</span></code>.</p>
+</section>
+<section id="model-construction">
+<h2>Model Construction<a class="headerlink" href="#model-construction" title="Link to this heading"></a></h2>
+<p>When creating a single compartment model, consider the following:</p>
+<ul>
+<li><p><strong>Morphology and Surface Area</strong>:
+The model typically represents the soma as a simple geometrical object (e.g., a cylinder or sphere) with dimensions based on experimental data or literature.
+The <em>surface area</em> of the compartment is essential because it determines the total membrane capacitance and the total conductance based on conductance densities.
+For example, modeling a soma as a cylinder without end caps:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">30</span>    <span class="c1"># micron</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># micron</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Surface area (without end caps): </span><span class="si">{</span><span class="n">soma</span><span class="o">.</span><span class="n">area</span><span class="p">()</span><span class="si">}</span><span class="s2"> um^2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Membrane Capacitance and Resistance</strong>:
+Specific membrane capacitance is generally assumed to be 1 µF/cm² (0.01 pF/µm²). Based on the measured or estimated capacitance and surface area, the total capacitance can be calculated.
+Membrane resistance (Rm), input resistance (Rin), and membrane time constant (τm = Rm * Cm) can be derived or measured experimentally to constrain model parameters.</p></li>
+<li><p><strong>Ionic Conductances</strong>:
+Insert ionic conductance mechanisms (<code class="xref py py-class docutils literal notranslate"><span class="pre">hh</span></code> or custom NMODL mechanisms) with maximum conductance parameters (<cite>gbar</cite>). These can be tuned via parameter search to match voltage clamp current-voltage relationships and current clamp spiking behavior.</p>
+<p>If your model is purely a single compartment (with <cite>nseg=1</cite>), all ionic mechanisms exist uniformly over the membrane, and channel densities (conductance per unit area) translate into total numbers of channels scaled by the compartment surface area.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The location of conductances in a single compartment model is implicitly uniform; the kinetics and gating dynamics determine their temporal and voltage dependence, regardless of channel density spatial distribution.</p>
+</div>
+</li>
+</ul>
+</section>
+<section id="single-compartment-model-limitations-and-usefulness">
+<h2>Single Compartment Model Limitations and Usefulness<a class="headerlink" href="#single-compartment-model-limitations-and-usefulness" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Single compartment models assume the neuron is electrically compact and equipotential; this is rarely perfectly true for real neurons with complex dendritic trees.</p></li>
+<li><p>They cannot simulate spatially distributed phenomena such as voltage propagation, dendritic filtering, or location-dependent synaptic inputs.</p></li>
+<li><p>Single compartment models <strong>do not respond to extracellular stimulation</strong> in the sense of spatially non-uniform extracellular voltage gradients. Explicit extracellular mechanisms or multi-compartment models are needed for extracellular stimulation protocols.</p></li>
+<li><p>Voltage clamp and current clamp protocols (implemented using <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> and <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a>) are still applicable and meaningful in single compartment models as they mimic somatic electrophysiological recordings.</p></li>
+<li><p>Starting with a single compartment model is recommended — it represents a hypothesis that can be tested and refined. Add complexity such as dendrites or multiple compartments only when needed.</p></li>
+</ul>
+</section>
+<section id="current-and-current-density-conversion">
+<h2>Current and Current Density Conversion<a class="headerlink" href="#current-and-current-density-conversion" title="Link to this heading"></a></h2>
+<p>NEURON mechanisms typically record ionic currents as current density in mA/cm². To compute total current (in nA or mA), multiply the recorded current density by membrane surface area (in cm²):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume `vec` records the current density in mA/cm² at location 0.5 on `soma`</span>
+<span class="n">surface_area_um2</span> <span class="o">=</span> <span class="n">soma</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>         <span class="c1"># microns^2</span>
+<span class="n">surface_area_cm2</span> <span class="o">=</span> <span class="n">surface_area_um2</span> <span class="o">*</span> <span class="mf">1e-8</span>  <span class="c1"># conversion µm² to cm²</span>
+<span class="n">total_current_nA</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">surface_area_cm2</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>  <span class="c1"># mA/cm² * cm² * 1000 to nA</span>
+
+<span class="c1"># Alternatively, if vec contains current density over time, use:</span>
+<span class="c1"># vec.mul(surface_area_cm2 * 1e3) converts mA/cm² to nA total current</span>
+</pre></div>
+</div>
+</section>
+<section id="patch-area-considerations">
+<h2>Patch Area Considerations<a class="headerlink" href="#patch-area-considerations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Whole-cell recordings approximate total cell current; “patch area” is not usually relevant for total current calculations in whole-cell mode.</p></li>
+<li><p>For cell-attached or outside-out patches, estimated patch area can be approximated as π * (pipette radius)², but this is typically not used for whole-cell recordings.</p></li>
+<li><p>When modeling whole-cell conditions, use the total compartment surface area for current calculations.</p></li>
+</ul>
+</section>
+<section id="simulating-dual-electrode-protocols">
+<h2>Simulating Dual Electrode Protocols<a class="headerlink" href="#simulating-dual-electrode-protocols" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Simulating simultaneous current injection at one site and recording membrane potential at another often requires models with spatial extent (multiple segments, <cite>nseg &gt; 1</cite>) because spatial voltage differences are important.</p></li>
+<li><p>In a single compartment model (<cite>nseg=1</cite>), the membrane potential is uniform; recording or injecting at different fractional positions (e.g., <cite>v(0.1)</cite> vs. <cite>v(0.9)</cite>) is equivalent.</p></li>
+<li><p>Dual voltage clamps or dual electrode experiments (e.g., stimulating one cell and recording from a coupled cell) require multiple connected cells with gap junctions represented via, e.g., resistive connections.</p></li>
+<li><p>Gap junctions can be modeled by electrically coupling sections of different cells via conductive connections. See ModelDB examples for implementing gap junctions.</p></li>
+</ul>
+</section>
+<section id="example-defining-a-single-compartment-with-ionic-channels-python">
+<h2>Example: Defining a Single Compartment with Ionic Channels (Python)<a class="headerlink" href="#example-defining-a-single-compartment-with-ionic-channels-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;stdrun.hoc&#39;</span><span class="p">)</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># length in microns</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># diameter in microns</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># single compartment</span>
+
+<span class="c1"># Insert Hodgkin-Huxley channels</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set maximal conductances (S/cm^2)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span> <span class="o">=</span> <span class="mf">0.12</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">gkbar_hh</span> <span class="o">=</span> <span class="mf">0.036</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">gl_hh</span> <span class="o">=</span> <span class="mf">0.0003</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">el_hh</span> <span class="o">=</span> <span class="o">-</span><span class="mf">54.3</span>
+
+<span class="c1"># Set membrane capacitance default (uF/cm^2)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">cm</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Current clamp stimulus at midpoint</span>
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># nA</span>
+
+<span class="c1"># Record membrane potential</span>
+<span class="n">v_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">)</span>
+<span class="n">t_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">700</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_vec</span><span class="p">,</span> <span class="n">v_vec</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Membrane potential (mV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Single compartment models are valuable for rapid prototyping, ionic mechanism testing, and cases where neuron morphology can be neglected.</p></li>
+<li><p>They use uniform membrane properties and gating dynamics based on maximal conductances and kinetics.</p></li>
+<li><p>Voltage clamp (<a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a>) and current clamp (<a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a>) protocols apply to single compartments as in experiments.</p></li>
+<li><p>Converting current density to total current requires multiplication by membrane surface area.</p></li>
+<li><p>Multi-compartment models are needed for spatially distributed phenomena, dual electrode experiments, or modeling extensive morphology with dendrites, distal appendages, or gap junction networks.</p></li>
+<li><p>Use experimental data such as time constants, input resistance, membrane capacitance, and conductances to inform and constrain the model.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consult chapters 3-6 of <em>The NEURON Book</em> (Hines and Carnevale, 2006) and the article Hines &amp; Carnevale (Neural Computation, 1997) for an in-depth understanding of membrane mechanisms and compartmental modeling in NEURON.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2714">https://neuron.yale.edu/phpBB/viewtopic.php?t=2714</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

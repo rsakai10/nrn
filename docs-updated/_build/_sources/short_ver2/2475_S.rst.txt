@@ -1,0 +1,64 @@
+.. _synaptic_conductance_waveform:
+
+Synaptic Conductance Driven by a Waveform
+=========================================
+
+You can model a synapse by dynamically changing the membrane conductance according to a specified waveform using a point process like the following GClamp mechanism:
+
+.. code-block:: nrn
+
+    NEURON {
+       POINT_PROCESS GClamp
+       RANGE g, i, e
+       NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+       (mV) = (millivolt)
+       (uS) = (micromho)
+       (nA) = (nanoamp)
+    }
+
+    PARAMETER {
+       g (micromho)
+       e (millivolt)
+       v (millivolt)
+    }
+    ASSIGNED { i (nanoamp) }
+
+    BREAKPOINT {
+       i = g*(v - e)
+    }
+
+**Important Notes:**
+
+- Use ``NONSPECIFIC_CURRENT`` instead of ``ELECTRODE_CURRENT`` when modeling a conductance-based synapse to ensure simulation stability. The current equation remains ``i = g*(v - e)``.
+- Ensure your conductance waveform vector contains only non-negative values; negative conductances are biophysically implausible and can cause simulation instability.
+- You can load and play a conductance waveform into the GClamp’s ``g`` variable via :class:`Vector`'s :meth:`play` method. For example, if ``gvec`` and ``tvec`` are vectors of conductance and times respectively, and ``pp`` is the GClamp instance:
+
+  .. code-block:: python
+
+      gvec.play(&pp.g, tvec, 1)  # continuous interpolation enabled
+
+- Match the initial membrane potential and passive reversal potential (e.g., ``v_init`` and ``e_pas``) to avoid initial transients.
+- Alternatively, an :class:`AlphaSynapse` can be used with the conductance waveform played into its ``gmax`` parameter, but adjusting its time constant ``tau`` appropriately is required.
+
+**Example HOC code to instantiate GClamp and load waveform data:**
+
+.. code-block:: hoc
+
+    objref syn, gvec, tvec
+    soma syn = new GClamp(0.5)
+    syn.e = -80
+
+    gvec = new Vector()
+    tvec = new Vector()
+    // Load data into gvec and tvec here (see file I/O examples)
+
+    gvec.play(&syn.g, tvec, 1)  // Play conductance waveform into syn.g continuously
+
+.. seealso::
+
+   :class:`Vector` and its :meth:`play` method, :class:`AlphaSynapse`, :ref:`dynamic_clamp`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2475 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2475>`_

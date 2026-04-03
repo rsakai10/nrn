@@ -1,0 +1,103 @@
+Issues Using NetStim in NEURON
+==============================
+
+Problem Description
+-------------------
+Users often encounter difficulties when trying to use `NetStim` objects to deliver random or patterned stimuli to neurons in NEURON simulations. A common misunderstanding is attempting to connect a `NetStim` directly to a neural section without an intermediate synaptic mechanism, which results in no observable effect on the neuron.
+
+Key Points and Solutions
+------------------------
+
+1. **Proper Connection of NetStim**
+
+   - A `NetStim` object generates spike events but does **not** directly inject current or conductance changes into a neuron.
+   - To affect a neuron, `NetStim` must be connected via a `NetCon` to a synaptic mechanism (e.g., `ExpSyn`, `Exp2Syn`) located on a neural section.
+   - The typical workflow is:
+     
+     .. code-block:: python
+     
+        stimNc = h.NetStim()
+        stimNc.noise = 1
+        stimNc.start = 0
+        stimNc.number = 100
+        stimNc.interval = 5
+        
+        syn = h.ExpSyn(0.5, sec=soma)
+        nc = h.NetCon(stimNc, syn)
+        nc.weight[0] = 10
+
+   - This order is important: create `NetStim` → create synapse on section → create `NetCon` connecting `NetStim` to synapse.
+
+2. **Why Direct Connection to Section Fails**
+
+   - `NetStim` and `NetCon` do not themselves generate current.
+   - Without a synaptic mechanism or point process that produces current, the neuron’s membrane potential will not change.
+   - Artificial spiking cells (like `NetStim`) are point processes and require a target that modifies the neuron’s state.
+
+3. **Recording NetStim Events**
+
+   - To monitor when `NetStim` generates events, use the `NetCon.record()` method:
+     
+     .. code-block:: python
+     
+        spike_times = h.Vector()
+        nc.record(spike_times)
+     
+   - This records the times at which `NetStim` fires events.
+   - Additionally, recording synaptic currents or membrane potentials can help verify stimulus effects.
+
+4. **Debugging Tips**
+
+   - Use short simulation times initially.
+   - Test neuron response to simple, known stimuli (e.g., single square pulses).
+   - Check parameters such as `NetStim.number`, `NetStim.start`, and simulation `tstop` to ensure events occur within simulation time.
+   - Verify synaptic weights are nonzero and sufficiently large to produce measurable effects.
+   - Inspect neuron geometry and membrane properties if unexpected firing patterns occur.
+
+5. **Alternative Random Stimulus Approach**
+
+   - Using `IClamp` with a `Vector.play()` of random amplitudes can create random stimuli.
+   - However, observed bursting or regular firing may be due to intrinsic neuron properties rather than stimulus pattern.
+
+Example: Recording NetStim Events and Synaptic Current
+------------------------------------------------------
+
+.. code-block:: python
+
+    stimNc = h.NetStim()
+    stimNc.noise = 1
+    stimNc.start = 0
+    stimNc.number = 100
+    stimNc.interval = 5
+
+    syn = h.ExpSyn(0.5, sec=soma)
+    nc = h.NetCon(stimNc, syn)
+    nc.weight[0] = 10
+
+    spike_times = h.Vector()
+    nc.record(spike_times)
+
+    syn_current = h.Vector()
+    syn_current.record(syn._ref_i)
+
+    t_vec = h.Vector()
+    t_vec.record(h._ref_t)
+
+    h.tstop = 100
+    h.run()
+
+    # spike_times now contains times of NetStim events
+    # syn_current contains synaptic current over time
+
+.. note::
+
+   Always ensure that the synaptic mechanism and `NetCon` are properly set up to observe the effects of `NetStim`.
+
+.. seealso::
+
+   - NEURON documentation on `NetStim` and `NetCon`
+   - NEURON forum thread: Voltage waveform as a NetCon source (viewtopic.php?f=15&t=2753)
+
+Reference
+---------
+Original discussion thread: https://www.neuron.yale.edu/phpBB/viewtopic.php?f=15&t=2750

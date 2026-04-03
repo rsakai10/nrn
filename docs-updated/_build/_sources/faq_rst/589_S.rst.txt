@@ -1,0 +1,109 @@
+.. _collapse_dendritic_tree:
+
+Collapse a dendritic tree into N compartments
+==============================================
+
+This :hoc:`collapse.hoc` script allows collapsing a dendritic tree into a specified number of compartments (e.g., 3, 4, 10, or any user-defined number) while preserving the axial resistance of the original morphology.
+
+Key features:
+- Uses axial resistance path from soma to assign dendrites into compartments based on cutoff values stored in a :class:`Vector` called ``CUTOFF``.
+- Supports different methods for averaging branch lengths during merging:
+  - simple average (:obj:`AVGLENGTH`)
+  - diameter-weighted average (:obj:`AVGLENGTHWDIAM`)
+  - membrane area-weighted average (:obj:`AVGLENGTHWSURF`)
+- Rescales branch lengths if :obj:`AREABYLONG` is set.
+- Uses :class:`Vector` indices consistently to generalize to arbitrary number of compartments (:obj:`n_comp`).
+
+Example initialization of cutoff vector for 10 compartments:
+
+.. code-block:: hoc
+
+    objref CUTOFF
+    CUTOFF = new Vector()
+    CUTOFF.append(0, 7.3, 10, 20, 30, 40, 50, 60, 65, 71, 1e10)
+    n_comp = CUTOFF.size()
+
+Assign compartments in ``cycmake``:
+
+.. code-block:: hoc
+
+    proc cycmake() {
+        local sec, i, extent
+        initto()
+        initcyc()
+        setmrg()
+        for sec = 1, NSEC-1 {
+            if (secpathri.x(sec) >= CUTOFF.x[n_comp-2] && secpathri.x(sec) < 1e10) {
+                tocyc.set(sec, -1)
+            }
+        }
+        for (i = n_comp - 3; i >= 0; i -= 1) {
+            for sec = 1, NSEC-1 {
+                if (secpathri.x(sec) >= CUTOFF.x[i] && secpathri.x(sec) < CUTOFF.x[i+1]) {
+                    tocyc.set(sec, -n_comp + i + 1)
+                }
+            }
+        }
+        for sec = 1, NSEC-1 {
+            if (secpathri.x(sec) >= 0 && secpathri.x(sec) < CUTOFF.x[0]) {
+                tocyc.set(sec, -n_comp)
+            }
+        }
+        for extent = 1, n_comp {
+            getnextABP(extent)
+            shortnms()
+            while (secA > 0) {
+                if (secB == 0 && secP != 0) joinAP()
+                if (secB != 0 && secP != 0) joinABP()
+                if (secB == 0 && secP == 0) tagAcyc(extent)
+                if (secB != 0 && secP == 0) tagABcyc(extent)
+                getnextABP(extent)
+                shortnms()
+            }
+        }
+        // Additional processing for merged compartments...
+    }
+
+Notes
+-----
+
+- Always verify the results with the original 3-compartment case by setting ``n_comp`` and ``CUTOFF`` accordingly.
+- Vectors such as ``cycL``, ``cycdiam``, and ``cycnin`` should be allocated with length ``n_comp+1`` because indices start at 1.
+- The somatic compartment assignment may be unexpected; changing cutoff values affects which compartment is considered "proximal".
+- Collapsing simplifies morphology but couples previously uncoupled compartments, affecting synaptic and channel distributions.
+
+.. seealso::
+
+   :meth:`Section.insert`, :meth:`Section.L`, :meth:`Section.diam`, :class:`Vector`
+
+.. code-block:: hoc
+
+   // Example snippet to initialize cutoff vector for 3 compartments
+   objref CUTOFF
+   CUTOFF = new Vector()
+   CUTOFF.append(0, 7.3, 71, 1e10)
+   n_comp = CUTOFF.size()
+
+   // Initialize vectors with one-based indexing for n_comp compartments
+   proc initcyc() {
+       cycL = new Vector(n_comp+1, 0)
+       cycdiam = new Vector(n_comp+1, 0)
+       cycnin = new Vector(n_comp+1, 0)
+   }
+
+.. code-block:: python
+
+   # Python pseudocode summary for how to assign dendrites to compartments
+   # based on path axial resistance with cutoff vector CUTOFF:
+   n_comp = len(CUTOFF) - 1
+   for sec in dendritic_sections:
+       path_ri = axial_resistance_to_soma(sec)
+       for i in range(n_comp):
+           if CUTOFF[i] <= path_ri < CUTOFF[i+1]:
+               compartment = i + 1
+               break
+       # Assign section to compartment
+
+This approach generalizes collapsing of dendritic trees flexibly depending on user-defined cutoffs.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=589 <https://neuron.yale.edu/phpBB/viewtopic.php?t=589>`_

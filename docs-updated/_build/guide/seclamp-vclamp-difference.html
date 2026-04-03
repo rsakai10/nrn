@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is the difference between SEClamp and VClamp, and which should I use? &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SEClamp and IClamp just deliver rectangular step waveforms. How can I make them produce an arbitrary waveform, e.g. something that I calculated or recorded from a real cell?" href="seclamp-iclamp-arbitrary-waveform.html" />
+    <link rel="prev" title="Find all point processes in a NEURON model" href="faq_rst2/Find_all_point_processes_in_a_NEURON_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">What is the difference between SEClamp and VClamp, and which should I use?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seclamp-iclamp-arbitrary-waveform.html">SEClamp and IClamp just deliver rectangular step waveforms. How can I make them produce an arbitrary waveform, e.g. something that I calculated or recorded from a real cell?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="current-clamp-pulse-sequence.html">I just want a current clamp that will deliver a sequence of current pulses at regular intervals. Vector play seems like overkill for this.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="current-clamp-event-pulse.html">I want a current clamp that will generate a pulse when I send it an event, or that I can use to produce pulses at precalculated times.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Ineffective_Simulation_with_Very_Short_Current_Injection_Pulses.html">Ineffective Simulation with Very Short Current Injection Pulses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Action_Potential_Amplitude_Variation_in_Single_Compartment_Models.html">Action Potential Amplitude Variation in Single Compartment Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Fast_and_Persistent_Sodium_Currents_in_NEURON.html">Fast and Persistent Sodium Currents in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Action_Potential_Propagation_and_Intracellular_Voltage_in_NEURON.html">Action Potential Propagation and Intracellular Voltage in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Propagation_Speed_of_Action_Potentials_is_Slower_Than_Expected_in_NEURON_Simulations.html">Propagation Speed of Action Potentials (AP) is Slower Than Expected in NEURON Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Direction_of_Current_in_a_Point_Process_in_NEURON.html">Direction of Current in a Point Process in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq_rst2/Propagation_Speed_of_Action_Potentials_is_Slower_Than_Expected_in_NEURON_Simulations.html">Propagation Speed of Action Potentials (AP) is Slower Than Expected in NEURON Simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">What is the difference between SEClamp and VClamp, and which should I use?</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guide/seclamp-vclamp-difference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="what-is-the-difference-between-seclamp-and-vclamp-and-which-should-i-use">
+<span id="seclamp-vclamp-difference"></span><h1>What is the difference between SEClamp and VClamp, and which should I use?<a class="headerlink" href="#what-is-the-difference-between-seclamp-and-vclamp-and-which-should-i-use" title="Link to this heading"></a></h1>
+<p><a class="reference internal" href="../progref/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> is just an ideal voltage source in series with a resistance (Single Electrode Clamp), while <a class="reference internal" href="../progref/modelspec/programmatic/mechanisms/mech.html#VClamp" title="VClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">VClamp</span></code></a> is a model of a two electrode voltage clamp with this equivalent circuit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                 tau2
+                 gain
+                +-|\____rstim____&gt;to cell
+-amp --&#39;\/`-------|/
+                |
+                |----||---
+                |___    __|-----/|___from cell
+                    `&#39;`&#39;        \|
+                    tau1
+</pre></div>
+</div>
+<p>If the purpose of your model is to study the properties of a cell, use <a class="reference internal" href="../progref/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a>. If the purpose is to study how instrumentation artefacts affect voltage clamp data, use <a class="reference internal" href="../progref/modelspec/programmatic/mechanisms/mech.html#VClamp" title="VClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">VClamp</span></code></a>.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="faq_rst2/Find_all_point_processes_in_a_NEURON_model.html" class="btn btn-neutral float-left" title="Find all point processes in a NEURON model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="seclamp-iclamp-arbitrary-waveform.html" class="btn btn-neutral float-right" title="SEClamp and IClamp just deliver rectangular step waveforms. How can I make them produce an arbitrary waveform, e.g. something that I calculated or recorded from a real cell?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

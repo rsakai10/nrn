@@ -1,0 +1,25 @@
+.. rubric:: Default Parameter Values in NEURON
+
+By default, a newly created section in NEURON has parameters modeled after the squid giant axon, specifically:
+
+- Diameter, specific membrane capacitance (cm), and cytoplasmic resistivity (Ra).
+
+The built-in Hodgkin-Huxley (:class:`hh`) mechanism's parameters are derived from the classic Hodgkin and Huxley publications on the squid giant axon.
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section()
+    print(f"Diameter: {sec.diam} um")  # typically 1 um
+    print(f"cm: {sec.cm} uF/cm2")       # typically 1 uF/cm2
+    print(f"Ra: {sec.Ra} ohm-cm")       # typically 100 ohm-cm
+
+.. note::
+
+    Users should adjust these default values to match the species or cell type of interest.
+
+.. seealso::
+
+    :class:`Section`, :class:`hh`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4561 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4561>`_

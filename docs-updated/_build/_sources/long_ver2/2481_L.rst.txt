@@ -1,0 +1,75 @@
+Total Membrane Capacitance Calculation
+======================================
+
+When working with cellular models in NEURON, the specific membrane capacitance `cm` (in µF/cm²) is specified as a property of each section via its biophysical properties. However, if you want to calculate the *total membrane capacitance* (in µF) of a cell or a collection of sections, you need to multiply the specific capacitance by the membrane surface area of each compartment (segment) and then sum across all segments.
+
+Calculation Concept
+-------------------
+
+The total membrane capacitance \( C_{total} \) is given by:
+
+.. math::
+
+    C_{total} = \sum_{sections} \sum_{segments} (\text{segment area}) \times cm
+
+where:
+
+- *segment area* is the surface area of each segment (in cm²), accessible via :meth:`area()`.
+- *cm* is the specific membrane capacitance (µF/cm²) of the segment.
+
+Implementation in HOC
+---------------------
+
+You can implement this calculation as a HOC function that iterates over all segments in all sections of a cell using the `forall` keyword and the `for (x, 0)` loop over segments:
+
+.. code-block:: hoc
+
+    func totalcm() { local tmp
+      tmp = 0
+      forall for (x,0) tmp += area(x)*cm(x)
+      return tmp
+    }
+
+- `forall` iterates over all sections in the model.
+- `for (x,0)` iterates over all segments in the current section.
+- `area(x)` returns the membrane surface area of segment `x`.
+- `cm(x)` returns the specific membrane capacitance at segment `x`.
+
+This function returns the total membrane capacitance as a scalar value in µF.
+
+Implementation in Python
+------------------------
+
+If you use NEURON's Python interface, you can compute total capacitance by iterating over all sections and their segments:
+
+.. code-block:: python
+
+    from neuron import h
+
+    def total_cm():
+        total_capacitance = 0.0
+        for sec in h.allsec():
+            for seg in sec:
+                total_capacitance += seg.area() * seg.cm
+        return total_capacitance
+
+    # Usage example:
+    # total_c = total_cm()
+    # print(f"Total membrane capacitance = {total_c} µF")
+
+Notes
+-----
+
+- The total capacitance depends on the distribution of specific membrane capacitance `cm` and the morphology (surface area) of the cell.
+- Different segments can have different `cm` values if heterogeneous membrane properties are defined.
+- This calculation sums over segments rather than sections because segments represent discretized compartments that may have different areas.
+
+.. note::
+
+   The term `cm` in NEURON always stands for specific membrane capacitance (µF/cm²), not total capacitance.
+
+.. seealso::
+
+   :meth:`area()`, :attr:`cm`, :keyword:`forall`, :keyword:`for`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2481 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2481>`_

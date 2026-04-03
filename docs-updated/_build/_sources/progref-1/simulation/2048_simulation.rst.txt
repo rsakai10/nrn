@@ -1,0 +1,66 @@
+Simulation Divided into Consecutive Runs Using :class:`SaveState`
+===============================================================
+
+When performing multiple consecutive simulations where each run continues from the final state of the previous one, the :class:`SaveState` class can be used to save and restore neuron states. However, special care must be taken when combining :meth:`Vector.play` and :meth:`SaveState.save`/restore() to ensure correct stimulus replay and state continuity.
+
+.. note::
+   During the **first run**, use NEURON’s standard initialization (:func:`finitialize`) without restoring a saved state. For all subsequent runs, restore the saved state with :meth:`SaveState.restore` **using the argument 1** to avoid clearing the event queue.
+
+Example workflow:
+
+.. code-block:: hoc
+
+  objref stim, r, f, svstate
+  stim = IClamp[0]
+  stim.del = 0
+  stim.dur = 1e9
+  stim.amp = 0
+
+  DT = 0.025  // stimulus sampling interval
+  svstate = new SaveState()
+  f = new File()
+  r = new Vector()
+  r.play(&stim.amp, DT)  // only once per session, before SaveState save/restore
+
+  proc myinit() {
+    finitialize(v_init)
+    if (!$1) {  // not first run
+      svstate.restore(1)  // restore without clearing the event queue
+      t = 0
+      if (cvode.active()) {
+        cvode.re_init()
+      } else {
+        fcurrent()
+      }
+      frecord_init()
+    }
+  }
+
+  proc myrun() {
+    myinit($1)
+    continuerun(tstop)
+  }
+
+  proc batchrun() {
+    local firstrun
+    firstrun = 1
+    for (i = 1; i <= $1; i += 1) {
+      sprint(filename, "stim%d.dat", i)
+      f.ropen(filename)
+      r.scanf(f)
+      f.close()
+      myrun(firstrun)
+      svstate.save()
+      firstrun = 0
+    }
+  }
+
+.. note::
+   - Call :meth:`Vector.play` **once before** the first run to link the stimulus vector.
+   - Use a control variable (e.g., ``firstrun``) to distinguish the first run from subsequent runs in the custom :func:`myinit`.
+   - Use a :class:`Matrix` to read multicolumn stimulus files if necessary, extracting columns into the stimulus vector without destroying it.
+   - Always restore :class:`SaveState` with argument 1 (:meth:`SaveState.restore(1)`) to preserve the event queue and enable proper vector playback across runs.
+
+.. seealso::
+   :class:`SaveState`, :meth:`SaveState.save`, :meth:`SaveState.restore`, :meth:`Vector.play`, :func:`finitialize`
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=2048

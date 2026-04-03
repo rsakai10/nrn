@@ -1,0 +1,30 @@
+.. rubric:: Units and Accessibility of hh Mechanism Ionic Currents
+
+The variables ``ina`` and ``ik`` in the Hodgkin–Huxley (:mod:`hh`) mechanism represent the sodium and potassium transmembrane current densities, respectively. Their units are current per membrane area, specifically **mA/cm²**.
+
+.. note::
+   Although the :class:`hh` mechanism internally computes and writes ``ina`` and ``ik``, these variables are *not* declared as :keyword:`RANGE` and thus are **not accessible** as attributes of the mechanism instance in either HOC or Python. For example::
+
+       >>> axon = h.Section(name='axon')
+       >>> axon.insert('hh')
+       >>> h.finitialize(-65)
+       >>> axon(0.5).hh.ina
+       Traceback (most recent call last):
+         ...
+       AttributeError: 'nrn.Mechanism' object has no attribute 'ina'
+
+In contrast, the leak current ``il`` *is* :keyword:`NONSPECIFIC_CURRENT` and declared as :keyword:`RANGE`, making it accessible::
+
+    >>> axon(0.5).hh.il
+    -0.00321
+
+To obtain sodium or potassium current densities at a segment, use the section segment's attributes ``ina`` and ``ik`` directly, which provide the total ionic current densities in mA/cm²:: 
+
+    >>> axon(0.5).ina
+    -0.00122
+    >>> axon(0.5).ik
+    0.00440
+
+These current densities are typically used to compute ionic concentration dynamics and are therefore exposed at the segment level.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4364 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4364>`_

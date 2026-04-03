@@ -1,0 +1,31 @@
+Random123: High-Quality PRNG in NEURON
+=====================================
+
+NEURON provides the Random123 random number generator, accessible from Python, HOC, and NMODL. It offers high-quality, reproducible random streams defined by three parameters, which is especially useful for parallel simulations.
+
+.. note::
+   Mersenne Twister is not implemented in NEURON and is generally not recommended for parallel or cryptographic uses due to its limited independent state (first 624 values only).
+
+The Random123 algorithm (Philox variant) enables assigning independent streams per neuron, facilitating reproducibility across processors.
+
+Example in Python:
+
+.. code-block:: python
+
+    rng = h.Random()
+    rng.Random123(1, cell_id, 0)
+    random_value = rng.repick()
+
+Equivalent HOC usage:
+
+.. code-block:: hoc
+
+    objref rng
+    rng = new Random()
+    rng.Random123(1, cell_id, 0)
+    val = rng.repick()
+
+.. seealso::
+   :class:`Random`, :meth:`Random.Random123`, :meth:`Random.repick`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4265 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4265>`_

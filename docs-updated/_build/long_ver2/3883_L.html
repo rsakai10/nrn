@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recording Spikes from Specific Locations Using ParallelNetManager.want_all_spikes() &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Recording Spikes from Specific Locations Using <cite>ParallelNetManager.want_all_spikes()</cite></li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3883_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="recording-spikes-from-specific-locations-using-parallelnetmanager-want-all-spikes">
+<h1>Recording Spikes from Specific Locations Using <cite>ParallelNetManager.want_all_spikes()</cite><a class="headerlink" href="#recording-spikes-from-specific-locations-using-parallelnetmanager-want-all-spikes" title="Link to this heading"></a></h1>
+<p>When using the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/parnet.html#ParallelNetManager" title="ParallelNetManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelNetManager</span></code></a> in a parallelized NEURON model, the method <a class="reference internal" href="../progref-1/modelspec/programmatic/network/parnet.html#ParallelNetManager.want_all_spikes" title="ParallelNetManager.want_all_spikes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ParallelNetManager.want_all_spikes()</span></code></a> records spike times based on the global identifiers (gids) assigned to presynaptic cells’ spike trigger zones. By default, these spike trigger zones are typically located at the soma or the canonical spike initiation site.</p>
+<p>If your model includes cells that generate action potentials (APs) in atypical locations—such as axo-axonic cells causing spikes in the distal axon that do not backpropagate to the soma—recording those spikes requires additional setup.</p>
+<section id="how-to-record-spikes-from-a-specific-section-e-g-distal-axon">
+<h2>How to Record Spikes from a Specific Section (e.g., Distal Axon)<a class="headerlink" href="#how-to-record-spikes-from-a-specific-section-e-g-distal-axon" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Attach additional :class:`NetCon` objects to the desired recording sites.</strong>
+For each location where you want to detect spikes (e.g., distal axon segments), create a <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> attached to the membrane potential at that site. For example, you can attach it to the threshold-crossing voltage at that particular section and position (x-coordinate).</p></li>
+<li><p><strong>Assign unique gids to these :class:`NetCon` instances.</strong>
+Each <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> must be assigned a unique global identifier (gid). These gids must be registered with the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/parnet.html#ParallelNetManager" title="ParallelNetManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelNetManager</span></code></a> for <code class="xref py py-meth docutils literal notranslate"><span class="pre">want_all_spikes()</span></code> to collect spikes from these additional sites.</p></li>
+<li><p><strong>Modify the model setup to include these additional spike detectors.</strong>
+Insert the initialization of these <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> objects and gid assignments at model creation before running the simulation.</p></li>
+</ol>
+</section>
+<section id="example-procedure-python">
+<h2>Example Procedure (Python)<a class="headerlink" href="#example-procedure-python" title="Link to this heading"></a></h2>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from neuron import h
+from nrn import ParallelContext</p>
+<p>pc = ParallelContext()
+# Assume cell is your neuron cell object, and has a distal axon section “axon[distal_index]”</p>
+<p># Define the threshold for spike detection
+threshold = 0</p>
+<p># Create a NetCon attached to the distal axon section (e.g., at position 0.5)
+nc_axon = h.NetCon(cell.axon[distal_index](0.5)._ref_v, None, sec=cell.axon[distal_index])
+nc_axon.threshold = threshold</p>
+<p># Assign a unique gid for this NetCon
+gid_axon = pc.get_gid()  # or manual assignment consistent with your gid map
+pc.set_gid2node(gid_axon, pc.id())  # Register gid to local node</p>
+<p># Register the NetCon with this gid
+pc.cell(gid_axon, nc_axon.get_presynaptic())</p>
+<p># Now request spikes from all gids including this new one
+pc.want_all_spikes()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</section>
+<section id="example-procedure-hoc">
+<h2>Example Procedure (HOC)<a class="headerlink" href="#example-procedure-hoc" title="Link to this heading"></a></h2>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>hoc
+objref nc_axon
+nc_axon = new NetCon(axon[distal_index](0.5)._ref_v, nil)
+nc_axon.threshold = 0</p>
+<p>gid_axon = pc.get_gid()
+pc.set_gid2node(gid_axon, pc.id())
+pc.cell(gid_axon, nc_axon.get_presynaptic())</p>
+<p>pc.want_all_spikes()
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The usual spike trigger zone is often the soma or initial segment. Adding <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> objects to other compartments allows detection of locally generated spikes that may not propagate to the soma.</p></li>
+<li><p>Ensure that gids are unique and properly registered with the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/parnet.html#ParallelNetManager" title="ParallelNetManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelNetManager</span></code></a>.</p></li>
+<li><p>This approach applies only to models using parallelization with <a class="reference internal" href="../progref-1/modelspec/programmatic/network/parcon.html#ParallelContext" title="ParallelContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelContext</span></code></a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">want_all_spikes()</span></code> method collects spike times from all gids it knows about. Attaching additional <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> objects at desired locations and registering them with unique gids enables comprehensive spike recording beyond the default soma recordings.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3883">https://neuron.yale.edu/phpBB/viewtopic.php?t=3883</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COBA Neuron Model and the SpikeOut Mechanism &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">COBA Neuron Model and the SpikeOut Mechanism</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2304_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="coba-neuron-model-and-the-spikeout-mechanism">
+<span id="coba-neuron-model"></span><h1>COBA Neuron Model and the SpikeOut Mechanism<a class="headerlink" href="#coba-neuron-model-and-the-spikeout-mechanism" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The COBA (Conductance-Based) neuron model implements synaptic interactions through conductance changes triggered by presynaptic spikes. When a presynaptic neuron _j_ emits a spike, the synaptic conductance (g_{ji}) in the postsynaptic neuron _i_ is incremented instantaneously by a quantum value (e.g., 6 nS for excitatory and 67 nS for inhibitory synapses) and then exponentially decays with a specified time constant (5 ms for excitation, 10 ms for inhibition).</p>
+</section>
+<section id="model-implementation-details">
+<h2>Model Implementation Details<a class="headerlink" href="#model-implementation-details" title="Link to this heading"></a></h2>
+<section id="synaptic-conductances">
+<h3>Synaptic Conductances<a class="headerlink" href="#synaptic-conductances" title="Link to this heading"></a></h3>
+<p>Synaptic conductances are implemented using built-in NEURON point processes of type <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>. This is defined in the biophysical cell templates (e.g., <cite>CobaCell</cite> in <em>cobacell.hoc</em>). The quantum increment upon spike arrival and the exponential decay dynamics are intrinsic to the ExpSyn model and are integrated via NEURON’s event delivery and numerical integration routines.</p>
+<p>The <cite>spikeout.mod</cite> mechanism does <strong>not</strong> generate synaptic conductances; rather, it:</p>
+<ul class="simple">
+<li><p>Provides a functional action potential mechanism,</p></li>
+<li><p>Forces the membrane potential to follow a preset spike-like time course,</p></li>
+<li><p>Serves as a source of spike events.</p></li>
+</ul>
+<p>Synaptic inputs increment conductances via ExpSyn, while SpikeOut handles threshold crossing and spike emission.</p>
+</section>
+<section id="spikeout-mechanism">
+<h3>SpikeOut Mechanism<a class="headerlink" href="#spikeout-mechanism" title="Link to this heading"></a></h3>
+<p>The SpikeOut mechanism (defined in <em>spikeout.mod</em>) is a point process that implements a simplified spike waveform by instantaneously changing an effective conductance. It acts like a voltage clamp, rapidly driving the local membrane potential (v) to a refractory voltage (<cite>vrefrac</cite>) upon threshold crossing. The primary parameters are:</p>
+<ul class="simple">
+<li><p><cite>thresh</cite>: Membrane potential threshold for spike initiation,</p></li>
+<li><p><cite>vrefrac</cite>: Voltage during refractory period,</p></li>
+<li><p><cite>grefrac</cite>: Conductance during refractory period,</p></li>
+<li><p><cite>refrac</cite>: Refractory period duration (ms),</p></li>
+<li><p><cite>g</cite>: The conductance state variable representing the transient spike conductance.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the original <em>spikeout.mod</em>, the membrane potential is set directly inside the <cite>NET_RECEIVE</cite> block at threshold crossing, but in updated versions (e.g., <em>xspikeout.mod</em>), this direct assignment is replaced by injecting a large conductance that drives the membrane potential towards the refractory voltage.</p>
+</div>
+<p>Code excerpts (from <em>spikeout.mod</em>):</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  POINT_PROCESS SpikeOut
+  RANGE thresh, vrefrac, grefrac, refrac, g
+  NONSPECIFIC_CURRENT i
+  GLOBAL thresh, vrefrac, grefrac, refrac
+}
+
+ASSIGNED {
+  v (mV)
+  i (nA)
+  g (uS)
+}
+
+INITIAL {
+  g = 0
+  net_send(0, 3)
+}
+
+BREAKPOINT {
+  i = g*(v - vrefrac)
+}
+
+NET_RECEIVE(flag) {
+  if (flag == 1) {
+    net_event(t)
+    net_send(refrac, 2)
+    v = vrefrac
+    g = grefrac
+  } else if (flag == 2) {
+    g = 0
+  } else if (flag == 3) {
+    WATCH (v &gt; thresh) 1
+  }
+}
+</pre></div>
+</div>
+</section>
+<section id="operational-details">
+<h3>Operational Details<a class="headerlink" href="#operational-details" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The <cite>INITIAL</cite> block launches a self-event with <cite>flag == 3</cite> at time zero. This executes the <cite>WATCH</cite> statement, which installs a threshold-crossing monitor on <cite>v</cite>.</p></li>
+<li><p>When membrane potential crosses <cite>thresh</cite>, a self-event with <cite>flag == 1</cite> is triggered immediately:
+- Calls <code class="xref py py-meth docutils literal notranslate"><span class="pre">net_event()</span></code> to emit spike events via <cite>NetCon</cite>.
+- Schedules a self-event (<cite>flag == 2</cite>) after the refractory period <cite>refrac</cite> to end the spike.
+- Sets synaptic conductance <cite>g</cite> to <cite>grefrac</cite> (large value), generating an outward current that clamps the voltage at <cite>vrefrac</cite>.</p></li>
+<li><p>Once the refractory self-event (<cite>flag == 2</cite>) occurs, the conductance <cite>g</cite> is reset to zero, removing the clamp.</p></li>
+<li><p>The <cite>WATCH</cite> statement actively monitors voltage at every integration time step, requiring only a single execution at initialization.</p></li>
+</ul>
+</section>
+</section>
+<section id="modification-for-realistic-spike-waveforms">
+<h2>Modification for Realistic Spike Waveforms<a class="headerlink" href="#modification-for-realistic-spike-waveforms" title="Link to this heading"></a></h2>
+<p>To emulate a more realistic spike waveform with a voltage that rises above threshold and subsequently decays, the SpikeOut mechanism can be extended to incorporate multiple states and staged voltage control. An example is the <em>xspikeout.mod</em> mechanism, which:</p>
+<ul class="simple">
+<li><p>Splits the refractory period into two phases during which the command voltage ramps or clamps at different levels (e.g., rising to +20mV,
+then declining back to refractory voltage).</p></li>
+<li><p>Uses multiple self-events (<cite>flag</cite> values 1, 2, 3, 4) to transition between states.</p></li>
+<li><p>Continues to use the WATCH statement for threshold detection.</p></li>
+</ul>
+<p>Partial snippet of enhanced NET_RECEIVE block from <em>xspikeout.mod</em>:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NET_RECEIVE(w) {
+  if (flag == 1) {
+    net_event(t)
+    net_send(refrac * (1 - p), 2)
+    ; v = vrefrac0  ; commented, voltage clamp via conductance now
+    vrev = vrefrac0
+    g = grefrac
+  } else if (flag == 2) {
+    net_send(refrac * p, 3)
+    vrev = vrefrac1
+  } else if (flag == 3) {
+    g = 0
+  } else if (flag == 4) {
+    WATCH (v &gt; thresh) 1
+  }
+}
+</pre></div>
+</div>
+<p>Key Parameters in <em>xspikeout.mod</em>:</p>
+<ul class="simple">
+<li><p><cite>p</cite> controls fraction of refractory interval at each phase,</p></li>
+<li><p><cite>vrefrac0</cite> and <cite>vrefrac1</cite> specify clamp voltages in two phases.</p></li>
+</ul>
+</section>
+<section id="additional-implementation-notes">
+<h2>Additional Implementation Notes<a class="headerlink" href="#additional-implementation-notes" title="Link to this heading"></a></h2>
+<ul>
+<li><p>The current through SpikeOut is calculated at each time step in the <cite>BREAKPOINT</cite> block as:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>i = g * (v - vrev)
+</pre></div>
+</div>
+<p>where large <cite>g</cite> values clamp <cite>v</cite> to <cite>vrev</cite>.</p>
+</li>
+<li><p>Direct assignment to the membrane potential <cite>v</cite> inside <cite>NET_RECEIVE</cite> is generally discouraged and replaced by the conductance-clamp method for stability and accuracy.</p></li>
+<li><p>WATCH statements must be executed during initialization to monitor the variable (here, membrane voltage) continuously throughout the simulation.</p></li>
+<li><p>GLOBAL parameters of mechanisms are addressed in hoc as <cite>parameter_mechanismname</cite>, for example, <cite>thresh_SpikeOut</cite> and <cite>refrac_SpikeOut</cite>. Assigning these in hoc scripts sets model parameter values used during simulation.</p></li>
+</ul>
+</section>
+<section id="practical-use-and-tuning">
+<h2>Practical Use and Tuning<a class="headerlink" href="#practical-use-and-tuning" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>To tune neuron firing rate or threshold, adjust parameters such as <cite>thresh_SpikeOut</cite>, <cite>grefrac</cite>, and synaptic conductance strengths in the hoc setup scripts.</p></li>
+<li><p>If SpikeOut’s conductance (<cite>grefrac</cite>) is too large relative to other conductances, it may excessively shunt the neuron, preventing firing.</p></li>
+<li><p>In single-cell COBA models with no synaptic input, spike generation is triggered by intrinsic conductances and/or current injection.</p></li>
+<li><p>SpikeOut generates output events upon threshold crossing that can be connected via <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> to synaptic targets.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>The COBA neuron model employs conductance-based synaptic inputs realized with built-in ExpSyn mechanisms, while spike generation is handled by the SpikeOut point process acting as a threshold-triggered voltage clamp. The mechanism uses efficient event-driven state transitions via <cite>NET_RECEIVE</cite> and continuous voltage monitoring with <cite>WATCH</cite>. Customization of spike waveform shape is achievable by extending SpikeOut’s state machine as demonstrated in <em>xspikeout.mod</em>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">spikeout</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">xspikeout</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a></p>
+</div>
+<p>Example hoc snippet to customize SpikeOut parameters:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref spike
+spike = new SpikeOut(0.5)  // attach at section midpoint
+spike.thresh_SpikeOut = -50    // threshold in mV
+spike.vrefrac_SpikeOut = -60   // refractory voltage in mV
+spike.grefrac_SpikeOut = 100   // conductance during refractory period in µS
+spike.refrac_SpikeOut = 5      // refractory period in ms
+</pre></div>
+</div>
+<p>Python equivalent example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">spike</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SpikeOut</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">soma</span><span class="p">)</span>
+<span class="n">spike</span><span class="o">.</span><span class="n">thresh_SpikeOut</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span>
+<span class="n">spike</span><span class="o">.</span><span class="n">vrefrac_SpikeOut</span> <span class="o">=</span> <span class="o">-</span><span class="mi">60</span>
+<span class="n">spike</span><span class="o">.</span><span class="n">grefrac_SpikeOut</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">spike</span><span class="o">.</span><span class="n">refrac_SpikeOut</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p>Use these parameter settings to tailor spiking behavior according to experimental data or modeling needs.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2304">https://neuron.yale.edu/phpBB/viewtopic.php?t=2304</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+Random Number Generators in NEURON
+==================================
+
+NEURON provides support for high-quality pseudorandom number generation suitable for large-scale and parallel simulations. Below is guidance on the available RNGs, including their properties and usage.
+
+Mersenne Twister RNG
+--------------------
+
+The classic Mersenne Twister (MT) RNG algorithm is **not** available natively within NEURON. Additionally, MT is not considered cryptographically secure and has limitations in independence after its initial 624 generated values. Thus, it is generally not recommended for generating independent random streams in parallel neural network simulations.
+
+Recommended RNG: Random123
+--------------------------
+
+NEURON provides the **Random123** family of pseudorandom number generators, which are accessible from Python, HOC, and NMODL interfaces. Random123 offers:
+
+- High-quality, statistically robust random number generation.
+- Large numbers of independent random streams parameterized by three integers.
+- Ideal reproducibility for simulations on single or multiple processors.
+- Efficient parallel initialization per cell or compartment using distinct stream indices.
+
+Random123 uses Philox or Threefry counter-based algorithms, described in:
+
+    Salmon, J. K., Moraes, M. A., Dror, R. O., & Shaw, D. E. (2011). Parallel random numbers: as easy as 1, 2, 3. Proceedings of the 2011 International Conference for High Performance Computing, Networking, Storage and Analysis.
+
+Using Random123 in NEURON
+-------------------------
+
+To use a Random123 RNG in NEURON, initialize a :class:`h.Random` object specifying the generator type. You can parameterize it by seed and stream indices to ensure reproducible independent streams.
+
+**Python example:**
+
+.. code-block:: python
+
+    from neuron import h
+
+    rng = h.Random()
+    # Switch to Random123 generator (Philox or Threefry)
+    rng.random123(0)  # 0 for Philox, 1 for Threefry; select desired generator
+    rng.MCellRan4(0)  # Reset internal state
+
+    # Initialize with a seed and stream parameter (e.g., cell id)
+    seed = 42
+    cell_id = 7
+    # Set three parameters: seed, stream, and subsequence
+    rng.Random123_set(stream=cell_id, subsequence=0, seed=seed)
+
+    print(rng.repick())  # Generates a reproducible random number
+
+**HOC example:**
+
+.. code-block:: hoc
+
+    objref rng
+    rng = new Random()
+    rng.random123(0)  // Use Philox generator
+    rng.Random123_set(7, 0, 42) // stream=7 (e.g., cell id), subsequence=0, seed=42
+    printf("%g\n", rng.repick())
+
+Notes
+-----
+
+- Use different stream indices when creating RNGs for different neurons to guarantee independent random sequences.
+- The three parameters (seed, stream, subsequence) allow for reproducible parallel simulations even when neurons are distributed across multiple processors.
+- If you require cryptographic security, note that neither Mersenne Twister nor Random123 are cryptographically secure.
+
+.. seealso::
+
+   :class:`h.Random` for RNG manipulation in NEURON  
+   :meth:`Random.random123` to select the Random123 algorithm  
+   :meth:`Random.Random123_set` to parameterize streams for reproducibility
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4265 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4265>`_

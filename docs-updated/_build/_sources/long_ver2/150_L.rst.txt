@@ -1,0 +1,81 @@
+Record and Print Recorded Data in NEURON
+========================================
+
+When recording variables during a simulation using :class:`Vector`'s :meth:`record` method, it is important to run the simulation before accessing or printing the recorded data.
+
+Recording Data Using :class:`Vector`
+-------------------------------------
+
+1. Create :class:`Vector` objects to store time and variable data:
+
+.. code-block:: hoc
+
+    objref rect, recv
+    rect = new Vector()
+    recv = new Vector()
+
+2. Set up recording of time and a variable (e.g., voltage at the middle of the soma):
+
+.. code-block:: hoc
+
+    recv.record(&SThcells[0].soma.v(0.5))
+    rect.record(&t)
+
+3. Run the simulation before trying to access the recorded data:
+
+.. code-block:: hoc
+
+    run()
+
+4. Print or access the recorded data after the simulation has run:
+
+.. code-block:: hoc
+
+    recv.printf()
+
+Explanation
+-----------
+
+The :meth:`record` method marks the :class:`Vector` to record the referenced variable during the simulation run. However, the vector does not contain any data before simulation starts. Therefore, printing the vector immediately after calling :meth:`record` but before running the simulation will result in an empty vector (often just outputting `0`).
+
+To avoid this:
+
+- Always call :func:`run` (in HOC) or :meth:`h.run` (in Python) after setting up recording and before accessing recorded data.
+- You can then print or manipulate the vectors containing recorded data.
+
+Example HOC code snippet:
+
+.. code-block:: hoc
+
+    objref rect, recv
+    rect = new Vector()
+    recv = new Vector()
+    recv.record(&SThcells[0].soma.v(0.5))
+    rect.record(&t)
+
+    run()
+
+    recv.printf()
+
+Example Python code snippet:
+
+.. code-block:: python
+
+    from neuron import h
+
+    rect = h.Vector()
+    recv = h.Vector()
+
+    # Assuming SThcells is defined and has a soma section
+    recv.record(SThcells[0].soma(0.5)._ref_v)
+    rect.record(h._ref_t)
+
+    h.run()
+
+    recv.printf()
+
+.. note::
+
+   The key point is that recording merely establishes a "listener" on the variable to save its value during simulation. Actual data appears in the vector only after the simulation advances in time via :func:`run`.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=150 <https://neuron.yale.edu/phpBB/viewtopic.php?t=150>`_

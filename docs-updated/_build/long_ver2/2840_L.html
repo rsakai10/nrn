@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changing Synaptic Conductance During a Sequence of Events &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changing Synaptic Conductance During a Sequence of Events</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2840_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changing-synaptic-conductance-during-a-sequence-of-events">
+<h1>Changing Synaptic Conductance During a Sequence of Events<a class="headerlink" href="#changing-synaptic-conductance-during-a-sequence-of-events" title="Link to this heading"></a></h1>
+<p>This section explains how to drive multiple synapses with a specific temporal sequence of activation events, and how to vary synaptic strength dynamically during a simulation in NEURON. It addresses common questions about whether to modify synaptic parameters such as <cite>gmax</cite> or synaptic weights, and provides a scalable and clean approach using <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> and <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>.</p>
+<section id="synapse-model-assumptions">
+<h2>Synapse Model Assumptions<a class="headerlink" href="#synapse-model-assumptions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Synapses are implemented as point process mechanisms (e.g., <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, AMPA/NMDA synapses).</p></li>
+<li><p>Synaptic strength is controlled by the weight of the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> delivering events to each synapse.</p></li>
+<li><p>Synaptic mechanisms do <strong>not</strong> contain a <cite>gmax</cite> parameter that represents maximal conductance for each synaptic event.</p></li>
+<li><p>Each synapse has its own <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>.</p></li>
+</ul>
+</section>
+<section id="why-use-synaptic-weights-and-not-gmax">
+<h2>Why Use Synaptic Weights and Not <cite>gmax</cite><a class="headerlink" href="#why-use-synaptic-weights-and-not-gmax" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For event-driven synaptic mechanisms, the synaptic strength should be controlled via the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.weight" title="NetCon.weight"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.weight()</span></code></a> parameter rather than a <cite>gmax</cite> variable inside the synapse model.</p>
+</div>
+<p>Reasons:</p>
+<ul class="simple">
+<li><p>Multiple synapses that are electrically close can be represented by a single synaptic mechanism instance; independent synaptic strengths are achieved by varying weights of individual :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>NetCon`s.</p></li>
+<li><p>Changing a global <cite>gmax</cite> in the synapse model affects <em>all</em> incoming inputs simultaneously, causing non-physiological heterosynaptic interactions.</p></li>
+<li><p>Altering <cite>gmax</cite> dynamically violates causality by affecting ongoing conductance transients from prior synaptic events without any biological basis.</p></li>
+</ul>
+</section>
+<section id="setting-up-a-sequence-of-synaptic-events-with-dynamic-weights">
+<h2>Setting Up a Sequence of Synaptic Events with Dynamic Weights<a class="headerlink" href="#setting-up-a-sequence-of-synaptic-events-with-dynamic-weights" title="Link to this heading"></a></h2>
+<p>Suppose you want to activate synapses at times contained in a Vector <cite>stvec</cite> with corresponding synaptic weights in Vector <cite>swvec</cite>. A clean way to implement this:</p>
+<ol class="arabic simple">
+<li><p>Identify synaptic mechanisms and store them in a <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> called <cite>synlist</cite>.</p></li>
+<li><p>Compute the minimum interevent interval in <cite>stvec</cite> and use half of it, <cite>actdel</cite>, as a safety margin to schedule changes to synaptic weights slightly before synapse activation times.</p></li>
+<li><p>Shift all times in <cite>stvec</cite> earlier by <cite>actdel</cite> so that weight updates occur before corresponding synaptic events.</p></li>
+<li><p>Create a <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> that generates events at the shifted times.</p></li>
+<li><p>For each synapse, create a <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> connecting the <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> to the synapse, with delay equal to <cite>actdel</cite> (so the synaptic activation occurs at original <cite>stvec</cite> times).</p></li>
+<li><p>Create another <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> from the same <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> to <cite>nil</cite> with zero delay, setting its <cite>.record()</cite> method to call a procedure that updates the weights for all :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>NetCon`s connected to the synapses.</p></li>
+<li><p>Use an <a class="reference internal" href="../progref-1/simctrl/programmatic.html#FInitializeHandler" title="FInitializeHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">FInitializeHandler</span></code></a> to initialize a counter before simulation runs.</p></li>
+</ol>
+</section>
+<section id="example-hoc-code">
+<h2>Example HOC Code<a class="headerlink" href="#example-hoc-code" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Assumptions:
+// synlist: List of synaptic mechanism instances (point processes).
+// stvec: Vector of activation times (monotonically increasing, &gt; 0).
+// swvec: Vector of synaptic weights corresponding to activation times.
+
+objref tmpvec, vecstim, nclist, ncx, fih
+
+// 1. Compute half minimum inter-event interval
+tmpvec = stvec.c
+tmpvec.deriv()                 // first derivative, differences between times
+actdel = tmpvec.min()/2        // half min interval between synaptic events
+if (stvec.x[0] &lt; actdel) {     // ensure no negative event times
+  actdel = stvec.x[0] / 2
+}
+stvec.sub(actdel)              // shift event times earlier by actdel
+
+// 2. Create VecStim with shifted times
+vecstim = new VecStim()
+vecstim.play(stvec)
+
+// 3. Create NetCons from VecStim to each synapse with delay = actdel
+nclist = new List()
+for ii=0, synlist.count()-1 {
+  nclist.append(new NetCon(vecstim, synlist.o(ii)))
+  nclist.o(ii).delay = actdel
+}
+
+// 4. Initialize global counter for weight updates
+count = 0
+fih = new FInitializeHandler(&quot;count = 0&quot;)
+
+// 5. Define procedure to update synaptic weights before each synaptic event
+proc setweights() {
+  local ii
+  for ii=0, nclist.count()-1 {
+    nclist.o(ii).weight = swvec.x[count]
+  }
+  count += 1
+}
+
+// 6. Create NetCon to call setweights() at shifted event times with zero delay
+ncx = new NetCon(vecstim, nil)
+ncx.delay = 0
+ncx.record(&quot;setweights()&quot;)
+</pre></div>
+</div>
+</section>
+<section id="notes-on-code-adjustments">
+<h2>Notes on Code Adjustments<a class="headerlink" href="#notes-on-code-adjustments" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Each <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> must connect a spike source (e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code>) to a synaptic point process. The second argument to <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> must be a point process, not a <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> or an object wrapper.</p></li>
+<li><p>When managing collections, use <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> objects and remember to access elements with <cite>.o(ii)</cite>.</p></li>
+<li><p>The <cite>setweights</cite> procedure is called slightly <em>before</em> each synaptic activation time, ensuring weights are updated in time.</p></li>
+</ul>
+</section>
+<section id="python-example-snippet">
+<h2>Python Example Snippet<a class="headerlink" href="#python-example-snippet" title="Link to this heading"></a></h2>
+<p>If you prefer Python, the same logic applies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">synlist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="c1"># Assume synlist is populated with point process synapses</span>
+<span class="n">stvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>  <span class="c1"># event times in ms</span>
+<span class="n">swvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>  <span class="c1"># corresponding weights</span>
+
+<span class="n">tmpvec</span> <span class="o">=</span> <span class="n">stvec</span><span class="o">.</span><span class="n">c</span><span class="p">()</span>
+<span class="n">tmpvec</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>
+<span class="n">actdel</span> <span class="o">=</span> <span class="n">tmpvec</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="k">if</span> <span class="n">stvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">actdel</span><span class="p">:</span>
+    <span class="n">actdel</span> <span class="o">=</span> <span class="n">stvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">stvec</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">actdel</span><span class="p">)</span>
+
+<span class="n">vecstim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">VecStim</span><span class="p">()</span>
+<span class="n">vecstim</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">stvec</span><span class="p">)</span>
+
+<span class="n">nclist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synlist</span><span class="o">.</span><span class="n">count</span><span class="p">()):</span>
+    <span class="n">nclist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">vecstim</span><span class="p">,</span> <span class="n">synlist</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+    <span class="n">nclist</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">actdel</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">setweights</span><span class="p">():</span>
+    <span class="k">nonlocal</span> <span class="n">count</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nclist</span><span class="o">.</span><span class="n">count</span><span class="p">()):</span>
+        <span class="n">nclist</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">swvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">ncx</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">vecstim</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">ncx</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">ncx</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">setweights</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">FInitializeHandler</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="summary-recommendations">
+<h2>Summary Recommendations<a class="headerlink" href="#summary-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> and a single spike source for scalability, instead of scheduling individual events with <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.event" title="NetCon.event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.event()</span></code></a>.</p></li>
+<li><p>Control synaptic strengths with <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.weight" title="NetCon.weight"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.weight()</span></code></a> rather than modifying synapse-internal parameters like <cite>gmax</cite>.</p></li>
+<li><p>Schedule weight changes just before synaptic activations using a small offset delay.</p></li>
+<li><p>Avoid introducing <cite>gmax</cite> in event-driven synaptic mechanisms since it affects all inputs simultaneously and violates temporal causality.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/programmatic.html#FInitializeHandler" title="FInitializeHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">FInitializeHandler</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.weight" title="NetCon.weight"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.weight()</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2840">https://neuron.yale.edu/phpBB/viewtopic.php?t=2840</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

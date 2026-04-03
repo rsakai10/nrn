@@ -1,0 +1,89 @@
+How to Split a NEURON Simulation into Multiple Runs and Record Data
+====================================================================
+
+When simulating a neuron model for a total duration (e.g., 1000 ms), you may want to split the simulation into multiple segments to modify parameters between runs and continue from the last state.
+
+Basic Approach
+--------------
+
+1. Run the first segment of the simulation.
+2. Modify parameters as needed.
+3. Re-initialize the solver if using variable time step integration.
+4. Continue the simulation for the remaining time.
+
+Example in Python:
+
+.. code-block:: python
+
+    # Initialize and run first segment
+    h.finitialize(-65 * mV)
+    h.continuerun(300 * ms)
+
+    # Modify parameters here
+    # ...
+
+    # Re-initialize solver if CVODE is active
+    if h.cvode.active():
+        h.cvode.re_init()
+    else:
+        h.fcurrent()
+
+    # Continue simulation to new stop time
+    h.continuerun(1000 * ms)  # new stop time > 300 ms
+
+
+Recording Variables Across Multiple Runs
+----------------------------------------
+
+- Define recording vectors **before** the first simulation and use the same vectors throughout.
+- Do **not** create new recording vectors for the second run; this will result in empty data.
+- To record only the second segment, call ``h.frecord_init()`` before continuing the simulation.
+
+Example:
+
+.. code-block:: python
+
+    # Define recording vectors once
+    soma_v = h.Vector().record(my_cell.soma(0.5)._ref_v)
+    t = h.Vector().record(h._ref_t)
+
+    # First simulation segment
+    h.finitialize(-65 * mV)
+    h.continuerun(300 * ms)
+
+    # Modify parameters
+    # ...
+
+    # Re-initialize solver if needed
+    if h.cvode.active():
+        h.cvode.re_init()
+    else:
+        h.fcurrent()
+
+    # To record only second segment, reset recording vectors
+    h.frecord_init()
+
+    # Continue simulation
+    h.continuerun(1000 * ms)
+
+.. note::
+
+   After the full simulation, ``soma_v`` and ``t`` will contain data from the entire simulation (0 to 1000 ms). If ``h.frecord_init()`` is called before the second run, they will contain only data from the second segment.
+
+Additional Tips
+---------------
+
+- If you want to save and restore simulation states to avoid rerunning the first segment multiple times, consider using NEURON's ``SaveState`` functionality.
+- For parameter changes that depend on events during simulation, consider using events or play vectors.
+- Always ensure the new stop time in ``h.continuerun(newtstop)`` is greater than the previous stop time.
+
+.. seealso::
+
+   - NEURON Python documentation: https://nrn.readthedocs.io
+   - Forum post on ``h.frecord_init()``: https://www.neuron.yale.edu/phpBB/viewtopic.php?p=15895#p15895
+   - Hot tips: Using events to implement parameter changes during a run
+
+Reference
+---------
+
+Original discussion thread: https://www.neuron.yale.edu/phpBB/viewtopic.php?f=16&t=4593

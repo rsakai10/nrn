@@ -1,0 +1,922 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapting MOD files for C++ with NEURON &gt;= 9.0 &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Frequently asked questions (FAQ)" href="faq.html" />
+    <link rel="prev" title="Randomness in NEURON models" href="randomness.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Adapting MOD files for C++ with NEURON &gt;= 9.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#legacy-patterns-that-are-invalid-c">Legacy patterns that are invalid C++</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#implicit-pointer-type-conversions">Implicit pointer type conversions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#local-non-prototype-function-declarations">Local non-prototype function declarations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-declarations-with-incorrect-types">Function declarations with incorrect types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k-r-function-definitions">K&amp;R function definitions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#legacy-patterns-that-are-considered-deprecated">Legacy patterns that are considered deprecated</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#deprecated-overloads-taking-void">Deprecated overloads taking <code class="docutils literal notranslate"><span class="pre">void*</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#legacy-random-number-generators-and-api">Legacy random number generators and API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guides</a></li>
+      <li class="breadcrumb-item active">Adapting MOD files for C++ with NEURON &gt;= 9.0</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guide/porting_mechanisms_to_cpp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adapting-mod-files-for-c-with-neuron-with-cpp-mechanisms">
+<span id="porting-mechanisms-to-cpp"></span><h1>Adapting MOD files for C++ with NEURON &gt;= 9.0<a class="headerlink" href="#adapting-mod-files-for-c-with-neuron-with-cpp-mechanisms" title="Link to this heading"></a></h1>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>This guide only applies if you have MOD files with VERBATIM blocks that fail
+to compile with NEURON &gt;= 9.0 but work with older versions of
+NEURON. If this is not your case, you can skip this guide.</p>
+</div>
+<p>In older versions of NEURON, MOD files containing NMODL code were translated
+into C code before being compiled and executed by NEURON.
+Starting with NEURON &gt;= 9.0, NMODL code is translated into C++
+code instead.</p>
+<p>In most cases, this does not present any issues, as simple C code is typically
+valid C++, and no changes are required.
+However, C and C++ are not the same language, and there are cases in which MOD
+files containing <code class="docutils literal notranslate"><span class="pre">VERBATIM</span></code> blocks need to be modified in order to build with
+NEURON &gt;= 9.0.</p>
+<p>Before you start, you should decide if you need your MOD files to be
+compatible simultaneously with NEURON &gt;= 9.0 <strong>and</strong> older
+versions, or if you can safely stop supporting older versions.
+Supporting both is generally possible, but it may be more cumbersome than
+committing to using C++ features.
+Considering NEURON has maintained strong backward compatibility and its
+internal numerical methods haven’t changed with migration to C++, it is likely
+to be sufficient to adapt MOD files to C++ only and use
+NEURON &gt;= 9.0.
+If you do decide to preserve compatibility across versions, the preprocessor
+macros described in <a class="reference internal" href="../nmodl/language/nmodl_neuron_extension.html#verbatim"><span class="std std-ref">VERBATIM</span></a> may prove useful.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have a model that stopped compiling when you upgraded to or beyond
+NEURON &gt;= 9.0, the first thing that you should check is
+whether the relevant MOD files have already been updated in ModelDB or in the
+GitHub repository of that model. You can check the repository name with the
+model accession number under <a class="reference external" href="https://github.com/ModelDBRepository">https://github.com/ModelDBRepository</a>.
+An updated version may already be available!</p>
+<p>The following models were updated in ModelDB in preparation for
+NEURON &gt;= 9.0 and may serve as useful references. You can see
+updated MOD files in the <cite>Changed Mod Files</cite> column. You can just apply the changes
+to your MOD files, or you can use the updated MOD files directly from the GitHub repository.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ModelDB Id</p></th>
+<th class="head"><p>Model Name</p></th>
+<th class="head"><p>GitHub Repository</p></th>
+<th class="head"><p>Pull Request</p></th>
+<th class="head"><p>Changed Mod Files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/2487">2487</a></p></td>
+<td><p>Olfactory Mitral Cell (Davison et al 2000)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/2487">ModelDBRepository/2487</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/2487/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/2730">2730</a></p></td>
+<td><p>Olfactory Bulb Network (Davison et al 2003)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/2730">ModelDBRepository/2730</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/2730/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/2733">2733</a></p></td>
+<td><p>Olfactory Mitral Cell (Bhalla, Bower 1993)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/2733">ModelDBRepository/2733</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/2733/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/3658">3658</a></p></td>
+<td><p>Glutamate diffusion …lar glomerulus (Saftenku 2005)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/3658">ModelDBRepository/3658</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/3658/pull/1/files">pull/1</a></p></td>
+<td><p>glubbfbm.mod glubes2.mod glubes23.mod glubes3.mod glubes4.mod glubes5.mod glubes6.mod glures23.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/7399">7399</a></p></td>
+<td><p>Feedforward heteroas…with HH dynamics (Lytton 1998)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/7399">ModelDBRepository/7399</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/7399/pull/1/files">pull/1</a></p></td>
+<td><p>matrix.mod snsarr.inc vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/7400">7400</a></p></td>
+<td><p>Hippocampus temporo-…gram shift model (Lytton 1999)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/7400">ModelDBRepository/7400</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/7400/pull/1/files">pull/1</a></p></td>
+<td><p>matrix.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/8284">8284</a></p></td>
+<td><p>Febrile seizure-indu…ations to Ih (Chen et al 2001)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/8284">ModelDBRepository/8284</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/8284/pull/1/files">pull/1</a></p></td>
+<td><p>hyperde1.mod hyperde2.mod hyperde3.mod hyperso.mod ichan.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/9889">9889</a></p></td>
+<td><p>Thalamic quiescence …e seizures (Lytton et al 1997)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/9889">ModelDBRepository/9889</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/9889/pull/1/files">pull/1</a></p></td>
+<td><p>rand.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/12631">12631</a></p></td>
+<td><p>Computer model of cl…n thalamic slice (Lytton 1997)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/12631">ModelDBRepository/12631</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/12631/pull/2/files">pull/2</a></p></td>
+<td><p>rand.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/26997">26997</a></p></td>
+<td><p>Gamma oscillations i… networks (Wang, Buzsaki 1996)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/26997">ModelDBRepository/26997</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/26997/pull/1/files">pull/1</a></p></td>
+<td><p>vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/35358">35358</a></p></td>
+<td><p>CA3 pyramidal cell: …ub model (Pinsky, Rinzel 1994)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/35358">ModelDBRepository/35358</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/35358/pull/2/files">pull/2</a></p></td>
+<td><p>matrix.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/37819">37819</a></p></td>
+<td><p>Thalamocortical augm…response (Bazhenov et al 1998)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/37819">ModelDBRepository/37819</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/37819/pull/1/files">pull/1</a></p></td>
+<td><p>matrix.mod pointer.inc ppsav.inc vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/51781">51781</a></p></td>
+<td><p>Dentate gyrus networ…model (Santhakumar et al 2005)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/51781">ModelDBRepository/51781</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/51781/pull/1/files">pull/1</a></p></td>
+<td><p>hyperde3.mod ichan2.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/52034">52034</a></p></td>
+<td><p>Cortical network mod…leptogenesis (Bush et al 1999)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/52034">ModelDBRepository/52034</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/52034/pull/1/files">pull/1</a></p></td>
+<td><p>holt_rnd.mod precall.mod snsarr.inc</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/64229">64229</a></p></td>
+<td><p>Parallel network sim…h NEURON (Migliore et al 2006)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/64229">ModelDBRepository/64229</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/64229/pull/1/files">pull/1</a></p></td>
+<td><p>parbulbNet/cadecay.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/64296">64296</a></p></td>
+<td><p>Dynamical model of o…al cell  (Rubin, Cleland 2006)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/64296">ModelDBRepository/64296</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/64296/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/87585">87585</a></p></td>
+<td><p>Sodium channel mutat…eizures + (Barela et al. 2006)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/87585">ModelDBRepository/87585</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/87585/pull/1/files">pull/1</a></p></td>
+<td><p>ichanR859C1.mod ichanWT2005.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/93321">93321</a></p></td>
+<td><p>Activity dependent c…euron model  (Liu et al. 1998)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/93321">ModelDBRepository/93321</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/93321/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/97868">97868</a></p></td>
+<td><p>NEURON interfaces to…gorithm (Neymotin et al. 2008)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/97868">ModelDBRepository/97868</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/97868/pull/2/files">pull/2</a></p></td>
+<td><p>MySQL.mod spud.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/97874">97874</a></p></td>
+<td><p>Neural Query System …NEURON Simulator (Lytton 2006)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/97874">ModelDBRepository/97874</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/97874/pull/2/files">pull/2</a></p></td>
+<td><p>NQS/vecst.mod modeldb/vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/97917">97917</a></p></td>
+<td><p>Cell splitting in ne…ng scaling (Hines et al. 2008)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/97917">ModelDBRepository/97917</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/97917/pull/2/files">pull/2</a></p></td>
+<td><p>nrntraub/mod/rand.mod nrntraub/mod/ri.mod pardentategyrus/hyperde3.mod pardentategyrus/ichan2.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/105507">105507</a></p></td>
+<td><p>Tonic-clonic transit…tion (Lytton and Omurtag 2007)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/105507">ModelDBRepository/105507</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/105507/pull/2/files">pull/2</a></p></td>
+<td><p>intf_.mod misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/106891">106891</a></p></td>
+<td><p>JitCon: Just in time… networks (Lytton et al. 2008)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/106891">ModelDBRepository/106891</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/106891/pull/3/files">pull/3</a></p></td>
+<td><p>jitcon.mod misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/113732">113732</a></p></td>
+<td><p>MEG of Somatosensory Neocortex (Jones et al. 2007)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/113732">ModelDBRepository/113732</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/113732/pull/1/files">pull/1</a></p></td>
+<td><p>precall.mod presyn.inc</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/116094">116094</a></p></td>
+<td><p>Lateral dendrodendit…ctory Bulb (David et al. 2008)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116094">ModelDBRepository/116094</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116094/pull/1/files">pull/1</a></p></td>
+<td><p>LongDendrite/cadecay.mod ShortDendrite/cadecay.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/116830">116830</a></p></td>
+<td><p>Broadening of activi…tructures (Lytton et al. 2008)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116830">ModelDBRepository/116830</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116830/pull/1/files">pull/1</a></p></td>
+<td><p>intf.mod misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/116838">116838</a></p></td>
+<td><p>The virtual slice setup (Lytton et al. 2008)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116838">ModelDBRepository/116838</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116838/pull/1/files">pull/1</a></p></td>
+<td><p>intf_.mod misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/116862">116862</a></p></td>
+<td><p>Thalamic interneuron…rtment model (Zhu et al. 1999)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116862">ModelDBRepository/116862</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/116862/pull/1/files">pull/1</a></p></td>
+<td><p>clampex.mod misc.h vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/123815">123815</a></p></td>
+<td><p>Encoding and retriev…rcuit (Cutsuridis et al. 2009)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/123815">ModelDBRepository/123815</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/123815/pull/1/files">pull/1</a></p></td>
+<td><p>burststim2.mod ichan2.mod regn_stim.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/136095">136095</a></p></td>
+<td><p>Synaptic information…columns (Neymotin et al. 2010)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/136095">ModelDBRepository/136095</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/136095/pull/1/files">pull/1</a></p></td>
+<td><p>clampex.mod field.mod infot.mod intf_.mod intfsw.mod misc.h misc.mod netrand.inc pregencv.mod stats.mod updown.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/136310">136310</a></p></td>
+<td><p>Modeling local field…otentials (Bedard et al. 2004)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/136310">ModelDBRepository/136310</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/136310/pull/1/files">pull/1</a></p></td>
+<td><p>ImpedanceFM.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/137845">137845</a></p></td>
+<td><p>Spike exchange metho…rcomputer (Hines et al., 2011)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/137845">ModelDBRepository/137845</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/137845/pull/1/files">pull/1</a></p></td>
+<td><p>invlfire.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/138379">138379</a></p></td>
+<td><p>Emergence of physiol…lations (Neymotin et al. 2011)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/138379">ModelDBRepository/138379</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/138379/pull/1/files">pull/1</a></p></td>
+<td><p>intf6_.mod misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/139421">139421</a></p></td>
+<td><p>Ketamine disrupts th…pocampus (Neymotin et al 2011)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/139421">ModelDBRepository/139421</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/139421/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod stats.mod vecst.mod wrap.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/140881">140881</a></p></td>
+<td><p>Computational Surgery (Lytton et al. 2011)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/140881">ModelDBRepository/140881</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/140881/pull/1/files">pull/1</a></p></td>
+<td><p>intf6_.mod misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/141505">141505</a></p></td>
+<td><p>Prosthetic electrost…ortical simulation (Kerr 2012)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/141505">ModelDBRepository/141505</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/141505/pull/1/files">pull/1</a></p></td>
+<td><p>infot.mod intf6_.mod intfsw.mod misc.h misc.mod staley.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/144538">144538</a></p></td>
+<td><p>Reinforcement learni…ement (Chadderdon et al. 2012)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/144538">ModelDBRepository/144538</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/144538/pull/1/files">pull/1</a></p></td>
+<td><p>infot.mod intf6_.mod intfsw.mod misc.h misc.mod stats.mod updown.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/144549">144549</a></p></td>
+<td><p>Hopfield and Brody m…d, Brody 2000) (NEURON+python)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/144549">ModelDBRepository/144549</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/144549/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/144586">144586</a></p></td>
+<td><p>Boolean network-base…sis network (Mai and Liu 2009)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/144586">ModelDBRepository/144586</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/144586/pull/1/files">pull/1</a></p></td>
+<td><p>bnet.mod misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/146949">146949</a></p></td>
+<td><p>Motor cortex microci…pping (Chadderdon et al. 2014)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/146949">ModelDBRepository/146949</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/146949/pull/1/files">pull/1</a></p></td>
+<td><p>infot.mod intf6.mod intfsw.mod matrix.mod misc.h misc.mod staley.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/149000">149000</a></p></td>
+<td><p>Using Strahler`s ana…c models (Marasco et al, 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/149000">ModelDBRepository/149000</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/149000/pull/1/files">pull/1</a></p></td>
+<td><p>pj.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/149739">149739</a></p></td>
+<td><p>A two-layer biophysi…dulation (Li and Cleland 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/149739">ModelDBRepository/149739</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/149739/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod cadecay2.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/150240">150240</a></p></td>
+<td><p>A Model Circuit of T…vergence (Behuret et al. 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150240">ModelDBRepository/150240</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150240/pull/1/files">pull/1</a></p></td>
+<td><p>RandomGenerator.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/150245">150245</a></p></td>
+<td><p>Sensorimotor cortex …eaching (Neymotin et al. 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150245">ModelDBRepository/150245</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150245/pull/1/files">pull/1</a></p></td>
+<td><p>infot.mod intf6_.mod misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/150551">150551</a></p></td>
+<td><p>Calcium waves and mG…rons (Ashhad &amp; Narayanan 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150551">ModelDBRepository/150551</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150551/pull/1/files">pull/1</a></p></td>
+<td><p>Calamp.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/150556">150556</a></p></td>
+<td><p>Single compartment D…MPA (Biddell and Johnson 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150556">ModelDBRepository/150556</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150556/pull/1/files">pull/1</a></p></td>
+<td><p>KBNetStim.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/150691">150691</a></p></td>
+<td><p>Model of arrhythmias…twork (Casaleggio et al. 2014)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150691">ModelDBRepository/150691</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/150691/pull/1/files">pull/1</a></p></td>
+<td><p>Readme halfgapm1.mod halfgapspk.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/151126">151126</a></p></td>
+<td><p>Effects of increasin… network (Bianchi et al. 2014)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/151126">ModelDBRepository/151126</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/151126/pull/1/files">pull/1</a></p></td>
+<td><p>burststim2.mod ichan2.mod regn_stim.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/151282">151282</a></p></td>
+<td><p>Ih tunes oscillation…3 model (Neymotin et al. 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/151282">ModelDBRepository/151282</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/151282/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/153280">153280</a></p></td>
+<td><p>Parvalbumin-positive…amidal cells (Lee et al. 2014)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/153280">ModelDBRepository/153280</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/153280/pull/1/files">pull/1</a></p></td>
+<td><p>ch_Kdrfast.mod mynetstim.mod repeatconn.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/154732">154732</a></p></td>
+<td><p>Spine head calcium i…ell model (Graham et al. 2014)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/154732">ModelDBRepository/154732</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/154732/pull/1/files">pull/1</a></p></td>
+<td><p>burststim2.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/155568">155568</a></p></td>
+<td><p>Dentate gyrus network model (Tejada et al 2014)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/155568">ModelDBRepository/155568</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/155568/pull/1/files">pull/1</a></p></td>
+<td><p>hyperde3.mod ichan2.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/155601">155601</a></p></td>
+<td><p>Basket cell extrasyn…tions (Proddutur et al., 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/155601">ModelDBRepository/155601</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/155601/pull/1/files">pull/1</a></p></td>
+<td><p>hyperde3.mod ichan2.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/155602">155602</a></p></td>
+<td><p>Status epilepticus a…c inhibition (Yu J et al 2013)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/155602">ModelDBRepository/155602</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/155602/pull/1/files">pull/1</a></p></td>
+<td><p>hyperde3.mod ichan2.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/156780">156780</a></p></td>
+<td><p>Microcircuits of L5 …midal cells (Hay &amp; Segev 2015)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/156780">ModelDBRepository/156780</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/156780/pull/1/files">pull/1</a></p></td>
+<td><p>ProbAMPANMDA2.mod ProbUDFsyn2.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/157157">157157</a></p></td>
+<td><p>CA1 pyramidal neuron…cles (Saudargiene et al. 2015)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/157157">ModelDBRepository/157157</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/157157/pull/1/files">pull/1</a></p></td>
+<td><p>burststim2.mod regn_stim.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/168874">168874</a></p></td>
+<td><p>Neuronal dendrite ca…e model (Neymotin et al, 2015)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/168874">ModelDBRepository/168874</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/168874/pull/4/files">pull/4</a></p></td>
+<td><p>misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/181967">181967</a></p></td>
+<td><p>Long time windows fr…op (Cutsuridis &amp; Poirazi 2015)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/181967">ModelDBRepository/181967</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/181967/pull/1/files">pull/1</a></p></td>
+<td><p>burststim.mod hyperde3.mod ichan2.mod regn_stim.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/182129">182129</a></p></td>
+<td><p>Computational modeli…signaling (Lupascu et al 2020)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/182129">ModelDBRepository/182129</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/182129/pull/1/files">pull/1</a></p></td>
+<td><p>ProbGABAAB_EMS_GEPH_g.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/183300">183300</a></p></td>
+<td><p>Mitral cell activity…ory bulb NN (Short et al 2016)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/183300">ModelDBRepository/183300</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/183300/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod cadecay2.mod thetastim.mod vecstim.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/185355">185355</a></p></td>
+<td><p>Dentate gyrus networ…g in epilepsy (Yim et al 2015)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/185355">ModelDBRepository/185355</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/185355/pull/2/files">pull/2</a></p></td>
+<td><p>HCN.mod ichan2.mod netstim125.mod netstimbox.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/185858">185858</a></p></td>
+<td><p>Ca+/HCN channel-depe…eocortex (Neymotin et al 2016)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/185858">ModelDBRepository/185858</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/185858/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod vecst.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/186768">186768</a></p></td>
+<td><p>CA3 Network Model of…Activity (Sanjay et. al, 2015)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/186768">ModelDBRepository/186768</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/186768/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod stats.mod vecst.mod wrap.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/187604">187604</a></p></td>
+<td><p>Hippocampal CA1 NN w…ork clamp (Bezaire et al 2016)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/187604">ModelDBRepository/187604</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/187604/pull/2/files">pull/2</a></p></td>
+<td><p>fastconn.mod mynetstim.mod repeatconn.mod sgate.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/189154">189154</a></p></td>
+<td><p>Multitarget pharmaco…ia in M1 (Neymotin et al 2016)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/189154">ModelDBRepository/189154</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/189154/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod stats.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/194897">194897</a></p></td>
+<td><p>Motor system model w…l arm (Dura-Bernal et al 2017)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/194897">ModelDBRepository/194897</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/194897/pull/2/files">pull/2</a></p></td>
+<td><p>izhi2007.mod nsloc.mod vecevent.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/195615">195615</a></p></td>
+<td><p>Computer models of c…ynamics (Neymotin et al. 2017)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/195615">ModelDBRepository/195615</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/195615/pull/1/files">pull/1</a></p></td>
+<td><p>misc.h misc.mod vecst.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/223031">223031</a></p></td>
+<td><p>Interneuron Specific…l (Guet-McCreight et al, 2016)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/223031">ModelDBRepository/223031</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/223031/pull/1/files">pull/1</a></p></td>
+<td><p>S1/ingauss.mod S2/ingauss.mod SD/ingauss.mod SDprox1/ingauss.mod SDprox2/ingauss.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/225080">225080</a></p></td>
+<td><p>CA1 pyr cell: Inhibi…ssion (Grienberger et al 2017)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/225080">ModelDBRepository/225080</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/225080/pull/1/files">pull/1</a></p></td>
+<td><p>pr.mod vecevent.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/231427">231427</a></p></td>
+<td><p>Shaping NMDA spikes …on on L5PC (Doron et al. 2017)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/231427">ModelDBRepository/231427</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/231427/pull/2/files">pull/2</a></p></td>
+<td><p>ProbAMPA.mod ProbUDFsyn2_lark.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/232097">232097</a></p></td>
+<td><p>2D model of olfactor…llations (Li and Cleland 2017)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/232097">ModelDBRepository/232097</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/232097/pull/1/files">pull/1</a></p></td>
+<td><p>cadecay.mod cadecay2.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/239177">239177</a></p></td>
+<td><p>Phase response theor…(Tikidji-Hamburyan et al 2019)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/239177">ModelDBRepository/239177</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/239177/pull/1/files">pull/1</a></p></td>
+<td><p>PIR-Inetwork/innp.mod PIR-Inetwork/vecevent.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/241165">241165</a></p></td>
+<td><p>Biophysically realis…imulation (Aberra et al. 2018)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/241165">ModelDBRepository/241165</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/241165/pull/1/files">pull/1</a></p></td>
+<td><p>mechanisms/ProbAMPANMDA_EMS.mod mechanisms/ProbGABAAB_EMS.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/241240">241240</a></p></td>
+<td><p>Role of afferent-hai…regularity (Holmes et al 2017)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/241240">ModelDBRepository/241240</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/241240/pull/1/files">pull/1</a></p></td>
+<td><p>afhcsyn_i0.mod hc1.mod random.mod ribbon1.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/244262">244262</a></p></td>
+<td><p>Deconstruction of co…ic DBS (Kumaravelu et al 2018)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/244262">ModelDBRepository/244262</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/244262/pull/1/files">pull/1</a></p></td>
+<td><p>rand.mod ri.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/244848">244848</a></p></td>
+<td><p>Active dendrites sha…urons (Basak &amp; Narayanan 2018)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/244848">ModelDBRepository/244848</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/244848/pull/2/files">pull/2</a></p></td>
+<td><p>apamp.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/247968">247968</a></p></td>
+<td><p>Gamma genesis in the…ral amygdala (Feng et al 2019)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/247968">ModelDBRepository/247968</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/247968/pull/1/files">pull/1</a></p></td>
+<td><p>Gfluct_new_exc.mod Gfluct_new_inh.mod vecevent.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/249463">249463</a></p></td>
+<td><p>Layer V pyramidal ce…cs (Mäki-Marttunen et al 2019)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/249463">ModelDBRepository/249463</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/249463/pull/1/files">pull/1</a></p></td>
+<td><p>almog/ProbAMPANMDA2.mod almog/ProbUDFsyn2.mod hay/ProbAMPANMDA2.mod hay/ProbUDFsyn2.mod</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://modeldb.science/256388">256388</a></p></td>
+<td><p>The APP in C-termina…n firing (Pousinha et al 2019)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/256388">ModelDBRepository/256388</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/256388/pull/1/files">pull/1</a></p></td>
+<td><p>burststim2.mod ichan2.mod regn_stim.mod</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://modeldb.science/259366">259366</a></p></td>
+<td><p>Cycle skipping in IN…dji-Hamburyan &amp; Canavier 2020)</p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/259366">ModelDBRepository/259366</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ModelDBRepository/259366/pull/1/files">pull/1</a></p></td>
+<td><p>innp.mod</p></td>
+</tr>
+</tbody>
+</table>
+<section id="legacy-patterns-that-are-invalid-c">
+<h2>Legacy patterns that are invalid C++<a class="headerlink" href="#legacy-patterns-that-are-invalid-c" title="Link to this heading"></a></h2>
+<p>This section aims to list some patterns that the NEURON developers have found
+in pre-NEURON &gt;= 9.0 models that need to be modified to be valid
+C++.</p>
+<section id="implicit-pointer-type-conversions">
+<h3>Implicit pointer type conversions<a class="headerlink" href="#implicit-pointer-type-conversions" title="Link to this heading"></a></h3>
+<p>C++ has stricter rules governing pointer type conversions than C. For example</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">;</span><span class="w">   </span><span class="c1">// valid C, invalid C++</span>
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w">    </span><span class="c1">// valid C++, invalid C</span>
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// valid C and C++ (C-style casts discouraged in C++)</span>
+</pre></div>
+</div>
+<p>Similarly, in C one can pass a <code class="docutils literal notranslate"><span class="pre">void*</span></code> argument to a function that expects a
+<code class="docutils literal notranslate"><span class="pre">double*</span></code>. In C++ this is forbidden.</p>
+<p>The same issue may manifest itself in code such as</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">7</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span><span class="w">          </span><span class="c1">// valid C, invalid C++</span>
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span><span class="w">                       </span><span class="c1">// valid C++, invalid C</span>
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">7</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span><span class="w"> </span><span class="c1">// valid C and C++ (C-style casts discouraged in C++)</span>
+</pre></div>
+</div>
+<p>If you choose to move from using C <code class="docutils literal notranslate"><span class="pre">malloc</span></code> and <code class="docutils literal notranslate"><span class="pre">free</span></code> to using C++ <code class="docutils literal notranslate"><span class="pre">new</span></code>
+and <code class="docutils literal notranslate"><span class="pre">delete</span></code> then remember that you cannot mix and match <code class="docutils literal notranslate"><span class="pre">new</span></code> with <code class="docutils literal notranslate"><span class="pre">free</span></code>
+and so on.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Explicit memory management with <code class="docutils literal notranslate"><span class="pre">new</span></code> and <code class="docutils literal notranslate"><span class="pre">delete</span></code> is discouraged in C++
+(<a class="reference external" href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-newdelete">R.11: Avoid calling new and delete explicitly</a>).
+If you do not need to support older versions of NEURON, you may be able to
+use standard library containers such as <code class="docutils literal notranslate"><span class="pre">std::vector&lt;T&gt;</span></code>.</p>
+</div>
+</section>
+<section id="local-non-prototype-function-declarations">
+<span id="local-non-prototype-function-declaration"></span><h3>Local non-prototype function declarations<a class="headerlink" href="#local-non-prototype-function-declarations" title="Link to this heading"></a></h3>
+<p>In C, the function declaration</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">some_function</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>is a <a class="reference external" href="https://en.cppreference.com/w/c/language/function_declaration">non-prototype function declaration</a>: it declares
+that <code class="docutils literal notranslate"><span class="pre">some_function</span></code> exists, but it does not specify the number of arguments
+that it takes, or their types.
+In C++, the same code declares that <code class="docutils literal notranslate"><span class="pre">some_function</span></code> takes zero arguments (the
+C equivalent of this is <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">some_function(void)</span></code>).</p>
+<p>If such a declaration occurs in a top-level <code class="docutils literal notranslate"><span class="pre">VERBATIM</span></code> block then it is
+likely to be harmless: it will add a zero-parameter overload of the function,
+which will never be called.
+It <strong>will</strong>, however, cause a problem if the declaration is included <strong>inside</strong>
+an NMODL construct</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PROCEDURE</span><span class="w"> </span><span class="nf">procedure</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="n">VERBATIM</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">some_method_taking_an_int</span><span class="p">();</span><span class="w"> </span><span class="c1">// problematic in C++</span>
+<span class="w">  </span><span class="n">some_method_taking_an_int</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+<span class="n">ENDVERBATIM</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>because in this case the local declaration hides the real declaration, which is
+something like</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">some_method_taking_an_int</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>in a NEURON header that is included when the translated MOD file is compiled.
+In this case, the problematic local declaration can simply be removed.</p>
+</section>
+<section id="function-declarations-with-incorrect-types">
+<span id="function-decls-with-incorrect-types"></span><h3>Function declarations with incorrect types<a class="headerlink" href="#function-declarations-with-incorrect-types" title="Link to this heading"></a></h3>
+<p>In older MOD files and versions of NEURON, API methods were often accessed by
+declaring them in the MOD file and not by including a correct declaration from
+NEURON itself.
+In NEURON 8.2+, more declarations are implicitly included when MOD files are
+compiled.
+This can lead to problems if the declaration in the MOD file did not specify
+the correct argument and return types.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Rand</span><span class="o">*</span><span class="w"> </span><span class="nf">nrn_random_arg</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span><span class="w"> </span><span class="c1">// correct declaration from NEURON header, only in new NEURON</span>
+<span class="cm">/* ... */</span>
+<span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">nrn_random_arg</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span><span class="w"> </span><span class="c1">// incorrect declaration in MOD file, clashes with previous line</span>
+</pre></div>
+</div>
+<p>The fix here is simply to remove the incorrect declaration from the MOD file.</p>
+<p>If the argument types are incorrect, the situation is slightly more nuanced.
+This is because C++ supports overloading functions by argument type, but not by
+return type.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">sink</span><span class="p">(</span><span class="n">Thing</span><span class="o">*</span><span class="p">);</span><span class="w"> </span><span class="c1">// correct declaration from NEURON header, only in new NEURON</span>
+<span class="cm">/* ... */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">sink</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">);</span><span class="w"> </span><span class="c1">// incorrect declaration in MOD file, adds an overload, not a compilation error</span>
+<span class="cm">/* ... */</span>
+<span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">void_ptr</span><span class="p">;</span>
+<span class="n">sink</span><span class="p">(</span><span class="n">void_ptr</span><span class="p">);</span><span class="w">  </span><span class="c1">// probably used to work, now causes a linker error</span>
+<span class="n">Thing</span><span class="o">*</span><span class="w"> </span><span class="n">thing_ptr</span><span class="p">;</span>
+<span class="n">sink</span><span class="p">(</span><span class="n">thing_ptr</span><span class="p">);</span><span class="w"> </span><span class="c1">// works with both old and new NEURON</span>
+</pre></div>
+</div>
+<p>Here the incorrect declaration <code class="docutils literal notranslate"><span class="pre">sink(void*)</span></code> declares a second overload of
+the <code class="docutils literal notranslate"><span class="pre">sink</span></code> function, which is not defined anywhere.
+With NEURON &gt;= 9.0 the <code class="docutils literal notranslate"><span class="pre">sink(void_ptr)</span></code> line will select the
+<code class="docutils literal notranslate"><span class="pre">void*</span></code> second overload, based on the argument type, and this will fail during
+linking because this overload is not defined (only <code class="docutils literal notranslate"><span class="pre">sink(Thing*)</span></code> has a
+definition).</p>
+<p>In contrast, <code class="docutils literal notranslate"><span class="pre">sink(thing_ptr)</span></code> will select the correct overload in
+NEURON &gt;= 9.0, and it also works in older NEURON versions
+because <code class="docutils literal notranslate"><span class="pre">Thing*</span></code> can be implicitly converted to <code class="docutils literal notranslate"><span class="pre">void*</span></code>.</p>
+<p>The fix here is, again, to remove the incorrect declaration from the MOD file.</p>
+<p>See also the section below, <a class="reference internal" href="#deprecated-overloads-taking-void"><span class="std std-ref">Deprecated overloads taking void*</span></a>, for cases
+where NEURON <strong>does</strong> provide a (deprecated) definition of the <code class="docutils literal notranslate"><span class="pre">void*</span></code>
+overload.</p>
+</section>
+<section id="k-r-function-definitions">
+<h3>K&amp;R function definitions<a class="headerlink" href="#k-r-function-definitions" title="Link to this heading"></a></h3>
+<p>C supports (<a class="reference external" href="https://en.cppreference.com/w/c/language/function_definition">until C23</a>) a legacy
+(“K&amp;R”) syntax for function declarations.
+This is not valid C++.</p>
+<p>There is no advantage to the legacy syntax. If you have legacy definitions such
+as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>then simply replace them with</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>which is valid in both C and C++.</p>
+</section>
+</section>
+<section id="legacy-patterns-that-are-considered-deprecated">
+<h2>Legacy patterns that are considered deprecated<a class="headerlink" href="#legacy-patterns-that-are-considered-deprecated" title="Link to this heading"></a></h2>
+<p>As noted above (<a class="reference internal" href="#local-non-prototype-function-declaration"><span class="std std-ref">Local non-prototype function declarations</span></a>), declarations
+such as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">VERBATIM</span>
+<span class="k">extern</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">vector_resize</span><span class="p">();</span>
+<span class="n">ENDVERBATIM</span>
+</pre></div>
+</div>
+<p>at the global scope in MOD files declare C++ function overloads that take no
+parameters.
+If such declarations appear at the global scope then they do not hide the
+correct declarations, so this can be harmless, but it is not necessary.
+In NEURON &gt;= 9.0 the full declarations of the NEURON API methods
+that can be used in MOD files are implicitly included via the <code class="docutils literal notranslate"><span class="pre">mech_api.h</span></code>
+header, so this explicit declaration of a zero-parameter overload is not needed
+and can safely be removed.</p>
+<section id="deprecated-overloads-taking-void">
+<span id="id157"></span><h3>Deprecated overloads taking <code class="docutils literal notranslate"><span class="pre">void*</span></code><a class="headerlink" href="#deprecated-overloads-taking-void" title="Link to this heading"></a></h3>
+<p>As noted above (<a class="reference internal" href="#function-decls-with-incorrect-types"><span class="std std-ref">Function declarations with incorrect types</span></a>),
+NEURON &gt;= 9.0 provides extra overloads for some API methods that
+aim to smooth the transition from C to C++.
+These overloads are provided for widely used methods, and where overloading on
+return type would not be required.</p>
+<p>An example is the <code class="docutils literal notranslate"><span class="pre">vector_capacity</span></code> function, which in
+NEURON &gt;= 9.0 has two overloads</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">vector_capacity</span><span class="p">(</span><span class="n">IvocVect</span><span class="o">*</span><span class="p">);</span>
+<span class="p">[[</span><span class="n">deprecated</span><span class="p">(</span><span class="s">&quot;non-void* overloads are preferred&quot;</span><span class="p">)]]</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">vector_capacity</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The second one simply casts its argument to <code class="docutils literal notranslate"><span class="pre">IvocVect*</span></code> and calls the first
+one.
+The <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code> attribute means that MOD files that use the second
+overload emit compilation warnings when they are compiled using <code class="docutils literal notranslate"><span class="pre">nrnivmodl</span></code>.</p>
+<p>If your MOD files produce these deprecation warnings, make sure that the
+relevant method (<code class="docutils literal notranslate"><span class="pre">vector_capacity</span></code> in this example) is being called with an
+argument of the correct type (<code class="docutils literal notranslate"><span class="pre">IvocVect*</span></code>), and not a type that is implicitly
+converted to <code class="docutils literal notranslate"><span class="pre">void*</span></code>.</p>
+</section>
+</section>
+<section id="legacy-random-number-generators-and-api">
+<h2>Legacy random number generators and API<a class="headerlink" href="#legacy-random-number-generators-and-api" title="Link to this heading"></a></h2>
+<p>Various changes have also been done in the API of NEURON functions related to random
+number generators.</p>
+<p>First, in NEURON &gt;= 9.0 parameters passed to the functions need to be
+of the correct type as it was already mentioned in <a class="reference internal" href="#function-decls-with-incorrect-types"><span class="std std-ref">Function declarations with incorrect types</span></a>.
+The most usual consequence of that is that NEURON random API functions that were taking as
+an argument a <code class="docutils literal notranslate"><span class="pre">void*</span></code> now need to called with a <code class="docutils literal notranslate"><span class="pre">Rand*</span></code>. An example of the changes needed
+to fix this issue is given in <a class="reference external" href="https://github.com/ModelDBRepository/182129/pull/1">182129</a>.</p>
+<p>Another related change is with <code class="docutils literal notranslate"><span class="pre">scop_rand()</span></code> function that is usually used for defining a
+<code class="docutils literal notranslate"><span class="pre">URAND</span></code> <code class="docutils literal notranslate"><span class="pre">FUNCTION</span></code> in mod files to return a number based on a uniform distribution from 0 to 1.
+This function now takes no argument anymore. An example of this change can also be found in
+<a class="reference external" href="https://github.com/ModelDBRepository/182129/pull/1">182129</a>.</p>
+<p>Finally, the preferred random number generator is <code class="docutils literal notranslate"><span class="pre">Random123</span></code>. You can find more information
+about that in <a class="reference internal" href="../progref/programming/math/random.html#Random.Random123" title="Random.Random123"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Random.Random123()</span></code></a> and <a class="reference internal" href="randomness.html#randomness-in-neuron-models"><span class="std std-ref">Randomness in NEURON models</span></a>. An example of the
+usage of <code class="docutils literal notranslate"><span class="pre">Random123</span></code> can be seen in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/netstim.mod">netstim.mod</a>
+and its <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/coreneuron/test_psolve.py#L60">corresponding test</a>.`
+Another important aspect of <code class="docutils literal notranslate"><span class="pre">Random123</span></code> is that it’s supported in CoreNEURON as well. For more
+information about this see <a class="reference internal" href="../coreneuron/compatibility.html#random-number-generators-random123-vs-mcellran4"><span class="std std-ref">Random Number Generators: Random123 vs MCellRan4</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="randomness.html" class="btn btn-neutral float-left" title="Randomness in NEURON models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently asked questions (FAQ)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

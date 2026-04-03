@@ -1,0 +1,135 @@
+Spike Time Extraction from Voltage Traces
+==========================================
+
+When analyzing spike train outputs from neuron simulations, it is often useful to obtain a vector of spike times rather than just a voltage trace. This section explains two common approaches for extracting spike times in NEURON.
+
+Using :class:`NetCon` to Record Spike Times
+-------------------------------------------
+
+If you want to record the times at which a voltage crosses a predefined threshold during a simulation, the recommended and efficient way is to use the :class:`NetCon` class with its :meth:`NetCon.record` method.
+
+**Procedure:**
+
+1. Create a :class:`NetCon` object that detects threshold crossings from a membrane potential variable (e.g., `soma(0.5).v`).
+2. Set a detection threshold value corresponding to the spike "event" definition (e.g., -20 mV).
+3. Create a :class:`Vector` to record the time points of each crossing.
+4. Run the simulation.
+5. The :class:`Vector` stores the spike times in order.
+
+**Example (Python):**
+
+```python
+from neuron import h, gui
+
+# Create cell and simulation setup
+soma = h.Section(name='soma')
+soma.insert('hh')
+
+# Define a threshold for spike detection
+threshold = 0  # mV
+
+# Create a vector to record spike times
+spike_times = h.Vector()
+
+# Create NetCon to detect when voltage crosses threshold
+nc = h.NetCon(soma(0.5)._ref_v, None, sec=soma)
+nc.threshold = threshold
+nc.record(spike_times)
+
+# Stimulate the soma to generate spikes
+stim = h.IClamp(soma(0.5))
+stim.delay = 5
+stim.dur = 100
+stim.amp = 0.1  # nA
+
+h.tstop = 150
+h.run()
+
+# spike_times now contains the time points of detected threshold crossing
+print(list(spike_times))
+```
+
+**Example (HOC):**
+
+```hoc
+create soma
+access soma
+insert hh
+
+objref spike_times, nc, stim
+
+spike_times = new Vector()
+nc = new NetCon(&v(0.5), nil)
+nc.threshold = 0
+nc.record(spike_times)
+
+stim = new IClamp(0.5)
+stim.delay = 5
+stim.dur = 100
+stim.amp = 0.1
+
+tstop = 150
+run()
+
+spike_times.printf()
+```
+
+Extracting Spike Times from Existing Voltage Vectors
+---------------------------------------------------
+
+If you already have a recorded membrane potential trace stored in a :class:`Vector` and want to determine spike times post-hoc, you can detect times when the voltage crosses the threshold in the positive-going direction.
+
+**Method:**
+
+1. Use the :meth:`Vector.indwhere` method to find indices where voltage crosses the threshold (e.g., going from below 0 mV to above 0 mV).
+2. Convert those indices to time points using the :meth:`Vector.x` method or by knowing the sampling interval.
+
+**Example (Python):**
+
+```python
+vvec = h.Vector()  # Recorded voltage vector
+tvec = h.Vector()  # Corresponding time vector
+
+# Assume voltage and time have been recorded:
+# vvec.record(soma(0.5)._ref_v)
+# tvec.record(h._ref_t)
+
+threshold = 0  # mV
+
+# Find indices where voltage crosses threshold upwards
+crossings = vvec.indwhere(lambda i: (vvec[i] < threshold) and (vvec[i + 1] >= threshold))
+
+# Compute approximate spike times by linear interpolation
+spike_times = h.Vector()
+for idx in crossings:
+    t0 = tvec[idx]
+    t1 = tvec[idx + 1]
+    v0 = vvec[idx]
+    v1 = vvec[idx + 1]
+    # Linear interpolation to estimate exact crossing time
+    frac = (threshold - v0) / (v1 - v0)
+    spike_time = t0 + frac * (t1 - t0)
+    spike_times.append(spike_time)
+
+print(list(spike_times))
+```
+
+**Notes:**
+
+- This method assumes voltage vectors are sampled at sufficiently high temporal resolution.
+- The spike time estimate is approximate due to discrete sampling.
+- For very accurate spike timing, prefer direct recording with :class:`NetCon`.
+
+Summary
+-------
+
+- Use :class:`NetCon` with :meth:`NetCon.record` for direct spike time recording during simulation.
+- Use :meth:`Vector.indwhere` to detect threshold crossings from existing voltage recordings.
+- Define a consistent threshold voltage for spike detection.
+- Use linear interpolation to refine spike time estimates from discrete voltage samples.
+
+.. seealso::
+
+   :class:`NetCon`, :meth:`NetCon.record`, :meth:`Vector.indwhere`, :class:`Vector`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3303 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3303>`_

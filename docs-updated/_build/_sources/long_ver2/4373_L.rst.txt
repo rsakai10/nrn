@@ -1,0 +1,102 @@
+.. _nrnmech_dll_loading_issue:
+
+Loading Mechanisms from nrnmech.dll in Python Scripts
+=====================================================
+
+When using NEURON with Python, you may encounter an error such as:
+
+.. code-block:: python
+
+    soma.insert('klt')
+    ValueError: argument not a density mechanism name.
+
+This usually indicates that NEURON has not successfully loaded the compiled mechanisms (e.g., from **nrnmech.dll**). Below is a detailed explanation of common causes and remedies based on troubleshooting experience.
+
+Mechanism Compilation and Loading
+---------------------------------
+
+1. **Compilation of mod Files**
+
+   Make sure you have compiled your NMODL files with the :command:`mknrndll` tool in the directory where the :file:`.mod` files reside. A successful compilation typically displays messages similar to:
+
+   .. code-block:: none
+
+       NEURON -- VERSION 7.8.2 release/7.8
+       ...
+       Translating klt.mod into klt.c
+       Thread Safe
+       ...
+       nrnmech.dll was built successfully.
+
+2. **Using nrniv to Test Loading**
+
+   You can verify the mechanism DLL loads correctly by running a simple hoc file with :command:`nrniv` in the directory containing :file:`nrnmech.dll`. The loading message should list the mechanisms:
+
+   .. code-block:: none
+
+       loading membrane mechanisms from /path/to/nrnmech.dll
+       Additional mechanisms from files
+        hcnobo.mod klt.mod leak.mod ...
+
+3. **Python Use and Loading**
+
+   When running Python scripts, if your code explicitly calls :meth:`h.nrn_load_dll()`, the argument **must** include the full path **and filename** of the DLL:
+
+   .. code-block:: python
+
+       from neuron import h
+       h.nrn_load_dll("C:/Users/username/path/to/nrnmech.dll")  # include filename
+
+   Omitting the filename (e.g., giving just the containing directory) will cause Python to fail to load the mechanisms, producing the above error when inserting mechanisms.
+
+   Alternatively, if you run your Python script from the directory containing :file:`nrnmech.dll` (and your compiled mod files), you do not need to call :meth:`h.nrn_load_dll()` explicitly. NEURON will automatically load the :file:`nrnmech.dll` found in the current working directory.
+
+Example: Minimal Verification in Python
+---------------------------------------
+
+To ensure a mechanism such as `'klt'` is available and loads correctly, perform the following:
+
+1. Compile the `.mod` file with `mknrndll` in a separate, empty directory containing the `.mod` file.
+
+2. Open a terminal, change directory to where `nrnmech.dll` resides, and start Python.
+
+3. At the Python prompt, enter:
+
+   .. code-block:: python
+
+       from neuron import h
+       soma = h.Section(name='soma')
+       soma.insert('klt')        # should succeed without error
+       print(soma.psection())    # displays mechanism parameters
+
+If this works without error, your compiled mechanism and DLL are valid.
+
+Best Practices
+--------------
+
+- Place the `.mod` files alongside your main simulation script and run :command:`mknrndll` there. This avoids path issues and the need for explicit calls to :meth:`h.nrn_load_dll()`.
+
+- When calling :meth:`h.nrn_load_dll()`, always specify the full path **including the DLL file name** (e.g., `"C:/path/to/nrnmech.dll"`).
+
+- Running the code from the directory containing `nrnmech.dll` ensures that NEURON automatically loads the compiled mechanisms without extra commands.
+
+.. note::
+
+   Many users find it preferable to avoid :meth:`h.nrn_load_dll()` in their Python scripts and rely on NEURON's automatic DLL loading from the current working directory, simplifying code portability and shareability.
+
+Summary
+-------
+
+- Compile `.mod` files with :command:`mknrndll` in the directory of your choice.
+
+- Either:
+
+  - Run your Python script from that directory; NEURON auto-loads `nrnmech.dll`.
+
+  - Or call :meth:`h.nrn_load_dll()` with the full path and filename of `nrnmech.dll`.
+
+- Insert compiled mechanisms only after the DLL has successfully loaded.
+
+This approach avoids the common `ValueError: argument not a density mechanism name.` and ensures your Python simulations that rely on compiled mechanisms run correctly.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4373 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4373>`_

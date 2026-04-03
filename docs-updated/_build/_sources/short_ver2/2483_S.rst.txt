@@ -1,0 +1,35 @@
+.. note::
+   A :class:`Section` in NEURON represents an unbranched cable segment. The method :meth:`Section.pt3dadd` adds 3D points (x, y, z, diameter) sequentially along that section’s length to define its shape.
+
+   .. admonition:: Key points about branching and geometry
+
+      - Branching (bifurcations) is represented by creating multiple :class:`Section` objects.
+      - To establish the connectivity between sections (i.e., branching topology), use the :meth:`Section.connect` method.
+      - Points added via :meth:`Section.pt3dadd` connect only linearly within a single section, not by proximity to other points.
+      - A list of 3D points added sequentially by :meth:`Section.pt3dadd` defines the geometry of that one section but does not determine branching.
+
+.. code-block:: hoc
+
+   // Creating branching morphology
+   create parent, child
+   parent.pt3dadd(0,0,0,1)
+   parent.pt3dadd(10,0,0,1)
+   child.pt3dadd(10,0,0,1)
+   child.pt3dadd(20,5,0,1)
+   child.connect(parent, 1, 0)  // connect child(0) to parent(1)
+
+.. code-block:: python
+
+   from neuron import h
+   parent = h.Section(name='parent')
+   child = h.Section(name='child')
+   parent.pt3dadd(0,0,0,1)
+   parent.pt3dadd(10,0,0,1)
+   child.pt3dadd(10,0,0,1)
+   child.pt3dadd(20,5,0,1)
+   child.connect(parent(1), 0)  # connect child(0) to parent(1)
+
+.. note::
+   Thus, use :meth:`Section.pt3dadd` to define geometry within sections, and use :meth:`Section.connect` to define topology between sections.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2483 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2483>`_

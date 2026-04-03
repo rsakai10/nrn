@@ -1,0 +1,93 @@
+Connecting Sections and the Currently Accessed Section
+=======================================================
+
+When building neuron morphologies in NEURON, it is common to connect sections to form a tree structure. Understanding how the :meth:`connect` statement works and the role of the currently accessed section is important.
+
+Connecting Sections Using :meth:`connect`
+-----------------------------------------
+
+The classic form of :meth:`connect` is:
+
+.. code-block:: hoc
+
+    connect dendrite[1](0), soma(1)
+
+This connects the 0 end of section `dendrite[1]` to the 1 end of section `soma`.
+
+Connecting Multiple Sections in a Section Block
+-----------------------------------------------
+
+An alternative, often seen in complex models, uses a section block with curly braces `{ }`:
+
+.. code-block:: hoc
+
+    soma[0] {
+        connect soma[1](0), 1
+        connect basal[0](0), 0
+        connect basal[20](0), 0
+        connect basal[23](0), 0
+        connect basal[41](0), 0
+    }
+
+In this usage:
+
+- The block executes each statement with `soma[0]` as the *currently accessed section*.
+- The sections inside the block are connected as children **to** the currently accessed section, `soma[0]`.
+- This is a concise way to connect many sections as children of a single parent section.
+
+Effect of the Currently Accessed Section
+----------------------------------------
+
+Using a section block,
+
+.. code-block:: hoc
+
+    sectionname {
+        statement1
+        statement2
+        ...
+    }
+
+executes `statement1`, `statement2`, etc. with `sectionname` set as the *currently accessed section*. This means that if the statements inside call :meth:`connect` with a single section and a location (like `1` or `0`), the connection is understood relative to `sectionname`.
+
+Explanation of Connection Locations
+-----------------------------------
+
+In the call
+
+.. code-block:: hoc
+
+    connect childsection(x), y
+
+- The argument `x` is the location on the **child** section (between 0 and 1) where the connection is made.
+- The argument `y` is the location on the **currently accessed** (parent) section (between 0 and 1) where the child connects.
+
+Most commonly, `x` or `y` is `0` (start) or `1` (end) of the sections, but any value between 0 and 1 is allowed.
+
+Python Equivalent
+----------------
+
+Using NEURON’s Python interface, the equivalent connections can be done explicitly by calling :meth:`Section.connect`:
+
+.. code-block:: python
+
+    # Connect dendrite[1](0) to soma(1)
+    dendrite[1].connect(soma(0.5), 0)  # Example for explicit access
+
+    # Using a loop to connect multiple basal dendrites to soma[0]
+    for idx in [0,20,23,41]:
+        basal[idx].connect(soma[0](0), 0)
+
+.. note::
+
+    In Python, there is no direct concept of a "currently accessed section" like in HOC section blocks, so connections must be explicitly specified.
+
+Summary
+-------
+
+- The section block `{ ... }` sets the currently accessed section for the statements inside.
+- :meth:`connect` attaches the child section at the location given on the parent (currently accessed) section.
+- The locations after the comma in :meth:`connect` specify the point of attachment on the parent section.
+- This syntax provides a convenient way to connect multiple sections as children of a single parent section.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=70 <https://neuron.yale.edu/phpBB/viewtopic.php?t=70>`_

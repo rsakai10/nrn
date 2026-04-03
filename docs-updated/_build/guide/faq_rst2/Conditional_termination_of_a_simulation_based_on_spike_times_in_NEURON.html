@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conditional termination of a simulation based on spike times in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="How can I split a NEURON simulation into two runs with parameter changes in between?" href="How_can_I_split_a_NEURON_simulation_into_two_runs_with_parameter_changes_in_between.html" />
+    <link rel="prev" title="Continue Simulation Until a Preset Number of Spikes is Reached" href="Continue_Simulation_Until_a_Preset_Number_of_Spikes_is_Reached.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Simulation_with_time_step_greater_than_0_025_ms.html">Simulation with time step greater than 0.025 ms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Variable_Step_Size_and_Integration_Methods_in_NEURON.html">Variable Step Size and Integration Methods in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Maximum_dt_in_NEURON_and_PDE_Solver_Methods.html">Maximum dt in NEURON and PDE Solver Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Factors_Influencing_NEURON_Simulation_Run_Time_Beyond_Total_Compartment_Count.html">Factors Influencing NEURON Simulation Run Time Beyond Total Compartment Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Programmatically_Changing_Temperature_During_a_NEURON_Simulation.html">Programmatically Changing Temperature During a NEURON Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Continue_Simulation_Until_a_Preset_Number_of_Spikes_is_Reached.html">Continue Simulation Until a Preset Number of Spikes is Reached</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Conditional termination of a simulation based on spike times in NEURON</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-in-python">Example in Python:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-in-hoc">Example in Hoc:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="How_can_I_split_a_NEURON_simulation_into_two_runs_with_parameter_changes_in_between.html">How can I split a NEURON simulation into two runs with parameter changes in between?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Simulation_with_time_step_greater_than_0_025_ms.html">Simulation with time step greater than 0.025 ms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">Conditional termination of a simulation based on spike times in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Conditional_termination_of_a_simulation_based_on_spike_times_in_NEURON.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="conditional-termination-of-a-simulation-based-on-spike-times-in-neuron">
+<h1>Conditional termination of a simulation based on spike times in NEURON<a class="headerlink" href="#conditional-termination-of-a-simulation-based-on-spike-times-in-neuron" title="Link to this heading"></a></h1>
+<p>You can run a NEURON simulation and automatically stop it when a convergence criterion on inter-spike intervals (ISIs) is met, such as when the difference between the two most recent ISIs falls below a threshold. This can be achieved by using <cite>NetCon.record()</cite> to attach a callback function that tracks spike times, compares ISIs, and stops the simulation when the condition is fulfilled.</p>
+<p>Key points:</p>
+<ul class="simple">
+<li><p>Use <cite>NetCon</cite> to detect spikes and record spike times via a callback function.</p></li>
+<li><p>Maintain variables (e.g., spike count and ISIs) in Python to evaluate termination condition.</p></li>
+<li><p>Use <cite>FInitializeHandler</cite> to initialize variables before each run for interactive usage.</p></li>
+<li><p>You do not need to write a new NMODL mechanism; Python or hoc code suffices.</p></li>
+<li><p>Global variables are a simple way to share state between calls; alternatively, pass and return variables explicitly from the callback.</p></li>
+</ul>
+<section id="example-in-python">
+<h2>Example in Python:<a class="headerlink" href="#example-in-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Create a soma section with HH properties and surface area 100 um2</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># roughly 100 um2</span>
+<span class="n">h</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">soma</span><span class="p">)</span>
+
+<span class="c1"># Parameters</span>
+<span class="n">TOL</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">dt</span>  <span class="c1"># convergence tolerance</span>
+
+<span class="c1"># Variables for spike counting and ISI tracking</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">isi</span> <span class="o">=</span> <span class="mf">1e3</span>      <span class="c1"># initialize to large value</span>
+<span class="n">previsi</span> <span class="o">=</span> <span class="mf">2e3</span>  <span class="c1"># initialize to different large value</span>
+
+<span class="c1"># Reset function called before each simulation run</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">resetstuff</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span><span class="p">,</span> <span class="n">isi</span><span class="p">,</span> <span class="n">previsi</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">isi</span> <span class="o">=</span> <span class="mf">1e3</span>
+    <span class="n">previsi</span> <span class="o">=</span> <span class="mf">2e3</span>
+
+<span class="c1"># Register reset function to run at model initialization</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">FInitializeHandler</span><span class="p">(</span><span class="n">resetstuff</span><span class="p">)</span>
+
+<span class="c1"># NetCon to detect spikes, threshold set to -10 mV</span>
+<span class="n">nc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">nc</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+
+<span class="n">tsp</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># time of last spike</span>
+
+<span class="c1"># Called on each spike detected by NetCon</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spikehappened</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">tsp</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">isi</span><span class="p">,</span> <span class="n">previsi</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">tsp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">previsi</span> <span class="o">=</span> <span class="n">isi</span>
+        <span class="n">isi</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">tsp</span>
+        <span class="n">tsp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">isi</span> <span class="o">-</span> <span class="n">previsi</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">stoprun</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># terminate simulation</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spike </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">t</span><span class="si">}</span><span class="s2"> ms, ISI=</span><span class="si">{</span><span class="n">isi</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, prev ISI=</span><span class="si">{</span><span class="n">previsi</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">nc</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">spikehappened</span><span class="p">)</span>
+
+<span class="c1"># Example of stimulus:</span>
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">1e9</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="c1"># Run simulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;stdrun.hoc&#39;</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-in-hoc">
+<h2>Example in Hoc:<a class="headerlink" href="#example-in-hoc" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+access soma
+soma {
+  insert hh
+  L = 10
+  diam = 10
+}
+
+objref nc
+proc resetstuff() {
+  count = 0
+  isi = 1e3
+  previsi = 2e3
+}
+
+// Variables
+count = 0
+isi = 1e3
+previsi = 2e3
+tsp = 0
+
+proc spikehappened() {
+  count += 1
+  if (count == 1) {
+    tsp = t
+  } else {
+    previsi = isi
+    isi = t - tsp
+    tsp = t
+    if (fabs(isi - previsi) &lt; dt) {
+      stoprun = 1
+    }
+  }
+  print &quot;Spike at &quot; + $o + &quot; ms, count = &quot; + count + &quot; ISI = &quot; + isi + &quot; prev ISI = &quot; + previsi
+}
+
+proc run_sim() {
+  resetstuff()
+  objref nc
+  nc = new NetCon(&amp;soma.v(0.5), nil)
+  nc.threshold = -10
+  nc.record(&amp;spikehappened)
+
+  objref stim
+  stim = new IClamp(0.5)
+  stim.del = 1
+  stim.dur = 1e9
+  stim.amp = 0.01
+
+  finitialize(-65)
+  run(10000)
+}
+
+run_sim()
+</pre></div>
+</div>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Using <cite>FInitializeHandler</cite> (Python) or a reset function in hoc ensures variables are properly initialized before each run; this is especially helpful when running multiple simulations interactively.</p></li>
+<li><p>The <cite>spikehappened</cite> callback function updates spike count and ISIs, and sets <cite>h.stoprun = 1</cite> (or <cite>stoprun = 1</cite> in hoc) to end the simulation when the termination condition is met.</p></li>
+<li><p>Passing state variables as arguments and returning them is possible but more complex with <cite>NetCon.record()</cite>, which only supports callbacks without output. Global variables or object attributes are simpler in this context.</p></li>
+</ul>
+<p>This approach provides a simple and effective way to conditionally terminate simulations based on spike time metrics without requiring additional NMODL mechanisms.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4652">https://neuron.yale.edu/phpBB/viewtopic.php?t=4652</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Continue_Simulation_Until_a_Preset_Number_of_Spikes_is_Reached.html" class="btn btn-neutral float-left" title="Continue Simulation Until a Preset Number of Spikes is Reached" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="How_can_I_split_a_NEURON_simulation_into_two_runs_with_parameter_changes_in_between.html" class="btn btn-neutral float-right" title="How can I split a NEURON simulation into two runs with parameter changes in between?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

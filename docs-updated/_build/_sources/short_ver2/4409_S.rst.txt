@@ -1,0 +1,24 @@
+Getting Started with NEURON
+===========================
+
+NEURON is designed for mechanistic modeling of biological neurons and networks, capturing complex anatomical and biophysical properties including ion channels and cell interconnections. Models can range from point neurons and single compartments to detailed morphologies and large-scale networks.  
+
+NEURON internally handles the cable equation for neurons with significant electrical extent, allowing users to focus on model construction rather than numerical details. It supports Hodgkin-Huxley-style ODEs, Markov state transition models, and enables incorporation of ion channels, synapses, and drug-receptor interactions using :class:`h.Section`, NMODL mechanisms, and the Channel Builder.
+
+Simulations can be run on a single processor or in parallel using multithreading and MPI for distributed computation.
+
+.. note::
+   We recommend using the Python interface rather than hoc for new projects due to Python’s advanced features and ease of use.
+
+.. code-block:: python
+
+   from neuron import h, gui
+   soma = h.Section(name='soma')
+   soma.L = 20    # length in microns
+   soma.diam = 20 # diameter in microns
+   soma.insert('hh')  # insert Hodgkin-Huxley channels
+
+.. seealso::
+   :class:`h.Section`, :meth:`h.Section.insert`, :func:`h.load_file`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4409 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4409>`_

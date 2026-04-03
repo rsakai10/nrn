@@ -1,0 +1,200 @@
+Recording and Plotting the Second Derivative of an Action Potential in NEURON
+==================================================================================
+
+This section explains how to record the second time derivative of an action potential from a neuron model in NEURON, and how to generate plots such as \( y'' = f(t) \) and phase plots \( y'' = f(x') = f(i_{cap}) \).
+
+Conceptual Overview
+-------------------
+
+- The second derivative \( y'' \) of the membrane voltage \( y = V \) is related to the derivative of the membrane capacitive current \( i_{cap} \) with respect to time.
+- Instead of computing derivatives inside a `mod` file, it is recommended to record time series data of variables such as `v` and `i_cap` during the simulation.
+- Post-simulation, use the `Vector` class methods (e.g., :meth:`Vector.deriv`) to calculate derivatives from the recorded data.
+- If adaptive integration is used, recorded vectors may have uneven time steps; the :meth:`Vector.interpolate` method can be used to resample at uniform intervals.
+
+Guidelines for Implementing This Analysis
+-----------------------------------------
+
+1. **Model Specification Code**
+
+   Define the neuron morphology and biophysical properties (e.g., membrane mechanisms, channels).
+
+2. **Instrumentation Code**
+
+   Set up stimulus sources and record variables of interest (e.g., `v(0.5)` and `i_cap(0.5)`) into :class:`Vector` objects.
+
+   Example HOC instrumentation code:
+
+   .. code-block:: hoc
+
+      objref vvec, icvec
+      vvec = new Vector()
+      icvec = new Vector()
+      vvec.record(&soma.v(0.5))
+      icvec.record(&soma.i_cap(0.5))
+
+3. **Simulation Control Code**
+
+   Set simulation parameters and control flow, for example:
+
+   .. code-block:: hoc
+
+      tstop = 50
+      dt = 0.025
+      celsius = 32
+      v_init = -55
+
+   Implement a procedure that runs the simulation and calls post-simulation analysis:
+
+   .. code-block:: hoc
+
+      proc myrun() {
+         run()
+         postprocess()
+      }
+
+4. **Post-Simulation Analysis**
+
+   Define a procedure `postprocess()` that calculates the derivatives and plots the results.
+
+   Example for calculating the first and second derivatives of `i_cap` and plotting a phase plot (`d2` vs `i_cap`):
+
+   .. code-block:: hoc
+
+      objref d2, g2
+      d2 = new Vector()
+
+      proc postprocess() {
+         d2.deriv(icvec, dt)   // Compute d/dt(i_cap)
+         if (g2 == nil) {
+            g2 = new Graph(0)
+         } else {
+            g2.exec_menu("Erase")   // Clear previous plots
+         }
+         d2.plot(g2, icvec)     // Plot d2 vs i_cap
+         g2.size(-0.5, 0.5, -15, 15)
+         g2.view(-0.5, -15, 1, 30, 648, 296, 400.48, 300.32)
+         g2.label(0.05, 0.9, "x: i_cap(0.5)", 2, 1, 0, 0, 2)
+         g2.label(0.05, 0.75, "y: D_t(i_cap(0.5))", 2, 1, 0, 0, 3)
+         g2.exec_menu("View = plot")  // Autoscale plot axes
+      }
+
+5. **Updating Plots When Model Parameters Change**
+
+   - When parameters such as channel conductances or geometry are changed, simply call `myrun()` again.
+   - The graphs will update with the new data.
+   - To avoid accumulation of traces from multiple runs, clear the graph in `postprocess()` as shown above.
+   - To keep multiple traces for comparison, use NEURON's “Vector display” functionality by copying traces to a VecWrap.
+
+Additional Tips
+---------------
+
+- **Recording Data Vectors Before Simulation:**  
+  Vector recording objects (`vvec`, `icvec`) should be initialized **before** the simulation runs.
+
+- **Running Derivative Calculations After Simulation:**  
+  Derivative calculations must be performed after the simulation is complete and vectors populated.
+
+- **Adaptive Integration & Interpolation:**  
+  If using variable time step integrators, interpolate vectors to uniform sampling before derivative calculations using :meth:`Vector.interpolate`.
+
+- **Plotting i_cap vs. voltage during Simulation:**  
+  To plot `i_cap` versus `v` during a run, create a graph object and add variable tracings:
+
+  .. code-block:: hoc
+
+     objref icvsv
+     icvsv = new Graph(0)
+     icvsv.size(-100, 20, -0.5, 0.5)
+     icvsv.view(-100, -0.5, 120, 1, 648, 34, 300.48, 200.32)
+     graphList[3].append(icvsv)  // update during run
+     icvsv.xexpr("v(0.5)", 0)
+     icvsv.label(0.05, 0.9, "x-axis: v(0.5)", 2, 1, 0, 0, 1)
+     icvsv.addvar("soma.i_cap(0.5)", 2, 1, 0.05, 0.85, 2)
+
+Complete Example: Recording and Plotting the Second Derivative of an Action Potential
+-------------------------------------------------------------------------------------
+
+.. code-block:: hoc
+
+   // Model specification
+   create soma
+   soma {
+     nseg = 1
+     L = 35
+     diam = 15
+     Ra = 150.0
+     cm = 1
+     insert pasnts
+     insert kdrDA
+     gbar_kdrDA = 100
+     insert Na12
+     Vmid_ac_Na12 = -35
+     gbar_Na12 = 250
+     insert ka
+     gbar_ka = 2
+     ena = 60
+     ek = -90
+   }
+
+   // Simulation parameters
+   tstop = 50
+   dt = 0.025
+   celsius = 32
+   v_init = -55
+
+   // Instrumentation: Record voltage and capacitive current
+   objref vvec, icvec
+   vvec = new Vector()
+   icvec = new Vector()
+   vvec.record(&soma.v(0.5))
+   icvec.record(&soma.i_cap(0.5))
+
+   // Post-simulation analysis vectors and graph
+   objref d2, g2
+   d2 = new Vector()
+
+   proc postprocess() {
+     d2.deriv(icvec, dt) // compute time derivative of i_cap
+     if (g2 == nil) {
+       g2 = new Graph(0)
+     } else {
+       g2.exec_menu("Erase")
+     }
+     d2.plot(g2, icvec)
+     g2.size(-0.5, 0.5, -15, 15)
+     g2.view(-0.5, -15, 1, 30, 648, 296, 400.48, 300.32)
+     g2.label(0.05, 0.9, "x: i_cap(0.5)", 2, 1, 0, 0, 2)
+     g2.label(0.05, 0.75, "y: D_t(i_cap(0.5))", 2, 1, 0, 0, 3)
+     g2.exec_menu("View = plot")
+   }
+
+   // Simulation flow control
+   proc myrun() {
+     run()
+     postprocess()
+   }
+
+Usage Notes
+-----------
+
+- To run the simulation and view updated derivative plots, simply call:
+
+  .. code-block:: hoc
+
+     myrun()
+
+- For multiple runs with parameter changes, calling `myrun()` repeatedly will update the graph without overlapping old data.
+
+- To preserve traces for comparison, use NEURON’s Vector display and VecWrap facilities as described above.
+
+Summary
+-------
+
+- Record variables during simulation to :class:`Vector` instances.
+- Execute derivative calculations post-simulation using :meth:`Vector.deriv`.
+- Manage plot updating by clearing graphs in post-processing.
+- Automate simulation and analysis in procedures for convenient reuse.
+
+This approach allows flexible, accurate analysis of temporal derivatives such as the second derivative of an action potential without modifying channel mechanism source code.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3452 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3452>`_

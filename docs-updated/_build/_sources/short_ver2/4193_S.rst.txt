@@ -1,0 +1,57 @@
+.. rubric:: How to Determine the Location of a Synapse on a Section
+
+When a synapse is instantiated at a position along a section, e.g.::
+
+    syn = h.ExpSyn(dend(0.77))
+
+retrieving its location via ``syn.get_segment().x`` or ``syn.get_loc()`` may not return exactly the position given (0.77 in this example). Instead, it returns the relative position of the midpoint of the segment actually containing the synapse, which depends on the section's number of segments (``nseg``).
+
+.. note::
+
+   The synapse is assigned to the segment whose midpoint is closest to the requested location. Thus, when ``nseg`` is small, the reported position can differ significantly from the provided value.
+
+To improve positional accuracy, increase the number of segments::
+
+    dend.nseg = 100
+    syn = h.ExpSyn(dend(0.77))
+    print(syn.get_segment().x)  # Output will be close to 0.77
+
+.. note::
+
+   Using multiple connected sections to represent specific locations (e.g., placing a synapse at a section junction) can provide precise synapse placement without excessive segmentation.
+
+For choosing an appropriate ``nseg`` value, consider applying the d_lambda rule, which sets ``nseg`` based on the cable's electrotonic properties to balance accuracy and computational cost. You can use the hoc procedure ``geom_nseg()`` from NEURON's example scripts by loading it with::
+
+    h.xopen("fixnseg.hoc")
+    h.geom_nseg()
+
+and modify as needed if your model lacks a soma.
+
+.. seealso::
+
+   :meth:`Section.nseg`, :meth:`PointProcess.get_segment`, :meth:`PointProcess.get_loc`
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file('stdrun.hoc')
+    dend = h.Section(name='dend')
+    dend.L = 200
+    dend.nseg = 100
+    syn = h.ExpSyn(dend(0.77))
+    print(f"Synapse location (segment midpoint): {syn.get_segment().x}")
+    print(f"Synapse get_loc(): {syn.get_loc()}")
+
+.. code-block:: hoc
+
+    create dend
+    dend {
+        L = 200
+        nseg = 100
+    }
+    objref syn
+    syn = new ExpSyn(dend(0.77))
+    print syn.get_segment().x
+    print syn.get_loc()
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4193 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4193>`_

@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parallel Assignment of Large Arrays to Multiple Instances of an NMODL Mechanism &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Parallel Assignment of Large Arrays to Multiple Instances of an NMODL Mechanism</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4167_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parallel-assignment-of-large-arrays-to-multiple-instances-of-an-nmodl-mechanism">
+<h1>Parallel Assignment of Large Arrays to Multiple Instances of an NMODL Mechanism<a class="headerlink" href="#parallel-assignment-of-large-arrays-to-multiple-instances-of-an-nmodl-mechanism" title="Link to this heading"></a></h1>
+<p>When working with large arrays in NMODL mechanisms that are instantiated multiple times, setting the array values individually in each instance can be very inefficient, especially if the array values are identical and constant across all instances. This section explains how to efficiently share a single large array among many mechanism instances using pointers, avoiding repeated data copying.</p>
+<section id="problem-context">
+<h2>Problem Context<a class="headerlink" href="#problem-context" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>You have an NMODL mechanism that includes an array (e.g., <cite>arr[NUM_VALS]</cite>).</p></li>
+<li><p>Multiple instances of this mechanism are created on different sections.</p></li>
+<li><p>The array values are identical and fixed for all instances.</p></li>
+<li><p>Setting the array values in Python with nested loops (over instances and array indices) is slow and inefficient.</p></li>
+<li><p>Goal: Assign a single large array once and have all mechanism instances refer to it.</p></li>
+</ul>
+<section id="inefficient-method-setting-each-instances-array-individually">
+<h3>Inefficient Method: Setting Each Instance’s Array Individually<a class="headerlink" href="#inefficient-method-setting-each-instances-array-individually" title="Link to this heading"></a></h3>
+<p>Example minimal mechanism (<cite>ARRAY_TEST.mod</cite>):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DEFINE NUM_VALS 100
+
+NEURON {
+    POINT_PROCESS ARRAY_TEST
+    RANGE arr
+}
+
+ASSIGNED {
+    arr[NUM_VALS]
+}
+</pre></div>
+</div>
+<p>Corresponding Python code to set one instance’s array values slowly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Create mechanism instances</span>
+<span class="n">mech1</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ARRAY_TEST</span><span class="p">(</span><span class="n">s0</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">mech2</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ARRAY_TEST</span><span class="p">(</span><span class="n">s0</span><span class="p">(</span><span class="mf">0.4</span><span class="p">))</span>
+
+<span class="c1"># Create numpy array</span>
+<span class="n">numpy_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Set values for one instance (slow for large arrays and many instances)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">mech1</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This approach performs repeated Python-to-NMODL data transfers, which scale poorly with array size and number of instances.</p>
+</section>
+</section>
+<section id="efficient-approach-sharing-a-single-array-via-pointer-and-verbatim">
+<h2>Efficient Approach: Sharing a Single Array via POINTER and VERBATIM<a class="headerlink" href="#efficient-approach-sharing-a-single-array-via-pointer-and-verbatim" title="Link to this heading"></a></h2>
+<p>### Idea</p>
+<ul class="simple">
+<li><p>Store the array in a single numpy array in Python.</p></li>
+<li><p>Obtain a pointer to the numpy array data using <code class="xref py py-func docutils literal notranslate"><span class="pre">neuron.numpy_element_ref()</span></code>.</p></li>
+<li><p>Pass the pointer to each mechanism instance’s POINTER variable.</p></li>
+<li><p>Use a VERBATIM block in the NMODL to access array elements directly through the pointer.</p></li>
+</ul>
+<p>### Benefits</p>
+<ul class="simple">
+<li><p>No copying of the array data per instance — all instances point to the same memory.</p></li>
+<li><p>Only one array is set once in Python.</p></li>
+<li><p>Fast, scalable to very large arrays and many instances.</p></li>
+</ul>
+</section>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading"></a></h2>
+<p>### 1. Modify the NMODL mechanism to include a POINTER and an output variable</p>
+<p>Example <cite>ARRAY_TEST.mod</cite>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS ARRAY_TEST
+    POINTER foo
+    RANGE val
+}
+
+UNITS {
+    (mV) = (millivolt)
+}
+
+ASSIGNED {
+    v            (mV)
+    foo
+    val          (1)
+}
+
+BREAKPOINT {
+    VERBATIM
+        // Access shared array via pointer foo, indexed by voltage cast to int plus offset of 100
+        val = _p_foo[(int) _v + 100];
+    ENDVERBATIM
+}
+</pre></div>
+</div>
+<p>Notes:</p>
+<ul class="simple">
+<li><p><cite>foo</cite> is declared as a POINTER.</p></li>
+<li><p>Inside the VERBATIM block, the pointer <cite>foo</cite> is referenced as <cite>_p_foo</cite>.</p></li>
+<li><p>All other variables use a prefixed underscore (<cite>_</cite>) inside VERBATIM; here voltage is <cite>_v</cite>.</p></li>
+<li><p>Adjust indexing inside the VERBATIM block as needed.</p></li>
+</ul>
+<p>### 2. Python script to assign the pointer to multiple mechanism instances</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">numpy_element_ref</span>
+
+<span class="c1"># Create sections</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">dend</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dend&#39;</span><span class="p">)</span>
+
+<span class="c1"># Instantiate mechanisms on segments</span>
+<span class="n">pps</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">ARRAY_TEST</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">dend</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))]</span>
+
+<span class="c1"># Create large shared data array (can be very large, e.g., millions of entries)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Get pointer to numpy array data (start index 0)</span>
+<span class="n">ptr</span> <span class="o">=</span> <span class="n">numpy_element_ref</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Assign the pointer to each point process&#39;s POINTER variable &#39;foo&#39;</span>
+<span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">pps</span><span class="p">:</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">_ref_foo</span> <span class="o">=</span> <span class="n">ptr</span>
+
+<span class="c1"># Set some example voltage values to test indexing</span>
+<span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">dend</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="o">-</span><span class="mi">43</span>
+
+<span class="c1"># Advance the simulation for mechanisms to update val</span>
+<span class="n">h</span><span class="o">.</span><span class="n">fadvance</span><span class="p">()</span>
+
+<span class="c1"># Validate matching values from NEURON and numpy array</span>
+<span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">pps</span><span class="p">:</span>
+    <span class="n">seg</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">get_segment</span><span class="p">()</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="mi">100</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">seg</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pp</span><span class="o">.</span><span class="n">val</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output example (random data, values may differ):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>soma(0.5) 0.28198634180594195 0.28198634180594195
+dend(0.5) 0.47065239091128874 0.47065239091128874
+</pre></div>
+</div>
+<p>### 3. Alternative for NEURON versions prior to 7.7.2</p>
+<p>Older NEURON versions do not support setting the pointer via attribute (<cite>pp._ref_foo</cite>).</p>
+<p>Instead, use <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.setpointer()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">pps</span><span class="p">:</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">setpointer</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">pp</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The pointer must remain valid in Python scope for the duration of the simulation; do not free or overwrite the numpy array while pointer(s) refer to it.</p></li>
+<li><p>Access to the array in VERBATIM must obey C pointer syntax (<cite>_p_&lt;pointer_name&gt;</cite>).</p></li>
+<li><p>This method applies when the array elements represent indexed values, not time-varying variables.</p></li>
+<li><p>If the underlying array is large and constant during simulation, this approach is efficient.</p></li>
+<li><p>If you require a time-varying GLOBAL variable synchronized across many mechanisms, consider using a density mechanism with a GLOBAL variable and <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a>. For static arrays, POINTER+VERBATIM is preferred.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To efficiently share a large, constant array across many instances of the same NMODL mechanism:</p>
+<ul class="simple">
+<li><p>Store array once in Python as a numpy array.</p></li>
+<li><p>Obtain a pointer to the array data via <code class="xref py py-func docutils literal notranslate"><span class="pre">neuron.numpy_element_ref()</span></code>.</p></li>
+<li><p>Pass the pointer to each mechanism instance’s POINTER variable (<cite>pp._ref_foo = ptr</cite>).</p></li>
+<li><p>Read array values inside the mechanism using a VERBATIM block referencing <cite>_p_foo</cite>.</p></li>
+<li><p>Avoid setting arrays instance-by-instance in Python loops.</p></li>
+</ul>
+<p>This method significantly reduces overhead and memory use when assigning large arrays to multiple mechanism instances.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4167">https://neuron.yale.edu/phpBB/viewtopic.php?t=4167</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

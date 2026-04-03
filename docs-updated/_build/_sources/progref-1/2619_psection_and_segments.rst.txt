@@ -1,0 +1,30 @@
+psection and accessing all segments
+===================================
+
+When using NEURON's `psection(sec=Section)`, it returns information only about the first segment of the section. To inspect properties of all segments in a section (when `nseg > 1`), you need to iterate over the segments explicitly.
+
+Example
+-------
+
+Suppose you have a section `soma` with a density mechanism having the suffix `na` and a RANGE variable `gbar`. To print the location (`seg.x`) and the value of `gbar_na` for all segments in `soma`, use:
+
+.. code-block:: python
+
+    for seg in soma:
+        print(seg.x, seg.gbar_na)
+
+This loop accesses each segment in the section, allowing you to examine or modify segment-specific variables.
+
+.. note::
+
+    Iterating over segments is a general approach to access segment-specific properties in NEURON when `nseg > 1`.
+
+.. seealso::
+
+    - NEURON documentation on sections and segments
+    - Using RANGE variables in mechanisms
+
+Reference
+---------
+
+Original discussion thread: https://www.neuron.yale.edu/phpBB/viewtopic.php?f=3&t=2619

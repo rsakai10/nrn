@@ -1,0 +1,29 @@
+.. _simulation_chunking_cvode_example:
+
+Chunked Simulation with :class:`h.CVode`
+=========================================
+
+When running a simulation in chunks using :meth:`h.continuerun`, note that variable time step integration with :class:`h.CVode` handles time differently than fixed step methods. For example, initializing time to negative values and advancing in chunks requires informing CVode of changes in time and states using :meth:`h.CVode.re_init`. Otherwise, :attr:`h.t` may advance unexpectedly.
+
+.. code-block:: python
+
+    h.finitialize()
+    h.t = -stabilize_time
+    h.CVode().re_init()
+
+    for i in range(num_chunks):
+        h.continuerun(h.t + chunk_time)
+        if h.t >= 0:
+            # write data
+        h.frecord_init()
+
+To avoid manual calls to :meth:`h.CVode.re_init`, initialize time correctly at the start using an :class:`h.FInitializeHandler` callback. Additionally, to ensure integration stops exactly at a desired time point with CVode, schedule an event at that time using :meth:`h.CVode.event`.
+
+.. note::
+
+    Variable time step integration with CVode may advance :attr:`h.t` beyond the requested stop time after :meth:`h.continuerun`; using events controls this behavior.
+
+.. seealso::
+
+    :meth:`h.continuerun`, :meth:`h.CVode.re_init`, :class:`h.FInitializeHandler`, :meth:`h.CVode.event`
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=4605

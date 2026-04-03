@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obtaining the Actual Location Along a Section for a NetCon Source &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Obtaining the Actual Location Along a Section for a NetCon Source</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3811_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="obtaining-the-actual-location-along-a-section-for-a-netcon-source">
+<h1>Obtaining the Actual Location Along a Section for a NetCon Source<a class="headerlink" href="#obtaining-the-actual-location-along-a-section-for-a-netcon-source" title="Link to this heading"></a></h1>
+<p>When creating a <code class="xref py py-class docutils literal notranslate"><span class="pre">h.NetCon</span></code> instance with a source on a membrane potential of a section, you may want to retrieve the exact fractional position along the section where the source is located. Historically, the method <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a> returns <cite>0</cite>, <cite>0.5</cite>, or <cite>1.0</cite> for location fractions, and may not correspond to the actual position if a segment center differs from the requested fraction.</p>
+<section id="limitations-of-netcon-preloc">
+<h2>Limitations of <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a><a class="headerlink" href="#limitations-of-netcon-preloc" title="Link to this heading"></a></h2>
+<p>The legacy behavior of <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a> is as follows:</p>
+<ul class="simple">
+<li><p>Returns <cite>0</cite> or <cite>1</cite> if the source is at the end of a section (<cite>0</cite> or <cite>1</cite>).</p></li>
+<li><p>Returns <cite>0.5</cite> for any intermediate location because the voltage variable is associated with a segment (which may be centered away from the specified fraction).</p></li>
+<li><p>Will return <cite>-1</cite> if there is no source.</p></li>
+<li><p>Will return <cite>-2</cite> if the source variable is not a membrane potential.</p></li>
+<li><p>Requires a matching <code class="xref py py-func docutils literal notranslate"><span class="pre">h.pop_section()</span></code> call if the return value is non-negative (≥ 0).</p></li>
+</ul>
+<p>Example illustrating this behavior:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">preloc</span><span class="p">())</span>  <span class="c1"># prints 0.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">preloc</span><span class="p">())</span>  <span class="c1"># prints 1.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">preloc</span><span class="p">())</span>  <span class="c1"># prints 0.5</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">preloc</span><span class="p">())</span>  <span class="c1"># prints 0.5 (does not match 0.25)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">preloc</span><span class="p">())</span>  <span class="c1"># prints 0.5 (does not match 0.75)</span>
+</pre></div>
+</div>
+</section>
+<section id="new-method-netcon-preseg">
+<h2>New Method <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a><a class="headerlink" href="#new-method-netcon-preseg" title="Link to this heading"></a></h2>
+<p>Starting from NEURON version 7.5 (commit “af83c99” onwards), a new Python-specific method <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> provides access to the exact pre-section <code class="xref py py-class docutils literal notranslate"><span class="pre">Segment</span></code> of the spike detector source. This method returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">Segment</span></code> object when the source is a membrane voltage variable, which allows retrieving:</p>
+<ul class="simple">
+<li><p>The exact fractional location along the section: <code class="docutils literal notranslate"><span class="pre">nc.preseg().x</span></code></p></li>
+<li><p>The source section object: <code class="docutils literal notranslate"><span class="pre">nc.preseg().sec</span></code></p></li>
+</ul>
+<p>If there is no source, or the source is on a remote MPI process, or the source variable is not a voltage, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> returns <cite>None</cite>.</p>
+<p>Usage example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">nc1</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc1</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 0.0</span>
+
+<span class="n">nc2</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc2</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 1.0</span>
+
+<span class="n">nc3</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc3</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># ~0.55 (segment center near 0.5)</span>
+
+<span class="n">nc4</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc4</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 0.25</span>
+
+<span class="n">nc5</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc5</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 0.75</span>
+
+<span class="n">nc6</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_cm</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># non-voltage variable</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc6</span><span class="o">.</span><span class="n">preseg</span><span class="p">())</span>  <span class="c1"># None</span>
+</pre></div>
+</div>
+</section>
+<section id="notes-on-coordinate-references">
+<h2>Notes on Coordinate References<a class="headerlink" href="#notes-on-coordinate-references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The fractional positions returned by <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> and <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a> are with respect to the end of the section that has a parent section (i.e., the 0 position is always assigned to the end connected to the parent), <strong>not</strong> with respect to the orientation of the section as specified by <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.orientation" title="Section.orientation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.orientation()</span></code></a>. As of the latest fixes, this behavior is corrected to be consistent and reliable.</p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> does <strong>not</strong> push the section onto the stack, so no corresponding <code class="xref py py-func docutils literal notranslate"><span class="pre">h.pop_section()</span></code> call is necessary after its use.</p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a> may require a <code class="xref py py-func docutils literal notranslate"><span class="pre">h.pop_section()</span></code> call if it returns a value ≥ 0.</p></li>
+</ul>
+</section>
+<section id="extended-test-example">
+<h2>Extended Test Example<a class="headerlink" href="#extended-test-example" title="Link to this heading"></a></h2>
+<p>The following test script demonstrates working with connected sections and validating <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> and <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a> values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">d1</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span>
+<span class="n">d2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">d1</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">d1</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">d2</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-11</span>
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">sec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">((</span><span class="n">eq</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">nc</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">ncx</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">preloc</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">((</span><span class="n">eq</span><span class="p">(</span><span class="n">ncx</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">ncx</span><span class="p">))</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">pop_section</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]:</span>
+    <span class="n">test</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">test</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+    <span class="n">test</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">pc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ParallelContext</span><span class="p">()</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ExpSyn</span><span class="p">(</span><span class="n">d1</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">nc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">gid_connect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">preloc</span><span class="p">()</span> <span class="o">==</span> <span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">pop_section</span><span class="p">()</span>
+
+<span class="n">nc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">d2</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_cm</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">d2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">preseg</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">preloc</span><span class="p">()</span> <span class="o">==</span> <span class="o">-</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">pop_section</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Expected output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|-----|       __nrnsec_0x1bd7740(0-1)
+       `----|       __nrnsec_0x1bd77a0(1-0)
+
+(True, 0.0, 0.0)
+(True, 0.0, 0.0)
+(True, 1.0, 1.0)
+(True, 1.0, 1.0)
+(True, 0.1, 0.1)
+(True, 0.1, 0.1)
+(True, 0.0, 0.0)
+(True, 0.0, 0.0)
+(True, 1.0, 1.0)
+(True, 1.0, 1.0)
+(True, 0.1, 0.09999999999999998)
+(True, 0.1, 0.09999999999999998)
+True
+True
+True
+True
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> to obtain the actual segment location (<code class="xref py py-attr docutils literal notranslate"><span class="pre">x</span></code>) and section (<code class="xref py py-attr docutils literal notranslate"><span class="pre">sec</span></code>) for a NetCon’s spike detector on a membrane potential.</p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preloc" title="NetCon.preloc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preloc()</span></code></a> provides an arc position that may differ from the requested fraction but has legacy requirements such as needing a matching <code class="xref py py-func docutils literal notranslate"><span class="pre">h.pop_section()</span></code>.</p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.preseg" title="NetCon.preseg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.preseg()</span></code></a> returns <cite>None</cite> if no valid source exists or source is non-voltage, without requiring <code class="xref py py-func docutils literal notranslate"><span class="pre">h.pop_section()</span></code>.</p></li>
+<li><p>The fractional coordinate system is parent-end-based, not dependent on section orientation.</p></li>
+</ul>
+<p>This enhancement facilitates precise introspection of NetCon source locations without modifying original models or tracking source positions externally.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3811">https://neuron.yale.edu/phpBB/viewtopic.php?t=3811</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

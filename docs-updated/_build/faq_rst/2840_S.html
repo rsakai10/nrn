@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changing Synaptic Conductance During a Sequence of Events &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changing Synaptic Conductance During a Sequence of Events</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq_rst/2840_S.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changing-synaptic-conductance-during-a-sequence-of-events">
+<h1>Changing Synaptic Conductance During a Sequence of Events<a class="headerlink" href="#changing-synaptic-conductance-during-a-sequence-of-events" title="Link to this heading"></a></h1>
+<p>When activating multiple synapses with varying conductances in a temporal sequence, it is recommended to use a single <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> as a spike source and adjust synaptic weights via the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> weights rather than modifying synaptic <cite>gmax</cite> parameters directly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Event-driven synaptic mechanisms like <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a> do not have a <cite>gmax</cite> parameter; synaptic strength is controlled by the NetCon weight. Changing <cite>gmax</cite> is discouraged because it affects all inputs simultaneously and violates biological causality.</p>
+</div>
+<p>Example workflow:</p>
+<ol class="arabic simple">
+<li><p>Store event times and corresponding weights in <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> objects, e.g., <cite>stvec</cite> and <cite>swvec</cite>.</p></li>
+<li><p>Find shortest interevent interval and shift event times earlier by half this interval (<cite>actdel</cite>) to set weights before activation.</p></li>
+<li><p>Create a <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> to play shifted event times.</p></li>
+<li><p>Create a list of <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> objects connecting the <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> to synapses, setting their delays to <cite>actdel</cite>.</p></li>
+<li><p>Use an <a class="reference internal" href="../progref-1/simctrl/programmatic.html#FInitializeHandler" title="FInitializeHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">FInitializeHandler</span></code></a> to initialize a counter.</p></li>
+<li><p>Define a <cite>setweights()</cite> procedure that updates each NetCon’s weight from <cite>swvec</cite> at times just before synaptic activation.</p></li>
+<li><p>Create a NetCon without a target (<code class="xref py py-obj docutils literal notranslate"><span class="pre">nil</span></code>) that calls <cite>setweights()</cite> by recording the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.record" title="NetCon.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.record()</span></code></a> method.</p></li>
+</ol>
+<p>Minimal HOC code sketch:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// synlist: List of synaptic point process instances
+// stvec: Vector of synaptic activation times
+// swvec: Vector of weights for each activation
+
+objref tmpvec, vecstim, nclist, fih, ncx
+double actdel
+int count
+
+tmpvec = stvec.c
+tmpvec.deriv()
+actdel = tmpvec.min()/2
+if (stvec.x[0] &lt; actdel) { actdel = stvec.x[0]/2 }
+stvec.sub(actdel)
+
+vecstim = new VecStim()
+vecstim.play(stvec)
+
+nclist = new List()
+for i=0, synlist.count()-1 {
+  nclist.append(new NetCon(vecstim, synlist.o(i)))
+  nclist.o(i).delay = actdel
+}
+
+count = 0
+fih = new FInitializeHandler(&quot;count = 0&quot;)
+
+proc setweights() { local i
+  for i=0,nclist.count()-1 nclist.o(i).weight = swvec.x[count]
+  count += 1
+}
+
+ncx = new NetCon(vecstim, nil)
+ncx.delay = 0
+ncx.record(&quot;setweights()&quot;)
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/programmatic.html#FInitializeHandler" title="FInitializeHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">FInitializeHandler</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2840">https://neuron.yale.edu/phpBB/viewtopic.php?t=2840</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

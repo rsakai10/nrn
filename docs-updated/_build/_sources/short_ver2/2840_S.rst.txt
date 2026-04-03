@@ -1,0 +1,67 @@
+Changing Synaptic Conductance During a Sequence of Events
+===========================================================
+
+When activating multiple synapses with varying conductances in a temporal sequence, it is recommended to use a single :class:`VecStim` as a spike source and adjust synaptic weights via the :class:`NetCon` weights rather than modifying synaptic `gmax` parameters directly.
+
+.. note::
+   Event-driven synaptic mechanisms like :class:`ExpSyn` do not have a `gmax` parameter; synaptic strength is controlled by the NetCon weight. Changing `gmax` is discouraged because it affects all inputs simultaneously and violates biological causality.
+
+Example workflow:
+
+1. Store event times and corresponding weights in :class:`Vector` objects, e.g., `stvec` and `swvec`.
+
+2. Find shortest interevent interval and shift event times earlier by half this interval (`actdel`) to set weights before activation.
+
+3. Create a :class:`VecStim` to play shifted event times.
+
+4. Create a list of :class:`NetCon` objects connecting the :class:`VecStim` to synapses, setting their delays to `actdel`.
+
+5. Use an :class:`FInitializeHandler` to initialize a counter.
+
+6. Define a `setweights()` procedure that updates each NetCon's weight from `swvec` at times just before synaptic activation.
+
+7. Create a NetCon without a target (:obj:`nil`) that calls `setweights()` by recording the :meth:`NetCon.record` method.
+
+Minimal HOC code sketch:
+
+.. code-block:: hoc
+
+    // synlist: List of synaptic point process instances
+    // stvec: Vector of synaptic activation times
+    // swvec: Vector of weights for each activation
+    
+    objref tmpvec, vecstim, nclist, fih, ncx
+    double actdel
+    int count
+
+    tmpvec = stvec.c
+    tmpvec.deriv()
+    actdel = tmpvec.min()/2
+    if (stvec.x[0] < actdel) { actdel = stvec.x[0]/2 }
+    stvec.sub(actdel)
+
+    vecstim = new VecStim()
+    vecstim.play(stvec)
+
+    nclist = new List()
+    for i=0, synlist.count()-1 {
+      nclist.append(new NetCon(vecstim, synlist.o(i)))
+      nclist.o(i).delay = actdel
+    }
+
+    count = 0
+    fih = new FInitializeHandler("count = 0")
+
+    proc setweights() { local i
+      for i=0,nclist.count()-1 nclist.o(i).weight = swvec.x[count]
+      count += 1
+    }
+
+    ncx = new NetCon(vecstim, nil)
+    ncx.delay = 0
+    ncx.record("setweights()")
+
+.. seealso::
+   :class:`VecStim`, :class:`NetCon`, :class:`ExpSyn`, :class:`FInitializeHandler`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2840 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2840>`_

@@ -1,0 +1,39 @@
+Changing Units in NMODL
+=======================
+
+When modifying units in a NMODL file, ensure dimensional consistency especially when calculating currents. For example, consider these two snippets defining conductance `g` and current `i`:
+
+.. code-block:: mod
+
+    UNITS {
+        (uS) = (microsiemens)
+        (nS) = (nanosiemens)
+        (nA) = (nanoamp)
+        (mV) = (millivolt)
+    }
+
+    ASSIGNED {
+        v (mV)
+        i (nA)
+        g (uS)   // or g (nS) if using nanosiemens
+    }
+
+    BREAKPOINT {
+        i = g * (v - e)
+    }
+
+If `g` is in microsiemens (uS) and `v - e` in millivolts (mV), the product `g * (v - e)` correctly yields nanoamps (nA). However, if `g` is changed to nanosiemens (nS) without adjusting the formula, the units mismatch: (nS) * (mV) = picoamps (pA), not nanoamps. This causes the current `i` to be off by a factor of 1000.
+
+Use the :func:`modlunit` tool to check unit consistency. If units are changed from microsiemens to nanosiemens, multiply by the correct conversion factor:
+
+.. code-block:: mod
+
+    BREAKPOINT {
+        i = (0.001) * g * (v - e)  // converts nS*mV to nA
+    }
+
+.. note::
+
+   Always verify unit consistency to prevent unintended scaling errors in simulations.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1935 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1935>`_

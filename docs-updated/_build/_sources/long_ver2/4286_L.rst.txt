@@ -1,0 +1,112 @@
+Range Variable Assignment and Mechanism Parameter Gradients Along Sections in Python
+========================================================================================
+
+NEURON supports specifying spatially varying properties such as morphology parameters (e.g., diameter) and mechanism parameters (e.g., conductance densities) along the length of a section. While HOC offers a compact but obscure syntax for range assignments, Python requires explicit iteration over segments.
+
+.. note::
+   The HOC syntax for range assignments, for example::
+   
+       diam(0:1) = 1.5 : 0.5
+   
+   is not directly translatable to Python and is not recommended due to its obscurity and unintuitive behavior. This syntax performs a linear interpolation of the parameter value based on segment center positions but does not guarantee that values at exact endpoints are assigned.
+
+Basic Concept of Segment-Based Assignments
+-----------------------------------------
+A NEURON :class:`h.Section` is divided into discrete segments (:class:`h.Segment` objects). The number of segments (:attr:`Section.nseg`) determines the spatial resolution for assigning properties that vary along the section.
+
+- Assigning a value at an arbitrary location along the section (e.g., `section(x).var`) actually sets the value for the segment containing `x`.
+- Segment center positions, accessible as the attribute :attr:`Segment.x`, range from 0 (start) to 1 (end) along the normalized length of the section.
+- Thus, the finest granularity available for changing parameter values along a section is per segment.
+
+Assigning a Linearly Varying Morphology Parameter (e.g., Diameter)
+-----------------------------------------------------------------
+To specify a gradient of a morphology property like `diam` between two values along a section, define a function that assigns values to each segment based on its position.
+
+.. code-block:: python
+
+    def range_assignment(sec, var, start, stop):
+        """Linearly assign values to `var` (string) between `start` and `stop`
+        at segments of the section `sec`.
+
+        Parameters
+        ----------
+        sec : h.Section
+            The section whose segments will have the variable set.
+
+        var : str
+            The name of the segment variable to set (e.g., 'diam').
+
+        start : float
+            The value at the proximal end of the section (x=0).
+
+        stop : float
+            The value at the distal end of the section (x=1).
+        """
+        delta = stop - start
+        for seg in sec:
+            setattr(seg, var, start + seg.x * delta)
+
+Example usage:
+
+.. code-block:: python
+
+    from neuron import h
+
+    axon = h.Section(name='axon')
+    axon.nseg = 5
+
+    # Assign a diameter gradient from 1.5 to 0.5 microns along the axon segments
+    range_assignment(axon, 'diam', 1.5, 0.5)
+
+    print(axon.psection()['morphology']['diam'])
+    # Output: [1.5, 1.125, 0.75, 0.375, 0.5]
+
+Assigning Spatially Varying Mechanism Parameters
+------------------------------------------------
+Mechanism density parameters such as conductances (e.g., `gbar_na16`) are range variables that can be assigned similarly by iterating over segments.
+
+Example:
+
+.. code-block:: python
+
+    axon.insert('na16')
+    for seg in axon:
+        # Assign conductance linearly from 0 to 100 mS/cm2 along the section length
+        seg.gbar_na16 = 100 * seg.x
+
+.. note::
+   Assigning values at arbitrary locations using `section(x).gbar_na16 = value` only affects the segment containing `x`. If multiple values are assigned at positions within the same segment, the last assignment prevails.
+
+Caveats Regarding the HOC Range Assignment Syntax
+-------------------------------------------------
+- The HOC syntax::
+
+      axon {
+          gbar_na16(0 : 0.5) = 0 : 100
+      }
+
+  specifies a piecewise linear function of parameter values. However, it can be confusing and unintuitive:
+
+  - The values at segment centers do not correspond exactly to values at the range endpoints.
+  - The interpolation applies over segment center positions, not segment boundaries.
+  - Values assigned to `section(x)` with `x` not at segment centers are mapped to the nearest segment.
+  
+- Replicating HOC range assignments in Python by direct interpolation over segment centers with `np.linspace` may produce different results than the HOC code.
+
+- It is recommended to avoid the HOC range assignment syntax for clarity and maintainability.
+
+Morphology Specification Recommendation
+---------------------------------------
+- While diameter can be specified per segment, for realistic morphologies it is recommended to specify morphology using 3D points via methods like :meth:`Section.pt3dadd`, which are independent of discretization (:attr:`nseg`).
+
+Summary
+-------
+- The smallest discrete unit for assigning spatially varying morphology or mechanisms is a segment (:class:`h.Segment`).
+- To assign gradients in Python, iterate over segments using their normalized positions to compute values.
+- Avoid using the HOC range assignment syntax due to its obscurity and unintuitive behavior.
+- Use explicit functions and clear code, e.g., the `range_assignment` function above, to assign spatial gradients in parameters.
+
+.. seealso::
+   :class:`h.Section`, :class:`h.Segment`, :meth:`Section.insert`, :meth:`Section.pt3dadd`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4286 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4286>`_

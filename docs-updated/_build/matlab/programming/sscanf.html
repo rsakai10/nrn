@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>String Parsing (sscanf) &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">String Parsing (sscanf)</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/matlab/programming/sscanf.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><a href="#sscanf" title="Link to this definition">sscanf</a></p><section id="string-parsing-sscanf">
+<span id="sscanf-doc"></span><h1>String Parsing (sscanf)<a class="headerlink" href="#string-parsing-sscanf" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="sscanf">
+<span class="sig-name descname"><span class="pre">sscanf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sscanf" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">num</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">sscanf</span><span class="p">(</span><span class="s">&quot;string&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;format&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>A subset of the c stdio sscanf function.
+The formats understood are %s, %[…], %c, %lf, %f, %d, %i, %o, %x, along with
+numbers and the * character. Explicit strings in the format are also understood.
+A great deal of error checking is done to make sure the args match the
+format string. The function returns the actual number of args that are
+assigned values. The arguments must be <code class="docutils literal notranslate"><span class="pre">n.ref</span></code> objects.</p>
+<p>Note that %lf is always preferred to %f since the latter truncates to floating
+point accuracy. Hence</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;0.3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%f&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>prints: <code class="docutils literal notranslate"><span class="pre">0.300000011921</span></code></p>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">);</span>
+<span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">arrayfun</span><span class="p">(@(</span><span class="nb">i</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;UniformOutput&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% this</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%[^\n]&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% this is a test</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%*s%s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% is</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%2s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% th</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%10s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% this</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%*3s%s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% s</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;this is a test\n&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%*s%s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">s</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% is</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;0xff 010 25&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%i%i%i&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">3</span><span class="p">});</span>
+<span class="nb">disp</span><span class="p">([</span><span class="n">x</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">2</span><span class="p">}{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">3</span><span class="p">}{</span><span class="mi">1</span><span class="p">}]);</span><span class="w">  </span><span class="c">% 255.0 8.0 25.0</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;50.75&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%d.%d&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">2</span><span class="p">});</span>
+<span class="nb">disp</span><span class="p">([</span><span class="n">x</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">2</span><span class="p">}{</span><span class="mi">1</span><span class="p">}]);</span><span class="w">  </span><span class="c">% 50.0 75.0</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;30.987654321&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%f&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">y</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% 30.9876537323</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;30.987654321&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%lf&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">y</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% 30.987654321</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%c&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">y</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span><span class="w">  </span><span class="c">% 65.0 (ASCII code for the letter A)</span>
+<span class="nb">disp</span><span class="p">(</span><span class="nb">char</span><span class="p">(</span><span class="nb">int32</span><span class="p">(</span><span class="n">y</span><span class="p">{</span><span class="mi">1</span><span class="p">})));</span><span class="w">  </span><span class="c">% A</span>
+
+<span class="nb">count</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;1 2 3 4 5 6 7 8 9 10&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%f%f%f%f%f%f%f%f%f%f%f&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">3</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">5</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">6</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">7</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">8</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">9</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">10</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">11</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">12</span><span class="p">});</span>
+<span class="nb">disp</span><span class="p">(</span><span class="s">&#39;Should only have non-zero values for x indices 0 - 9&#39;</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">13</span>
+<span class="w">    </span><span class="nb">disp</span><span class="p">([</span><span class="nb">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="nb">i</span><span class="p">}{</span><span class="mi">1</span><span class="p">}]);</span>
+<span class="k">end</span>
+
+<span class="c">% the following are invalid and therefore raise a RuntimeError exception</span>
+<span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="c">% invalid format string</span>
+<span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%*&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="c">% invalid format string</span>
+<span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%c%c%c%c%c&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">3</span><span class="p">});</span><span class="w"> </span><span class="c">% error due to insufficient number of args</span>
+<span class="n">n</span><span class="p">.</span><span class="n">sscanf</span><span class="p">(</span><span class="s">&#39;25&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;%d&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="c">% last entry not a pointer to a string</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Python standard library does not provide a direct equivalent for <code class="docutils literal notranslate"><span class="pre">n.sscanf</span></code>, but consider using the Regular Expressions module <code class="docutils literal notranslate"><span class="pre">re</span></code> instead, which can also be used for string parsing, albeit with a different specification.</p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

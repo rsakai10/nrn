@@ -1,0 +1,47 @@
+Number of Sections, Compartments, and nseg
+==========================================
+
+- The :attr:`nseg` property determines the number of segments per section and affects spatial discretization accuracy. Increasing :attr:`nseg` improves accuracy by reducing the compartment size.
+
+- To check if :attr:`nseg` is sufficient, plot variables like membrane potential (:meth:`h.v`) at multiple positions along the section (e.g., 0.1, 0.5, 0.9) before and after increasing :attr:`nseg` (e.g., using ``forall nseg*=3``). If plots change significantly, increase :attr:`nseg` further until results stabilize.
+
+- Dividing one section of length L into three connected sections each of length L/3 only means increasing compartments if each section has :attr:`nseg` = 1. Otherwise, compartments per section are given by :attr:`nseg`.
+
+- Non-uniform spatial parameter distributions (e.g., varying conductances) require :attr:`nseg` > 1 for interpolation.
+
+- The :meth:`h.d_lambda` rule provides guidelines for choosing :attr:`nseg` based on the electrotonic length constant to ensure sufficient spatial resolution.
+
+Example in HOC:
+
+.. code-block:: hoc
+
+    create A
+    access A
+    A.L = 100
+    A.diam = 2
+    insert hh
+    insert pas
+    print A.nseg  // 1 by default
+    A.nseg = 3
+    // Now can set spatially varying parameters along A, e.g. gnabar_hh(0), gnabar_hh(0.5), gnabar_hh(1)
+
+Example in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    A = h.Section(name='A')
+    A.L = 100
+    A.diam = 2
+    A.insert('hh')
+    A.insert('pas')
+    print(A.nseg)  # default 1
+    A.nseg = 3
+    # Set conductance values at 3 locations along A
+    for x in [0, 0.5, 1]:
+        h.gnabar_hh(x) = 0.12 * (1 + x)  # example non-uniform distribution
+
+.. note::
+   Increasing :attr:`nseg` increases computational cost but improves solution accuracy. Use the :meth:`h.d_lambda` rule or iterative convergence testing to determine an appropriate :attr:`nseg` value for each section.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=773 <https://neuron.yale.edu/phpBB/viewtopic.php?t=773>`_

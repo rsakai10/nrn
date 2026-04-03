@@ -1,0 +1,49 @@
+Initialization of Calcium Concentration with Point Processes and ion_style
+===============================================================================
+
+When using calcium dynamics in a morphology with mechanisms that read and write calcium concentration (e.g. :mod:`CaDynamics_E2`), ion concentrations may not initialize as expected if attached point processes also read or write calcium ions.
+
+.. note::
+
+   - The internal (:attr:`cai`) and external (:attr:`cao`) calcium concentrations are by default initialized to NEURON's global parameters
+   :attr:`h.cai0_ca_ion` (5.0e-5 mM) and :attr:`h.cao0_ca_ion` (2.0 mM) during :meth:`h.finitialize()`.
+   - If a mechanism (e.g. :mod:`CaDynamics_E2`) lacks an INITIAL block setting :attr:`cai`, and does not WRITE :attr:`cao`, initial values come from these defaults.
+   - Calling :func:`h.ion_style()` with the cinit (initial concentration) parameter set to zero can be overridden by subsequent insertion of mechanisms reading :attr:`cai`, promoting the ion style and causing unintended re-initialization in specific segments.
+
+**To ensure consistent initialization of calcium concentrations:**
+
+1. Modify your calcium dynamics NMODL (e.g., :file:`CaDynamics_E2.mod`) to include initialization of :attr:`cai`:
+
+   .. code-block:: neron
+
+      PARAMETER {
+          cai0 = 1e-3 (mM)
+          ...
+      }
+      INITIAL {
+          cai = cai0
+      }
+
+2. For stability, consider using the ``derivimplicit`` method in the :meth:`BREAKPOINT` block for calcium state variables.
+
+3. To control external calcium (:attr:`cao`) explicitly in your model:
+
+   - Set :attr:`h.cao0_ca_ion` to the desired value (e.g., 1.2 mM) in your main Python or HOC file **outside** of cell class definitions:
+
+     .. code-block:: python
+
+        h.cao0_ca_ion = 1.2
+
+   - Alternatively, extend the NMODL mechanism to WRITE :attr:`cao`, declare it as a STATE variable, initialize it in the INITIAL block, and fix it during simulation to avoid drift.
+
+4. Remove redundant calls to :func:`h.ion_style()` if they conflict with the updated initialization scheme.
+
+5. When attaching a synaptic point process that reads :attr:`cai` and :attr:`cao` (e.g. a plastic synapse with a USEION statement), be aware that it may promote ion styles in particular segments, affecting initial calcium values locally.
+
+.. seealso::
+
+   :class:`h.Section`, :func:`h.ion_style`, :meth:`h.finitialize`, NMODL ``USEION`` statement
+
+This approach ensures that both intracellular and extracellular calcium concentrations are initialized consistently across all compartments and segments, avoiding unexpected local changes caused by point processes or ion style promotion.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4325 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4325>`_

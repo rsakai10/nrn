@@ -1,0 +1,122 @@
+Conditional Termination of Simulation Based on Inter-Spike Interval Convergence
+====================================================================================
+
+This section explains how to run a NEURON simulation that terminates automatically when the difference between the most recent inter-spike interval (ISI) and the second-most-recent ISI falls below a prescribed threshold. This is useful, for example, in single neuron simulations with adaptation currents where steady-state firing properties are of interest.
+
+Overview
+--------
+
+The simulation uses a :class:`h.NetCon` to detect spikes and a callback function that monitors spike times and ISIs. When the difference between two consecutive ISIs is smaller than a tolerance, the simulation is stopped using :attr:`h.stoprun`.
+
+Key steps:
+- Initialize tracking variables at the start of each simulation run.
+- Use a :class:`h.NetCon` with a voltage threshold to detect spikes.
+- Define a spike event handler function that updates ISI values, checks the convergence condition, and stops the simulation if met.
+- Use :class:`h.FInitializeHandler` to reset variables on each simulation initialization (useful especially for GUI-driven or interactive workflows).
+
+Example Implementation in Python
+--------------------------------
+
+This example assumes:
+
+- A single section named ``soma`` with Hodgkin-Huxley channels.
+- An applied current via an :class:`h.IClamp`.
+- The use of the standard RunControl panel (e.g., default ``tstop``), but the simulation will stop earlier if the ISI convergence criterion is met.
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file('stdrun.hoc')
+
+    # Create a soma section with hh channels
+    soma = h.Section(name='soma')
+    soma.L = soma.diam = 10  # 100 um2 area approx
+    soma.insert('hh')
+
+    # Inject a current
+    stim = h.IClamp(soma(0.5))
+    stim.delay = 1
+    stim.dur = 1e9  # effectively long duration
+    stim.amp = 0.01  # nA
+
+    # Define tolerance for ISI convergence (can be smaller than h.dt if desired)
+    TOL = h.dt
+
+    # Variables to track spike count and ISIs:
+    count = 0       # number of spikes detected
+    isi = 0         # most recent inter-spike interval
+    previsi = 0     # inter-spike interval before the most recent
+    tsp = 0         # time of last spike
+
+    # Initialization function called on every simulation initialize
+    def reset_variables():
+        global count, isi, previsi, tsp
+        count = 0
+        # Assign clearly distinct initial dummy values so they don't trigger early stopping
+        isi = 1e3    # a large ISI value (ms)
+        previsi = 2e3  # a different large ISI value
+        tsp = 0
+        print("Simulation initialized: count reset, ISI values cleared.")
+
+    # Register the initialization handler
+    rc = h.FInitializeHandler(reset_variables)
+
+    # Set the voltage threshold for spike detection (mV)
+    nc = h.NetCon(soma(0.5)._ref_v, None)
+    nc.threshold = -10  # threshold can be adjusted
+
+    # Spike event callback function
+    def on_spike():
+        global count, isi, previsi, tsp
+        count += 1
+        if count == 1:
+            tsp = h.t
+            # Leave isi and previsi as initialized
+        else:
+            previsi = isi
+            isi = h.t - tsp
+            tsp = h.t
+        print(f"Spike {count}: t = {h.t:.3f} ms, ISI = {isi:.3f}, previous ISI = {previsi:.3f}")
+        if abs(isi - previsi) < TOL:
+            print("ISI convergence reached. Stopping simulation.")
+            h.stoprun = 1
+
+    # Connect the NetCon to the spike callback
+    nc.record(on_spike)
+
+    # Initialize simulation membrane potential
+    h.finitialize(-65)
+
+    # Run the simulation (tstop can be longer than needed, the callback will stop early)
+    h.continuerun(10000)
+
+Notes on Implementation
+-----------------------
+
+- The use of :class:`h.FInitializeHandler` ensures the spike count and ISI variables are reset before each simulation run. This is especially helpful in interactive sessions or GUI-based workflows where multiple simulations are started without exiting NEURON.
+
+- Variables like ``count``, ``isi``, ``previsi``, and ``tsp`` are defined as global Python variables to be accessible and mutable inside the spike callback. This is a simple and effective approach for this use case.
+
+- The spike detection threshold is set via :attr:`NetCon.threshold` to a suitable value (commonly between -30 mV and 0 mV depending on cell and recording location).
+
+- The callback function prints spike and ISI information for monitoring during simulation.
+
+Alternative Approaches
+----------------------
+
+- A pure Python approach avoids the need for custom NMODL mechanisms or instrumenting sections with additional variables.
+
+- Alternative state-handling within the spike callback using argument passing and return values is possible but less straightforward to integrate with :meth:`NetCon.record`.
+
+- If desired, one could implement a delayed termination mechanism (e.g., continue simulation a few milliseconds after detected convergence) by scheduling :func:`h.cvode.event` to stop the simulation.
+
+Summary
+-------
+
+This method effectively allows a NEURON simulation to stop conditionally based on spike train statistics computed online. It leverages :class:`NetCon` spike detection and :class:`FInitializeHandler` for clean variable resetting, requiring only Python code without custom mechanisms.
+
+.. note::
+
+   Use global Python variables or class attributes to store evolving state accessed by a NetCon callback. Passing and returning variables via callback arguments is not supported by the :meth:`NetCon.record` interface.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4652 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4652>`_

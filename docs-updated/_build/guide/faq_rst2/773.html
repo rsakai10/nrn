@@ -1,0 +1,231 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Number of Sections, Compartments, and nseg in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Number of Sections, Compartments, and nseg in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/773.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="number-of-sections-compartments-and-nseg-in-neuron">
+<h1>Number of Sections, Compartments, and nseg in NEURON<a class="headerlink" href="#number-of-sections-compartments-and-nseg-in-neuron" title="Link to this heading"></a></h1>
+<p><strong>Q: How does the number of segments (`nseg`) in a NEURON section affect simulation accuracy, and what is the relationship between sections, compartments, and `nseg`?</strong></p>
+<ul class="simple">
+<li><p>The parameter <cite>nseg</cite> determines the spatial discretization within a section. Increasing <cite>nseg</cite> improves spatial accuracy by subdividing the section into finer compartments.</p></li>
+<li><p>To check if <cite>nseg</cite> is sufficient, compare simulation results (e.g., membrane potential over time) at several positions in the model for gradually increasing <cite>nseg</cite>. Increase <cite>nseg</cite> (e.g., triple it) and rerun simulations until results no longer change significantly.</p></li>
+<li><p>Dividing one section of length L into multiple sections (e.g., three sections of length L/3) only increases the number of compartments if each section has <cite>nseg=1</cite>. Each segment within a section corresponds to one compartment; thus, a section with <cite>nseg=3</cite> corresponds to three compartments.</p></li>
+<li><p>There are guidelines such as the <em>d_lambda</em> rule to determine an appropriate <cite>nseg</cite> for each section based on its electrotonic length to balance accuracy and computational cost.</p></li>
+<li><p>Non-uniform distributions of channel densities can only be applied if <cite>nseg &gt; 1</cite>, since with <cite>nseg=1</cite> values are uniform along the section.</p></li>
+</ul>
+<p>Example Hoc code illustrating <cite>nseg</cite> and channel density settings:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create A
+access A
+A.L = 100
+A.diam = 2
+insert hh
+insert pas
+
+// Initially nseg = 1 (one compartment)
+print &quot;nseg =&quot;, A.nseg   // Outputs: nseg = 1
+
+// Assign uniform channel density (same at all locations):
+for (x=0; x&lt;=1; x+=0.5) {
+    printf(&quot;gnabar_hh(%.1f) = %g\n&quot;, x, gnabar_hh(x))
+}
+
+// Increase nseg to 3 (three compartments)
+A.nseg = 3
+
+// Assign channel density with a gradient:
+gnabar_hh(0) = 2
+gnabar_hh(1) = 5
+
+// Print channel densities at segment centers:
+for (x=0; x&lt;=1; x += 1.0/(A.nseg-1)) {
+    printf(&quot;gnabar_hh(%.8f) = %g\n&quot;, x, gnabar_hh(x))
+}
+</pre></div>
+</div>
+<p>Example Python code using NEURON’s h module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">A</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">A</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;pas&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;nseg = </span><span class="si">{</span><span class="n">A</span><span class="o">.</span><span class="n">nseg</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># Outputs: nseg = 1</span>
+
+<span class="c1"># Access channel density values (uniform at nseg = 1)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gnabar_hh(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">) = </span><span class="si">{</span><span class="n">A</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Increase nseg to 3</span>
+<span class="n">A</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="c1"># Set channel density with a spatial gradient</span>
+<span class="n">A</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">A</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># Print channel densities at all segment locations</span>
+<span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">A</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gnabar_hh(</span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1">) = </span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Summary:</p>
+<ul class="simple">
+<li><p><cite>nseg</cite> controls the number of compartments within a section.</p></li>
+<li><p>Higher <cite>nseg</cite> improves accuracy but increases computational cost.</p></li>
+<li><p>Segment location-dependent parameters require <cite>nseg &gt; 1</cite>.</p></li>
+<li><p>Use iterative testing or the <em>d_lambda</em> rule to set a suitable <cite>nseg</cite>.</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

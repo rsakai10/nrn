@@ -1,0 +1,138 @@
+Ornstein–Uhlenbeck Noise Current Implementation and Troubleshooting in NEURON
+===============================================================================
+
+When implementing noisy current inputs in NEURON using a `POINT_PROCESS` that simulates an Ornstein–Uhlenbeck process, it is important to avoid calling random number generators directly inside the `BREAKPOINT` block. Doing so can cause unexpected and large discontinuities in the membrane potential.
+
+Problem Description
+-------------------
+
+A common source of voltage discontinuities arises when code in the `BREAKPOINT` block calls a random number generator such as `normrand()`. The `BREAKPOINT` block is executed twice per time step by NEURON's variable time step solver to estimate the conductance derivative (di/dv). If a random value is generated independently on each call, these duplicate calls yield inconsistent results, causing incorrect Jacobian matrix values and resulting in large voltage jumps or noise artifacts.
+
+Example of Problematic MOD File Code:
+
+.. code-block:: nrn
+
+    INDEPENDENT { t FROM 0 TO 1 WITH 1 (ms) }
+
+    NEURON {
+        POINT_PROCESS Inoise2
+        RANGE tau, amp
+        RANGE new_seed
+        NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+    }
+
+    PARAMETER {
+        dt       (ms)
+        amp = 0.01 (nA)
+        tau = 30 (ms)
+    }
+
+    ASSIGNED {
+        i    (nA)  : fluctuating current
+    }
+
+    INITIAL {
+        i = 0
+    }
+
+    BREAKPOINT {
+        i = i - (dt * i) / tau + amp * normrand(0,1)
+    }
+
+    PROCEDURE new_seed(seed) {
+        set_seed(seed)
+    }
+
+Key Issue:
+
+- The call to `normrand(0,1)` inside the `BREAKPOINT` block is executed twice per time step independently.
+- This breaks the assumption that the mechanism's current is a smooth function of voltage and time.
+- It corrupts the Jacobian matrix estimation, causing large erroneous voltage deflections.
+
+Corrected Implementation
+------------------------
+
+To avoid this issue, separate the random number generation and state update from the `BREAKPOINT` block by moving that logic into a dedicated `PROCEDURE`. Then use a `SOLVE` statement inside `BREAKPOINT` to call that procedure exactly once per time step.
+
+Revised MOD file code snippet:
+
+.. code-block:: nrn
+
+    NEURON {
+        POINT_PROCESS Inoise2
+        RANGE tau, amp
+        RANGE new_seed
+        NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+    }
+
+    PARAMETER {
+        dt       (ms)
+        amp = 0.01 (nA)
+        tau = 30 (ms)
+    }
+
+    ASSIGNED {
+        i    (nA)
+    }
+
+    INITIAL {
+        i = 0
+    }
+
+    BREAKPOINT {
+        SOLVE noise
+    }
+
+    PROCEDURE noise() {
+        i = i - (dt * i) / tau + amp * normrand(0,1)
+    }
+
+    PROCEDURE new_seed(seed) {
+        set_seed(seed)
+    }
+
+Explanation:
+
+- The `SOLVE noise` statement in `BREAKPOINT` executes the `noise()` procedure only once per time step.
+- This avoids multiple independent calls to `normrand()` during the same time step.
+- The conductance derivative estimation remains consistent.
+- Voltage discontinuities are eliminated and the noise behaves in a smooth and physically realistic manner.
+
+Practical Consequences
+----------------------
+
+- Removing the RNG call from the `BREAKPOINT` block smooths the membrane potential fluctuations by preventing artificial sawtooth jumps.
+- The amplitude and statistical properties of the noise current change substantially. You typically need to reduce the `amp` parameter by a factor on the order of 50 to maintain similar voltage fluctuation amplitudes.
+- Existing simulations using the old method should be repeated with the corrected implementation to ensure results are valid.
+
+Additional Notes
+----------------
+
+- The reason moving the RNG call to a separate `PROCEDURE` fixes the problem is because the `SOLVE` statement guarantees that the `noise()` procedure is only executed once per time step.
+- Direct code in `BREAKPOINT` executes at least twice per step when variable time step integration is used (to estimate conductance slopes).
+- This approach applies generally to any mechanism that involves random number generation or time-dependent state updates which should not be evaluated multiple times per time step.
+
+Summary
+-------
+
+When implementing noisy currents or synapses in NEURON MOD files that use random numbers, do **not** call random number generators directly inside the `BREAKPOINT` block. Instead:
+
+1. Encapsulate the random number calls and state updates inside a `PROCEDURE` (e.g., `noise()`).
+2. Call the procedure exactly once per time step using `SOLVE noise` inside the `BREAKPOINT` block.
+
+This ensures consistent numerical integration, prevents spurious voltage discontinuities, and results in more physically realistic noise-driven currents.
+
+.. seealso::
+
+   :mod:`Random` class for random number generation  
+   :meth:`041-solve` and :meth:`breakpoint` explanation in NEURON documentation
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3455 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3455>`_

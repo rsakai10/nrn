@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>netstim and random seed control &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">netstim and random seed control</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/4388.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="netstim-and-random-seed-control">
+<h1>netstim and random seed control<a class="headerlink" href="#netstim-and-random-seed-control" title="Link to this heading"></a></h1>
+<p><strong>Question:</strong>
+How can I ensure that multiple NetStim objects in NEURON generate reproducible and independent random spike trains by fixing their random seeds?</p>
+<p><strong>Answer:</strong>
+By default, all NetStim objects share the same global random number generator. This causes their spike trains to be interdependent: changing parameters of one NetStim affects the spike times of the others. To generate reproducible and independent random spike trains from multiple NetStim instances, each NetStim should be associated with its own <cite>Random</cite> object initialized with a distinct random seed or random stream identifier. This allows each NetStim to use an independent random sequence.</p>
+<p>Additionally, calling <cite>seq(1)</cite> on each <cite>Random</cite> object resets the random sequence, enabling reproducible simulations.</p>
+<p><strong>Example in Hoc:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref nslist, rslist
+nslist = new List() // List for NetStims
+rslist = new List() // List for Randoms
+
+// Random123 stream identifiers (nonzero integers)
+id1 = 1
+id2 = 2
+id3 = 3
+
+proc makenetstims() {
+    local i, ns, rs
+    nslist = new List()
+    rslist = new List()
+    for i=0,4 {  // create 5 NetStims
+        rs = new Random()
+        rs.Random123(id1, id2, id3 + i) // distinct streams for each
+        rslist.append(rs)
+        rs.negexp(1) // specify exponential distribution with mean 1
+        ns = new NetStim()
+        ns.noiseFromRandom(rs)
+        nslist.append(ns)
+    }
+}
+
+makenetstims()
+
+proc setnsparams() {
+    local i
+    for i=0, nslist.count()-1 {
+        nslist.o(i).interval = 50
+        nslist.o(i).number = 200
+        nslist.o(i).start = 0
+        nslist.o(i).noise = 1
+    }
+}
+
+setnsparams()
+
+proc restart() {
+    local i
+    for i=0, rslist.count()-1 {
+        rslist.o(i).seq(1) // reset random sequences
+    }
+}
+</pre></div>
+</div>
+<p><strong>Example in Python:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">nslist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">rslist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">,</span> <span class="n">id3</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>  <span class="c1"># Random123 stream identifiers</span>
+
+<span class="k">def</span> <span class="nf">makenetstims</span><span class="p">(</span><span class="n">num_netstims</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">nslist</span><span class="p">,</span> <span class="n">rslist</span>
+    <span class="n">nslist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rslist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_netstims</span><span class="p">):</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Random</span><span class="p">()</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">Random123</span><span class="p">(</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">,</span> <span class="n">id3</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>  <span class="c1"># distinct streams</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">negexp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># exponential distribution with mean 1</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetStim</span><span class="p">()</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">noiseFromRandom</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+        <span class="n">nslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
+        <span class="n">rslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">setnsparams</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nslist</span><span class="p">:</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">noise</span>
+
+<span class="k">def</span> <span class="nf">restart</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">rs</span> <span class="ow">in</span> <span class="n">rslist</span><span class="p">:</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># reset random sequences</span>
+
+
+<span class="c1"># Usage:</span>
+<span class="n">makenetstims</span><span class="p">()</span>
+<span class="n">setnsparams</span><span class="p">()</span>
+<span class="n">restart</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Summary:</strong>
+Associate each NetStim with a separate <cite>Random</cite> object initialized with a unique seed or stream, and call <cite>seq(1)</cite> on all to reset their sequences. This procedure ensures independent, reproducible, and controllable random spike trains from multiple NetStims.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4388">https://neuron.yale.edu/phpBB/viewtopic.php?t=4388</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

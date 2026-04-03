@@ -1,0 +1,22 @@
+Maximum Time Step in NEURON Simulation
+========================================
+
+When using the standard fixed time step integration in NEURON, the time step size :attr:`dt` is adjusted by the procedure :meth:`run.setdt()` to be compatible with :attr:`steps_per_ms`. Specifically, it enforces that
+
+.. math::
+
+   dt = \\frac{1}{N \\times steps\\_per\\_ms}
+
+where :math:`N` is an integer (1, 2, 3, ...). This means :attr:`dt` can only take values that evenly divide the interval determined by :attr:`steps_per_ms`.
+
+.. note::
+
+   Reducing :attr:`dt` is constrained to integer divisions of the reciprocal of :attr:`steps_per_ms`, which is why you observe reductions by factors of two only in your performance tests.
+
+Spatial discretization uses a central difference method with each section divided into segments specified by :attr:`nseg`. An odd number of segments ensures a node at the midpoint for better accuracy.
+
+NEURON’s default integration employs the implicit Euler method. Alternative methods such as Crank-Nicholson and adaptive time step schemes are also available as described in the Programmer’s Reference.
+
+.. seealso::
+   :attr:`dt`, :attr:`steps_per_ms`, :attr:`nseg`, and the implicit Euler integration method.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=1976

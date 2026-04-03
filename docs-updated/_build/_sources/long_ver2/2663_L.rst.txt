@@ -1,0 +1,165 @@
+Assigning Values to Range Variables Using `for (x)` and `for (x, 0)` Loops in HOC
+====================================================================================
+
+In NEURON's HOC language, the syntax `for (x) stmt` loops over all segments of the currently accessed section, where `x` takes values from 0 to 1 inclusive. However, this loop iteration has subtle behavior that affects how range variables are assigned when using this form.
+
+.. note::
+   The keyword `x` is a position variable along the currently accessed section, where `x=0` and `x=1` correspond to the ends of the section, and intermediate values correspond to segment centers.
+
+Behavior of `for (x)` Loop
+--------------------------
+
+The construct:
+
+.. code-block:: hoc
+
+   for (x) stmt
+
+iterates `stmt` over `nseg + 2` values of `x`: starting at 0, ending at 1, and including the centers of all segments between.
+
+Example:
+
+.. code-block:: hoc
+
+   create axon
+   access axon
+   nseg = 1
+   diam = 2
+   for (x) { print x, diam(x) }
+
+Outputs:
+
+.. code-block:: text
+
+   0 2
+   0.5 2
+   1 2
+
+Assigning Range Variable Values Using `for (x)`
+-----------------------------------------------
+
+A common mistake is to assign values to range variables using:
+
+.. code-block:: hoc
+
+   for (x) diam(x) = x
+
+Since the loop includes the segment ends (x = 0 and x = 1), values assigned at these boundary points actually affect the diameter of the neighboring segment centers, due to how NEURON stores segment properties.
+
+Specifically:
+
+- On the first pass with `x=0`, the assignment `diam(0) = 0` affects the diameter of the first segment centered at 0.5.
+- On the last pass with `x=1`, the assignment `diam(1) = 1` affects the diameter of the last segment centered near 0.5.
+- This causes the diameter of the last segment to be incorrectly set, often to an unexpected value.
+
+The reported diameters after assignment illustrate the problem:
+
+.. code-block:: hoc
+
+   for (x) { print x, diam(x) }
+
+Result:
+
+.. code-block:: text
+
+   0 1
+   0.5 1
+   1 1
+
+Using `for (x, 0)` to Exclude Boundary Points when Assigning Range Variables
+---------------------------------------------------------------------------
+
+To avoid this problem, use the construct:
+
+.. code-block:: hoc
+
+   for (x, 0) stmt
+
+which loops over the segment centers but excludes the endpoints `x=0` and `x=1`. This ensures that assignments happen only at segment centers and do not overlap or conflict with boundary nodes.
+
+For example,
+
+.. code-block:: hoc
+
+   for (x,0) diam(x) = x
+
+assigns `diam` only at segment centers.
+
+Printing the diameters afterwards:
+
+.. code-block:: hoc
+
+   for (x) { print x, diam(x) }
+
+gives consistent values across segment centers, for example:
+
+.. code-block:: text
+
+   0 0.5
+   0.5 0.5
+   1 0.5
+
+Summary and Best Practices
+--------------------------
+
+- Use `for (x)` when **reading** values of range variables, since the values at section endpoints are meaningful and consistent with NEURON's cable equations.
+- Use `for (x, 0)` when **assigning** values to range variables to avoid unintended assignments at the section endpoints that influence neighboring segments incorrectly.
+- The difference arises because NEURON stores segment variables at segment centers, while the `x` values 0 and 1 are nodes that do not correspond to unique segments.
+- This distinction is particularly important for parameters such as diameter (`diam(x)`), passive properties, or ion channel densities assigned as range variables.
+
+.. warning::
+   Some published models use `for (x)` to assign range variables, which may lead to inaccurately assigned parameters in the last segment of sections. Verify your model setup carefully and prefer `for (x, 0)` assignments to ensure correctness.
+
+Example: Complete HOC Code Demonstrating Correct Assignment
+
+.. code-block:: hoc
+
+   create axon
+   access axon
+   nseg = 3
+
+   // Incorrect assignment - will set boundary nodes
+   for (x) diam(x) = x
+   print "Diameters after for(x) assignment:"
+   for (x) print x, diam(x)
+
+   // Correct assignment - excludes boundary nodes
+   for (x,0) diam(x) = x
+   print "Diameters after for(x,0) assignment:"
+   for (x) print x, diam(x)
+
+Python Equivalent Using NEURON's h Module
+-----------------------------------------
+
+In Python with NEURON's `h` module, the loops can be performed similarly using:
+
+.. code-block:: python
+
+   from neuron import h
+
+   axon = h.Section(name='axon')
+   axon.nseg = 3
+
+   # Incorrect assignment
+   for x in [0, 0.5, 1]:
+       axon.diam(x) = x
+
+   print("Diameters after for(x) assignment:")
+   for x in [0, 0.5, 1]:
+       print(x, axon.diam(x))
+
+   # Correct assignment excluding boundary points
+   # Here, generate segment centers manually or use sec.segments
+   for seg in axon:
+       x = seg.x
+       if 0 < x < 1:
+           axon.diam(x) = x
+
+   print("Diameters after for(x,0) assignment:")
+   for x in [0, 0.5, 1]:
+       print(x, axon.diam(x))
+
+.. seealso::
+   :class:`Section`, :meth:`Section.diam`, :ref:`range-variable-behavior`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2663 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2663>`_

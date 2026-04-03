@@ -1,0 +1,25 @@
+.. rubric:: Difference Between Weight and Reversal Potential for Synaptic Connections
+
+When using :class:`NetCon` with conductance-based synapses like :class:`ExpSyn` or :class:`Exp2Syn`, the **reversal potential** (e.g. ``.e``) and the **weight** parameter fulfill distinct roles:
+
+- The **reversal potential** ``.e`` sets the driving force direction and the ion type of the synaptic current.
+- The **weight** parameter of :class:`NetCon` scales the amplitude of the synaptic conductance transient triggered by a presynaptic spike.
+
+The **weight** should be a **non-negative** value representing the peak conductance change (in µS). The sign and magnitude of the postsynaptic current arise from the difference between the membrane voltage and the reversal potential. Thus, inhibitory effects typically have reversal potentials negative relative to resting potential, with positive weights.
+
+For example, in HOC:
+
+.. code-block:: hoc
+
+    objref GABA
+    soma {
+        GABA = new Exp2Syn(0.5)
+        GABA.tau1 = 30
+        GABA.tau2 = 100
+        GABA.e = -75  // inhibitory reversal potential
+    }
+    NetCon(&v(0.5), GABA, -40, 1, 0.5)  // weight = 0.5 (peak conductance, always positive)
+
+Attempting to use a negative weight to invert current direction (e.g., weight = -1 and e = +75 vs. weight = +1 and e = -75) is incorrect, as synaptic weights represent conductances and cannot be negative without violating physical principles.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4001 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4001>`_

@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Range syntax for varying morphology and mechanisms along a section in Python &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Arrays as RANGE variables in NEURON" href="Arrays_as_RANGE_variables_in_NEURON.html" />
+    <link rel="prev" title="How to assign multiple values to an array in hoc and Python?" href="How_to_assign_multiple_values_to_an_array_in_hoc_and_Python.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="What_does_o1_mean_in_hoc_code.html">What does <cite>$o1</cite> mean in hoc code?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How_to_assign_multiple_values_to_an_array_in_hoc_and_Python.html">How to assign multiple values to an array in hoc and Python?</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Range syntax for varying morphology and mechanisms along a section in Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Arrays_as_RANGE_variables_in_NEURON.html">Arrays as RANGE variables in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parallel_assignment_of_large_arrays_in_multiple_instances_of_an_NMODL_mechanism.html">Parallel assignment of large arrays in multiple instances of an NMODL mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Dynamically_Creating_and_Managing_Multiple_Vectors_for_APCount_in_NEURON.html">Dynamically Creating and Managing Multiple Vectors for APCount in NEURON</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">Range syntax for varying morphology and mechanisms along a section in Python</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Range_syntax_for_varying_morphology_and_mechanisms_along_a_section_in_Python.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="range-syntax-for-varying-morphology-and-mechanisms-along-a-section-in-python">
+<h1>Range syntax for varying morphology and mechanisms along a section in Python<a class="headerlink" href="#range-syntax-for-varying-morphology-and-mechanisms-along-a-section-in-python" title="Link to this heading"></a></h1>
+<p><strong>Question:</strong>
+How can I specify a parameter (e.g., diameter or ion channel conductance) that varies continuously along a section in NEURON using Python, similar to the hoc range syntax like <cite>diam(0:1) = 1.5:0.5</cite>?</p>
+<p><strong>Short answer:</strong>
+The hoc range syntax for specifying linearly varying parameters along a section (e.g., <cite>diam(0:1) = 1.5:0.5</cite>) does not directly translate to Python. Instead, assign values explicitly to each segment in the section, since segments are the smallest discrete units NEURON handles for parameter values. This can be done by iterating over segments and setting the parameter based on the normalized position (<cite>seg.x</cite>) of the segment’s center.</p>
+<p><strong>Explanation:</strong></p>
+<ul class="simple">
+<li><p>NEURON sections are divided into <cite>nseg</cite> segments.</p></li>
+<li><p>Parameters like <cite>diam</cite> or channel conductances can be set per segment.</p></li>
+<li><p>The hoc syntax that specifies variation over a range uses hidden piecewise linear interpolation internally and can be obscure and non-intuitive.</p></li>
+<li><p>In Python, it’s clearer and safer to assign values by looping over segments.</p></li>
+<li><p>The <cite>.x</cite> property of each segment corresponds to the normalized location (0 to 1) along the section.</p></li>
+<li><p>Assigning values at arbitrary points not corresponding to segment centers will affect the segment that contains that location.</p></li>
+</ul>
+<p><strong>Example Python code:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">range_assignment</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linearly assign values to a range variable from start to stop along sec.&quot;&quot;&quot;</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">stop</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">sec</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">seg</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">delta</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+<span class="c1"># Create a section</span>
+<span class="n">axon</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;axon&#39;</span><span class="p">)</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># Vary diameter from 1.5 to 0.5 microns linearly along the section</span>
+<span class="n">range_assignment</span><span class="p">(</span><span class="n">axon</span><span class="p">,</span> <span class="s1">&#39;diam&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Print diameters at segment centers</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">axon</span><span class="o">.</span><span class="n">psection</span><span class="p">()[</span><span class="s1">&#39;morphology&#39;</span><span class="p">][</span><span class="s1">&#39;diam&#39;</span><span class="p">])</span>
+<span class="c1"># Output: [1.5, 1.25, 1.0, 0.75, 0.5]</span>
+
+<span class="c1"># Insert a mechanism and vary its conductance parameter</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>  <span class="c1"># Example mechanism</span>
+
+<span class="c1"># Set gnabar_hh from 0 to 0.12 along the axon</span>
+<span class="n">range_assignment</span><span class="p">(</span><span class="n">axon</span><span class="p">,</span> <span class="s1">&#39;gnabar_hh&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">axon</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Location </span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">x</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, gnabar_hh = </span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Equivalent hoc code:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create axon
+axon.nseg = 5
+
+// Assign diameters linearly from 1.5 to 0.5
+for i=0, axon.nseg-1 {
+    diam_val = 1.5 + (0.5 - 1.5) * ((i + 0.5)/axon.nseg)
+    axon.diam((i + 0.5)/axon.nseg) = diam_val
+}
+
+// Insert hh mechanism and assign gnabar linearly
+axon insert hh
+for i=0, axon.nseg-1 {
+    gnaba_val = 0 + (0.12 - 0) * ((i + 0.5)/axon.nseg)
+    axon.gnabar_hh((i + 0.5)/axon.nseg) = gnaba_val
+}
+</pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>The normalized segment location used for setting parameters is the center of each segment: <cite>(i + 0.5)/nseg</cite>.</p></li>
+<li><p>Parameters set to a location affect the entire segment containing that location.</p></li>
+<li><p>Assigning parameters at finer resolution than <cite>nseg</cite> will be clamped to segment values.</p></li>
+<li><p>For realistic morphologies, use 3D points (<cite>pt3dadd</cite>, etc.) to define spatial structure rather than segment diameters alone.</p></li>
+<li><p>It is strongly recommended to use explicit loops to set range variables for maintainability and clarity instead of obscure range expressions.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4286">https://neuron.yale.edu/phpBB/viewtopic.php?t=4286</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="How_to_assign_multiple_values_to_an_array_in_hoc_and_Python.html" class="btn btn-neutral float-left" title="How to assign multiple values to an array in hoc and Python?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Arrays_as_RANGE_variables_in_NEURON.html" class="btn btn-neutral float-right" title="Arrays as RANGE variables in NEURON" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

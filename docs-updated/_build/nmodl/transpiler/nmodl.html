@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module contents &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="NEURON SCM and Release" href="../../scm/index.html" />
+    <link rel="prev" title="Python package" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">Python package</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#neuron.nmodl.NmodlDriver"><code class="docutils literal notranslate"><span class="pre">NmodlDriver</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neuron.nmodl.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neuron.nmodl.to_nmodl"><code class="docutils literal notranslate"><span class="pre">to_nmodl()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#neuron-nmodl-ast-module">neuron.nmodl.ast module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neuron-nmodl-dsl-module">neuron.nmodl.dsl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neuron-nmodl-ode-module">neuron.nmodl.ode module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neuron-nmodl-symtab-module">neuron.nmodl.symtab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neuron-nmodl-visitor-module">neuron.nmodl.visitor module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">About the NMODL transpiler</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Python package</a></li>
+      <li class="breadcrumb-item active">Module contents</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/nmodl/transpiler/nmodl.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><a href="#neuron.nmodl.ast.view" title="Link to this definition">neuron.nmodl.ast.view</a> &middot; <a href="#neuron.nmodl.dsl.load_example" title="Link to this definition">neuron.nmodl.dsl.load_example</a> &middot; <a href="#neuron.nmodl.to_json" title="Link to this definition">neuron.nmodl.to_json</a> &middot; <a href="#neuron.nmodl.to_nmodl" title="Link to this definition">neuron.nmodl.to_nmodl</a></p><p><dl class="docutils"><dt><a href="#neuron.nmodl.NmodlDriver" title="Link to this definition">neuron.nmodl.NmodlDriver</a></dt><dd><a href="#neuron.nmodl.NmodlDriver.get_ast" title="Link to this definition">get_ast</a> &middot; <a href="#neuron.nmodl.NmodlDriver.parse_file" title="Link to this definition">parse_file</a> &middot; <a href="#neuron.nmodl.NmodlDriver.parse_stream" title="Link to this definition">parse_stream</a> &middot; <a href="#neuron.nmodl.NmodlDriver.parse_string" title="Link to this definition">parse_string</a></dd></dl></p><section id="module-neuron.nmodl">
+<span id="module-contents"></span><h1>Module contents<a class="headerlink" href="#module-neuron.nmodl" title="Link to this heading"></a></h1>
+<p>NMODL transpiler Python bindings</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuron.nmodl.NmodlDriver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuron.nmodl.</span></span><span class="sig-name descname"><span class="pre">NmodlDriver</span></span><a class="headerlink" href="#neuron.nmodl.NmodlDriver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl::parser::NmodlDriver</span></code></p>
+<p>This is the NmodlDriver class documentation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuron.nmodl.NmodlDriver.get_ast">
+<span class="sig-name descname"><span class="pre">get_ast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">neuron.nmodl._nmodl.nmodl::parser::NmodlDriver</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#neuron.nmodl.NmodlDriver.get_ast" title="Link to this definition"></a></dt>
+<dd><p>Get ast</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuron.nmodl.NmodlDriver.parse_file">
+<span class="sig-name descname"><span class="pre">parse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#neuron.nmodl.NmodlDriver" title="neuron.nmodl._nmodl.NmodlDriver"><span class="pre">neuron.nmodl._nmodl.NmodlDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#neuron.nmodl.NmodlDriver.parse_file" title="Link to this definition"></a></dt>
+<dd><p>Parse NMODL provided as a file</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): name of the C file</p>
+</dd>
+<dt>Returns:</dt><dd><p>AST: ast root node if success, throws an exception otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuron.nmodl.NmodlDriver.parse_stream">
+<span class="sig-name descname"><span class="pre">parse_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">neuron.nmodl._nmodl.NmodlDriver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in:</span> <span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#neuron.nmodl.NmodlDriver.parse_stream" title="Link to this definition"></a></dt>
+<dd><p>Parse NMODL file provided as istream</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>in (file): ifstream object</p>
+</dd>
+<dt>Returns:</dt><dd><p>AST: ast root node if success, throws an exception otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuron.nmodl.NmodlDriver.parse_string">
+<span class="sig-name descname"><span class="pre">parse_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#neuron.nmodl.NmodlDriver" title="neuron.nmodl._nmodl.NmodlDriver"><span class="pre">neuron.nmodl._nmodl.NmodlDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#neuron.nmodl.NmodlDriver.parse_string" title="Link to this definition"></a></dt>
+<dd><p>Parse NMODL provided as a string</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input (str): C code as string</p>
+</dd>
+<dt>Returns:</dt><dd><p>AST: ast root node if success, throws an exception otherwise</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="s2">&quot;DEFINE NSTEP 6&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neuron.nmodl.to_json">
+<span class="sig-prename descclassname"><span class="pre">neuron.nmodl.</span></span><span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node:</span> <span class="pre">nmodl::ast::Ast</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compact:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expand:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_nmodl:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#neuron.nmodl.to_json" title="Link to this definition"></a></dt>
+<dd><p>Given AST node, return the JSON string representation</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>node (AST): AST node
+compact (bool): Compact node
+expand (bool): Expand node</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: JSON string representation</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="s2">&quot;NEURON</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">ast</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">&#39;{&quot;Program&quot;:[{&quot;NeuronBlock&quot;:[{&quot;StatementBlock&quot;:[]}]}]}&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neuron.nmodl.to_nmodl">
+<span class="sig-prename descclassname"><span class="pre">neuron.nmodl.</span></span><span class="sig-name descname"><span class="pre">to_nmodl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node:</span> <span class="pre">nmodl::ast::Ast</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_types:</span> <span class="pre">set[nmodl::ast::AstNodeType]</span> <span class="pre">=</span> <span class="pre">set()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#neuron.nmodl.to_nmodl" title="Link to this definition"></a></dt>
+<dd><p>Given AST node, return the NMODL string representation</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>node (AST): AST node
+excludeTypes (set of AstNodeType): Excluded node types</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: NMODL string representation</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="s2">&quot;NEURON</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ast</span><span class="p">)</span>
+<span class="go">&#39;NEURON {\n}\n&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="submodules">
+<h1>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h1>
+<section id="neuron-nmodl-ast-module">
+<h2>neuron.nmodl.ast module<a class="headerlink" href="#neuron-nmodl-ast-module" title="Link to this heading"></a></h2>
+<p id="module-neuron.nmodl.ast">Module for vizualization of NMODL abstract syntax trees (ASTs).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="neuron.nmodl.ast.view">
+<span class="sig-prename descclassname"><span class="pre">neuron.nmodl.ast.</span></span><span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmodl_ast</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuron.nmodl.ast.view" title="Link to this definition"></a></dt>
+<dd><p>Visualize given NMODL AST in web browser</p>
+<p>In memory representation of AST can be converted to JSON
+form and it can be visualized using AST viewer implemented
+using d3.js.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>nmodl_ast: AST object of nmodl file or string</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="neuron-nmodl-dsl-module">
+<h2>neuron.nmodl.dsl module<a class="headerlink" href="#neuron-nmodl-dsl-module" title="Link to this heading"></a></h2>
+<dl class="py function" id="module-neuron.nmodl.dsl">
+<dt class="sig sig-object py" id="neuron.nmodl.dsl.list_examples">
+<span class="sig-prename descclassname"><span class="pre">neuron.nmodl.dsl.</span></span><span class="sig-name descname"><span class="pre">list_examples</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neuron.nmodl.dsl.list_examples" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of examples available</p>
+<p>The NMODL Framework provides a few examples for testing</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of available examples</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neuron.nmodl.dsl.load_example">
+<span class="sig-prename descclassname"><span class="pre">neuron.nmodl.dsl.</span></span><span class="sig-name descname"><span class="pre">load_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuron.nmodl.dsl.load_example" title="Link to this definition"></a></dt>
+<dd><p>Load an example from the NMODL examples</p>
+<p>The NMODL Framework provides a few examples for testing. The list of examples can be requested
+using <cite>list_examples()</cite>. This function then returns the NMODL code of the requested example
+file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>example: Filename of an example as provided by <cite>list_examples()</cite></p>
+</dd>
+<dt>Returns:</dt><dd><p>An path to the example as a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="neuron-nmodl-ode-module">
+<h2>neuron.nmodl.ode module<a class="headerlink" href="#neuron-nmodl-ode-module" title="Link to this heading"></a></h2>
+</section>
+<section id="neuron-nmodl-symtab-module">
+<h2>neuron.nmodl.symtab module<a class="headerlink" href="#neuron-nmodl-symtab-module" title="Link to this heading"></a></h2>
+</section>
+<section id="neuron-nmodl-visitor-module">
+<span id="module-neuron.nmodl.symtab"></span><h2>neuron.nmodl.visitor module<a class="headerlink" href="#neuron-nmodl-visitor-module" title="Link to this heading"></a></h2>
+<span class="target" id="module-neuron.nmodl.visitor"></span></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Python package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../scm/index.html" class="btn btn-neutral float-right" title="NEURON SCM and Release" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

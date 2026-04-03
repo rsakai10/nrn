@@ -1,0 +1,25 @@
+.. _netcon_synaptic_activation:
+
+Synaptic Activation without a Presynaptic Cell
+-----------------------------------------------
+
+You can activate a synapse directly without requiring a presynaptic neuron to fire by creating a :class:`NetCon` with a `None` (or `nil`) source and calling its :meth:`NetCon.event` method to deliver spikes at specified times.
+
+Example in HOC::
+
+    objref nc
+    nc = new NetCon(nil, synapse)  // synapse is the target point process
+    nc.event(10)                   // deliver event at 10 ms
+
+Example in Python::
+
+    from neuron import h
+    nc = h.NetCon(None, synapse)  # synapse is the target point process
+    nc.event(10)                  # deliver event at 10 ms
+
+To deliver multiple events at specified times, use a :class:`VecStim` which plays spikes from a :class:`Vector`.
+
+.. note::
+   The :meth:`NetCon.event` method schedules a single spike event without requiring a presynaptic source cell to generate action potentials.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4298 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4298>`_

@@ -1,0 +1,51 @@
+.. _hoc-argument-notation:
+
+HOC Argument Notation: Scalars vs. Object References
+====================================================
+
+When writing functions or procedures in the HOC language, arguments are referenced using a special notation. Understanding this notation is important for correctly accessing the inputs passed to your functions or procedures.
+
+Scalar Arguments
+----------------
+
+Scalar (numeric) arguments are referenced by a dollar sign followed by their argument position number. For example:
+
+.. code-block:: hoc
+
+    proc display_value() {
+        local val
+        val = $1  // First scalar argument
+        printf("Value: %g\n", val)
+    }
+
+Here, ``$1`` references the first scalar argument passed to the procedure.
+
+Object Reference Arguments
+--------------------------
+
+When your function or procedure takes one or more object references as arguments, these are prefixed with ``$o`` followed by their position number. For example, ``$o1`` corresponds to the first object argument.
+
+Example:
+
+.. code-block:: hoc
+
+    proc init() {
+        netstimA = $o1  // Assign first object argument to variable netstimA
+    }
+
+If the first argument is an object, you must use ``$o1`` rather than ``$1`` to correctly access it as an object reference. Using ``$1`` in this case will assume a scalar value, which leads to errors.
+
+Summary
+-------
+
+- ``$1``: First scalar argument
+- ``$o1``: First object argument
+- Similarly, ``$2``, ``$o2`` correspond to the second scalar or object argument, and so on.
+
+.. note::
+
+  This HOC argument notation is specific to the HOC interpreter in NEURON; Python interfaces use standard Python function argument syntax.
+
+For a comprehensive explanation of HOC syntax, including argument notation, see chapter 12 of *The NEURON Book* (:doc:`neuron-book-ch12`).
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3418 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3418>`_

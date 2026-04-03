@@ -1,0 +1,46 @@
+h.Section vs h.Section()
+=======================
+
+When using NEURON's Python interface, it is important to understand how to construct and use Hoc objects such as sections.
+
+Constructing a Section
+----------------------
+
+To create a new section from Python, you call `h.Section()` with parentheses, which acts like a function returning a new instance of the `Section` class:
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section()  # Create a new section instance
+
+This is because `h.Section` is a callable Hoc class available via the `h` interpreter object. Calling it, i.e. `h.Section()`, constructs and returns a new Hoc Section object.
+
+Accessing the Hoc Class
+-----------------------
+
+`h.Section` by itself (without parentheses) is a reference to the Hoc class constructor for Section objects. It can be assigned or stored as a callable:
+
+.. code-block:: python
+
+    from neuron import h
+    Section = h.Section  # The Hoc Section class
+    sec = Section()      # Construct an instance of Section
+
+In this usage, `h.Section` behaves like a factory or constructor function.
+
+Summary
+-------
+
+- `h.Section` is the Hoc Section class, which can be called to instantiate new section objects.
+- `h.Section()` calls the constructor and returns a new section instance.
+  
+.. note::
+
+   This Python syntax mirrors Hoc where `new Section()` creates a new Section instance. In Python, the parentheses are required to call the constructor and create objects, whereas without parentheses you only have a reference to the class.
+
+
+.. seealso::
+
+   :class:`h.Section` constructor for creating section objects.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2108 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2108>`_

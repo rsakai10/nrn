@@ -1,0 +1,86 @@
+Accessing Section Geometry (Length, Diameter, Surface Area) in NMODL
+=====================================================================
+
+When writing NMODL mechanisms, it is sometimes necessary to access the geometric properties of the section in which the mechanism is inserted, such as length (`L`), diameter (`diam`), or surface area. However, directly reading `L` in NMODL may not provide the expected value (e.g., returns 0.0), because `L` and `diam` are not automatically updated variables inside NMODL mechanisms.
+
+Accessing Section Length and Diameter in NMODL
+----------------------------------------------
+
+- The `diam` variable can be accessed in NMODL mechanisms only if it is explicitly passed or set, but typically `diam` is available as the diameter of the current segment.
+- The `L` value (section length) is not directly accessible as a variable inside NMODL and may show as zero.
+
+Recommended Approach: Use the `area` Variable Provided by NEURON
+----------------------------------------------------------------
+
+NEURON automatically provides the surface area of the current segment within NMODL in the variable `area`, with units in µm² (micron squared). Therefore, you do **not** need to calculate surface area yourself via diameter and length.
+
+Example declaration and usage in NMODL:
+
+.. code-block:: mod
+
+    ASSIGNED {
+        area (um2)  : surface area of the current segment
+    }
+
+    BREAKPOINT {
+        LOCAL my_surface_area
+        my_surface_area = area
+        : Use my_surface_area in computations as needed
+    }
+
+Units and Testing
+-----------------
+
+- `area` has units of µm². Make sure to use consistent units in your calculations.
+- Use conversion factors explicitly where needed.
+- It is good practice to test your mechanisms using :func:`modlunit` for unit consistency.
+
+Examples in Python and HOC
+--------------------------
+
+If you need to access the length or diameter from the hoc or Python level, you can do so as follows:
+
+**Python example:**
+
+.. code-block:: python
+
+    from neuron import h
+
+    sec = h.Section(name='soma')
+    sec.L = 100  # set length in microns
+    sec.diam = 10  # set diameter in microns
+
+    print(f"Section length L = {sec.L} µm")
+    print(f"Section diameter diam = {sec.diam} µm")
+    print(f"Section surface area = {sec(0.5).area()} µm^2")  # area at segment 0.5
+
+**HOC example:**
+
+.. code-block:: hoc
+
+    create soma
+    soma {
+        L = 100
+        diam = 10
+    }
+    print "Section length L = ", soma.L, " um"
+    print "Section diameter diam = ", soma.diam, " um"
+    print "Section surface area = ", soma(0.5).area(), " um2"
+
+Summary
+-------
+
+- Do **not** rely on reading `L` directly in NMODL mechanisms.
+- Use the built-in `area` variable to access the segment surface area.
+- Set and access geometry from hoc or Python as needed.
+- Verify your mechanisms using :func:`modlunit` and maintain consistent units.
+
+.. seealso::
+
+   :class:`Section`
+
+   :meth:`Section.area`
+
+   :func:`modlunit`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3093 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3093>`_

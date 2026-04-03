@@ -1,0 +1,32 @@
+.. note::
+   When recording membrane potentials (or any variable) from multiple sections using :meth:`Vector.record` inside a :keyword:`forall` loop in HOC, you must create a new :class:`Vector` for each section within the loop. Otherwise, appending the same :class:`Vector` object repeatedly to a :class:`List` will result in multiple references to the same vector instance, which records only the last segment.
+
+.. code-block:: hoc
+
+    objref results_list
+    proc record_results() {
+        results_list = new List()
+        forall {
+            objref tmpvec
+            tmpvec = new Vector()
+            tmpvec.record(&v(0.5))
+            results_list.append(tmpvec)
+        }
+    }
+    record_results()
+
+.. note::
+   In contrast, recording variables from individual known sections can be done by creating separate :class:`Vector` objects outside loops, for example:
+
+.. code-block:: hoc
+
+    objref test1, test2
+    test1 = new Vector()
+    test2 = new Vector()
+    test1.record(&cen_myelin[19].v(0.5))
+    test2.record(&cen_myelin[0].v(0.5))
+
+.. seealso::
+   :meth:`Vector.record`, :class:`List`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2489 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2489>`_

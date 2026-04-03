@@ -1,0 +1,114 @@
+Interfacing NEURON with External Software via Python Callbacks
+===============================================================
+
+When integrating NEURON with external software runtime processes, controlling artificial cells or mechanisms via Python callbacks can be achieved without custom `.mod` files.
+
+.. code-block:: hoc
+
+    NEURON {
+      POINT_PROCESS PyBeforeStep
+      POINTER callback
+    }
+    ASSIGNED {callback}
+    VERBATIM
+    extern int (*nrnpy_hoccommand_exec)(Object*);
+    ENDVERBATIM
+
+    BEFORE STEP {
+    VERBATIM
+      if (nrnpy_hoccommand_exec && _p_callback) {
+        Object** po = (Object**)(&(_p_callback));
+        (*nrnpy_hoccommand_exec)(*po);
+      }
+    ENDVERBATIM
+    }
+
+    PROCEDURE set_callback() {
+    VERBATIM
+      Object** po = (Object**)(&(_p_callback));
+      Object* old = *po;
+      *po = (Object*)0;
+      if (ifarg(1)) {
+        *po = *hoc_objgetarg(1);
+        hoc_obj_ref(*po);
+      }
+      if (old) { hoc_obj_unref(old); }
+    ENDVERBATIM
+    }
+
+However, the recommended approach is to use NEURON's built-in Python callback facilities:
+
+- :class:`h.FInitializeHandler` for initialization callbacks
+- :meth:`h.CVode.event` for event-driven callbacks
+- :meth:`h.CVode.extra_scatter_gather` for callbacks at every time step
+
+Example usage in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    from neuron.units import mV, ms
+    import matplotlib.pyplot as plt
+
+    def update_netstim(ns):
+        if h.t % 50 == 0:
+            ns.interval += 10
+
+    soma = h.Section(name='soma')
+    soma.insert('hh')
+    syn = h.ExpSyn(soma(0.5))
+    syn.tau = 20
+    syn.e = 0
+
+    ns = h.NetStim()
+    ns.interval = 20  # ms
+    ns.start = 0
+    ns.noise = 0
+    ns.number = 1e9
+
+    nc = h.NetCon(ns, syn)
+    nc.delay = 0
+    nc.weight[0] = 0.1
+
+    vx = h.Vector().record(soma(0.5)._ref_v)
+    t = h.Vector().record(h._ref_t)
+
+    # Use a lambda to avoid immediate call, keep reference to prevent GC
+    my_lambda = lambda: update_netstim(ns)
+    a = h.PyBeforeStep(soma(0.5))
+    a.set_callback(my_lambda)
+
+    h.tstop = 500
+    h.run()
+
+    plt.plot(t, vx)
+    plt.show()
+
+Better alternative without a custom mechanism:
+
+.. code-block:: python
+
+    def called_once():
+        print(f"called_once, t={h.t}")
+
+    def called_often():
+        print(f"called_often, t={h.t}")
+
+    def called_on_event():
+        print(f"called_on_event, t={h.t}")
+
+    fih = h.FInitializeHandler(called_once)
+    esg = h.CVode().extra_scatter_gather(0, called_often)
+    h.finitialize(-65 * mV)
+    event = h.CVode().event(0.1 * ms, called_on_event)
+    h.continuerun(0.2 * ms)
+
+.. note::
+
+   Use lambda functions or callable objects to pass Python callbacks safely. Avoid passing the result of function calls, which evaluates immediately and does not persist as a callback.
+
+.. seealso::
+
+   :class:`h.FInitializeHandler`, :meth:`h.CVode.event`, :meth:`h.CVode.extra_scatter_gather`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4242 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4242>`_

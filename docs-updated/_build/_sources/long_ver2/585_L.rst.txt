@@ -1,0 +1,46 @@
+String to Integer Conversion in hoc
+===================================
+
+In hoc, to convert a string representation of a number into an integer, you can use the :func:`sscanf` function. This function parses formatted input from a string, similar to the C library function of the same name.
+
+The :func:`sscanf` function supports different formats, including decimal, hexadecimal, and binary integers. It allows you to extract numeric values from strings and store them into variables.
+
+Example
+-------
+
+The following example demonstrates reading integers from a string in various formats and storing them in double variables:
+
+.. code-block:: hoc
+
+    strdef s
+    double x[3]
+
+    // Parse a word from the string "this is a test\n" into s; %*s skips first string
+    sscanf("this is a test\n", "%*s%s", s)
+    // Parse three integers in hex, octal, and decimal formats
+    sscanf("0xff 010 25", "%i%i%i", &x[0], &x[1], &x[2])
+    print x[0], x[1], x[2]  // Output: 255 8 25
+
+Details
+-------
+
+- The format specifier "%i" can interpret integer numbers in decimal, octal, or hexadecimal format.
+- The target variables must be passed by reference, using the address-of operator `&`.
+- :func:`sscanf` can also parse other types of inputs using appropriate format strings.
+
+.. note::
+
+   The integers extracted by :func:`sscanf` are stored in variables of type ``double`` because hoc's numeric variables are doubles by default.
+
+Summary
+-------
+
+To convert a string to an integer in hoc:
+
+1. Declare a double variable (or an array of doubles) to hold the result.
+2. Use :func:`sscanf` with the format specifier "%i" and pass the address of the variable.
+3. The variable will contain the converted integer value after the call.
+
+This method provides a straightforward way of parsing integers from strings directly within hoc code without requiring external functions.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=585 <https://neuron.yale.edu/phpBB/viewtopic.php?t=585>`_

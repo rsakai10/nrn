@@ -1,0 +1,34 @@
+New Installation of NEURON with Python
+======================================
+
+To install NEURON with Python on Windows 10 Pro 64-bit using Python 3.11 in Anaconda3, follow these steps:
+
+1. Install Python (e.g., via Anaconda3) if not already installed.
+2. Install NEURON (version 8.2.3 or later) by following the instructions in the NEURON documentation.
+
+.. note::
+   The NEURON version 8.2.3 or newer is recommended to avoid module import errors such as ``no module named hoc``.
+
+3. To verify the NEURON installation, open the NEURON program group and launch the ``bash`` terminal. Run the command:
+
+   .. code-block:: bash
+
+      neurondemo
+
+   The demonstration GUI windows should appear. Use the “Init & Run” button in the RunControl panel to start simulations.
+
+4. To verify Python can use NEURON, open an Anaconda Prompt and enter the Python interpreter:
+
+   .. code-block:: python
+
+      from neuron import h, gui
+
+   The NEURON Main Menu GUI should appear, indicating successful module import.
+
+.. note::
+   There is no need to install Interviews separately.
+
+.. seealso::
+   :class:`neuron.h`, :func:`neuron.gui`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4628 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4628>`_

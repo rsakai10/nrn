@@ -1,0 +1,841 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scripting NEURON basics &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ball and stick 1: Basic cell" href="ball-and-stick-1.html" />
+    <link rel="prev" title="Introduction to Python" href="pythontutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pythontutorial.html">Introduction to Python</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scripting NEURON basics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#What-is-NEURON?">What is NEURON?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-1:-Import-the-neuron-module-into-Python">Step 1: Import the neuron module into Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-2:-Create-a-cell">Step 2: Create a cell</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Aside-1:-NEURON's-n.topology-function">Aside 1: NEURON’s <code class="docutils literal notranslate"><span class="pre">n.topology</span></code> function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Aside-2:-The-psection-method">Aside 2: The <code class="docutils literal notranslate"><span class="pre">psection</span></code> method</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-3:-Set-the-cell's-morphological-properties">Step 3: Set the cell’s morphological properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Aside-3:-Python's-dir-function">Aside 3: Python’s <code class="docutils literal notranslate"><span class="pre">dir</span></code> function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Aside-4:-Getting-more-help">Aside 4: Getting more help</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Biophysical-mechanisms">Biophysical mechanisms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-4:-Insert-ion-channels">Step 4: Insert ion channels</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Aside-5:-Sections-and-segments">Aside 5: Sections and segments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Aside-6:-Accessing-segment-variables">Aside 6: Accessing segment variables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-5:-Insert-a-stimulus">Step 5: Insert a stimulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-6:-Set-up-recording-variables">Step 6: Set up recording variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-7:-Run-the-simulation">Step 7: Run the simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-8:-Plot-the-results">Step 8: Plot the results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Using-bokeh">Using bokeh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Using-matplotlib">Using matplotlib</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-9:-Saving-and-loading-results">Step 9: Saving and loading results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#CSV">CSV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#JSON">JSON</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Pickles">Pickles</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ball-and-stick-1.html">Ball and stick 1: Basic cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ball-and-stick-2.html">Ball and stick 2: Build a ring network of ball-and-stick cells</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ball-and-stick-3.html">Ball and stick 3: Extensible network of cells</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ball-and-stick-4.html">Ball and stick 4: Parallel vs serial mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python tutorials</a></li>
+      <li class="breadcrumb-item active">Scripting NEURON basics</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/scripting-neuron-basics.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Scripting-NEURON-basics">
+<h1>Scripting NEURON basics<a class="headerlink" href="#Scripting-NEURON-basics" title="Link to this heading"></a></h1>
+<p>The objectives of this part of the tutorial are to get familiar with basic operations of NEURON using Python. In this worksheet we will:</p>
+<ul class="simple">
+<li><p>Create a passive cell membrane in NEURON.</p></li>
+<li><p>Create a synaptic stimulus onto the neuron.</p></li>
+<li><p>Modify parameters of the membrane and stimulus.</p></li>
+<li><p>Visualize results with bokeh.</p></li>
+</ul>
+<section id="What-is-NEURON?">
+<h2>What is NEURON?<a class="headerlink" href="#What-is-NEURON?" title="Link to this heading"></a></h2>
+<p>The NEURON simulation environment is a powerful engine for performing simulations of neurons and biophysical neural networks. It permits the construction of biologically realistic membranes with active and passive ion channels, combined with virtual connectivity and electrophysiology tools to drive and measure neuron and network behaviors.</p>
+</section>
+<section id="Step-1:-Import-the-neuron-module-into-Python">
+<h2>Step 1: Import the neuron module into Python<a class="headerlink" href="#Step-1:-Import-the-neuron-module-into-Python" title="Link to this heading"></a></h2>
+<p>Any code that is not part of Python’s Built-in Functions must be imported. The Python interface to NEURON goes through the neuron module, especially the neuron.h submodule. The neuron module has additional submodules, including neuron.rxd for reaction-diffusion dynamics, neuron.gui2 for Jupyter-compatible PlotShape graphs, and neuron.gui for Interviews-based GUI tools. The neuron.h submodule also allows loading files, executing code, and calling functions written in HOC, an older scripting
+language supported by NEURON. This allows the continued use of HOC libraries in Python code.</p>
+<p>To import neuron, we could use:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">neuron</span>
+</pre></div>
+</div>
+</div>
+<p>If the above succeeded, it produces no output (in recent versions of NEURON), so how can we know what version of NEURON we have? Simple: ask for the <code class="docutils literal notranslate"><span class="pre">__version__</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">neuron</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>There are only a limited number of functions avaiable directly from the neuron module. In practice, we usually want to directly import the submodules we need; i.e. do something like the below instead:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">n</span>
+</pre></div>
+</div>
+</div>
+<p>When using NEURON, you will always want the n submodule. (With older code, you may have seen people use the h submodule. They are almost exactly equivalent, and h continues to work.) You may or may not need to import the additional submodules mentioned above. If you do, they can be imported separately or loaded in one line with a comma separated list, as in:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">n</span><span class="p">,</span> <span class="n">rxd</span>
+</pre></div>
+</div>
+</div>
+<p>NB: When importing n, etc like this, there is usually no need for importing neuron separately.</p>
+<p><p>NEURON assumes certain default units (concentration in mM, time in ms, voltage in mV), but units can be specified explicitly by importing unit definitions from neuron.units. Even if you are using the default units, being explicit makes your code more readable by others. For example:</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">ms</span><span class="p">,</span> <span class="n">mV</span>
+</pre></div>
+</div>
+</div>
+<p>If the above gives you an error, then you are using a version of NEURON older than 7.7. Update before proceeding.</p>
+</section>
+<section id="Step-2:-Create-a-cell">
+<h2>Step 2: Create a cell<a class="headerlink" href="#Step-2:-Create-a-cell" title="Link to this heading"></a></h2>
+<p>A Section is the basic morphological building-block in NEURON. We typically think of a Section as an unbranched cable, but it can also be used to represent a soma. Thus a simple model neuron with only a soma can be created as in:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="s2">&quot;soma&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>There is no output, so how can we tell that we successfully created a Section?</p>
+<section id="Aside-1:-NEURON's-n.topology-function">
+<h3>Aside 1: NEURON’s <code class="docutils literal notranslate"><span class="pre">n.topology</span></code> function<a class="headerlink" href="#Aside-1:-NEURON's-n.topology-function" title="Link to this heading"></a></h3>
+<p>NEURON’s <code class="docutils literal notranslate"><span class="pre">n.topology()</span></code> function displays the topological structure of the entire model, indicating which sections are connected to which sections, where they are connected, and how many <em>segments</em> each section is divided into.</p>
+<p>If you’re following along with our example, there’s not much to see yet since there is only one section, but it does demonstrate that the soma has been created and has one segment (one dash is shown):</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">n.topology()</span></code> function displays its data to screen and returns <code class="docutils literal notranslate"><span class="pre">1.0</span></code> indicating success (this function always succeeds). Note: This function is only for displaying data; other methods must be used to store the data in a variable for programmatic analysis.</p>
+</section>
+<section id="Aside-2:-The-psection-method">
+<h3>Aside 2: The <code class="docutils literal notranslate"><span class="pre">psection</span></code> method<a class="headerlink" href="#Aside-2:-The-psection-method" title="Link to this heading"></a></h3>
+<p><p>Every NEURON section has a psection method (think: properties of the section) that returns a Python dictionary providing a structured data representation of the properties of the section.</p>
+</p><p><p>For example, we can query the soma via:</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">psection</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The results tell us the soma is a cylinder with length 100 microns, diameter 500 microns, axial resistivity 35.4 ohm*cm, and specific membrance capacitance 1 μF/cm2.</p>
+<p>Note: calling this method does not itself print anything to the screen. Instead it returns a dictionary. We see the contents of the dictionary only because we are running interactively; from a script, nothing would be printed unless we explicitly printed it with print, or, better pretty-printed it with pprint.pprint.</p>
+<p>Since this is a dictionary, we can extract any properties we want using square brackets. For example, the length of the section is:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">psection</span><span class="p">()[</span><span class="s2">&quot;morphology&quot;</span><span class="p">][</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>All of these values can be individually accessed in more efficient ways, but psection provides an overview of the full properties of the section.</p>
+<p>For example, the length of the soma is more efficiently available (and settable) via:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">L</span>
+</pre></div>
+</div>
+</div>
+<p>soma.psection()[‘morphology’][‘diam’] is a list (of length 1 here), with each entry corresponding to the value for each segment. Similarly for soma.psection()[‘cm’], etc.</p>
+<p><strong>Important:</strong> You may have noticed that the default diameter is 500 μm, which is excessively large for mammalian neurons. It’s the default because it’s appropriate for the squid giant axons studied by Hodgkin and Huxley. NEURON also uses squid-relevant values for axial resistivity (<code class="docutils literal notranslate"><span class="pre">soma.Ra</span></code>) and temperature (<code class="docutils literal notranslate"><span class="pre">n.celsius</span></code>). These should all be adjusted for mammalian models.</p>
+</section>
+</section>
+<section id="Step-3:-Set-the-cell's-morphological-properties">
+<h2>Step 3: Set the cell’s morphological properties<a class="headerlink" href="#Step-3:-Set-the-cell's-morphological-properties" title="Link to this heading"></a></h2>
+<p>Since we’re simulating a soma, the default length of 100 μm and diameter of 500 μm are inappropriate. Let’s set the length (L) and diameter (diam) to 20 μm instead:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</div>
+<p>In many models, you will have cells consisting of many connected sections. In brief, this can be done using the Section’s connect method. That will be described in a subsequent part of the tutorial. For now though, we consider only the soma.</p>
+<section id="Aside-3:-Python's-dir-function">
+<h3>Aside 3: Python’s <code class="docutils literal notranslate"><span class="pre">dir</span></code> function<a class="headerlink" href="#Aside-3:-Python's-dir-function" title="Link to this heading"></a></h3>
+<p>We can also probe objects with Python’s built-in dir() function. Let’s see what it says about soma.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">soma</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This tells us all of the Python methods and variables associated with the object. Any methods with two leading and trailing underscores are reserved by Python. The other items in the list are additional members of soma that we can call. To see all of the functions, variables, etc available through NEURON’s <code class="docutils literal notranslate"><span class="pre">n</span></code> submodule, try:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">textwrap</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">n</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<p>(The ‘, ‘.join(…) tells Python to build a string out of the list returned by dir where the items are separated from each other with a comma and a space. The textwrap.fill(…) tells Python to split long lines into multiple lines, by default a maximum of 70 characters long.)</p>
+</section>
+<section id="Aside-4:-Getting-more-help">
+<h3>Aside 4: Getting more help<a class="headerlink" href="#Aside-4:-Getting-more-help" title="Link to this heading"></a></h3>
+<p>In addition to probing objects with dir(), help from docstrings is available using help().</p>
+<p>For example, from dir(soma) above, we know that there is a connect method available. Let’s inquire about that:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">soma</span><span class="o">.</span><span class="n">connect</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>When running interactively in Jupyter, the same information is available in a window that can be popped out by prefacing the method/function/etc with a question mark; e.g.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">?</span><span class="n">soma</span><span class="o">.</span><span class="n">connect</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Biophysical-mechanisms">
+<h3>Biophysical mechanisms<a class="headerlink" href="#Biophysical-mechanisms" title="Link to this heading"></a></h3>
+<p>NEURON comes with a few built in biophysical mechanisms that can be added to a model:</p>
+<table border="1" class="docutils"><colgroup><col width="26%" /><col width="74%"  /></colgroup><tbody valign="top"><tr class="row-odd"><td><p>pas</p>
+</td><td><p>Passive (“leak”) channel.</p>
+</td></tr><tr class="row-even"><td><p>extracellular</p>
+</td><td><p>For simulating effects of nonzero extracellular potential, as may happen with leaky patch clamps, or detailed propertes of the myelin sheath.</p>
+</td></tr><tr class="row-odd"><td><p>hh</p>
+</td><td><p>Hodgkin-Huxley sodium, potassium, and leakage channels.</p>
+</td></tr></tbody></table><p>Thousands of additional mechanisms (for A-currents, etc) are available as MOD files as part of published model codes on ModelDB.</p>
+</section>
+</section>
+<section id="Step-4:-Insert-ion-channels">
+<h2>Step 4: Insert ion channels<a class="headerlink" href="#Step-4:-Insert-ion-channels" title="Link to this heading"></a></h2>
+<p>A section’s <code class="docutils literal notranslate"><span class="pre">insert</span></code> method is used to insert density mechanisms (i.e. anything where we don’t want to specify every single instance separately). Let’s insert Hodgkin-Huxley channels into the <code class="docutils literal notranslate"><span class="pre">soma</span></code>’s membrane. We do this by passing <code class="docutils literal notranslate"><span class="pre">n.hh</span></code> as the mechanism type:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">hh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The section is returned so that multiple insertions can be chained together if desired.</p>
+<p>We note that Hodgkin-Huxley channel kinetics are based on the squid giant axon. If that’s not your model organism, then for your actual modeling projects, you’ll want to use other kinetics, either by downloading them from online resources like ModelDB or by writing them yourself in NMODL or NeuroML.</p>
+<section id="Aside-5:-Sections-and-segments">
+<h3>Aside 5: Sections and segments<a class="headerlink" href="#Aside-5:-Sections-and-segments" title="Link to this heading"></a></h3>
+<p>A NEURON Section is considered a piece of cable. Depending on the resolution desired, it may be necessary to divide the cable into a number of segments where voltage varies linearly between centers of adjacent segments. The number of segments within a section is given by the variable, <code class="docutils literal notranslate"><span class="pre">nseg</span></code>. The total ionic current across the segment membrane is approximately the area of the segment multiplied by the ionic current density at the center of the segment. To access a part of the section, specify
+a value between 0 and 1, where 0 is typically the end closest to the soma and 1 is the distal end. Because nseg divides the cable into equal-length parts, it should be an odd number so that to address the middle of the cable, (0.5), gives the middle segment.</p>
+<p>To summarize, we access sections by their name and segments by some location on the section.</p>
+<ul class="simple">
+<li><p>Section: <code class="docutils literal notranslate"><span class="pre">section</span></code></p></li>
+<li><p>Segment: <code class="docutils literal notranslate"><span class="pre">section(loc)</span></code></p></li>
+</ul>
+<p>Using the Python <code class="docutils literal notranslate"><span class="pre">type</span></code> function can tell us what a variable is:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;type(soma) = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">soma</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;type(soma(0.5)) = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Aside-6:-Accessing-segment-variables">
+<h3>Aside 6: Accessing segment variables<a class="headerlink" href="#Aside-6:-Accessing-segment-variables" title="Link to this heading"></a></h3>
+<p>Segment variables follow the idiom:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>section(loc).var
+</pre></div>
+</div>
+<p>And for mechanisms on the segment:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>section(loc).mech.var
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>section(loc).var_mech
+</pre></div>
+</div>
+<p>The first form is preferred.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mech</span> <span class="o">=</span> <span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">hh</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">mech</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">mech</span><span class="o">.</span><span class="n">gkbar</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">gkbar</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Step-5:-Insert-a-stimulus">
+<h2>Step 5: Insert a stimulus<a class="headerlink" href="#Step-5:-Insert-a-stimulus" title="Link to this heading"></a></h2>
+<p>Let’s insert a current clamp (an IClamp object) into the center of the soma to induce some membrane dynamics.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iclamp</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>An IClamp is a Point Process. Point processes are point sources of current. When making a new PointProcess, you pass the segment to which it will bind.</p>
+<p>Again, with the dir function, we can validate that iclamp is an object and contains some useful parameters. Let’s look at some of those parameters. We use a list comprehension to ignore those elements of the dir that start with double underscores (and are thus Python magic methods and not functions/variables intended to be used directly).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">iclamp</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<p>In particular, we notice three key properties of a current clamp: amp – the amplitude (in nA), delay – the time the current clamp switches on (in ms), and dur – how long (in ms) the current clamp stays on. Let’s set these values:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iclamp</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">iclamp</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">iclamp</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s use psection to get a representation of the soma model:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">psection</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Step-6:-Set-up-recording-variables">
+<h2>Step 6: Set up recording variables<a class="headerlink" href="#Step-6:-Set-up-recording-variables" title="Link to this heading"></a></h2>
+<p>The cell should be configured to run a simulation. However, we need to indicate which variables we wish to record; these will be stored in a NEURON Vector (n.Vector object). For now, we will record the membrane potential, which is soma(0.5).v and the corresponding time points (n.t). References to variables are available by preceding the last part of the variable name with a <code class="docutils literal notranslate"><span class="pre">_ref_</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">)</span>  <span class="c1"># Membrane potential vector</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>  <span class="c1"># Time stamp vector</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Step-7:-Run-the-simulation">
+<h2>Step 7: Run the simulation<a class="headerlink" href="#Step-7:-Run-the-simulation" title="Link to this heading"></a></h2>
+<p>By default, the NEURON h module provides the low level fadvance function for advancing one time step. For higher-level simulation control specification, we load NEURON’s stdrun library:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;stdrun.hoc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We can then initialize our simulation such that our cell has a resting membrane potential of -65 mV:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span> <span class="o">*</span> <span class="n">mV</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>And now continue the simulation from the current time (0) until 40 ms:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">40</span> <span class="o">*</span> <span class="n">ms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>(For those who are interested: we initialized to a resting membrane potential of -65 mV because that’s the default reversal potential for the hh channels, the only channel (set) inserted in this model.)</p>
+<p>(Strictly speaking, we didn’t need to specify the units here – recall they were defined above in the from neuron.units import ms, mV – as they are the defaults assumed by NEURON, but it is good practice to be explicitly clear.)</p>
+</section>
+<section id="Step-8:-Plot-the-results">
+<h2>Step 8: Plot the results<a class="headerlink" href="#Step-8:-Plot-the-results" title="Link to this heading"></a></h2>
+<section id="Using-bokeh">
+<h3>Using bokeh<a class="headerlink" href="#Using-bokeh" title="Link to this heading"></a></h3>
+<p><p>When working in Jupyter with an active internet connection, it is often convenient to use the bokeh module for plotting, as it provides interactive graphs that can be panned, zoomed, and saved from the Jupyter notebook.</p>
+</p><p>Let’s load bokeh and tell it to output to the Jupyter notebook:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">bokeh.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">output_notebook</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bokeh.plotting</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">output_notebook</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Now we plot membrane potential vs time.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">x_axis_label</span><span class="o">=</span><span class="s2">&quot;t (ms)&quot;</span><span class="p">,</span> <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;v (mV)&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Using-matplotlib">
+<h3>Using matplotlib<a class="headerlink" href="#Using-matplotlib" title="Link to this heading"></a></h3>
+<p>matplotlib is a mature non-Javascript based graphics library. While it does offer an interactive Jupyter mode, this interactivity blocks subsequent Python execution until interactive-mode is cancelled.</p>
+<p>In Jupyter, to ensure matplotlib graphs appear inline, use:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+</div>
+<p>(When not using Jupyter, skip the above step – it would be a syntax error in pure Python. Your graphs will appear in separate windows instead.)</p>
+<p>As with bokeh, we must import the matplotlib module before using it. In particular, we will load the pyplot submodule and give it the shorter name plt:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+<p>The matplotlib equivalent to the above bokeh example is then:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t (ms)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;v (mV)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Step-9:-Saving-and-loading-results">
+<h2>Step 9: Saving and loading results<a class="headerlink" href="#Step-9:-Saving-and-loading-results" title="Link to this heading"></a></h2>
+<section id="CSV">
+<h3>CSV<a class="headerlink" href="#CSV" title="Link to this heading"></a></h3>
+<p><p>The csv (comma separated variables) file format is widely used for data interchange, and can be used to transfer data to MATLAB, Excel, etc without writing any special conversion code.</p>
+</p><p><p>(Many Python distributions provide the pandas module which can do the same using a slightly simpler interface, but the code below works in all versions of Python… an example of reading CSV using pandas is shown below.)</p>
+<p>Python provides the csv module to simplify reading and writing csv files. We load it via:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+</pre></div>
+</div>
+</div>
+<h4><p>Writing</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>You should now have a data.csv file. Try loading it in your favorite spreadsheet.</p>
+<p>To write additional variables (as columns) to the CSV file, just add them inside the zip; e.g. zip(t, v1, v2, ca1).</p>
+<h4><p>Reading</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">tnew</span><span class="p">,</span> <span class="n">vnew</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[[</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span> <span class="k">if</span> <span class="n">row</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>The argument to the zip is a nested list comprehension; the zip and the asterisk together effectively transpose the data turning it from a list of (t, v) pairs into a list of t values and a list of v values. For loading more variables, the right hand side of the last line is unchanged; all that changes is that the variables need to be listed on the left; e.g. tnew, vnew, canew = zip(…)</p>
+<p>We can plot our newly loaded data (here with matplotlib) to see that it is the same as before:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tnew</span><span class="p">,</span> <span class="n">vnew</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t (ms)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;v (mV)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Reading and plotting using plotnine and pandas:</p>
+<p>The modules plotnine and pandas are key components of the Python data science ecosystem. We can use them to work with our NEURON data, but they may have to be installed separately.</p>
+<p>First, we’ll load the modules. It is common to use shortened names for the modules, but this is not necessary:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">p9</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+<p>We can load the data:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>(If the CSV file had a header row identifying the columns, then pd.read_csv would have handled the names automatically and we would not have had to specify the last two arguments above.)</p>
+<p>And now plot with plotnine’s version of ggplot. This function provides an implementation of Wilkinson’s Grammar of Graphics; as such, the interface is essentially identical to the R function of the same name.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="n">p9</span><span class="o">.</span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">p9</span><span class="o">.</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">geom_path</span><span class="p">())</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="JSON">
+<h3>JSON<a class="headerlink" href="#JSON" title="Link to this heading"></a></h3>
+<p><p>JSON is used for structured data interchange. It is a newer but widely used format and libraries for reading and writing JSON exist for most programming languages.</p>
+</p><p><p>Python provides the json module to simplify reading and writing JSON files. We load it via:</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</pre></div>
+</div>
+</div>
+<h4><p>Writing</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">({</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)},</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Here we built a dictionary with keys t and v, and stored their values as a list. Since JSON is a language-independent format, it does not have a concept of NEURON Vectors, which is why we had to create a list copy of them before saving. The indent=4 argument is optional, but indents the output to make it more human-readable (at the cost of a larger file size).</p>
+<h4><p>Reading</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">tnew</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span>
+<span class="n">vnew</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>As for csv, we plot the newly loaded data to show that it is the same as the original:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tnew</span><span class="p">,</span> <span class="n">vnew</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t (ms)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;v (mV)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Pickles">
+<h3>Pickles<a class="headerlink" href="#Pickles" title="Link to this heading"></a></h3>
+<p><p>Pickles are a Python-specific data exchange format.</p>
+</p><p><p>Python provides the pickle module to read and write pickled files. We load it via:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+</pre></div>
+</div>
+</div>
+<h4><p>Writing</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">({</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="n">v</span><span class="p">},</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This is slightly cleaner than the JSON solution above because it is Python specific and therefore able to explicitly encode NEURON Vector objects.</p>
+<h4><p>Reading</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data.p&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">tnewp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span>
+<span class="n">vnewp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Pickles in Python 3 are by default binary files, so we have to specify write and read flags of wb and rb respectively. We use a different variable name here than before simply to indicate that what is loaded in has type</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">tnewp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>and in particular is a NEURON Vector:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tnewp</span><span class="o">.</span><span class="n">hname</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Unlike the other solutions provided, which construct regular Python lists:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">tnew</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This is a minor distinction though, as we’ve already seen list(vec) copies a Vector vec into a new list. Using <code class="docutils literal notranslate"><span class="pre">n.Vector(old_list)</span></code> makes a NEURON Vector that is a copy of <code class="docutils literal notranslate"><span class="pre">old_list</span></code>.</p>
+<p>As before, plotting suggests that we have successfully loaded in the data:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tnewp</span><span class="p">,</span> <span class="n">vnewp</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t (ms)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;v (mV)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pythontutorial.html" class="btn btn-neutral float-left" title="Introduction to Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ball-and-stick-1.html" class="btn btn-neutral float-right" title="Ball and stick 1: Basic cell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

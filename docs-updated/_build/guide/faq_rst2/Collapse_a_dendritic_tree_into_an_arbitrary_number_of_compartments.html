@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collapse a dendritic tree into an arbitrary number of compartments &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Number of Sections, Compartments, and nseg in NEURON" href="Number_of_Sections_Compartments_and_nseg_in_NEURON.html" />
+    <link rel="prev" title="Multicompartment Soma Modeling and Inhibitory Synapse Distribution" href="Multicompartment_Soma_Modeling_and_Inhibitory_Synapse_Distribution.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../how_do_i_create_a_neuron_model.html">How do I create a NEURON model?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how_do_i_create_a_neuron_model.html#help-i-m-having-a-hard-time-implementing-models">Help! I’m having a hard time implementing models!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Current_Clamp_Electrode_Modeling_with_Electrode_Resistance_and_Capacitance_in_NEURON.html">Current Clamp Electrode Modeling with Electrode Resistance and Capacitance in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Extending_a_Single-Compartment_Model_to_a_Multi-Compartment_Model.html">Extending a Single-Compartment Model to a Multi-Compartment Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Multicompartment_Soma_Modeling_and_Inhibitory_Synapse_Distribution.html">Multicompartment Soma Modeling and Inhibitory Synapse Distribution</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Collapse a dendritic tree into an arbitrary number of compartments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Number_of_Sections_Compartments_and_nseg_in_NEURON.html">Number of Sections, Compartments, and nseg in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Templates_with_a_variable_number_of_sections.html">Templates with a variable number of sections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="What_are_single_compartment_neuron_models_useful_for.html">What are single compartment neuron models useful for, and how should I approach building and interpreting them in NEURON?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Changing_Channel_Densities_Along_a_Section_Without_Altering_Morphology.html">Changing Channel Densities Along a Section Without Altering Morphology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Is_it_possible_to_isolate_a_section_from_a_neuron_and_reproduce_its_voltage_response_as_if_it_were_still_connected.html">Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How_are_Sections_Connected_in_NEURON.html">How are Sections Connected in NEURON?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">Collapse a dendritic tree into an arbitrary number of compartments</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Collapse_a_dendritic_tree_into_an_arbitrary_number_of_compartments.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="collapse-a-dendritic-tree-into-an-arbitrary-number-of-compartments">
+<h1>Collapse a dendritic tree into an arbitrary number of compartments<a class="headerlink" href="#collapse-a-dendritic-tree-into-an-arbitrary-number-of-compartments" title="Link to this heading"></a></h1>
+<p><strong>Question:</strong>
+<em>How can I collapse a detailed dendritic tree into a specified number of equivalent compartments in NEURON, preserving the axial resistance?</em></p>
+<p><strong>Answer:</strong>
+The original <cite>collapse.hoc</cite> script collapses a dendritic tree into three compartments: proximal, middle, and distal, based on axial resistance cutoffs. To increase or change the number of compartments (e.g., to 4, 10, or any arbitrary number), the code needs to be refactored to use a vector of cutoff values and loop over the number of compartments dynamically.</p>
+<p>The key points for generalizing the code are:</p>
+<ul class="simple">
+<li><p>Use a <cite>Vector</cite> object <cite>CUTOFF</cite> to store cutoff values that define compartment boundaries by axial resistance.</p></li>
+<li><p>Use a variable <cite>n_comp</cite> that depends on the size of <cite>CUTOFF</cite> to define the number of compartments.</p></li>
+<li><p>Replace all hard-coded occurrences of compartment counts and cutoff variables with loops and vector indexing using <cite>n_comp</cite> and <cite>CUTOFF</cite>.</p></li>
+<li><p>Initialize arrays to the correct size according to <cite>n_comp</cite>.</p></li>
+</ul>
+<p>This approach preserves the axial resistance by merging dendritic branches into compartments where the total axial resistance falls within the cutoff intervals.</p>
+<p>Below is a simplified example illustrating essential modifications in HOC to collapse a dendritic tree into <cite>n_comp</cite> compartments:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Define cutoffs for any number of compartments (monotonically increasing)
+objref CUTOFF
+CUTOFF = new Vector()
+// Append cutoff values defining compartment boundaries, including 0 and a large number at the end
+CUTOFF.append(0, 7.3, 10, 20, 30, 40, 50, 60, 65, 71, 1e10)
+n_comp = CUTOFF.size() - 1  // number of compartments
+
+// Initialize vectors sized by n_comp+1 to accommodate 1-based indexing in some Vectors
+proc initcyc() {
+    cycL = new Vector(n_comp + 1, 0)
+    cycdiam = new Vector(n_comp + 1, 0)
+    cycnin = new Vector(n_comp + 1, 0)
+}
+
+// Assign each section to a compartment based on axial resistance using the cutoffs
+proc cycmake() {
+    local sec, i
+    initto()
+    initcyc()
+    setmrg()
+
+    // Assign top compartment (highest cutoff)
+    for sec = 1, NSEC - 1 {
+        if (secpathri.x(sec) &gt;= CUTOFF.x[n_comp] &amp;&amp; secpathri.x(sec) &lt; CUTOFF.x[n_comp+1]) {
+            tocyc.set(sec, -1)
+        }
+    }
+    // Assign intermediate compartments
+    for i = n_comp - 1, 1, -1 {
+        for sec = 1, NSEC - 1 {
+            if (secpathri.x(sec) &gt;= CUTOFF.x[i] &amp;&amp; secpathri.x(sec) &lt; CUTOFF.x[i + 1]) {
+                tocyc.set(sec, i - n_comp)
+            }
+        }
+    }
+}
+
+// Example to print collapsed compartments
+for ii = 1, n_comp {
+    print &quot;Section &quot;, ii, &quot;\tLength (um): &quot;, cycL.x(ii), &quot;\tDiameter (um): &quot;, cycdiam.x(ii)
+}
+</pre></div>
+</div>
+<p>Python users can control the number of compartments similarly by setting <cite>CUTOFF</cite> values and calling the equivalent functions from Python hoc calls or by manipulating compiled mechanisms.</p>
+<p>Example Python snippet to define cutoffs and set <cite>n_comp</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Define cutoffs as a NEURON Vector</span>
+<span class="n">CUTOFF</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">7.3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mf">1e10</span><span class="p">])</span>
+<span class="n">n_comp</span> <span class="o">=</span> <span class="n">CUTOFF</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="c1"># Access hoc procedures to initialize and collapse dendritic tree</span>
+<span class="n">h</span><span class="o">.</span><span class="n">initcyc</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">arborcharacterize</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">cycmake</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_comp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">cycL</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">diameter</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">cycdiam</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Section </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: Length = </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s2">, Diameter = </span><span class="si">{</span><span class="n">diameter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>—</p>
+<p><strong>Summary:</strong></p>
+<p>To collapse a dendritic tree into more than the original three compartments:</p>
+<ul class="simple">
+<li><p>Replace scalar cutoff variables with a vector of cutoffs.</p></li>
+<li><p>Use the size of this vector as the number of compartments.</p></li>
+<li><p>Modify loops and conditionals to index over this vector dynamically.</p></li>
+<li><p>Initialize data structures sized accordingly.</p></li>
+</ul>
+<p>This generalization maintains the principles of the original collapse algorithm based on conservation of axial resistance.</p>
+<p>—</p>
+<p><strong>References:</strong></p>
+<ul class="simple">
+<li><p>Bush and Sejnowski (1993) algorithm for collapsing dendritic trees by preserving axial resistance.</p></li>
+<li><p>Original <cite>collapse.hoc</cite> by Neubig &amp; Destexhe (1997; CNRS 2000).</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=589">https://neuron.yale.edu/phpBB/viewtopic.php?t=589</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Multicompartment_Soma_Modeling_and_Inhibitory_Synapse_Distribution.html" class="btn btn-neutral float-left" title="Multicompartment Soma Modeling and Inhibitory Synapse Distribution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Number_of_Sections_Compartments_and_nseg_in_NEURON.html" class="btn btn-neutral float-right" title="Number of Sections, Compartments, and nseg in NEURON" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

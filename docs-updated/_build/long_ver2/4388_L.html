@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Randomness Control with NetStim and Independent Random Streams &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Randomness Control with <code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code> and Independent Random Streams</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4388_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="randomness-control-with-netstim-and-independent-random-streams">
+<span id="netstim-randomness"></span><h1>Randomness Control with <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> and Independent Random Streams<a class="headerlink" href="#randomness-control-with-netstim-and-independent-random-streams" title="Link to this heading"></a></h1>
+<p>When using multiple <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> objects with noise enabled (e.g., <code class="docutils literal notranslate"><span class="pre">noise=1</span></code>) to generate stochastic spike trains, all <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> instances share NEURON’s single global pseudorandom number generator by default. This means that their random spike times are not truly independent: changing parameters of one <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> (such as interval, start time, or number) can alter the spike times of others.</p>
+<p>This behavior can lead to unintended correlations and difficulties in reproducibility when running simulations repeatedly or varying other model parameters in a loop.</p>
+<p>To obtain independent stochastic spike trains from multiple <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> objects and to be able to reproduce random sequences across runs, each <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> must be associated with its own independent random number generator based on <a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a>.</p>
+<section id="steps-to-use-independent-random-streams-with-multiple-netstim">
+<h2>Steps to use independent <a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> streams with multiple <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a><a class="headerlink" href="#steps-to-use-independent-random-streams-with-multiple-netstim" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Create separate :class:`Random` objects, one per stochastic :class:`NetStim`.</strong> Initialize each random stream with distinct non-zero integer identifiers using the <cite>Random123</cite> method to ensure independent sequences.</p></li>
+<li><p><strong>Set the random distribution for each :class:`Random` to the interspike interval distribution expected by the :class:`NetStim`.</strong> Normally, this is exponential with mean 1 (<cite>negexp(1)</cite>).</p></li>
+<li><p><strong>Create each :class:`NetStim` object and connect it to its corresponding :class:`Random` with :meth:`NetStim.noiseFromRandom`.</strong></p></li>
+<li><p><strong>Set any desired parameters (interval, number, start, noise) for each :class:`NetStim`.</strong></p></li>
+<li><p><strong>To reproduce the same patterns across simulation runs, reset each random stream’s sequence position by calling :meth:`Random.seq(1)` before simulation.</strong></p></li>
+</ol>
+</section>
+<section id="example-in-hoc">
+<h2>Example in HOC<a class="headerlink" href="#example-in-hoc" title="Link to this heading"></a></h2>
+<p>Below is a complete example that creates multiple stochastic <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> objects, each with its own independent random number generator to ensure independent and reproducible spike trains.</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Number of stochastic NetStims
+define NSNUM 5
+
+objref nslist, rslist
+nslist = new List()  // Will hold NetStims
+rslist = new List()  // Will hold Randoms
+
+// Random123 stream IDs for seeded independent sequences
+int id1 = 1
+int id2 = 2
+int id3 = 3
+
+// Procedure to create NSNUM NetStims with independent Random streams
+proc makenetstims() { local i, ns, rs
+  nslist = new List()
+  rslist = new List()
+  for i = 0, NSNUM-1 {
+    rs = new Random()
+    // Initialize independent random stream with distinct sequence numbers
+    rs.Random123(id1, id2, id3 + i)
+    rs.negexp(1)  // Set distribution to exponential with mean 1
+    rslist.append(rs)
+
+    ns = new NetStim()
+    nslist.append(ns)
+    ns.noiseFromRandom(rs)  // Use this random stream for noise
+  }
+}
+
+// Initialize NetStims and Randoms
+makenetstims()
+
+// Procedure to set parameters on all NetStims
+proc setnsparams() { local i
+  for i = 0, nslist.count()-1 {
+    nslist.o(i).interval = 50    // mean interval in ms
+    nslist.o(i).number = 200     // number of spikes
+    nslist.o(i).start = 0        // start time in ms
+    nslist.o(i).noise = 1        // enable stochastic spike generation
+  }
+}
+
+setnsparams()
+
+// Procedure to reset all random streams to the start of their sequences
+proc restart_random_streams() { local i
+  for i = 0, rslist.count()-1 {
+    rslist.o(i).seq(1)
+  }
+}
+
+// Call restart_random_streams() before each run to reproduce the same spiking pattern
+restart_random_streams()
+</pre></div>
+</div>
+</section>
+<section id="example-python-translation">
+<h2>Example Python translation<a class="headerlink" href="#example-python-translation" title="Link to this heading"></a></h2>
+<p>The same approach can be implemented in Python using <a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> objects and their methods to create independent random streams and associate them with <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> via <code class="xref py py-meth docutils literal notranslate"><span class="pre">NetStim.noise_from_random()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">NSNUM</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">nslist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">rslist</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">id1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">id2</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">id3</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="k">def</span> <span class="nf">makenetstims</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Random</span><span class="p">()</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">Random123</span><span class="p">(</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">,</span> <span class="n">id3</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">negexp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+
+        <span class="n">ns</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetStim</span><span class="p">()</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">noise_from_random</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+        <span class="n">nslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">setnsparams</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nslist</span><span class="p">:</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="n">ns</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">noise</span>
+
+<span class="k">def</span> <span class="nf">restart_random_streams</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">rs</span> <span class="ow">in</span> <span class="n">rslist</span><span class="p">:</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">makenetstims</span><span class="p">(</span><span class="n">NSNUM</span><span class="p">)</span>
+<span class="n">setnsparams</span><span class="p">()</span>
+<span class="n">restart_random_streams</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Using independent <a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> streams per <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> ensures that adjusting parameters for one spike generator does not affect the stochastic spike times of others.</p></li>
+<li><p>Calling the restart procedure (<cite>restart_random_streams()</cite>) before each simulation run resets the pseudorandom sequences to the same initial state for reproducibility.</p></li>
+<li><p>Without assigning independent random number generators, all <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> objects share the global stream, making spike times interdependent and non-reproducible when parameters change.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a>
+<a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">NetStim.noiseFromRandom()</span></code>
+<a class="reference internal" href="../progref-1/programming/math/random.html#Random.Random123" title="Random.Random123"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Random.Random123()</span></code></a>
+<a class="reference internal" href="../progref-1/programming/math/random.html#Random.negexp" title="Random.negexp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Random.negexp()</span></code></a>
+<a class="reference internal" href="../progref-1/programming/math/random.html#Random.seq" title="Random.seq"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Random.seq()</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4388">https://neuron.yale.edu/phpBB/viewtopic.php?t=4388</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

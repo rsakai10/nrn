@@ -1,0 +1,78 @@
+TypeError: sec is not a Section when accessing hoc template sections from Python
+==================================================================================
+
+Problem
+-------
+
+When trying to stimulate or record from a section of a hoc template cell in Python, you may encounter the error:
+
+.. code-block:: python
+
+    stim = h.IClamp(0.5, sec=soma_py)
+    TypeError: sec is not a Section
+
+This happens because the object referenced by ``soma_py`` is not a Section instance, even though it may appear to be accessible.
+
+Cause
+-----
+
+- The hoc template class itself does not create sections until an *instance* of the template is created.
+- Accessing ``h.example().soma`` refers to the template's member, not an actual section of an instantiated cell.
+- You must first create an instance of the template to have actual Section objects.
+
+Solution
+--------
+
+1. Load the hoc file defining the template:
+
+   .. code-block:: python
+
+       from neuron import h
+       h.load_file('example.hoc')
+
+2. Create an instance of the template class:
+
+   .. code-block:: python
+
+       cell = h.example()
+
+3. Access the section(s) from the instance, e.g., the first soma section:
+
+   .. code-block:: python
+
+       soma_py = cell.soma[0]
+
+4. Use the section object to create stimuli or recordings:
+
+   .. code-block:: python
+
+       stim = h.IClamp(0.5, sec=soma_py)
+
+Additional Notes
+----------------
+
+- The template may define ``soma`` as an array of sections (e.g., ``soma[NumSoma]``), so you need to index it.
+- You can verify that sections exist by iterating over all sections:
+
+  .. code-block:: python
+
+      for sec in h.allsec():
+          print(h.secname(sec=sec))
+
+- Avoid unnecessary imports like ``import neuron`` if you already have ``from neuron import h``.
+
+Example
+-------
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file('example.hoc')
+    cell = h.example()        # instantiate the template
+    soma_py = cell.soma[0]   # access the first soma section
+    stim = h.IClamp(0.5, sec=soma_py)  # create stimulus on soma
+
+Reference
+---------
+
+Original forum discussion: `NEURON Forum Topic 4134 <https://www.neuron.yale.edu/neuron/for...pic=4134>`_

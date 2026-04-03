@@ -1,0 +1,42 @@
+.. _recording_currents_example:
+
+Recording and Saving Ionic Currents in NEURON
+=============================================
+
+To correctly record and save an ionic current such as :obj:`soma.i_na(0.5)` during a simulation, it is essential to start the recording *before* running the simulation and save the data *after* it completes.
+
+Example using HOC:
+
+.. code-block:: hoc
+
+    objref recina, savcurrent, current_matrix
+    recina = new Vector()
+    recina.record(&soma.i_na(0.5))
+    objref rect
+    rect = new Vector()
+    rect.record(&t)
+
+    // Run the simulation
+    run()
+
+    // Open file and save data
+    savcurrent = new File()
+    savcurrent.wopen("current_soma.asc")
+    savcurrent.printf("Time\tI_Na\n")
+
+    current_matrix = new Matrix()
+    current_matrix.resize(rect.size(), 2)
+    current_matrix.setcol(0, rect)
+    current_matrix.setcol(1, recina)
+    current_matrix.fprint(savcurrent, " %g")
+    savcurrent.close()
+
+.. note::
+
+   The :meth:`Vector.record` method records variable values during simulation time steps; data is only transferred on exit from :func:`finitialize` and :func:`fadvance`, so calling :meth:`run` (or manually advancing) after recording is necessary to obtain meaningful data.
+
+.. seealso::
+
+   :class:`Vector`, :meth:`Vector.record`, :func:`run`, :func:`finitialize`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=755 <https://neuron.yale.edu/phpBB/viewtopic.php?t=755>`_

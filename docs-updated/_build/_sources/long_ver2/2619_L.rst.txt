@@ -1,0 +1,44 @@
+psection and Accessing All Segments
+===================================
+
+When using :meth:`h.psection` to obtain information about a :class:`Section`, it reports details only for the first segment (at location `seg.x == 0.5` by default). If the section has multiple segments (`nseg > 1`), you may want to inspect properties across all segments.
+
+Accessing All Segments in a Section
+-----------------------------------
+
+Each :class:`Section` supports iteration over its segments. By iterating through the segments, you can access properties such as RANGE variables defined in mechanisms along the entire section.
+
+For example, if the section `soma` contains a density mechanism with suffix `na` that has a RANGE variable `gbar`, you can print the value of `gbar_na` at every segment as follows:
+
+.. code-block:: python
+
+    for seg in soma:
+        print(f"Location: {seg.x}, gbar_na: {seg.gbar_na}")
+
+Here, `seg.x` denotes the relative position along the section (from 0 to 1), and `seg.gbar_na` is the value of the RANGE variable at that segment.
+
+Equivalent HOC syntax to iterate over all segments is:
+
+.. code-block:: hoc
+
+    forall if(ismembrane("na")) {
+        objref seg
+        forsec soma {
+            int i
+            for i=0, nseg(soma)-1 {
+                seg = soma.segment_[i]
+                printf("seg.x = %g, gbar_na = %g\n", seg.x, seg.gbar_na)
+            }
+        }
+    }
+
+.. note::
+
+   - Iterating segments provides continuous profiles of mechanism parameters or states along the section.
+   - This technique is useful for examining spatial gradients, verifying parameter assignment, or debugging.
+
+.. seealso::
+
+   :class:`Section`, :class:`Segment`, :meth:`Section.__iter__`, :meth:`Section.nseg`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2619 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2619>`_

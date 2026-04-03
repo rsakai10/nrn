@@ -1,0 +1,47 @@
+.. _spike_count_termination:
+
+Stopping a Simulation After a Preset Number of Spikes
+-----------------------------------------------------
+
+To terminate a simulation after a defined number of spikes, use the :class:`NetCon` event delivery system with a custom callback:
+
+.. code-block:: hoc
+
+    objref nc, stv, fih
+    stv = new Vector()
+    nc = new NetCon(source, nil)  // replace source with spike-generating object
+
+    proc reset_stv() {
+      stv = new Vector()
+    }
+    fih = new FInitializeHandler("reset_stv()")  // clear spike times before each run
+
+    const MAXNUM = 3
+    const WAIT = 8  // ms delay to allow event propagation
+
+    proc wrapup() {
+      printf("Spike times:\n")
+      stv.printf()
+      stoprun = 1
+    }
+
+    proc counter() {
+      stv.append(t)
+      if (stv.size() == MAXNUM) {
+        cvode.event(t + WAIT, "wrapup()")
+      }
+    }
+
+    nc.record("counter()")
+
+This approach avoids costly per-timestep spikebin calls by capturing spike times via :meth:`NetCon.record` and scheduling simulation stop using :meth:`CVode.event`. The delay WAIT ensures synaptic events propagate before halting.
+
+.. note::
+
+    The :meth:`NetCon.record` method can accept a procedure name in quotes, allowing custom spike counting and control logic.
+
+.. seealso::
+
+    :class:`NetCon`, :meth:`NetCon.record`, :class:`CVode`, :meth:`CVode.event`, :class:`FInitializeHandler`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=138 <https://neuron.yale.edu/phpBB/viewtopic.php?t=138>`_

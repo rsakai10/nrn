@@ -1,0 +1,40 @@
+.. rubric:: Single Compartment Neuron Models: Usage and Considerations
+
+Single compartment models approximate neurons as a single electrically uniform segment with parameters such as soma diameter and surface area. These models are especially useful for:
+
+- Testing individual ionic channel mechanisms (:class:`Channel`, :mod:`NMODL`).
+- Exploring membrane and intracellular dynamics without spatial complexity.
+- Simplified modeling of small or electrotonically compact cells or networks where detailed morphology is less critical.
+
+**Model construction tips:**
+
+- Base surface area on experimental measurements or estimates of membrane capacitance (:attr:`Cm`) and input resistance (:attr:`Ra`), assuming specific membrane capacitance ≈ 1 µF/cm².
+- Insert ionic conductances using :file:`.mod` files and define maximum conductances (`gbar`) to fit voltage-clamp data.
+- Total transmembrane currents recorded as densities (mA/cm²) can be converted to absolute currents (mA) by multiplying by surface area, e.g.:
+
+  .. code-block:: python
+
+     # Assuming section 'soma' with nseg=1 and recorded vector inavec for sodium current density
+     absolute_current = inavec.mul(0.01 * soma(0.5).area())
+
+**Regarding stimulation and recording:**
+
+- Current clamp (:class:`IClamp`) and voltage clamp (:class:`SEClamp`) simulate intracellular manipulations, not extracellular stimulation.
+- Extracellular stimulation applies current outside the membrane and requires explicit extracellular mechanisms.
+- In single compartment models (nseg=1), spatial distinctions like stimulating or recording at different segment locations are not meaningful—voltage is uniform.
+- Dual recordings or injecting current and recording at different sites require multicompartment models or multiple connected cells (e.g., coupled by gap junctions).
+
+**Modeling gap junctions:**
+
+- Represent electrically coupled cells as separate sections connected by resistive junctions.
+- Use multiple sections or cells in NEURON to simulate intercellular current flow and voltage changes, which cannot be captured in a simple single compartment.
+
+.. note::
+
+Single compartment models are simplifications and cannot capture spatially distributed channel dynamics or dendritic processing. Start simple and add complexity only if necessary to address your scientific question.
+
+.. seealso::
+
+   :class:`Section`, :class:`IClamp`, :class:`SEClamp`, :class:`Vector`, :mod:`NMODL`, NEURON Book chapters 3-6 for detailed concepts on membrane properties and spatial discretization.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2714 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2714>`_

@@ -1,0 +1,32 @@
+Reconstructing 3D Points of an Imported Morphology
+===================================================
+
+When using :class:`Import3D` to load a morphology, the 3D coordinates of a :class:`Section` are accessed via the :meth:`Section.x3d`, :meth:`Section.y3d`, :meth:`Section.z3d`, and :meth:`Section.diam3d` methods, indexed from 0 to :meth:`Section.n3d` - 1. These points define the 3D shape of the section but do not directly correspond to segment end points.
+
+.. note::
+   Segments are transient subdivisions controlled by the section’s :attr:`nseg` parameter; iterating over segments with
+   .. code-block:: python
+      for seg in section:
+          print(seg.x)   # normalized location along the section (0 to 1)
+   accesses segment centers, where ``seg.x`` is the normalized path length from the 0 end of the section.
+
+A :class:`Section` itself does not store segment 3D coordinates but stores the morphology as a sequence of 3D points defining its shape.
+
+.. code-block:: python
+
+   axon = h.Section(name='axon')
+   axon.pt3dclear()
+   axon.pt3dadd(0, 0, 0, 1)
+   axon.pt3dadd(100, 0, 0, 1)
+   for i in range(axon.n3d()):
+       print(f"Point {i}: ({axon.x3d(i)}, {axon.y3d(i)}, {axon.z3d(i)})")
+
+Connections between sections can be to any location (normalized 0 to 1) along the parent section, not necessarily corresponding to any 3D point index. The value of :meth:`Section.parentseg().x` indicates the normalized location on the parent section where the child connects.
+
+.. note::
+   The 3D coordinates of connected section ends are not guaranteed to match exactly since connection points can be at arbitrary positions along the parent section. The :meth:`define_shape` method or shape plotting translates child morphology points to align with the parent for visualization but does not alter underlying coordinates.
+
+.. seealso::
+   :meth:`Section.pt3dadd`, :meth:`Section.connect`, :meth:`Section.parentseg`, :meth:`define_shape`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4190 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4190>`_

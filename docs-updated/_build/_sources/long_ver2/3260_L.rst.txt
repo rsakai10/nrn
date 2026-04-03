@@ -1,0 +1,169 @@
+Units Checking and Fixing Common Errors in MOD Files
+======================================================
+
+When using :func:`mknrndll` or the NEURON GUI's unit checking facility (modlunit) to verify units consistency in MOD files, it is common to encounter errors related to unit declarations and compatibility. This document explains typical error messages, how to diagnose their causes, and how to fix them, illustrated with explicit examples from the Morgan/Santhakumar 2007 model's MOD files.
+
+General Recommendations for Using modlunit
+------------------------------------------
+
+1. **Iterative correction:**  
+   The unit checker stops at the first error it finds in a MOD file. Run modlunit repeatedly: fix the first error, then rerun until no errors remain.
+
+2. **Distinguish between apparent and true errors:**  
+   Some errors stem from missing or unknown unit declarations rather than actual unit mismatches; the numerical results might still be correct. However, other errors involve inconsistent units that can cause incorrect simulation behavior.
+
+3. **Familiarize yourself with recognized unit names:**  
+   NEURON recognizes a standard set of units and their abbreviations (e.g. `mV`, `mM`, `degC`, `umho`). Use these exact spellings in the :code:`UNITS` block and variable declarations. For example, use `degC` instead of `DegC` (case sensitive) to avoid unrecognized unit errors.
+
+Common Errors and How to Fix Them
+---------------------------------
+
+1. **Unknown or undeclared units in UNITS block**
+
+   Example error:
+   
+   .. code-block:: text
+   
+      Need declaration in UNITS block of the form:
+              (mM)    (units)
+      Cannot recognize the units: mM at line 18 in file ./tca.mod
+              cai (mM)<<ERROR>>
+   
+   **Fix:**
+   
+   a. Add a corresponding entry to the :code:`UNITS` block if missing:
+   
+   .. code-block:: mod
+   
+      UNITS {
+          (mM) = (milli/liter)
+          ...
+      }
+   
+   b. Verify that the declared unit text matches NEURON's recognized unit names exactly.
+   
+2. **Incorrect unit declarations for dimensionless variables**
+
+   Example error in *ppsyn.mod*:
+   
+   .. code-block:: text
+   
+      units:  1-09 sec2-coul2/m2-kg
+      units:  1-06 sec-coul2/m2-kg
+      The units of the previous two expressions are not conformable
+       at line 40 in file ./ppsyn.mod
+      gs=gsbar * on<<ERROR>>
+   
+   Investigation shows `gs` and `gsbar` are conductances (units: umho), but `on` is incorrectly declared with units `ms`. Since it is a dimensionless gating variable, it should have unit `(1)` (unitless).
+
+   **Fix:**
+
+   Change the unit declaration:
+
+   .. code-block:: mod
+   
+      on (1)
+   
+   Also, declare `on` in the correct :code:`ASSIGNED` block rather than :code:`PARAMETER` if it appears on the left side of assignment statements.
+
+3. **Unit name case sensitivity**
+
+   Example error for temperature units:
+
+   .. code-block:: text
+   
+      Need declaration in UNITS block of the form:
+              (DegC)  (units)
+      Cannot recognize the units: DegC at line 75 in file ./LcaMig.mod
+      FUNCTION KTF(celsius (DegC)<<ERROR>>) (mV) {
+   
+   **Fix:**
+
+   Use lowercase `degC` since NEURON recognizes it:
+
+   .. code-block:: mod
+   
+      UNITS {
+          (degC) = (celsius)
+      }
+   
+   Replace all occurrences of `(DegC)` with `(degC)` in the code.
+
+4. **Ensuring unit compatibility in FUNCTION return values**
+
+   Example error in *LcaMig.mod* with the `KTF` function:
+
+   .. code-block:: text
+   
+      units:  1 K
+      units:  0.001 m2-kg/sec2-coul
+      The units of the previous two expressions are not conformable
+      at line 76 in file ./LcaMig.mod
+      KTF = ((25./293.15)*(celsius + 273.15))<<ERROR>>
+   
+   **Cause and Fix:**
+
+   The right-hand side expression mixes units incompatibly. To fix, explicitly declare units for numeric literals in the expression to assist modlunit's parser:
+
+   .. code-block:: mod
+   
+      FUNCTION KTF(celsius (degC)) (mV) {
+          KTF = ((25. (mV)/293.15 (degC))*(celsius + 273.15 (degC)))
+      }
+   
+   Explanation:  
+   - `celsius` has units `degC`. Adding `273.15 (degC)` ensures dimensionally correct addition.  
+   - `25.` is assigned units `mV` consistent with the function return type/mV.  
+   - `293.15` is assigned units `degC`.  
+   
+   This declaration respects unit algebra and satisfies modlunit.
+
+5. **Dimensionless ratios**
+
+   In the function `ghk`:
+
+   .. code-block:: mod
+   
+      FUNCTION ghk(v (mV), ci (mM), co (mM)) (mV) {
+          LOCAL nu, f
+          f = KTF(celsius)/2
+          nu = v/f
+          ghk = -f*(1. - (ci/co)*exp(nu))*efun(nu)
+      }
+   
+   The variable `nu` must be dimensionless since it appears inside the exponential. Since `v` has units mV, ensure that `f` also has units mV for `nu = v/f` to be dimensionless. This depends on `KTF` correctly returning units mV as shown above.
+
+6. **Additional notes on code style**
+
+   - Use the :code:`ASSIGNED` block for variables that are assigned in the code rather than :code:`PARAMETER`.  
+   - Avoid multiple :code:`PARAMETER` blocks; combine them if needed.  
+   - The :code:`INDEPENDENT` declaration is rarely needed in NMODL and can be removed unless required.
+
+Cleaning Up Temporary or Hidden Files on Windows
+------------------------------------------------
+
+Sometimes compilation issues are caused by hidden or temporary files in the source directory (e.g., files starting with `~$`).
+
+On Windows, such files may not be visible in the Explorer GUI but appear in terminal listings (e.g., Cygwin). The shell may interpret special characters (like `$`) as variable substitution and make removal difficult.
+
+To delete such files in Cygwin or a bash shell, escape the special character:
+
+.. code-block:: bash
+
+   rm ~\$bgka.mod
+
+This command treats the `$` literally rather than as a variable substitution.
+
+Summary
+-------
+
+- Always run modlunit repeatedly, fixing errors one at a time.  
+- Use only recognized unit names and declare units explicitly in the :code:`UNITS` block.  
+- For dimensionless variables, use `(1)` as unit.  
+- Make sure function return units are compatible with expressions inside the function.  
+- Use proper blocks (`ASSIGNED`, `PARAMETER`) to reflect variable usage.  
+- To fix compilation issues, ensure no hidden temporary files remain in the directory.
+
+By following these steps you can ensure that your MOD files pass NEURON's unit checking without errors and simulations produce valid results.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3260 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3260>`_

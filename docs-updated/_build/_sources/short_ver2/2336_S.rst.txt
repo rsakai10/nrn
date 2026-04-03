@@ -1,0 +1,24 @@
+.. note::
+   To control the peak synaptic conductance of an :class:`Exp2Syn` point process, adjust the weight of the :class:`NetCon` object that delivers spikes to it.
+
+   The :attr:`Exp2Syn.g` variable should not be set directly, as it represents the instantaneous synaptic conductance and is updated automatically during simulation.
+
+   For example, setting the weight of a :class:`NetCon` in Python:
+
+   .. code-block:: python
+
+      nc = h.NetCon(source, syn)
+      nc.weight[0] = 0.001  # weight corresponds to the peak conductance in µS
+
+   In HOC:
+
+   .. code-block:: hoc
+
+      objref nc
+      nc = new NetCon(source, syn)
+      nc.weight[0] = 0.001  // peak conductance in µS
+
+.. seealso::
+   :class:`NetCon`, :class:`Exp2Syn`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2336 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2336>`_

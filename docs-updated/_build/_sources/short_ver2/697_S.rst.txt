@@ -1,0 +1,42 @@
+E_pas Parameter and Resting Potential Initialization
+===================================================
+
+When using the passive mechanism (``pas``) in a :class:`Section`, the conductance is set as
+
+.. math::
+
+    g_{pas} = \frac{1}{R_m}
+
+where :math:`R_m` is the specific membrane resistance (in ohm·cm²) obtained from literature.
+
+The reversal potential :attr:`e_pas` represents the equilibrium potential of the passive current. It is important to note:
+
+.. note::
+
+   The resting membrane potential of a section containing only the ``pas`` mechanism is determined by :attr:`e_pas`. 
+
+Therefore, when starting a simulation, to have the initial voltage at the resting potential, set :attr:`v_init` to the same value as :attr:`e_pas` rather than vice versa.
+
+Example in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    soma = h.Section(name='soma')
+    soma.insert('pas')
+    # Set passive parameters
+    soma.g_pas = 1.0 / 20000  # example Rm = 20000 ohm·cm²
+    soma.e_pas = -65          # mV, resting potential
+    h.v_init = -65            # initialize simulation voltage to e_pas
+
+In more complex models with spatially varying properties or multiple ionic mechanisms, the resting potential may be nonuniform. NEURON’s default initialization clamps all compartments at :attr:`v_init` before simulation start. If the model contains diverse mechanisms or ion accumulation, the membrane potential may drift after initialization.
+
+.. note::
+
+   To ensure a stable resting state before applying stimuli, it is advisable either to run the simulation without stimuli until variables settle, or to use specialized initialization strategies tailored for nonuniform biophysical properties.
+
+.. seealso::
+
+   :attr:`Section.g_pas`, :attr:`Section.e_pas`, :attr:`nrnstdinit`, :attr:`h.finitialize`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=697 <https://neuron.yale.edu/phpBB/viewtopic.php?t=697>`_

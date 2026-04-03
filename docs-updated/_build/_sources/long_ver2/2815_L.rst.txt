@@ -1,0 +1,114 @@
+Array of Point Processes in NEURON with Python
+===============================================
+
+When translating hoc code that creates arrays of point processes to Python, it is recommended to manage collections of objects using Python lists rather than fixed-size indexed arrays. Python lists offer more flexibility, dynamic sizing, and simpler management compared to hoc arrays.
+
+Creating Collections of Point Processes
+---------------------------------------
+
+The following hoc code illustrates creation of arrays of point processes using indexed arrays:
+
+.. code-block:: hoc
+
+    objref GABAinp[N_in], GABApre[N_in], GABAconn[N_in]
+
+    for ii=0, N_in-1 {
+        GABAinp[ii] = new Exp2Syn(0.5)
+        GABApre[ii] = new NetStim(0.5)
+        GABAconn[ii] = new NetCon(GABApre[ii], GABAinp[ii])
+        GABAconn[ii].weight = 0.0005
+    }
+
+
+Instead of using arrays, use :class:`hoc.List` in hoc for dynamic lists:
+
+.. code-block:: hoc
+
+    objref gabasyn, gabapre, gabanc
+    gabasyn = new List()
+    gabapre = new List()
+    gabanc = new List()
+    for ii=0, N_in-1 {
+        gabasyn.append(new Exp2Syn(0.5))
+        gabapre.append(new NetStim())
+        gabanc.append(new NetCon(gabapre.o(ii), gabasyn.o(ii)))
+        gabanc.o(ii).weight = 0.0005
+    }
+
+Iteration over these lists is done using the list count:
+
+.. code-block:: hoc
+
+    for ii=0, gabanc.count-1 {
+        gabanc.o(ii).weight = 0.0004
+    }
+
+
+Corresponding Python Implementation
+-----------------------------------
+
+In Python, use native Python lists to manage point process objects. Here is an equivalent example:
+
+.. code-block:: python
+
+    from neuron import h
+    N_in = 10  # define number of inputs
+
+    gabasyn = []
+    gabapre = []
+    gabanc = []
+
+    for _ in range(N_in):
+        syn = h.Exp2Syn(0.5)
+        stim = h.NetStim()
+        nc = h.NetCon(stim, syn)
+        nc.weight[0] = 0.0005
+        gabasyn.append(syn)
+        gabapre.append(stim)
+        gabanc.append(nc)
+
+To modify attributes of all NetCon objects, iterate over the list:
+
+.. code-block:: python
+
+    for nc in gabanc:
+        nc.weight[0] = 0.0004
+
+
+Notes on Using a Single Synapse vs Multiple Instances
+----------------------------------------------------
+
+If all synapses have the same parameters and connect to the same compartment location, a single synapse instance can often replace multiple instances. This reduces memory usage and improves simulation speed.
+
+For example, hoc code using one synapse instance:
+
+.. code-block:: hoc
+
+    objref gabasyn, gabapre, gabanc
+    gabasyn = new Exp2Syn(0.5)
+    gabapre = new List()
+    gabanc = new List()
+    for ii=0, N_in-1 {
+        gabapre.append(new NetStim())
+        gabanc.append(new NetCon(gabapre.o(ii), gabasyn))
+        gabanc.o(ii).weight = 0.0005
+    }
+
+The underlying linearity of the ODE governing synaptic conductance ensures that multiple input events to one synapse produce the same total conductance as multiple independent synapses each driven by a single event.
+
+.. note::
+    This equivalence holds only if the synaptic mechanism's governing equation is linear, which applies to typical double-exponential conductance-based synapses (:class:`h.Exp2Syn`).
+
+Summary
+-------
+
+- Use Python lists to manage collections of point process objects instead of fixed-size arrays.
+- Create point processes and NetCon objects, and append them to lists dynamically.
+- To update properties, iterate directly over the Python lists.
+- Using a single synapse instance driven by multiple NetCon inputs can be computationally more efficient and produces equivalent results for linear synaptic mechanisms.
+
+.. seealso::
+
+    :class:`h.Exp2Syn`, :class:`h.NetStim`, :class:`h.NetCon`, :class:`hoc.List`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2815 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2815>`_

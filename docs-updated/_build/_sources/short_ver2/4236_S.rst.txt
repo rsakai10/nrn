@@ -1,0 +1,61 @@
+.. _section_middle_coordinates:
+
+Finding the Middle Coordinates of a Section in NEURON
+----------------------------------------------------
+
+Determining the "middle" 3D coordinates of a section (for example, at :math:`x = 0.5`) is not as simple as averaging pt3d points, because pt3d data define the shape, not the discretization of the section.
+
+.. note::
+   The :meth:`Section.n3d` points are shape-control points and are not evenly spaced along the section length. Averaging them or interpolating their indices does *not* necessarily give the middle of the section.
+
+The correct approach is to use :meth:`Section.arc3d` and linearly interpolate pt3d coordinates along the path length at the normalized position of interest. For a segment at position :math:`x` (from 0 to 1), compute the distance along the section and interpolate:
+
+.. code-block:: python
+
+    import numpy as np
+    from collections import namedtuple
+    Point = namedtuple('Point', ['x', 'y', 'z'])
+
+    def coordinate(seg):
+        sec = seg.sec
+        d = seg.x * sec.L
+        n3d = sec.n3d()
+        xs = [sec.x3d(i) for i in range(n3d)]
+        ys = [sec.y3d(i) for i in range(n3d)]
+        zs = [sec.z3d(i) for i in range(n3d)]
+        arcs = [sec.arc3d(i) for i in range(n3d)]
+        x = np.interp(d, arcs, xs)
+        y = np.interp(d, arcs, ys)
+        z = np.interp(d, arcs, zs)
+        return Point(x, y, z)
+
+Then calling ``coordinate(sec(0.5))`` returns the xyz coordinate at the center of the section.
+
+.. note::
+   The :meth:`h.define_shape` function updates pt3d data consistency but does *not* insert new points at segment centers if morphology was defined by :meth:`Section.pt3dadd`. Therefore, interpolation as above is necessary.
+
+.. warning::
+   The extracellular potential (:attr:`Section.e_extracellular`) must be set for *all* segments, not only those at the section midpoint, since the extracellular field affects the entire morphology.
+
+.. seealso::
+   :class:`Section`, :meth:`Section.pt3dadd`, :meth:`Section.nseg`, :meth:`Section.arc3d`, :meth:`h.define_shape`
+
+Example usage:
+
+.. code-block:: python
+
+    from neuron import h
+    import matplotlib.pyplot as plt
+
+    soma = h.Section(name='soma')
+    soma.pt3dadd(0, 0, 0, 1)
+    soma.pt3dadd(5, 5, 0, 2)
+    soma.pt3dadd(10, 5, 0, 2)
+
+    pts = [coordinate(soma(i*0.1)) for i in range(11)]
+    xs, ys = zip(*[(p.x, p.y) for p in pts])
+    plt.plot(xs, ys, 'o-')
+    plt.axis('equal')
+    plt.show()
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4236 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4236>`_

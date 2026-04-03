@@ -1,0 +1,54 @@
+.. rubric:: Managing conductance shutdown after spikes using NET_RECEIVE and WATCH statements
+
+To toggle a channel conductance (e.g. sodium) off for a time interval following a spike in a point process mechanism, use the event delivery system with a self-event and the WATCH statement inside :meth:`NET_RECEIVE`.
+
+Example implementation highlights:
+
+.. code-block:: mod
+
+   PARAMETER {
+     gbar = 0.12 (S/cm2)
+     thresh = 10 (mV)
+     toff = 1 (ms)
+   }
+   ASSIGNED {
+     area (um2)
+     gmax (uS)
+     gm (uS)
+   }
+   INITIAL {
+     gmax = gbar * area  : convert units appropriately
+     gm = gmax          : conductance initially on
+     net_send(0, 3)     : start WATCH with flag 3
+   }
+   NET_RECEIVE(flag) {
+     if (flag == 3) {
+        WATCH (v > thresh) 2 : detect spike, trigger flag 2
+     } else if (flag == 2) {
+        if (gm > 0) {
+          gm = 0
+          net_send(toff, 1) : turn conductance back on later, flag 1
+        } else {
+          net_move(t+toff)  : delay recovery if already off
+        }
+     } else if (flag == 1) {
+        gm = gmax          : restore conductance
+     }
+   }
+In this pattern:
+
+- The implicit integer argument `flag` distinguishes event types in the :meth:`NET_RECEIVE` block.
+- A self-event with flag 3 initializes the :meth:`WATCH` statement, which monitors when membrane voltage crosses threshold.
+- When a spike is detected (`flag==2`), conductance `gm` is set to zero and a self-event scheduled with `net_send(toff,1)` to restore it after `toff`.
+- If already off, `net_move` delays the recovery event appropriately.
+- This avoids dependency on :class:`NetCon` and manual event management.
+
+.. note::
+
+  The :meth:`WATCH` statement must be inside :meth:`NET_RECEIVE` and triggered by a self-event at simulation start. Managing conductance switching in :meth:`NET_RECEIVE` using self-events provides more reliable timing than attempts to do it in :meth:`BREAKPOINT`, especially when using variable time step solvers.
+
+.. seealso::
+
+   :meth:`net_send`, :meth:`net_move`, :meth:`WATCH`, :meth:`NET_RECEIVE`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1788 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1788>`_

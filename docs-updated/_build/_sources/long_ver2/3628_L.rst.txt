@@ -1,0 +1,299 @@
+Load Balancing in NEURON with Heterogeneous Morphologies and Synapses
+=======================================================================
+
+When simulating large networks with cells exhibiting variable morphologies and synaptic distributions, uneven computational load across MPI ranks can reduce parallel efficiency. This document explains concepts and practical approaches to effective load balancing, including the use of multisplit and least processing time (LPT) algorithms.
+
+Load Balancing Considerations
+-----------------------------
+
+- **Simple Distribution:**  
+  When the number of cells is very large relative to the number of hosts and cell complexity variance is small, a simple round-robin distribution of whole cells to ranks may provide sufficient load balance.  
+  
+- **When to Use Multisplit:**  
+  The multisplit technique subdivides cells into smaller computational pieces to distribute load more evenly across hosts. It is beneficial if the largest cell's complexity exceeds the average complexity per rank, i.e.,
+
+  .. code-block:: none
+
+     TotalNumberOfStatesForAllCells / nhost < NumberOfStatesOfLargestCell
+
+  Here, complexity is approximated as the number of ODE states in the cell; number of compartments can be used as a rougher proxy.
+
+Measuring Cell Complexity
+-------------------------
+
+You can estimate cell complexity using :class:`h.LoadBalance`. This example Python script summarizes complexity metrics across ranks:
+
+.. code-block:: python
+
+   from neuron import h
+   pc = h.ParallelContext()
+   nhost = int(pc.nhost())
+   rank = int(pc.id())
+
+   h.load_file("loadbal.hoc")
+
+   def cx():
+       lb = h.LoadBalance()
+       cell_cx = []
+       for sec in h.allsec():
+           if sec.parentseg() is None:  # root section indicates a "cell"
+               cell_cx.append(lb.cell_complexity(sec=sec))
+       max_cx = max(cell_cx) if cell_cx else 0.0
+       sum_cx = sum(cell_cx)
+
+       max_cx = pc.allreduce(max_cx, 2)  # maximum across ranks
+       sum_cx = pc.allreduce(sum_cx, 1)  # sum across ranks
+
+       if rank == 0:
+           print(f"max_cx = {max_cx:g}  average cx per rank = {sum_cx/nhost:g}")
+
+   cx()
+   pc.barrier()
+   h.quit()
+
+.. note::
+   The :func:`h.allsec` function returns all sections present on the calling rank; each root section corresponds to a single cell, which can vary across ranks.
+
+Estimating Load Balance during Simulation
+-----------------------------------------
+
+A more accurate measurement includes dynamic effects from spike exchange:
+
+.. code-block:: python
+
+   def prun():
+       pc = h.ParallelContext()
+       nhost = int(pc.nhost())
+       rank = int(pc.id())
+
+       h.stdinit()
+       # Setup the simulation model here
+
+       runtime = startsw()
+       pc.psolve(h.tstop)
+       runtime = startsw() - runtime
+
+       computation_time = pc.step_time()
+       cw_time = computation_time + pc.step_wait()
+       max_cw_time = pc.allreduce(cw_time, 2)
+       avg_comp_time = pc.allreduce(computation_time, 1) / nhost
+       load_balance = avg_comp_time / max_cw_time
+       return runtime, load_balance, avg_comp_time
+
+Using Least Processing Time (LPT) Algorithm for Cell Distribution
+-----------------------------------------------------------------
+
+LPT is a heuristic that balances load by assigning the most computationally expensive cells first to the least loaded host. Pseudocode:
+
+.. code-block:: none
+
+   REPEAT
+       assign the most complex cell to the host with the least total assigned complexity
+   UNTIL all cells are assigned
+
+This approach can improve load balance especially when cell complexity varies widely.
+
+Python Module Example: Load Balance Estimation and LPT Balancing
+----------------------------------------------------------------
+
+This Python module uses :class:`h.LoadBalance` and MPI collectives to estimate the current load balance and suggest an improved LPT-based distribution. Usage assumes each rank has a :class:`hoc.Vector` of gids allocated to it (`gidvec`), and a cell exists for each gid.
+
+.. code-block:: python
+
+   from neuron import h
+   pc = h.ParallelContext()
+   nhost = int(pc.nhost())
+   rank = int(pc.id())
+
+   h.load_file("loadbal.hoc")
+
+   def cx(gidvec):
+       """Return a hoc.Vector of cell complexities for gids in gidvec."""
+       lb = h.LoadBalance()
+       cxvec = gidvec.c()
+       for i, gid in enumerate(gidvec):
+           cxvec.x[i] = lb.cell_complexity(pc.gid2cell(gid))
+       return cxvec
+
+   def ld_bal(cxvec):
+       """Compute and print the expected load balance from local complexities."""
+       sum_cx = sum(cxvec)
+       max_sum_cx = pc.allreduce(sum_cx, 2)
+       sum_cx = pc.allreduce(sum_cx, 1)
+       if rank == 0:
+           print(f"expected load_balance {sum_cx/nhost / max_sum_cx:.2f}")
+
+   def lpt_bal(gidvec, cxvec):
+       """Perform LPT re-assignment of gids for load balancing."""
+       src = [None] * nhost
+       src[0] = (gidvec, cxvec)
+       dest = pc.py_alltoall(src)
+       del src
+
+       if rank == 0:
+           allgidvec = h.Vector()
+           allcxvec = h.Vector()
+           for pair in dest:
+               allgidvec.append(pair[0])
+               allcxvec.append(pair[1])
+           del dest
+
+           lb = h.LoadBalance()
+           # Suppress printing with last argument 0
+           rankvec = lb.lpt(allcxvec, nhost, 0)
+
+           # Generate balanced splits
+           src = [(h.Vector(), h.Vector()) for _ in range(nhost)]
+           for i in range(len(allcxvec)):
+               dest_rank = int(rankvec.x[i])
+               src[dest_rank][0].append(allgidvec.x[i])
+               src[dest_rank][1].append(allcxvec.x[i])
+           del allgidvec
+           del allcxvec
+       else:
+           src = [None] * nhost
+
+       dest = pc.py_alltoall(src)
+       balanced_gidvec = dest[0][0]
+       balanced_cxvec = dest[0][1]
+       del dest
+
+       return balanced_gidvec, balanced_cxvec
+
+   def test(gidvec):
+       cxvec = cx(gidvec)
+       if rank == 0:
+           print("\ncurrent distribution")
+       ld_bal(cxvec)
+
+       balanced_gidvec, balanced_cxvec = lpt_bal(gidvec, cxvec)
+       if rank == 0:
+           print("\nafter LPT distribution")
+       ld_bal(balanced_cxvec)
+
+Note:
+~~~~~
+Use :meth:`pc.py_alltoall` to gather and redistribute :class:`hoc.Vector` data among ranks.
+
+Using Enhanced Complexity Estimates
+-----------------------------------
+
+Better complexity proxies are possible using mechanism-level timing data:
+
+.. code-block:: python
+
+   from neuron import h
+   pc = h.ParallelContext()
+
+   h.load_file("loadbal.hoc")
+   lb = h.LoadBalance()
+
+   lb.ExperimentalMechComplex()  # perform mechanism complexity experiments
+   pc.barrier()                  # synchronize all ranks
+   h.quit()
+
+.. note::
+   The resulting ``mcomplex.dat`` file lists relative runtimes per mechanism. Subsequent calls to :meth:`h.LoadBalance.read_mcomplex()` read this data and improve cell complexity estimation:
+
+   .. code-block:: python
+
+      lb.read_mcomplex()
+
+Handling Distributed Output Safely
+----------------------------------
+
+Since multiple ranks may produce output files (e.g., ``mcomplex.dat``), implement serialized file writing to avoid conflicts. A typical pattern is:
+
+- Compute complexities independently on all ranks in parallel.
+- Use a single rank to write output sequentially (via MPI barriers or serialized function calls).
+
+For examples of serialized output file writing see :file:`ran3par.hoc` ModelDB entry 96444 procedure `spikeout()`.
+
+Alternative LPT Implementation in Python
+----------------------------------------
+
+An efficient pure Python version of the LPT partitioning algorithm using `heapq`:
+
+.. code-block:: python
+
+   import heapq
+
+   def lpt(cx_gid_list, npart):
+       """
+       Assign complexity-gid pairs to npart partitions, balancing total complexity.
+
+       Parameters
+       ----------
+       cx_gid_list : list of (complexity, gid)
+       npart : int
+           Number of partitions (e.g., number of ranks).
+
+       Returns
+       -------
+       parts : list of (total_complexity, [(complexity, gid), ...])
+           Partitions with assigned cells and their total complexities.
+       """
+       cx_gid_list.sort(key=lambda x: x[0], reverse=True)
+       h = [(0.0, []) for _ in range(npart)]
+       heapq.heapify(h)
+
+       for cx in cx_gid_list:
+           total_cx, partition = heapq.heappop(h)
+           partition.append(cx)
+           heapq.heappush(h, (total_cx + cx[0], partition))
+
+       parts = [heapq.heappop(h) for _ in range(len(h))]
+       return parts
+
+   def statistics(parts):
+       npart = len(parts)
+       total_cx = sum(p[0] for p in parts)
+       max_part_cx = max(p[0] for p in parts) if parts else 0
+       avg_part_cx = total_cx / npart if npart else 0
+       loadbal = avg_part_cx / max_part_cx if max_part_cx > 0 else 1.0
+       ncx = sum(len(p[1]) for p in parts)
+       max_cx = max(cx for p in parts for cx, _ in p[1]) if parts else 0
+       return (f"loadbal={loadbal:g} total_cx={total_cx:g} npart={npart} "
+               f"ncx={ncx} max_part_cx={max_part_cx:g} max_cx={max_cx:g}")
+
+Example usage:
+
+.. code-block:: python
+
+   if __name__ == '__main__':
+       cx = [(i, i) for i in range(10)]
+       parts = lpt(cx, 3)
+       print(len(cx), 'complexity items:', cx)
+       print(len(parts), 'LPT partitions:', parts)
+       print(statistics(parts))
+
+Workflow Suggestion
+-------------------
+
+- Compute cell complexity estimates using :meth:`h.LoadBalance.cell_complexity` or enhanced method with :meth:`LoadBalance.ExperimentalMechComplex` and :meth:`LoadBalance.read_mcomplex`.
+
+- Assess load balance factor with the current cell-to-rank distribution.
+
+- If imbalance is significant, consider applying LPT cell distribution algorithm to assign cells to ranks before simulation start.
+
+- Optionally write a file with the LPT-based gid-to-rank mapping and modify cell instantiation accordingly.
+
+- Run simulations with improved load balance and measure runtime load imbalance using MPI timing methods as shown above.
+
+References
+----------
+
+- Hines, M.L., Markram, H., Schürmann, F., 2008. Fully implicit parallel simulation of single neurons. *J. Comput. Neurosci.* 25, 439–448.  
+  Discusses multisplit and the LPT load balancing approach.
+
+- Korf, R.E., 1998. A complete anytime algorithm for number partitioning. *Artificial Intelligence* 106(2), 181–203.  
+  Presents least processing time heuristic relevant to load balancing.
+
+.. seealso::
+
+   :class:`h.LoadBalance`, :meth:`h.LoadBalance.cell_complexity`, :meth:`h.LoadBalance.ExperimentalMechComplex`, :meth:`h.LoadBalance.read_mcomplex`, :class:`h.ParallelContext`
+
+.. note::
+   For models with large heterogeneity, measuring and optimizing load balance prior to production runs can materially improve parallel performance.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3628 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3628>`_

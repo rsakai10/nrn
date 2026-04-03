@@ -1,0 +1,28 @@
+Times of Spikes Vector
+======================
+
+To record spike times rather than voltage traces, use the :class:`NetCon` class with its :meth:`record` method. This captures the times when a monitored variable (e.g., membrane potential) crosses a specified threshold.
+
+.. code-block:: python
+
+    from neuron import h
+    v_vec = h.Vector()
+    nc = h.NetCon(soma(0.5)._ref_v, None, sec=soma)
+    nc.threshold = 0  # set threshold in mV
+    nc.record(v_vec)
+    h.finitialize(-65)
+    h.continuerun(100)
+    print(list(v_vec))  # spike times
+
+If membrane potential is already recorded in a :class:`Vector`, use :meth:`indwhere` to find where it crosses the threshold positively:
+
+.. code-block:: python
+
+    spike_indices = v_vec.indwhere(lambda v: v > 0)
+    spike_times = [t_vec[i] for i in spike_indices]
+
+.. note::
+
+    The :class:`NetCon` record method is more efficient and precise for detecting spike times during simulation.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3303 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3303>`_

@@ -1,0 +1,45 @@
+.. rubric:: Specifying Range Variables and Mechanism Parameters Along Sections in Python
+
+When replicating HOC syntax like ``diam(0:1)=1.5:0.5`` in Python, direct slicing or range assignments are not supported. Instead, assign range variable values to each segment explicitly.
+
+.. note::
+   The HOC syntax ``var(x0:x1)=y0:y1`` defines a piecewise linear function for the range variable, but it is considered obscure and not recommended for use.
+
+Use a function like the following to assign values linearly along a section:
+
+.. code-block:: python
+
+    def range_assignment(sec, var, start, stop):
+        """Assign values to sec segments for variable `var` from start to stop linearly."""
+        delta = stop - start
+        for seg in sec:
+            setattr(seg, var, start + seg.x * delta)
+
+Example usage with diameter:
+
+.. code-block:: python
+
+    from neuron import h
+
+    axon = h.Section(name='axon')
+    axon.nseg = 5
+    range_assignment(axon, 'diam', 1.5, 0.5)
+    print(axon.psection()['morphology']['diam'])
+    # Output: [1.5, 1.125, 0.75, 0.375, 0.5]
+
+Similarly, for mechanism parameters (e.g., ``gbar_na16`` from a compiled mechanism):
+
+.. code-block:: python
+
+    axon.insert('na16')
+    range_assignment(axon, 'gbar_na16', 0, 100)
+
+.. note::
+   The smallest discrete unit for specifying parameter changes is a segment; segment positions are normalized from 0 to 1 along the section. Setting values at arbitrary locations uses the segment containing that location. Fine-scale assignments with positions between segments will be mapped to the nearest segment.
+
+For realistic morphology changes, it is recommended to use 3D points methods (:meth:`Section.pt3dadd`, etc.) instead of per-segment diameter assignments.
+
+.. seealso::
+   :meth:`Section.psection`, :attr:`Segment.x`, :meth:`Section.insert`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4286 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4286>`_

@@ -1,0 +1,92 @@
+Saving Recorded Currents in NEURON
+===================================
+
+When recording ionic currents such as the sodium current at the soma (e.g., `soma.i_na(0.5)`), it is important to ensure that the simulation is properly run before saving the recorded data. This guarantees that the recorded Vector has all the simulation values.
+
+Recording and Saving Ionic Currents
+-----------------------------------
+
+To record a current during a simulation and save it to a file in ASCII format, follow these steps:
+
+1. Create a :class:`Vector` to record the current.
+2. Schedule the recording using the Vector's :meth:`Vector.record` method.
+3. Run the simulation using :func:`finitialize` (optional) and :func:`run`.
+4. Save the recorded data together with the corresponding time points to a file.
+
+Example in HOC:
+
+.. code-block:: hoc
+
+    // Create vectors for recording time and current
+    objref tvec, ica_vec
+    tvec = new Vector()
+    ica_vec = new Vector()
+
+    // Record simulation time and sodium current at soma(0.5)
+    tvec.record(&t)
+    ica_vec.record(&soma.i_na(0.5))
+
+    // Initialize and run the simulation
+    finitialize(-65)     // optional with recent NEURON versions
+    run()
+
+    // Save recorded data to file
+    objref fout, data_matrix
+    fout = new File()
+    fout.wopen("current_soma.asc")
+    fout.printf("Time\tI_Na\n")
+
+    // Combine time and current data into a Matrix
+    data_matrix = new Matrix()
+    data_matrix.resize(tvec.size(), 2)
+    data_matrix.setcol(0, tvec)
+    data_matrix.setcol(1, ica_vec)
+
+    // Print matrix data to file with formatting
+    data_matrix.fprint(fout, " %g\t%g\n")
+    fout.close()
+
+Notes
+-----
+
+.. note::
+
+    - The :meth:`Vector.record` method records variable values at discrete time steps during the simulation and transfers the data on exit from :func:`finitialize` and :func:`run`.
+    - Recording without running the simulation (i.e., without calling :func:`run`) will result in empty or incomplete data.
+    - You can record any scalar variable accessible in the model by passing its address to :meth:`Vector.record`.
+
+Python equivalent example using NEURON's Python interface:
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Create vectors for recording
+    tvec = h.Vector()
+    ina_vec = h.Vector()
+
+    # Record time and sodium current at soma(0.5)
+    tvec.record(h._ref_t)
+    ina_vec.record(soma(0.5)._ref_i_na)
+
+    # Initialize and run the simulation
+    h.finitialize(-65)  # optional with recent NEURON versions
+    h.run()
+
+    # Save data to file
+    with open("current_soma.asc", "w") as f:
+        f.write("Time\tI_Na\n")
+        for time, current in zip(tvec, ina_vec):
+            f.write(f"{time}\t{current}\n")
+
+Summary
+-------
+
+To correctly save ionic current data:
+
+- Make sure to call :func:`run` after setting up :meth:`Vector.record`.
+- Record both time and current vectors.
+- Save the paired data to a file, e.g., using :class:`File`/ :class:`Matrix` in HOC or Python file I/O.
+- Confirm that the recorded current matches the expected values as viewed in NEURON's plotting tools.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=755 <https://neuron.yale.edu/phpBB/viewtopic.php?t=755>`_

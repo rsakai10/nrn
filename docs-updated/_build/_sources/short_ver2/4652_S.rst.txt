@@ -1,0 +1,59 @@
+Conditional Termination of a Simulation Based on Inter-Spike Interval Convergence
+======================================================================================
+
+You can stop a NEURON simulation when the difference between the two most recent inter-spike intervals (ISI) is less than a threshold by using a :class:`NetCon` and a Python callback function. This approach requires no NMODL code.
+
+Example implementation:
+
+.. code-block:: python
+
+    from neuron import h
+
+    TOL = h.dt  # convergence threshold, e.g., time step size
+
+    # Variables to track spike count and ISIs
+    count = 0
+    isi = 1e3      # Initial large bogus ISI
+    previsi = 2e3  # Previous bogus ISI
+
+    def reset_variables():
+        global count, isi, previsi
+        count = 0
+        isi = 1e3
+        previsi = 2e3
+
+    # Initialize variables at each simulation start
+    rc = h.FInitializeHandler(reset_variables)
+
+    # Create a section and set up a NetCon to detect spikes at threshold -10 mV
+    soma = h.Section(name='soma')
+    soma.L = soma.diam = 10
+    soma.insert('hh')
+    nc = h.NetCon(soma(0.5)._ref_v, None)
+    nc.threshold = -10
+
+    def spike_callback():
+        global count, isi, previsi
+        count += 1
+        if count == 1:
+            spike_time = h.t
+        else:
+            previsi = isi
+            isi = h.t - spike_time
+            spike_time = h.t
+            if abs(isi - previsi) < TOL:
+                h.stoprun = 1
+
+    nc.record(spike_callback)
+
+.. note::
+
+    - Use :class:`FInitializeHandler` to reset tracking variables at simulation start, enabling convenient interactive workflows.
+    - Global variables simplify state management for the callback function.
+    - Adjust the :attr:`NetCon.threshold` for spike detection as appropriate for your model.
+
+.. seealso::
+
+    :class:`NetCon`, :class:`FInitializeHandler`, :meth:`NetCon.record`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4652 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4652>`_

@@ -1,0 +1,28 @@
+.. rubric:: Plotting Only Selected Sections with :class:`Shape`
+
+To display only dendrites (excluding soma and axons) in a shape plot, create a :class:`SectionList` containing the desired sections, then use the :meth:`Shape.observe()` method to restrict the view to that list.
+
+Example in HOC::
+
+    objref dendrites, shape
+    dendrites = new SectionList()
+    forsec "dendrite_1" dendrites.append()
+    shape = new Shape()
+    shape.observe(dendrites)
+    shape.exec_menu("View = plot")
+
+In Python this can be done similarly::
+
+    from neuron import h, gui
+    dendrites = h.SectionList()
+    for sec in h.allsec():
+        if 'dend' in sec.name():
+            dendrites.append(sec=sec)
+    shape = h.Shape()
+    shape.observe(dendrites)
+    shape.exec_menu("View = plot")
+
+.. note::
+    Using :meth:`Shape.observe()` filters the shape plot to only show the specified sections. Calling :meth:`Shape.exec_menu()` with "View = plot" opens the shape plot window automatically.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2708 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2708>`_

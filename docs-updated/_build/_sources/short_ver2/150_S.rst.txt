@@ -1,0 +1,32 @@
+.. rubric:: Recording and Printing Vectors in NEURON
+
+When using a :class:`Vector` to record a variable via :meth:`Vector.record()`, the vector remains empty until the simulation is run. Calling :meth:`Vector.printf()` before running the simulation will print an empty vector. 
+
+To correctly record and print data:
+
+.. code-block:: hoc
+
+    objref rect, recv
+    rect = new Vector()
+    recv = new Vector()
+    recv.record(&SThcells[0].soma.v(0.5))
+    
+    run()       // Run the simulation first
+    recv.printf()  // Then print recorded values
+
+Alternatively, in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    rect = h.Vector()
+    recv = h.Vector()
+    recv.record(h.SThcells[0].soma(0.5)._ref_v)
+    
+    h.run()
+    recv.printf()
+
+.. note::
+   The :meth:`Vector.record()` method schedules recording during simulation runtime. The vector is populated only after :func:`h.run()` completes.
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=150

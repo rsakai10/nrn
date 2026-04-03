@@ -1,0 +1,184 @@
+Choosing a Random Section from a SectionList for Synapse Placement
+=====================================================================
+
+When working with a :class:`SectionList` containing dendritic sections, a common task is to randomly select one or more sections for synapse placement. Because :class:`SectionList` does not provide direct indexing or counting methods like a Python list, some additional steps are required.
+
+Random Selection Algorithm Overview
+-----------------------------------
+
+The goal is to select a dendritic section at random and attach a synapse at a random location, possibly multiple times. There are two common approaches depending on whether synapses should be equally likely per section or proportional to surface area.
+
+1. **Random section with equal probability**
+
+   - Count the number of sections in the :class:`SectionList` by iterating through it.
+   - Generate a random integer in `[0, count-1]`.
+   - Iterate again to select the "lucky" section corresponding to that index.
+   - Choose a random position along that section at which to place the synapse.
+
+2. **Random synapse placement proportional to section surface area**
+
+   - Compute a cumulative sum of segment surface areas for all sections.
+   - Generate a random floating point value in `[0, total surface area]`.
+   - Map this number to a specific segment by finding the interval it falls within.
+   - Place the synapse at the corresponding location within the selected segment.
+
+Algorithm Details and Implementation Suggestions
+-----------------------------------------------
+
+### 1. Counting and Random Section Selection
+
+Because :class:`SectionList` lacks `.count()` and `.object()` methods, the number of sections can be determined by iteration:
+
+.. code-block:: hoc
+
+   objref seclist
+   seclist = new SectionList()
+   // Fill seclist with dendrite sections
+
+   // Count sections
+   i = 0
+   forsec seclist {
+     i += 1
+   }
+   count = i
+
+   // Pick a random integer
+   objref ran
+   ran = new Random()
+   ran.MCellRan4(0)
+   lucky_section = int(ran.uniform(0, count))
+
+   // Select the lucky section
+   whichone = 0
+   forsec seclist {
+     if (whichone == lucky_section) {
+       // attach synapse at random location on this section
+       loc = ran.repick()  // or ran.uniform(0, 1)
+       // create synapse at `loc` on current section
+       break
+     }
+     whichone += 1
+   }
+
+### 2. Random Selection Weighted by Surface Area
+
+This method creates a continuous mapping of all segments across all sections onto a line representing total surface area.
+
+**Steps:**
+
+- Create a vector of cumulative surface areas for all segments.
+- Generate one uniform random number in `[0, total area]`.
+- Find the segment where this number falls.
+- Calculate relative position (`x`) inside the found segment.
+- Attach synapse at that position.
+
+Example in HOC (assuming spatial discretization is done):
+
+.. code-block:: hoc
+
+   objref seclist, cum_area, ran
+   seclist = new SectionList()
+   // fill seclist with dendrites
+
+   // Vector to hold cumulative surface area per segment
+   cum_area = new Vector()
+   cum_area.resize(0)
+   total_area = 0
+
+   forsec seclist {
+     for (x, 0) {
+       segment_area = area(x)
+       total_area += segment_area
+       cum_area.append(total_area)
+     }
+   }
+
+   ran = new Random()
+   ran.MCellRan4(0)
+
+   // Number of segments total
+   nsegs = cum_area.size()
+
+   // Generate a random value in [0, total_area]
+   rand_val = ran.uniform(0, total_area)
+
+   // Find index of segment where rand_val fits
+   segment_index = cum_area.uind(0, nsegs-1, func(){ return cum_area.x[i] >= rand_val })
+
+   // Find segment and corresponding section from segment_index
+   // (This requires bookkeeping the mapping of segments to sections)
+
+   // Calculate relative position inside segment
+   if segment_index == 0
+       loc_in_segment = rand_val / cum_area.x[0]
+   else
+       loc_in_segment = (rand_val - cum_area.x[segment_index-1]) / (cum_area.x[segment_index] - cum_area.x[segment_index-1])
+
+   // Attach synapse to section at loc_in_segment within segment[segment_index]
+
+**Note:** Efficiently mapping segment indices back to sections may require maintaining a parallel structure.
+
+Using :class:`SectionRef` and :class:`List` to Access Sections by Index
+------------------------------------------------------------------------
+
+Since :class:`SectionList` does not support indexing, a common workaround is to use :class:`SectionRef`, which acts as a wrapper for individual sections and can be stored in a :class:`List` that supports methods like `.count()` and `.object()`/.o() for indexed access.
+
+Example in HOC:
+
+.. code-block:: hoc
+
+   objref srlist
+   srlist = new List()
+
+   // Suppose seclist is your SectionList of dendrites
+   forsec seclist {
+       srlist.append(new SectionRef())
+   }
+
+   printf("Number of sections: %d\n", srlist.count())
+
+   // Access the i-th section
+   i = 0
+   objref sec_ref
+   sec_ref = srlist.o(i)
+   printf("Section name: %s\n", sec_ref.sec.name())
+
+Python equivalent using NEURON's Python interface:
+
+.. code-block:: python
+
+   from neuron import h
+   seclist = h.SectionList()
+   # Fill seclist with dendrite sections
+
+   srlist = h.List()
+   for sec in seclist:
+       srlist.append(h.SectionRef(sec=sec))
+
+   count = srlist.count()
+   import random
+
+   for _ in range(50):  # create 50 synapses
+       index = random.randint(0, count - 1)
+       sec_ref = srlist.object(index)
+       sec = sec_ref.sec
+       loc = random.random()
+       syn = h.Exp2Syn(sec(loc))
+       # Further synapse configuration here...
+
+Summary
+-------
+
+- To randomly select sections from a :class:`SectionList`, convert the list of sections into a :class:`List` of :class:`SectionRef` objects which support indexing and counting.
+- For uniform synapse placement proportional to surface area, precompute cumulative segment areas and sample accordingly.
+- Attach synapses at random locations along the chosen sections.
+
+.. note::
+
+   When mapping synapse density proportional to surface area, ensure your model's spatial discretization (:attr:`nseg`) is set appropriately beforehand, as synapses are placed on segments.
+
+.. seealso::
+
+   :class:`SectionList`, :class:`SectionRef`, :class:`List`, :class:`Random`, :class:`Vector`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=245 <https://neuron.yale.edu/phpBB/viewtopic.php?t=245>`_

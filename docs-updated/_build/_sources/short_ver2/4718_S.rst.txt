@@ -1,0 +1,41 @@
+Multicompartment Soma Modeling
+===============================
+
+Modeling the soma as a single compartment is standard in most vertebrate neuron models because electrical signals equilibrate rapidly across the soma’s small spatial scale. Multi-compartment somas are generally unnecessary for electrical signaling but may be relevant when modeling spatially detailed chemical dynamics such as calcium concentration gradients, which can be addressed using the :mod:`rxd` module or custom :file:`NMODL` mechanisms.
+
+Estimating somatic conductivity is challenging due to unknown cytoplasmic resistivity and the presence of organelles like the nucleus, which may act as electrical insulators. Simplified ball-and-stick models with a spherical soma constructed using :meth:`h.pt3dadd` points can approximate morphology, and synaptic inputs such as :class:`AlphaSynapse` can be attached to investigate signal spread.
+
+Multiple inhibitory synapses can be connected to the same compartment. For synchronous activation, scale the synaptic conductance. For asynchronous inputs, instantiate multiple synapse objects, for example multiple :class:`AlphaSynapse` or :class:`Exp2Syn` instances driven by separate :class:`NetStim` events.
+
+.. code-block:: python
+
+    soma = h.Section(name='soma')
+    soma.L = soma.diam = 20  # single compartment approximation
+    syn1 = h.AlphaSynapse(soma(0.5))
+    syn1.onset = 5
+    syn1.gmax = 0.001
+    syn2 = h.AlphaSynapse(soma(0.5))  # multiple synapses same compartment
+    syn2.onset = 10
+    syn2.gmax = 0.001
+
+.. code-block:: hoc
+
+    create soma
+    soma {
+      L = 20
+      diam = 20
+    }
+    objref syn1, syn2
+    syn1 = new AlphaSynapse(0.5)
+    syn1.set_segment(soma(0.5))
+    syn1.onset = 5
+    syn1.gmax = 0.001
+    syn2 = new AlphaSynapse(0.5)
+    syn2.set_segment(soma(0.5))
+    syn2.onset = 10
+    syn2.gmax = 0.001
+
+.. note::
+   Use multiple synapse instances to represent multiple inhibitory inputs when their activation timings differ.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4718 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4718>`_

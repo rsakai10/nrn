@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Internal Calcium Concentration: How to Correctly Implement and Initialize Cai in NEURON? &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="What does $o1 mean in hoc code?" href="What_does_o1_mean_in_hoc_code.html" />
+    <link rel="prev" title="Setting the Basal Level for Intracellular Calcium Concentration (cai) in NEURON" href="Setting_the_Basal_Level_for_Intracellular_Calcium_Concentration_in_NEURON.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Calcium_Diffusion__Does_the_Outermost_Shell_Represent_Intracellular_Calcium_Concentration.html">Calcium Diffusion: Does the Outermost Shell Represent Intracellular Calcium Concentration?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Spatial_discretization_for_radial_diffusion_of_calcium.html">Spatial discretization for radial diffusion of calcium (Ca)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Initialization_of_Calcium_Concentration_in_a_Segment_with_Attached_Point_Process.html">Initialization of Calcium Concentration in a Segment with Attached Point Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Setting_the_Basal_Level_for_Intracellular_Calcium_Concentration_in_NEURON.html">Setting the Basal Level for Intracellular Calcium Concentration (cai) in NEURON</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Simple Internal Calcium Concentration: How to Correctly Implement and Initialize Cai in NEURON?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#question">Question</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#answer">Answer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-mod-file-calcium-accumulation-mechanism">Example MOD File (calcium accumulation mechanism)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-hoc-simulation-setup">Example Hoc Simulation Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-python-simulation-setup">Example Python Simulation Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Spatial_discretization_for_radial_diffusion_of_calcium.html">Spatial discretization for radial diffusion of calcium (Ca)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">Simple Internal Calcium Concentration: How to Correctly Implement and Initialize Cai in NEURON?</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Simple_Internal_Calcium_Concentration_How_to_Correctly_Implement_and_Initialize_Cai_in_NEURON.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="simple-internal-calcium-concentration-how-to-correctly-implement-and-initialize-cai-in-neuron">
+<h1>Simple Internal Calcium Concentration: How to Correctly Implement and Initialize Cai in NEURON?<a class="headerlink" href="#simple-internal-calcium-concentration-how-to-correctly-implement-and-initialize-cai-in-neuron" title="Link to this heading"></a></h1>
+<p>This FAQ entry addresses common issues encountered when implementing a simple internal calcium concentration mechanism (<cite>cai</cite>) in NEURON, focusing on proper initialization, unit consistency, and scaling of calcium currents to concentration changes.</p>
+<section id="question">
+<h2>Question<a class="headerlink" href="#question" title="Link to this heading"></a></h2>
+<p>Why does the internal calcium concentration (<cite>cai</cite>) not change from its initial value despite substantial inward calcium current (<cite>ica</cite>), and how should the mechanism be correctly implemented and initialized in NEURON?</p>
+</section>
+<section id="answer">
+<h2>Answer<a class="headerlink" href="#answer" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Initialization and Parameters:</strong>
+- Declare a distinct parameter for the initial calcium concentration (<cite>cai0</cite>) in the <cite>NEURON</cite> block using <cite>RANGE cai0</cite>.
+- Set default values for parameters like <cite>tau</cite> (time constant), <cite>C0</cite> (background calcium concentration), and <cite>cai0</cite> in the <cite>PARAMETER</cite> block.
+- Ensure all parameters are assigned non-zero and physically meaningful values in hoc or Python before running simulations.</p></li>
+<li><p><strong>Unit Consistency and Geometric Scaling:</strong>
+- Calcium current density <cite>ica</cite> is reported in mA/cm², but calcium concentration change depends on the current influx per unit volume.
+- Use the surface-to-volume ratio rather than explicit volume and length multiplications to scale the influence of calcium current on <cite>cai</cite>.
+- For a cylindrical compartment, the surface-to-volume ratio is <cite>4/d</cite> (where <cite>d</cite> is diameter).
+- The derivative of <cite>cai</cite> should account for calcium influx with physical constants like Faraday’s constant.</p></li>
+<li><p><strong>Avoiding Incorrect Volume Multiplication:</strong>
+- Do not multiply <cite>ica</cite> by volume (<cite>pi*diam*L</cite>) as it incorrectly increases calcium influx with compartment size.
+- Instead, scale by <cite>4/(diameter)</cite> * <cite>(ica / (2 * FARADAY))</cite> to convert current density to concentration change rate, considering valence and units.</p></li>
+<li><p><strong>Initialization Best Practices:</strong>
+- Avoid custom initialization routines that manipulate time (<cite>t</cite>) or timestep (<cite>dt</cite>) manually.
+- Use NEURON’s standard <cite>finitialize()</cite> and <cite>fcurrent()</cite> procedures to ensure consistent state variable initialization.
+- Explicitly initialize <cite>cai</cite> in the mod file’s <cite>INITIAL</cite> block to <cite>cai0</cite> with proper unit conversion.</p></li>
+</ol>
+</section>
+<section id="example-mod-file-calcium-accumulation-mechanism">
+<h2>Example MOD File (calcium accumulation mechanism)<a class="headerlink" href="#example-mod-file-calcium-accumulation-mechanism" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX cacumst
+  USEION ca READ ica WRITE cai
+  RANGE tau, C0, cai0
+}
+
+UNITS {
+  (mA) = (milliamp)
+  (mM) = (millimolar)
+  (uM) = (micromolar)
+  (um) = (micrometer)
+  FARADAY = (faraday) (coulombs)
+}
+
+PARAMETER {
+  tau = 303 (ms)       : time constant (e.g., AB soma)
+  C0 = 0.5 (uM)        : background calcium concentration
+  cai0 = 0.5 (uM)      : initial internal calcium concentration
+}
+
+ASSIGNED {
+  ica (mA/cm2)
+  diam (um)
+}
+
+STATE {
+  cai (mM)
+}
+
+INITIAL {
+  cai = cai0 * 1e-3  : convert from uM to mM for NEURON units
+}
+
+BREAKPOINT {
+  SOLVE states METHOD cnexp
+}
+
+DERIVATIVE states {
+  : Convert C0 and cai units properly; factor 4 converts surface-to-volume ratio for a cylinder
+  cai&#39; = -(1e4)*2*ica/(FARADAY*diam) + (1e-3)*(C0*1e-3 - cai)/tau
+}
+</pre></div>
+</div>
+</section>
+<section id="example-hoc-simulation-setup">
+<h2>Example Hoc Simulation Setup<a class="headerlink" href="#example-hoc-simulation-setup" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>load_file(&quot;nrngui.hoc&quot;)
+create soma
+access soma
+
+soma {
+  diam = 16.695
+  L = 17159      : large length to keep surface-to-volume ratio correct
+  insert cacumst
+  tau_cacumst = 1e9   : large tau to reduce buffering effects (test scenario)
+  C0_cacumst = 0.5
+  cai0_cacumst = 0.5
+}
+
+objref capp
+capp = new CaPP(0.5)    : custom point process to deliver Ca current
+capp.del = 1            : delay in ms
+capp.dur = 1            : duration in ms
+capp.amp = -303         : amplitude in nA (negative for inward current)
+
+finitialize(-65)
+run()
+
+print &quot;Initial cai (mM): &quot;, soma.cai_cacumst
+print &quot;Final cai (mM): &quot;, soma.cai_cacumst
+</pre></div>
+</div>
+</section>
+<section id="example-python-simulation-setup">
+<h2>Example Python Simulation Setup<a class="headerlink" href="#example-python-simulation-setup" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mf">16.695</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">17159</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;cacumst&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">tau_cacumst</span> <span class="o">=</span> <span class="mf">1e9</span>    <span class="c1"># reduce buffering for test</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">C0_cacumst</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">cai0_cacumst</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># Define CaPP point process (similar to hoc version)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CaPP</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">PointProcess</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">):</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">PointProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">del_</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">303</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">pass</span>  <span class="c1"># Implement as needed, or use a current clamp equivalent</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial cai (mM):&quot;</span><span class="p">,</span> <span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">cai_cacumst</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final cai (mM):&quot;</span><span class="p">,</span> <span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">cai_cacumst</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always define initial concentrations (<cite>cai0</cite>) explicitly and make them accessible from hoc or Python via <cite>RANGE</cite>.</p></li>
+<li><p>Scale calcium currents properly using compartment geometry; use surface-to-volume ratio to convert current density to concentration change.</p></li>
+<li><p>Avoid custom initialization codes manipulating time stepping; use NEURON’s built-in initialization.</p></li>
+<li><p>Check units carefully: <cite>ica</cite> is in mA/cm², <cite>cai</cite> in mM; appropriate scaling with Faraday’s constant and geometry is critical.</p></li>
+</ul>
+<p>This procedure aligns with the calcium accumulation model described in Soto-Trevino et al., J Neurophysiol 94: 590–604, 2005.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1272">https://neuron.yale.edu/phpBB/viewtopic.php?t=1272</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Setting_the_Basal_Level_for_Intracellular_Calcium_Concentration_in_NEURON.html" class="btn btn-neutral float-left" title="Setting the Basal Level for Intracellular Calcium Concentration (cai) in NEURON" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="What_does_o1_mean_in_hoc_code.html" class="btn btn-neutral float-right" title="What does $o1 mean in hoc code?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

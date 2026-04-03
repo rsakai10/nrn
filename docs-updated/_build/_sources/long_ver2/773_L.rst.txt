@@ -1,0 +1,136 @@
+Number of Sections, Compartments, and the Role of nseg in Spatial Discretization
+==================================================================================
+
+In the NEURON simulator, understanding the relationship between sections, compartments, and the parameter `nseg` is essential for achieving accurate spatial discretization in neuron models.
+
+Description of Key Concepts
+---------------------------
+
+- Each **section** represents a continuous piece of neuronal morphology (e.g., dendrite, soma).
+
+- A **compartment** corresponds to a discretized spatial segment of a section over which variables such as voltage and channel densities are assumed to be uniform or vary smoothly.
+
+- The parameter **`nseg`** defines the number of internal segments (compartments) into which a section is divided for numerical simulation. Increasing `nseg` improves spatial accuracy by better approximating the continuous cable but increases computational cost.
+
+Checking for Spatial Accuracy by Adjusting nseg
+------------------------------------------------
+
+Inadequate spatial discretization (too small `nseg`) can lead to numerical errors that distort simulated membrane voltages and currents. To assess whether `nseg` is sufficient:
+
+1. Select several locations along a section (e.g., at normalized positions 0.1, 0.5, 0.9) and record the membrane potential `v(x)` over time.
+
+2. Run a simulation with the initial `nseg` values.
+
+3. Increase `nseg` by a factor (commonly 3) globally using:
+
+   .. code-block:: hoc
+
+       forall nseg *= 3
+
+4. Re-run the simulation and compare the voltage traces at the same locations.
+
+5. Repeat step 3–4 until further increases in `nseg` no longer change the voltage traces significantly.
+
+This procedure helps identify a minimal sufficient value of `nseg` for accurate simulation.
+
+Effect of Dividing Sections vs Increasing nseg
+----------------------------------------------
+
+If you split a section of length `L` into multiple connected sections each of length `L/3` with `nseg=1` for each, you effectively create a multi-compartment system with one segment per mini-section.
+
+- **Example**: One section with `nseg=3` vs three connected sections each with `nseg=1` can represent similar discretization.
+
+- However, if `nseg > 1`, each section represents multiple compartments internally without needing to be broken into smaller sections.
+
+Non-Uniform Parameter Distributions Across Segments
+---------------------------------------------------
+
+When `nseg=1`, channel densities (e.g., `gnabar_hh`) are uniform within the section since only one compartment exists.
+
+With `nseg > 1`, it is possible to specify non-uniform distributions of parameters across segments using range variables indexed by normalized position along the section.
+
+For example, in HOC:
+
+.. code-block:: hoc
+
+    create A
+    access A
+    A.L = 100
+    A.diam = 2
+    insert hh
+    insert pas
+
+    // Initially:
+    print A.nseg
+    // Output: 1
+
+    // Uniform channel density:
+    gnabar_hh(0) = 3.5
+    gnabar_hh(0.5) = 3.5
+    gnabar_hh(1) = 3.5
+
+    // Increase nseg:
+    A.nseg = 3
+
+    // Non-uniform channel density distribution:
+    gnabar_hh(0) = 2.5
+    gnabar_hh(0.1667) = 2.5
+    gnabar_hh(0.5) = 3.5
+    gnabar_hh(0.8333) = 4.5
+    gnabar_hh(1) = 4.5
+
+With `nseg=3`, three distinct compartments are represented internally, each potentially with different parameters.
+
+Interpreting Compartment Number from nseg
+-----------------------------------------
+
+- If a section has `nseg=1`, it behaves like a single compartment.
+
+- If `nseg > 1`, the section behaves as a multi-compartmental structure internally.
+
+- Dividing morphology into multiple smaller sections each with `nseg > 1` or `nseg=1` may increase resolution but is not strictly necessary if `nseg` is sufficiently large.
+
+Determining Adequate nseg: The d_lambda Rule
+--------------------------------------------
+
+To decide on appropriate `nseg` values for each section (which may vary in length and diameter), use the **d_lambda rule**:
+
+- This rule relates the segment length to a fraction of the AC length constant at the highest frequency of interest in the simulation, ensuring numerical accuracy and stability.
+
+- The rule is implemented by tools such as CellBuilder.
+
+- From code, a typical heuristic for choosing `nseg` in each section is:
+
+  .. code-block:: hoc
+
+      forall {
+          nseg = int((L / (0.1 * lambda_f)) + 0.9)
+          if (nseg % 2 == 0) nseg += 1  // ensure nseg is odd for better accuracy
+      }
+
+  where `lambda_f` is the AC length constant at the relevant frequency.
+
+.. note::
+
+   Consult Chapter 5 of *The NEURON Book* for a detailed explanation of the d_lambda rule and strategies for specifying `nseg`. Applying this rule ensures that the model's spatial discretization yields accurate and stable results.
+
+Summary
+-------
+
+- `nseg` controls the number of compartments per section and spatial accuracy.
+
+- Increasing `nseg` typically increases accuracy but at a higher computational cost.
+
+- Non-uniform channel distributions require `nseg > 1`.
+
+- Dividing sections into smaller connected sections changes model geometry but is not equivalent to increasing `nseg`.
+
+- Use the d_lambda rule to determine adequate `nseg` values systematically.
+
+.. seealso::
+
+   :class:`Section`, :attr:`Section.nseg`, :attr:`Section.L`, :attr:`Section.diam`
+
+   The NEURON Book, Chapter 5 (for details on spatial discretization and d_lambda rule)
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=773 <https://neuron.yale.edu/phpBB/viewtopic.php?t=773>`_

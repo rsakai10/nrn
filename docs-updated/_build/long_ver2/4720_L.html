@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reading Ionic Currents from NMODL Mechanisms in HOC or Python &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Reading Ionic Currents from NMODL Mechanisms in HOC or Python</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4720_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reading-ionic-currents-from-nmodl-mechanisms-in-hoc-or-python">
+<span id="calling-ionic-current-nmodl-hoc"></span><h1>Reading Ionic Currents from NMODL Mechanisms in HOC or Python<a class="headerlink" href="#reading-ionic-currents-from-nmodl-mechanisms-in-hoc-or-python" title="Link to this heading"></a></h1>
+<p>This section explains how to access ionic current variables implemented in NMODL mechanisms when using the NEURON simulator, focusing on how to properly read currents through point processes and density mechanisms from HOC or Python. It addresses common difficulties when dealing with nonspecific currents, multiple ions, and synaptic point processes distributed arbitrarily on a neuron model.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
+<p>NMODL mechanisms can implement ionic currents either as density mechanisms (currents per unit membrane area, e.g., mA/cm²) or as point processes (currents in absolute units, e.g., nA). Ionic currents declared using <a href="#id1"><span class="problematic" id="id2">:paramref:`USEION`</span></a> statements allow NEURON to track currents for standard ions (<cite>na</cite>, <cite>k</cite>, <cite>ca</cite>, etc.), making it easier to record total ionic currents in each segment.</p>
+<p>Challenges arise when:</p>
+<ul class="simple">
+<li><p>Mechanisms use nonspecific currents instead of standard ion currents.</p></li>
+<li><p>Synaptic point processes contribute ionic currents that are difficult to access by iterating over segments because synapses are arbitrarily distributed.</p></li>
+<li><p>Current variables are implemented in range or assigned blocks with confusing units or are calculated inside point processes.</p></li>
+</ul>
+</section>
+<section id="recommendations-and-best-practices">
+<h2>Recommendations and Best Practices<a class="headerlink" href="#recommendations-and-best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Use `USEION` Statements to Declare Ionic Currents</strong></p>
+<p>Replace <cite>NONSPECIFIC_CURRENT</cite> declarations in your MOD files with appropriate <cite>USEION</cite> statements. This lets NEURON handle the ionic currents automatically, accumulating currents of a given ion across all mechanisms in a segment.</p>
+<p>Example:</p>
+<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a>neuron
+NEURON {</p>
+<blockquote>
+<div><p>USEION na READ ena WRITE ina VALENCE 1
+USEION k READ ek WRITE ik VALENCE 1
+…</p>
+</div></blockquote>
+<p>This creates segment-specific ionic currents <cite>ina(x)</cite>, <cite>ik(x)</cite> accessible from HOC or Python, with units mA/cm².</p>
+</li>
+<li><p><strong>Create New Ionic Species for Synaptic Point Processes</strong></p>
+<p>If current is generated by synaptic point processes and you need to separate synaptic sodium or potassium currents from other sources, declare new ionic species with a <cite>VALENCE</cite> clause, for example:</p>
+<p><a href="#id7"><span class="problematic" id="id8">``</span></a><a href="#id9"><span class="problematic" id="id10">`</span></a>neuron
+NEURON {</p>
+<blockquote>
+<div><p>USEION nas WRITE inas VALENCE 1
+USEION ks WRITE iks VALENCE 1</p>
+</div></blockquote>
+<p>This automatically tracks synaptic sodium (<cite>inas</cite>) and potassium (<cite>iks</cite>) currents for each segment.</p>
+</li>
+<li><p><strong>Units Consistency</strong></p>
+<ul class="simple">
+<li><p>Density mechanisms use currents in mA/cm².</p></li>
+<li><p>Point processes use currents in absolute units such as nA.</p></li>
+<li><p>The permeability parameter <cite>Pmax</cite> in density mechanisms (e.g., in cm/s) differs in meaning and units compared to point process implementations (e.g., m³/s or volume/time).</p></li>
+</ul>
+<p>Ensure units in your MOD files are consistent with the biological interpretation and NEURON’s requirements.</p>
+</li>
+<li><p><strong>Accessing Ionic Currents in HOC or Python</strong></p>
+<p>When <cite>USEION</cite> is properly declared, ionic currents for a segment <cite>x</cite> are accessible as functions named by the ionic variable, e.g.:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">ina(x)</span>&#160;&#160; <span class="pre">//</span> <span class="pre">sodium</span> <span class="pre">current</span> <span class="pre">density</span> <span class="pre">(mA/cm2)</span> <span class="pre">at</span> <span class="pre">segment</span> <span class="pre">x</span>
+<span class="pre">inas(x)</span>&#160; <span class="pre">//</span> <span class="pre">synaptic</span> <span class="pre">sodium</span> <span class="pre">current</span> <span class="pre">density</span> <span class="pre">(mA/cm2)</span> <span class="pre">at</span> <span class="pre">segment</span> <span class="pre">x</span> <span class="pre">(for</span> <span class="pre">custom</span> <span class="pre">ionic</span> <span class="pre">species)</span>
+<span class="pre">`</span></code></p>
+<p>Since these are densities, to get absolute current (in nA) use the segment area:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">absolute_current_na</span> <span class="pre">=</span> <span class="pre">ina(x)</span> <span class="pre">*</span> <span class="pre">area(x)</span> <span class="pre">/</span> <span class="pre">100</span>&#160; <span class="pre">//</span> <span class="pre">area</span> <span class="pre">in</span> <span class="pre">um²,</span> <span class="pre">factor</span> <span class="pre">converts</span> <span class="pre">mA/cm2</span> <span class="pre">to</span> <span class="pre">nA</span>
+<span class="pre">`</span></code></p>
+</li>
+<li><p><strong>Summing Currents Over Entire Cell</strong></p>
+<p>Here is a sample HOC function to compute the total current for a custom ion <cite>nas</cite> over all segments:</p>
+<p><a href="#id11"><span class="problematic" id="id12">``</span></a><a href="#id13"><span class="problematic" id="id14">`</span></a>hoc
+func inas_total() { local tmp</p>
+<blockquote>
+<div><p>tmp = 0
+forall for (x, 0) {</p>
+<blockquote>
+<div><p>tmp += inas(x) * area(x) / 100</p>
+</div></blockquote>
+<p>}
+return tmp</p>
+</div></blockquote>
+</li>
+<li><p><strong>Avoid Iterating Over Point Process Arrays to Access Current Variables</strong></p>
+<p>Point processes placed on the morphology do not expose ionic current variables as arrays accessible from HOC. Attempting to access <cite>AMPAsyn[j].Pmax</cite> as an array without proper object referencing results in errors like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">NEURON:</span> <span class="pre">AMPAsyn</span> <span class="pre">not</span> <span class="pre">an</span> <span class="pre">array</span> <span class="pre">variable</span>
+<span class="pre">`</span></code></p>
+<p>Instead, use ionic tracking with <cite>USEION</cite> as above, which captures the total ionic current irrespective of synapse number or location without the need to iterate over created point process instances.</p>
+</li>
+</ol>
+</section>
+<section id="example-modified-ampar-nmodl-code-excerpt">
+<h2>Example: Modified AMPAR NMODL Code Excerpt<a class="headerlink" href="#example-modified-ampar-nmodl-code-excerpt" title="Link to this heading"></a></h2>
+<p><a href="#id15"><span class="problematic" id="id16">``</span></a><a href="#id17"><span class="problematic" id="id18">`</span></a>neuron
+NEURON {</p>
+<blockquote>
+<div><p>POINT_PROCESS ghkampa
+USEION nas WRITE inas VALENCE 1
+USEION ks WRITE iks VALENCE 1</p>
+<p>RANGE taur, taud
+RANGE iampa, inas, iks
+RANGE P, Pmax</p>
+</div></blockquote>
+<p>}</p>
+<dl class="simple">
+<dt>ASSIGNED {</dt><dd><p>inas (nA)
+iks  (nA)
+v    (mV)
+P    (cm/s)
+factor
+iampa (nA)
+Area (cm2)</p>
+</dd>
+</dl>
+<p>}</p>
+<dl>
+<dt>BREAKPOINT {</dt><dd><p>SOLVE state METHOD cnexp
+P = B - A</p>
+<p>inas = P * ghk(v, nai, nao, 1) * Area
+iks  = P * ghk(v, ki,  ko,  1) * Area
+iampa = inas + iks</p>
+</dd>
+</dl>
+<section id="id19">
+<h3>}<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="accessing-synaptic-sodium-current-in-hoc">
+<h2>Accessing Synaptic Sodium Current in HOC<a class="headerlink" href="#accessing-synaptic-sodium-current-in-hoc" title="Link to this heading"></a></h2>
+<p><a href="#id20"><span class="problematic" id="id21">``</span></a><a href="#id22"><span class="problematic" id="id23">`</span></a>hoc
+proc read_compartment_current() {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if (ismembrane(“nas_ion”)) {</dt><dd><p>ina_syn = inas($1) * area($1) / 100  // Convert from mA/cm2 to nA</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<section id="id24">
+<h3>}<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="key-notes">
+<h2>Key Notes<a class="headerlink" href="#key-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Declaring new ions like <cite>nas</cite> and <cite>ks</cite> requires a <cite>VALENCE</cite> clause.</p></li>
+<li><p>Variables declared with <cite>USEION … WRITE</cite> are automatically created per segment and accessible in HOC/Python.</p></li>
+<li><p>To record currents, make sure to attach all synapses before creating <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> recordings or making calls.</p></li>
+<li><p>The current accessed with <cite>inas(x)</cite>, <cite>ina(x)</cite> etc., are densities (mA/cm²); multiply by segment area and divide by 100 to convert to nA.</p></li>
+<li><p>Ensure your MOD files reflect proper units for parameters, notably permeability, to maintain biophysical consistency.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To read ionic current variables implemented in NMODL from HOC or Python, use <cite>USEION</cite> statements to define ionic currents in the MOD files with appropriate ion names and <cite>VALENCE</cite> for custom ions associated to synaptic point processes. This avoids the complexity and unreliability of iterating over synapse instances by having NEURON accumulate the currents per segment automatically. Then access those currents as density functions per segment, and multiply by segment area for absolute currents.</p>
+<p>This approach simplifies recording, analysis, and ensures correct biophysical unit handling in your NEURON models.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4720">https://neuron.yale.edu/phpBB/viewtopic.php?t=4720</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

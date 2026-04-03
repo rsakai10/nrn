@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Action Potential Propagation and Intracellular Voltage in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Action Potential Propagation and Intracellular Voltage in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4264_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="action-potential-propagation-and-intracellular-voltage-in-neuron">
+<h1>Action Potential Propagation and Intracellular Voltage in NEURON<a class="headerlink" href="#action-potential-propagation-and-intracellular-voltage-in-neuron" title="Link to this heading"></a></h1>
+<p>This section addresses common questions about modeling action potential propagation, point models, and computation of intracellular voltage in NEURON.</p>
+<section id="cable-theory-and-point-models">
+<h2>Cable Theory and Point Models<a class="headerlink" href="#cable-theory-and-point-models" title="Link to this heading"></a></h2>
+<p>NEURON typically models neurons using cable theory with sections representing cylindrical cable segments. However, <strong>point models</strong> are also supported:</p>
+<ul class="simple">
+<li><p>To create a biophysical point model, use a single section with <cite>nseg = 1</cite>.</p></li>
+<li><p>For simplified integrate-and-fire style models, use built-in artificial cells such as <code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire2" title="IntFire2"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire2</span></code></a>, or <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire4" title="IntFire4"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire4</span></code></a>.</p></li>
+<li><p>Custom artificial cell models can be created with MOD files of type <cite>ARTIFICIAL_CELL</cite>.</p></li>
+</ul>
+<p>Example: Creating a single-compartment biophysical neuron
+<code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">create</span> <span class="pre">soma</span>
+<span class="pre">access</span> <span class="pre">soma</span>
+<span class="pre">soma.nseg</span> <span class="pre">=</span> <span class="pre">1</span>
+<span class="pre">soma.L</span> <span class="pre">=</span> <span class="pre">18.8</span>
+<span class="pre">soma.diam</span> <span class="pre">=</span> <span class="pre">18.8</span>
+<span class="pre">soma.insert(&quot;hh&quot;)</span>
+<span class="pre">`</span></code></p>
+</section>
+<section id="action-potential-propagation-and-spatial-discretization">
+<h2>Action Potential Propagation and Spatial Discretization<a class="headerlink" href="#action-potential-propagation-and-spatial-discretization" title="Link to this heading"></a></h2>
+<p>If you want to observe action potential propagation along an axon, ensure the axon is subdivided into multiple segments (<cite>nseg &gt; 1</cite>). Setting <cite>nseg = 1</cite> means the axon is a single electrical compartment, so voltage is uniform along its length, and no propagation delay will be observed when recording at different locations.</p>
+<p><strong>To observe propagation delay:</strong></p>
+<ul class="simple">
+<li><p>Increase the number of segments, e.g., <cite>axon.nseg = 101</cite>.</p></li>
+<li><p>Use a smaller axon diameter (e.g., 2 µm instead of 18.8 µm) to impose greater axial resistance and slow propagation.</p></li>
+<li><p>Use a brief stimulus (e.g., 1 ms duration) for sharper spike initiation and clearer propagation timing.</p></li>
+</ul>
+<p>Example Python script demonstrating this setup and plotting voltage at two axon locations:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+import matplotlib.pyplot as plt
+from neuron import h
+from neuron.units import ms, mV</p>
+<p>h.load_file(“stdrun.hoc”)</p>
+<p>soma = h.Section(name=”soma”)
+axon = h.Section(name=”axon”)
+axon.connect(soma(0))</p>
+<p># Biophysical properties
+soma.nseg = 1
+soma.diam = soma.L = 18.8  # µm</p>
+<p>axon.nseg = 101
+axon.diam = 2  # µm, smaller diameter slows conduction
+axon.L = 500  # µm</p>
+<dl class="simple">
+<dt>for sec in [soma, axon]:</dt><dd><p>sec.Ra = 123  # Axial resistance in ohm-cm
+sec.insert(“hh”)  # Hodgkin-Huxley channels</p>
+</dd>
+</dl>
+<p>stim = h.IClamp(soma(0.5))
+stim.delay = 100 * ms
+stim.dur = 1 * ms
+stim.amp = 0.9  # nA</p>
+<p># Record time and membrane potentials at two locations on axon
+t = h.Vector().record(h._ref_t)
+v1 = h.Vector().record(axon(0.1)._ref_v)
+v2 = h.Vector().record(axon(0.9)._ref_v)</p>
+<p>h.finitialize(-65 * mV)
+h.continuerun(300 * ms)</p>
+<p>plt.plot(t, v1, label=”axon(0.1).v”)
+plt.plot(t, v2, label=”axon(0.9).v”)
+plt.xlim(99, 110)
+plt.xlabel(“Time (ms)”)
+plt.ylabel(“Membrane potential (mV)”)
+plt.legend()
+plt.show()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>This will display a clear propagation delay (~1 ms) between membrane voltages recorded near the proximal and distal ends of the axon.</p>
+</section>
+<section id="computing-intracellular-voltage-with-extracellular-mechanism">
+<h2>Computing Intracellular Voltage with Extracellular Mechanism<a class="headerlink" href="#computing-intracellular-voltage-with-extracellular-mechanism" title="Link to this heading"></a></h2>
+<p>When the <cite>extracellular</cite> mechanism is inserted into a section to model extracellular potentials, it provides an external potential <cite>vext</cite> relative to ground (0 mV).</p>
+<ul class="simple">
+<li><p>The variable <cite>v</cite> at any location is the transmembrane potential (inside minus outside).</p></li>
+<li><p>The extracellular potential just outside the membrane is accessible via <cite>vext[0](x)</cite> in HOC or <cite>sec(x).vext[0]</cite> in Python.</p></li>
+</ul>
+<p><strong>Intracellular absolute potential relative to ground</strong> at location <em>x</em> is given by:</p>
+<div class="math notranslate nohighlight">
+\[V_i(x) = V_m(x) + V_e(x)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p>(V_i(x)) is intracellular potential,</p></li>
+<li><p>(V_m(x) = sec(x).v),</p></li>
+<li><p>(V_e(x) = sec(x).vext[0]).</p></li>
+</ul>
+<p>### Recording intracellular voltage during simulation</p>
+<p>It is more efficient to record both <cite>v</cite> and <cite>vext[0]</cite> separately during simulation and add them post hoc rather than compute their sum at each time step.</p>
+<p>Example in Python:
+<a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+sec = h.Section(name=’foo’)
+sec.insert(‘extracellular’)</p>
+<p># Record vectors for membrane and extracellular voltages
+t = h.Vector().record(h._ref_t)
+v_mem = h.Vector().record(sec(0.5)._ref_v)
+v_ext = h.Vector().record(sec(0.5).vext._ref_e0[0])</p>
+<p>h.finitialize(-65)
+h.continuerun(100)</p>
+<p># Compute intracellular voltage by element-wise vector addition
+v_intracellular = v_mem + v_ext
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>Replace <cite>sec(0.5).vext._ref_e0[0]</cite> with the appropriate reference to <cite>vext[0]</cite> for the programming language and NEURON version you are using.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consult the Programmer’s Reference for <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a> to correctly set up recording variables.</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>NEURON supports both cable-theory-based sections and point neuron models.</p></li>
+<li><p>To simulate action potential propagation, use adequately fine spatial discretization with multiple segments and realistic geometry.</p></li>
+<li><p>Intracellular potential relative to ground is obtained by summing transmembrane potential and extracellular potential (<cite>v + vext[0]</cite>).</p></li>
+<li><p>Record <cite>v</cite> and <cite>vext</cite> during simulation and compute their sum post simulation for efficiency.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4264">https://neuron.yale.edu/phpBB/viewtopic.php?t=4264</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+.. _multiple_na_channels_and_current_plotting:
+
+Multiple Sodium Channels and Plotting Individual Ionic Currents
+================================================================
+
+To implement fast transient Na (NaT) and persistent Na (NaP) channels separately for the same ion (:ion:`na`), it is recommended to define each current in its own NMODL file with distinct :obj:`SUFFIX`es, e.g., ``nat.mod`` and ``nap.mod``:
+
+.. code-block:: hoc
+
+   NEURON {
+     SUFFIX nat
+     USEION na READ ena WRITE ina
+     RANGE gbar, i, g
+   }
+   ...
+   BREAKPOINT {
+     rates(v)
+     g = gbar * m^3 * h
+     i = g * (v - ena)
+     ina = i
+   }
+
+.. code-block:: hoc
+
+   NEURON {
+     SUFFIX nap
+     USEION na READ ena WRITE ina
+     RANGE gbar, i, g
+   }
+   ...
+   BREAKPOINT {
+     g = gbar * m^3
+     i = g * (v - ena)
+     ina = i
+   }
+
+Both mechanisms independently add to the total sodium current (`ina`), allowing analysis of each component’s contribution.
+
+Plotting Individual Currents
+----------------------------
+
+By default, currents from different mechanisms that WRITE to the same ionic current variable (e.g., ``ina``) are not individually accessible in hoc. To enable separate access (e.g., ``ina_nat`` or ``ina_nap``), you must:
+
+1. Add ``RANGE i`` in the NEURON block.
+2. Declare ``i`` in the :obj:`ASSIGNED` block (units mA/cm²).
+3. Assign the current to both ``i`` and the ionic current variable in :obj:`BREAKPOINT`:
+
+.. code-block:: c
+
+   BREAKPOINT {
+     i = gbar * m^3 * h * (v - ena)
+     ina = i
+   }
+
+becomes
+
+.. code-block:: c
+
+   BREAKPOINT {
+     i = gbar * m^3 * h * (v - ena)
+     ina = i
+   }
+
+For example, after this change, you can access ``soma.ina_nat(0.5)`` and plot individual currents.
+
+Temperature Dependence
+----------------------
+
+Temperature dependence can be modeled using Q10 factors by scaling rate constants accordingly in the NMODL code, typically by multiplying rates by:
+
+.. code-block:: none
+
+   q10_factor = q10 ^ ((celsius - reference_temp) / 10)
+
+where ``celsius`` is the simulation temperature and ``reference_temp`` is the temperature at which rate parameters were originally defined. Implement this scaling inside the ``rates(v)`` procedure or equivalent.
+
+.. note::
+
+   Separate mod files for different channel components improve modularity and facilitate individual current analysis.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=346 <https://neuron.yale.edu/phpBB/viewtopic.php?t=346>`_

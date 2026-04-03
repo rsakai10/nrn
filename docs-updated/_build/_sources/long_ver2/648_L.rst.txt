@@ -1,0 +1,144 @@
+Accessing and Managing Sections in NEURON
+==========================================
+
+When working with complex cell morphologies in NEURON, sections frequently have hierarchical and indexed names, such as::
+
+    soma
+    dend1[0], dend1[1], ..., dend1[n1]
+    dend2[0], dend2[1], ..., dend2[n2]
+    ...
+    dend10[0], dend10[1], ..., dend10[n10]
+
+This document explains how to programmatically access and iterate over sections, find out how many branches and segments they contain, rename sections, and organize sections into lists for efficient manipulation.
+
+Accessing All Sections
+----------------------
+
+To print all section names in a model, use the :func:`forall` statement combined with :meth:`secname()` in HOC:
+
+.. code-block:: hoc
+
+    forall {
+        printf("%s\n", secname())
+    }
+
+This will list every section in the model.
+
+Determining Branch Numbers and Segment Counts
+---------------------------------------------
+
+1. **Counting branches ("j")**:
+
+   If branches are named systematically (e.g., dend1, dend2, ..., dend10), you can count how many distinct branches exist by inspecting section names programmatically in Python or HOC.
+
+2. **Counting segments per branch ("i")**:
+
+   For each section (e.g., dend1[0], dend1[1], ...), access the number of segments via the :attr:`nseg` attribute:
+
+   .. code-block:: hoc
+
+       printf("Branch dend1 has %d segments\n", dend1[0].nseg)
+
+Note that "branches" (like dend1) usually correspond to a collection of sections indexed by `[0], [1], ...` in NEURON, so counting the indexed sections can be done by checking available indices in your data or by storing their count during morphology creation.
+
+Iterating Over Sections with forsec and SectionList
+---------------------------------------------------
+
+- **Using the forsec statement to process all sections whose names contain a substring:**
+
+  .. code-block:: hoc
+
+      forsec "dend" {
+          // Apply code for each section whose name includes 'dend'
+          diam = 2.0  // Example modification
+      }
+
+  Caution: Using forsec "dend1" may also include unintended sections like dend10 and dend11 due to substring matching.
+
+- **Creating and using a SectionList** to group sections and iterate explicitly: 
+
+  .. code-block:: hoc
+
+      objref dendriticSections
+      dendriticSections = new SectionList()
+
+      // Append all sections with 'dend' in their names
+      forsec "dend" {
+          dendriticSections.append()
+      }
+
+      // Iterate over the list
+      forsec dendriticSections {
+          diam = 2.0  // Example code applied to each section
+      }
+
+Renaming Sections
+-----------------
+
+NEURON does not support renaming sections after creation in a straightforward way. However, you can create a new naming scheme by:
+
+- Creating new sections with desired names.
+- Copying morphology and properties into them.
+- Or, organize sections into a :class:`SectionList` to treat them collectively under a common conceptual name.
+
+Accessing Sections in Python
+----------------------------
+
+Using NEURON's Python interface, you can similarly create and iterate over section lists.
+
+Example:
+
+.. code-block:: python
+
+    from neuron import h
+
+    dendritic_sections = h.SectionList()
+
+    # Append all sections whose name contains 'dend'
+    for sec in h.allsec():
+        if 'dend' in sec.name():
+            dendritic_sections.append(sec)
+
+    # Iterate over list and modify diameter
+    for sec in dendritic_sections:
+        sec.diam = 2.0  # example change
+
+Defining and Using Custom Functions on Sections
+-----------------------------------------------
+
+You can define functions in HOC or Python that operate on sections and call them inside `forsec` loops.
+
+**HOC example:**
+
+.. code-block:: hoc
+
+    func myfunc() {
+        return diam
+    }
+
+    forsec dendriticSections {
+        printf("%g\n", myfunc())
+    }
+
+**Python example:**
+
+.. code-block:: python
+
+    def myfunc(sec):
+        return sec.diam
+
+    for sec in dendritic_sections:
+        print(myfunc(sec))
+
+Summary
+-------
+
+- Use :func:`forall` or :func:`forsec` to iterate over all sections or subsets by name.
+- Use :class:`SectionList` to group sections for custom iteration.
+- Inspect `.nseg` attribute to find the number of segments per section.
+- Rename sections by reorganizing or creating new sections; direct renaming is not supported.
+- Define functions that operate on sections and call them in :func:`forsec` loops or Python iterations.
+
+This approach allows flexible, programmatic control over complex cell morphologies and their constituent sections and segments.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=648 <https://neuron.yale.edu/phpBB/viewtopic.php?t=648>`_

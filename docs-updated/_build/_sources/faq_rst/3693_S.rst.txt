@@ -1,0 +1,26 @@
+Simulation Time Step Constraints
+===============================
+
+When setting the simulation time step :attr:`h.dt` to values greater than 0.025 ms, NEURON may automatically reset it to 0.025 ms. This behavior occurs because the parameter :attr:`h.steps_per_ms` controls the number of integration steps per millisecond and restricts the effective step size.
+
+To use a time step larger than 0.025 ms, ensure you update both parameters consistently:
+
+.. code-block:: python
+
+    h.dt = 0.05  # desired time step in ms
+    h.steps_per_ms = 1.0 / h.dt
+
+In HOC, the equivalent is:
+
+.. code-block:: hoc
+
+    dt = 0.05
+    steps_per_ms = 1.0 / dt
+
+.. note::
+   Failing to set :attr:`h.steps_per_ms` accordingly causes NEURON to default to a smaller step size for stability during simulation.
+
+.. seealso::
+   :attr:`h.dt`, :attr:`h.steps_per_ms`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3693 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3693>`_

@@ -1,0 +1,18 @@
+Modifying the Initial Membrane Potential (:attr:`h.v_init`)
+==============================================================
+
+When running a simulation with :meth:`h.run()`, the membrane potential is initialized using the value of :attr:`h.v_init`, which defaults to -65 mV. Simply calling :meth:`h.finitialize(v)` before :meth:`h.run()` does not change this initial value, because :meth:`h.run()` internally calls :func:`stdinit()`, which in turn calls :meth:`h.finitialize()` with the current value of :attr:`h.v_init`.
+
+.. note::
+   To set a different initial membrane potential before running your simulation, assign a new value directly to :attr:`h.v_init`:
+
+.. code-block:: python
+
+    h.v_init = -61  # set desired initial membrane potential
+    h.run()
+
+This ensures that the model is initialized at the specified voltage instead of the default.
+
+.. seealso::
+   :meth:`h.finitialize`, :meth:`h.run`, :func:`stdinit`
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=3622

@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recording Synaptic Currents (GABA, AMPA, NMDA) to Approximate LFP in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Recording Synaptic Currents (GABA, AMPA, NMDA) to Approximate LFP in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/3428.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="recording-synaptic-currents-gaba-ampa-nmda-to-approximate-lfp-in-neuron">
+<h1>Recording Synaptic Currents (GABA, AMPA, NMDA) to Approximate LFP in NEURON<a class="headerlink" href="#recording-synaptic-currents-gaba-ampa-nmda-to-approximate-lfp-in-neuron" title="Link to this heading"></a></h1>
+<p><strong>Question:</strong>
+How can I record GABAergic, AMPAergic, and NMDAergic synaptic currents from a population of cells in NEURON, and efficiently sum them to approximate the Local Field Potential (LFP)? How can this be done in a memory-efficient way during long simulations?</p>
+<p><strong>Answer:</strong>
+Synapses in NEURON are typically implemented as point processes producing synaptic currents (units: nanoamperes). To record these currents for GABA, AMPA, and NMDA synapses, you must record the corresponding current variables from each synaptic mechanism instance using <cite>Vector.record()</cite>.</p>
+<p>However, synaptic mechanisms may have different variable names for their currents (e.g., <cite>igaba</cite>, <cite>iampa</cite>, <cite>inmda</cite>). For efficient recording and easy handling, it is recommended to modify each synaptic mechanism (<cite>.mod</cite> file) to define a <cite>RANGE i</cite> variable summing their respective currents, e.g.:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>NEURON {
+  POINT_PROCESS MySyn
+  RANGE i
+  ...
+}
+
+ASSIGNED {
+  i (nA)
+  igaba (nA)
+  iampa (nA)
+  inmda (nA)
+  ...
+}
+
+BREAKPOINT {
+  SOLVE release METHOD cnexp
+  i = igaba + iampa + inmda  // sum actual synaptic currents here
+  // (for specific synapses use i = igaba etc.)
+}
+</pre></div>
+</div>
+<p>This standardizes recording by allowing <cite>.i</cite> to be recorded regardless of synapse type.</p>
+<p>—</p>
+<p><strong>Managing Large Numbers of Synaptic Instances</strong></p>
+<p>If you have many synaptic instances (e.g., thousands), manually recording each current vector and summing at each timestep can be memory intensive. The recommended approach is:</p>
+<ol class="arabic simple">
+<li><p>Store all instances in a NEURON <cite>List</cite>.</p></li>
+<li><p>After model setup but before simulation, create and record vectors for each synaptic current.</p></li>
+<li><p>Run simulation in shorter segments.</p></li>
+<li><p>After each segment, sum absolute values of all recorded synaptic currents and append the result to a cumulative Vector.</p></li>
+<li><p>This approach avoids recording at every timestep and reduces memory usage.</p></li>
+</ol>
+<p>—</p>
+<p><strong>Example HOC code to record currents from a list of synapses:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Assume synlist is a List of synaptic point process instances
+
+objref isynvecs, tvec, sumabsisyn
+
+proc setup_recording() {
+  int i
+  objref tmpvec
+
+  // Vector to record simulation time
+  tvec = new Vector()
+  tvec.record(&amp;t)
+
+  // List of Vectors to record synaptic currents
+  isynvecs = new List()
+  for i=0,synlist.count()-1 {
+    tmpvec = new Vector()
+    tmpvec.record(&amp;synlist.o(i).i)
+    isynvecs.append(tmpvec)
+  }
+
+  // Vector to store summed absolute currents per time point
+  sumabsisyn = new Vector()
+}
+</pre></div>
+</div>
+<p>—</p>
+<p><strong>Example HOC snippet for breaking simulation into segments and summing synaptic currents:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc sumabsvecs() { local i localobj v, s
+  v = new Vector(isynvecs.o(0).size())
+  s = new Vector()
+  v.assign(0)
+  for i=0,isynvecs.count()-1 {
+    s = isynvecs.o(i).c()
+    s.abs()
+    v.add(s)
+  }
+  return v
+}
+
+proc segrun() {
+  // Parameters for simulation:
+  // total_time = 1000  // ms
+  // nsegments = 10
+  local i
+  local interval, t_end, lastpass
+  localobj segtvec, segsumabsisyn
+
+  interval = total_time / nsegments
+  t_end = 0
+  lastpass = 0
+
+  // Initialize vectors for segment recording
+  segtvec = new Vector()
+  segtvec.record(&amp;t)
+
+  for i=0,nsegments-1 {
+    t_end = t + interval
+    if (t_end &gt; total_time) {
+      t_end = total_time
+      lastpass = 1
+    }
+    continuerun(t_end)
+
+    // Sum absolute synaptic currents for this segment
+    segsumabsisyn = sumabsvecs()
+
+    // Append segment data to cumulative vectors
+    tvec.append(segtvec)
+    sumabsisyn.append(segsumabsisyn)
+
+    // Remove duplicate end points except last segment
+    if (lastpass == 0) {
+      tvec.remove(tvec.size()-1)
+      sumabsisyn.remove(sumabsisyn.size()-1)
+    }
+
+    // Reset segment vectors for next interval
+    frecord_init()
+    segtvec.resize(0)
+  }
+
+  print &quot;Simulation complete&quot;
+}
+</pre></div>
+</div>
+<p>—</p>
+<p><strong>Python example for recording synaptic currents:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Assume synlist is a h.List object containing synaptic point process instances</span>
+
+<span class="n">isynvecs</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="n">tvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">tvec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">setup_recording</span><span class="p">(</span><span class="n">synlist</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synlist</span><span class="o">.</span><span class="n">count</span><span class="p">()):</span>
+        <span class="n">syn</span> <span class="o">=</span> <span class="n">synlist</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+        <span class="n">vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">syn</span><span class="o">.</span><span class="n">_ref_i</span><span class="p">)</span>  <span class="c1"># assumes &#39;i&#39; variable defined in mod files</span>
+        <span class="n">isynvecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+
+<span class="c1"># Later, after simulation run:</span>
+<span class="c1"># Sum absolute values of all recorded currents element-wise in Python</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">sum_absolute_currents</span><span class="p">(</span><span class="n">isynvecs</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">isynvecs</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="n">all_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">isynvecs</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">n</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">isynvecs</span><span class="o">.</span><span class="n">count</span><span class="p">()):</span>
+        <span class="n">all_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">isynvecs</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">to_python</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_data</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>—</p>
+<p><strong>Summary:</strong></p>
+<ul class="simple">
+<li><p>Modify synaptic <cite>.mod</cite> files to define a common current variable <cite>i</cite> for ease of recording.</p></li>
+<li><p>Use NEURON <cite>List</cite> to hold synaptic instances.</p></li>
+<li><p>Record synaptic currents into vectors and sum their absolute values after simulation.</p></li>
+<li><p>To handle large simulations, divide simulation into segments, record within each segment, sum, and concatenate results.</p></li>
+<li><p>Avoid recording at every time step inside the simulation loop for performance and memory reasons.</p></li>
+<li><p>For clarity and maintainability, keep instrumentation and model specification separate.</p></li>
+</ul>
+<p>This approach enables efficient recording and summation of synaptic currents for approximating LFP in NEURON simulations.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3428">https://neuron.yale.edu/phpBB/viewtopic.php?t=3428</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

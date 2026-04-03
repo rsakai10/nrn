@@ -1,0 +1,125 @@
+Current Contribution of Custom Mechanisms in NEURON
+====================================================
+
+When implementing a custom mechanism (e.g., a synaptic current) in NEURON using NMODL, it is important to ensure that the mechanism properly contributes to the section's total current. This allows recording or computation of the section current (`i`), which includes all inserted mechanisms' currents.
+
+Mechanism Current Visibility
+----------------------------
+
+To have a mechanism's current recognized by the section and included in the section current recordings, the mechanism must:
+
+- Declare the current variable as a `NONSPECIFIC_CURRENT` in the `NEURON` block.
+- Define the current's value explicitly in a `BREAKPOINT` block.
+- Ensure the current variable is assigned a proper physical value during simulation.
+
+Only then will the mechanism’s current be accounted for in the overall membrane current balance equations and be visible when recording `section(x)._ref_i_mechanismName`.
+
+Typical Mistake: Missing BREAKPOINT Block
+-----------------------------------------
+
+Defining a current variable and modifying it in `NET_RECEIVE` events is not sufficient for NEURON to include the current in the section balance. The current variable must be assigned within the `BREAKPOINT` block to properly influence the voltage differential equations.
+
+Example
+-------
+
+The following example shows a minimal synaptic-like mechanism that increments its current on receiving events and has its current properly recognized by NEURON.
+
+NMODL code (`netcontest.mod`):
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS netcontest
+        RANGE amp0, delta, i
+        NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+        (uS) = (microsiemens)
+    }
+
+    PARAMETER {
+        amp0 = 0 (nA)      : initial current amplitude
+        delta = -0.01 (nA) : change in current per event; negative depolarizes
+    }
+
+    ASSIGNED {
+        i (nA)  : current contribution to membrane
+        amp (nA)
+    }
+
+    INITIAL {
+        amp = amp0
+    }
+
+    BREAKPOINT {
+        i = amp
+    }
+
+    NET_RECEIVE(weight (uS)) {
+        amp = amp + delta
+    }
+
+Python example to test current recording:
+
+.. code-block:: python
+
+    from neuron import h
+    import matplotlib.pyplot as plt
+
+    h.load_file("stdrun.hoc")
+
+    s0 = h.Section()
+    s0.insert('pas')
+
+    syn = h.netcontest(s0(0.5))  # insert custom synaptic mechanism
+
+    h.tstop = 10000
+    h.dt = 0.1
+    h.steps_per_ms = 1.0 / h.dt
+
+    evec = h.Vector([200, 1200, 7000])
+    input_vector = h.VecStim()
+    input_vector.play(evec)
+
+    nc = h.NetCon(input_vector, syn)
+    nc.weight[0] = 1
+
+    i_syn = h.Vector()
+    i_syn.record(syn._ref_i)  # record synaptic current
+
+    i_sec = h.Vector()
+    # Try to record the passive current as a reference
+    i_sec.record(s0(0.5)._ref_i_pas)
+
+    h.run()
+
+    plt.figure()
+    plt.title("Synaptic Current (netcontest) at s0(0.5)")
+    plt.plot(i_syn, label='netcontest i')
+    plt.xlabel("Time (ms)")
+    plt.ylabel("Current (nA)")
+    plt.legend()
+
+    plt.figure()
+    plt.title("Passive Current (pas) at s0(0.5)")
+    plt.plot(i_sec, label='pas i')
+    plt.xlabel("Time (ms)")
+    plt.ylabel("Current (nA)")
+    plt.legend()
+
+    plt.show()
+
+Summary
+-------
+
+- Declare your current variable with `NONSPECIFIC_CURRENT` in the `NEURON` block.
+- Assign the current variable *inside* the `BREAKPOINT` block.
+- Use `NET_RECEIVE` for event-driven updates, but current assignment for each time step happens in `BREAKPOINT`.
+- Parameterize your mechanism (use `PARAMETER` and `RANGE`) instead of hard-coded "magic numbers".
+- Ensure units are declared properly in the `UNITS` block to avoid unit consistency warnings.
+  
+This structure guarantees that the custom mechanism’s current is integrated into the membrane's charge balance and visible in simulations and recordings.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4105 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4105>`_

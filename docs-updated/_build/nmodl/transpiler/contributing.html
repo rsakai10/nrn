@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing to the NMODL transpiler &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Python package" href="modules.html" />
+    <link rel="prev" title="NMODL CONDUCTANCE" href="notebooks/nmodl-sympy-conductance.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Contributing to the NMODL transpiler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#got-a-question">Got a Question?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#found-a-bug">Found a Bug?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#missing-a-feature">Missing a Feature?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submission-guidelines">Submission Guidelines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submitting-an-issue">Submitting an Issue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submitting-a-pull-request-pr">Submitting a Pull Request (PR)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#development-conventions">Development Conventions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#new-lines">New Lines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#formatting">Formatting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#validate-the-python-package">Validate the Python package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#memory-leaks-and-clang-tidy">Memory Leaks and clang-tidy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blaming-nmodl">Blaming NMODL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">Contributing to the NMODL transpiler</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/nmodl/transpiler/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing-to-the-nmodl-transpiler">
+<h1>Contributing to the NMODL transpiler<a class="headerlink" href="#contributing-to-the-nmodl-transpiler" title="Link to this heading"></a></h1>
+<p>We would love for you to contribute to the NMODL transpiler and help make
+it better than it is today. As a contributor, here are the guidelines we
+would like you to follow:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#got-a-question"><span class="std std-ref">Question or Problem?</span></a></p></li>
+<li><p><a class="reference internal" href="#found-a-bug"><span class="std std-ref">Issues and Bugs</span></a></p></li>
+<li><p><a class="reference internal" href="#missing-a-feature"><span class="std std-ref">Feature Requests</span></a></p></li>
+<li><p><a class="reference internal" href="#submission-guidelines"><span class="std std-ref">Submission Guidelines</span></a></p></li>
+<li><p><a class="reference internal" href="#development-conventions"><span class="std std-ref">Development Conventions</span></a></p></li>
+</ul>
+<section id="got-a-question">
+<h2>Got a Question?<a class="headerlink" href="#got-a-question" title="Link to this heading"></a></h2>
+<p>Please do not hesitate to raise an issue on the project’s <a class="reference external" href="https://github.com/neuronsimulator/nrn">GitHub page</a>.</p>
+</section>
+<section id="found-a-bug">
+<h2>Found a Bug?<a class="headerlink" href="#found-a-bug" title="Link to this heading"></a></h2>
+<p>If you find a bug in the source code, you can help us by submitting an
+issue to our <a class="reference external" href="https://github.com/neuronsimulator/nrn">GitHub
+Repository</a>. Even better, you can
+submit a Pull Request with a fix.</p>
+</section>
+<section id="missing-a-feature">
+<h2>Missing a Feature?<a class="headerlink" href="#missing-a-feature" title="Link to this heading"></a></h2>
+<p>You can <em>request</em> a new feature by submitting an
+issue to our GitHub Repository. If you would like to
+<em>implement</em> a new feature, please submit an issue with a proposal for
+your work first, to be sure that we can use it.</p>
+<p>Please consider what kind of change it is:</p>
+<ul class="simple">
+<li><p>For a <strong>Major Feature</strong>, first open an issue and outline your
+proposal so that it can be discussed. This will also allow us to
+better coordinate our efforts, prevent duplication of work, and help
+you to craft the change so that it is successfully accepted into the
+project.</p></li>
+<li><p><strong>Small Features</strong> can be crafted and directly submitted as a Pull
+Request.</p></li>
+</ul>
+</section>
+<section id="submission-guidelines">
+<h2>Submission Guidelines<a class="headerlink" href="#submission-guidelines" title="Link to this heading"></a></h2>
+<section id="submitting-an-issue">
+<h3>Submitting an Issue<a class="headerlink" href="#submitting-an-issue" title="Link to this heading"></a></h3>
+<p>Before you submit an issue, please search the issue tracker, maybe an
+issue for your problem already exists and the discussion might inform
+you of workarounds readily available.</p>
+<p>We want to fix all the issues as soon as possible, but before fixing a
+bug we need to reproduce and confirm it. In order to reproduce bugs we
+will need as much information as possible, and preferably a sample MOD
+file or Python example.</p>
+</section>
+<section id="submitting-a-pull-request-pr">
+<h3>Submitting a Pull Request (PR)<a class="headerlink" href="#submitting-a-pull-request-pr" title="Link to this heading"></a></h3>
+<p>When you wish to contribute to the code base, please consider the
+following guidelines:</p>
+<ul>
+<li><p>Make a <a class="reference external" href="https://guides.github.com/activities/forking/">fork</a> of
+this repository.</p></li>
+<li><p>Make your changes in your fork, in a new git branch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>my-fix-branch<span class="w"> </span>master
+</pre></div>
+</div>
+</li>
+<li><p>Create your patch, <strong>including appropriate test cases</strong>.</p></li>
+<li><p>Format the files accordingly:</p>
+<ul class="simple">
+<li><p>to format CMake and C++ files:
+<code class="docutils literal notranslate"><span class="pre">external/coding-conventions/bin/format</span></code></p></li>
+<li><p>to format only the C++ files:
+<code class="docutils literal notranslate"><span class="pre">external/coding-conventions/bin/format</span> <span class="pre">--lang</span> <span class="pre">c++</span></code></p></li>
+<li><p>to format a subset of files or directories:
+<code class="docutils literal notranslate"><span class="pre">external/coding-conventions/bin/format</span> <span class="pre">src/nmodl/codegen/</span> <span class="pre">src/nmodl/main.cpp</span></code></p></li>
+<li><p>to check the formatting of CMake files:
+<code class="docutils literal notranslate"><span class="pre">external/coding-conventions/bin/format</span> <span class="pre">--dry-run</span> <span class="pre">--lang</span> <span class="pre">cmake</span></code></p></li>
+</ul>
+</li>
+<li><p>Run the full test suite, and ensure that all tests pass.</p></li>
+<li><p>Commit your changes using a descriptive commit message.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-a
+</pre></div>
+</div>
+</li>
+<li><p>Push your branch to GitHub:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>my-fix-branch
+</pre></div>
+</div>
+</li>
+<li><p>In GitHub, send a Pull Request to the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the
+upstream repository of the relevant component.</p></li>
+<li><p>If we suggest changes then:</p>
+<ul>
+<li><p>Make the required updates.</p></li>
+<li><p>Re-run the test suites to ensure tests are still passing.</p></li>
+<li><p>Rebase your branch and force push to your GitHub repository (this
+will update your Pull Request):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>master<span class="w"> </span>-i
+git<span class="w"> </span>push<span class="w"> </span>-f
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+<p>That’s it! Thank you for your contribution!</p>
+<section id="after-your-pull-request-is-merged">
+<h4>After your pull request is merged<a class="headerlink" href="#after-your-pull-request-is-merged" title="Link to this heading"></a></h4>
+<p>After your pull request is merged, you can safely delete your branch and
+pull the changes from the main (upstream) repository:</p>
+<ul>
+<li><p>Delete the remote branch on GitHub either through the GitHub web UI
+or your local shell as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>my-fix-branch
+</pre></div>
+</div>
+</li>
+<li><p>Check out the master branch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>master<span class="w"> </span>-f
+</pre></div>
+</div>
+</li>
+<li><p>Delete the local branch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>my-fix-branch
+</pre></div>
+</div>
+</li>
+<li><p>Update your master with the latest upstream version:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>pull<span class="w"> </span>--ff<span class="w"> </span>upstream<span class="w"> </span>master
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="development-conventions">
+<h2>Development Conventions<a class="headerlink" href="#development-conventions" title="Link to this heading"></a></h2>
+<section id="new-lines">
+<h3>New Lines<a class="headerlink" href="#new-lines" title="Link to this heading"></a></h3>
+<p>When generating/printing code it’s important to use <code class="docutils literal notranslate"><span class="pre">add_newline</span></code> to
+start a new line of code. When printing a string containing multiple lines,
+i.e. one that contains a <code class="docutils literal notranslate"><span class="pre">&quot;\n&quot;</span></code> one must use <code class="docutils literal notranslate"><span class="pre">add_multi_line</span></code>.</p>
+<p>It’s important that NMODL knows the line number it’s currently on.</p>
+</section>
+<section id="formatting">
+<h3>Formatting<a class="headerlink" href="#formatting" title="Link to this heading"></a></h3>
+<p>Run the HPC coding conventions formatter to format all source files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>external/coding-conventions/bin/format
+</pre></div>
+</div>
+<p>The HPC coding conventions formatter installs any dependencies into a Python
+virtual environment.</p>
+</section>
+<section id="validate-the-python-package">
+<h3>Validate the Python package<a class="headerlink" href="#validate-the-python-package" title="Link to this heading"></a></h3>
+<p>You may run the Python test-suites if your contribution has an impact on
+the Python API:</p>
+<ol class="arabic simple">
+<li><p>setup a sandbox environment with either <em>virtualenv</em>, <em>pyenv</em>, or
+<em>pipenv</em>. For instance with <em>virtualenv</em>:
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span> <span class="pre">&amp;&amp;</span> <span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p></li>
+<li><p>build the Python wheel with the command: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">wheel</span> <span class="pre">.</span> <span class="pre">--no-deps</span></code></p></li>
+<li><p>execute the unit-tests for the wheel: <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">packaging/test_wheel.bash</span> <span class="pre">$(command</span> <span class="pre">-v</span> <span class="pre">python)</span> <span class="pre">WHEEL</span></code>, where <code class="docutils literal notranslate"><span class="pre">WHEEL</span></code> is the path to the wheel generated in the previous step.</p></li>
+</ol>
+</section>
+<section id="memory-leaks-and-clang-tidy">
+<h3>Memory Leaks and clang-tidy<a class="headerlink" href="#memory-leaks-and-clang-tidy" title="Link to this heading"></a></h3>
+<p>If you want to test for memory leaks, do :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">valgrind</span> <span class="o">--</span><span class="n">leak</span><span class="o">-</span><span class="n">check</span><span class="o">=</span><span class="n">full</span> <span class="o">--</span><span class="n">track</span><span class="o">-</span><span class="n">origins</span><span class="o">=</span><span class="n">yes</span>  <span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">nmodl_lexer</span>
+</pre></div>
+</div>
+<p>Or using CTest as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ctest</span> <span class="o">-</span><span class="n">T</span> <span class="n">memcheck</span>
+</pre></div>
+</div>
+<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to
+have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.15</span></code> and use following cmake option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">..</span> <span class="o">-</span><span class="n">DENABLE_CLANG_TIDY</span><span class="o">=</span><span class="n">ON</span>
+</pre></div>
+</div>
+</section>
+<section id="blaming-nmodl">
+<h3>Blaming NMODL<a class="headerlink" href="#blaming-nmodl" title="Link to this heading"></a></h3>
+<p>While developing NMODL one may want to know which line of code in NMODL
+produced a particular line of code in the generated file, e.g. when faced with
+a compiler error such as</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>hodhux.cpp:105:26: error: ‘coreneuron’ has not been declared
+  105 |         double* celsius{&amp;coreneuron::celsius};
+      |                          ^~~~~~~~~~
+</pre></div>
+</div>
+<p>One can find the line by doing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nmodl hodhux.mod ... blame --line 105
+</pre></div>
+</div>
+<p>which will print a backtrace every time NMODL writes to line 105. While this is
+useful for finding the line responsible for printing, i.e. convert AST to C++,
+that line doesn’t immediately explain why the AST ended up that way.
+Currently, we don’t have a tool for the latter.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/nmodl-sympy-conductance.html" class="btn btn-neutral float-left" title="NMODL CONDUCTANCE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="Python package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

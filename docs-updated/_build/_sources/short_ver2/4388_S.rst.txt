@@ -1,0 +1,45 @@
+.. _netstim_randomness:
+
+Using Randomness with :class:`NetStim` and Reproducibility
+----------------------------------------------------------
+
+By default, all randomly firing :class:`NetStim` objects share the same global pseudorandom number generator (PRNG). This causes spike times to be correlated: changing parameters of one :class:`NetStim` affects others unexpectedly.
+
+To ensure independent and reproducible random streams for each :class:`NetStim`, create a separate :class:`Random` object per :class:`NetStim` and connect it via :meth:`NetStim.noiseFromRandom`. For example (HOC):
+
+.. code-block:: hoc
+
+    objref nslist, rslist
+    nslist = new List()
+    rslist = new List()
+
+    proc makenetstims() {
+        local i, ns, rs
+        for i=0,4 {
+            rs = new Random()
+            rs.Random123(1, 2, 3 + i)  // distinct stream per NetStim
+            rs.negexp(1)               // exponential intervals with mean=1
+            rslist.append(rs)
+
+            ns = new NetStim()
+            ns.noiseFromRandom(rs)
+            nslist.append(ns)
+        }
+    }
+    makenetstims()
+
+To reproduce spike patterns exactly across runs, reset each :class:`Random` stream’s position with :meth:`Random.seq`:
+
+.. code-block:: hoc
+
+    proc restart_random_streams() {
+        local i
+        for i=0, rslist.count()-1 {
+            rslist.o(i).seq(1)  // reset to beginning of sequence
+        }
+    }
+    restart_random_streams()
+
+This approach yields independent random spike trains for each :class:`NetStim` and full control over their reproducibility. The same pattern can be implemented in Python by creating :class:`h.Random` instances for each :class:`NetStim`.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4388 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4388>`_

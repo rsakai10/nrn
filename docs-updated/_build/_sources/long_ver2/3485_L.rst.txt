@@ -1,0 +1,137 @@
+Spatial Discretization for Radial Diffusion of Calcium in NEURON
+=================================================================
+
+When modeling calcium dynamics with radial diffusion and calcium accumulation mechanisms in NEURON, spatial discretization of the intracellular radial shells requires careful consideration. This is particularly important when different neuronal sections (soma, dendrites, axon) have different diameters, leading to varying shell widths and hence different calcium concentrations within shells.
+
+Radial Shell Thickness and Calcium Concentration
+------------------------------------------------
+Using equal shell thicknesses across sections with different diameters can introduce errors in calcium concentration estimates, especially near the membrane where calcium-activated mechanisms such as BK channels are located.
+
+Because the volume of each shell depends on its thickness, smaller shells correspond to smaller volumes and can show larger calcium changes in response to fluxes. Therefore, the calcium concentration reported in the outermost shell (nearest the membrane) must be interpreted carefully.
+
+Using Calcium for Channel Activation
+------------------------------------
+**Best practice:** Use the calcium concentration in the shell closest to the membrane (typically the outermost shell) for activating calcium-dependent channels (e.g., BK channels). However, if shell thickness varies considerably, consider empirically determining which shell depth best represents the effective calcium concentration for channel activation in each segment.
+
+It is generally not advisable to interpolate calcium from a fixed radial depth if shell thickness varies without validating via computational experiments.
+
+Empirical Approach to Spatial Discretization
+--------------------------------------------
+The spatial discretization of radial calcium diffusion can be investigated through simplified computational models:
+
+1. **Single section model ("model 0")**:
+   - Length (L): ~10 µm
+   - Diameter (diam): variable (e.g., 0.2, 1, 5, 25 µm)
+   - Ra: arbitrary (unimportant)
+   - Cm: 1 µF/cm²
+   - Insert voltage-gated calcium channels and BK channels with appropriate densities
+   - Attach an SEClamp stimulus to emulate a spike-like voltage transient
+   
+2. **Calcium accumulation mechanisms**:
+   - Start with a 4-shell (compartment) radial model where shell thickness is proportional to section radius.
+   - Create versions with different numbers of shells (e.g., 2, 10, 50, 250 shells), each with fixed shell thicknesses (~0.1 µm).
+   - Compare calcium concentration time courses, BK conductance, and BK current across these versions.
+
+3. **Analysis**:
+   - Focus on the BK conductance time course and BK current integral over relevant physiological intervals (e.g., 10–100 ms) since the BK current affects membrane potential.
+   - Differences in BK current integration less than typical experimental channel density variability (~20–40%) may be acceptable.
+   - Use the simplest mechanism that does not significantly distort model behavior and is computationally efficient.
+
+Radial Shell Volume Calculation
+-------------------------------
+In calcium accumulation models such as `cabpump.mod`, the radial shells often have unequal thicknesses with the outermost shell being half as thick as the others. This configuration yields second-order accuracy for calcium concentration near the membrane.
+
+The volume of shell *i* can be approximated as the cylindrical annulus volume:
+
+.. code-block:: hoc
+
+   PROCEDURE coord() {
+       LOCAL r, dr2
+       r = diam / 2              : Start at outer radius
+       dr2 = r / NANN           : Nominal full shell thickness
+       vol[0] = 0
+       frat[0] = 2 * r
+       FROM i=0 TO NANN-1 {
+           vol[i] = PI*(r*r - (r - dr2)*(r - dr2)) * 1  : Volume of shell (cylindrical length = 1 µm)
+           frat[i] = 2*PI*r / dr2                        : Area-related parameter for radial diffusion
+           r = r - dr2
+       }
+   }
+
+However, to achieve second-order spatial accuracy at the shell interface near the membrane, `cabpump.mod` uses a slightly different approach, splitting each shell into two half-volumes for adjacent shells during volume calculation:
+
+.. code-block:: hoc
+
+   FROM i=0 TO NANN-2 {
+       vol[i] = vol[i] + PI * (r - dr2/2) * 2 * dr2    : Interior half volume of shell i
+       r = r - dr2
+       frat[i+1] = 2 * PI * r / (2 * dr2)              : Radial diffusion parameter for shell i+1
+       r = r - dr2
+       vol[i+1] = PI * (r + dr2/2) * 2 * dr2           : Exterior half volume of shell i+1
+   }
+
+This adjustment ensures better approximation of calcium concentration gradients near the membrane.
+
+Implementation of Multi-Compartment Radial Calcium Dynamics with Cytoplasm and ER Compartments
+-----------------------------------------------------------------------------------------------
+
+To model calcium dynamics including intracellular stores such as the endoplasmic reticulum (ER), you can partition each radial shell volume into cytoplasmic and ER compartments.
+
+1. **Defining compartments within the KINETIC block:**
+
+Example MOD file snippet for calcium and ER calcium compartments with volume fractions:
+
+.. code-block:: mod
+
+   KINETIC state {
+       COMPARTMENT ii, (1 + bbr) * diam * diam * vol[ii] * 0.83 { ca }    : Cytoplasm (83% volume), bbr = buffer binding ratio
+       COMPARTMENT jj, diam * diam * vol[jj] * 0.17 { caer }             : ER (17% volume)
+   }
+
+Here, `ca` and `caer` are state variables representing free calcium concentrations in cytoplasm and ER respectively. The volume scaling factors distribute shell volume between cytoplasm and ER based on assumed volume fractions.
+
+2. **Example flux expressions for SERCA pump coupling cytosol and ER:**
+
+.. code-block:: mod
+
+   dsq = diam * diam
+
+   FROM i=0 TO NANN-1 {
+       dsqvol = dsq * vol[i] * 0.83     : cytoplasmic volume for shell i
+       dsqvoler = dsq * vol[i] * 0.17   : ER volume for shell i
+
+       jserca[i] = -vmaxsr * ca[i]^2 / (ca[i]^2 + kpsr^2)  : SERCA pump flux (negative for uptake into ER)
+
+       ~ ca[i]  << (dsqvol * jserca[i])     : update cytoplasmic calcium concentration
+       ~ caer[i] << (-dsqvoler * jserca[i]) : update ER calcium concentration
+   }
+
+This reactive flux transfers calcium between cytoplasm and ER, scaled by their respective volumes.
+
+3. **Initialization and validation:**
+
+- Initialize ER calcium concentration (`caer`) to a physiological resting value in the `INITIAL` block.
+- Validate your model by running test simulations:
+  - Check calcium dynamics for consistency.
+  - Perturb parameters (buffer ratios, pump rates) and confirm expected changes.
+  - Monitor for typographical or sign errors, as these can cause incorrect results despite no MOD file compilation errors.
+
+Notes on Model Parameters
+-------------------------
+- The number of radial shells (`NANN` or `Nannuli`) controls the spatial resolution of radial diffusion. Increasing `NANN` gives finer discretization but increases computational cost.
+- The parameter `nseg` governs the number of segments along the longitudinal axis and is distinct from radial shell number.
+- The `frat` array contains factors for calculating radial diffusion fluxes, often derived from shell surface areas divided by shell thicknesses.
+
+Summary Recommendations
+-----------------------
+- Use the outermost shell calcium concentration for membrane-associated calcium-activated mechanisms, but validate via simulations to determine if interpolating from a fixed radial depth is preferable.
+- Employ shell thicknesses that respect second-order spatial accuracy near the membrane by making the outermost shell half the thickness of interior shells.
+- Use multiple radial shells (e.g., ~10 shells of 0.1 µm thickness) to verify convergence of calcium dynamics and channel currents.
+- For multi-compartment calcium dynamics (cytoplasm and ER), scale compartment volumes within shells appropriately.
+- Verify your implementation by parameter perturbation and comparison of calcium transient time courses and BK current integrals.
+- Choose the simplest model that faithfully reproduces physiologically relevant calcium dynamics to balance accuracy and computational cost.
+
+.. seealso::
+   :mod:`cabpump.mod`, :class:`SEClamp`, :mod:`rxd` for advanced reaction-diffusion modeling, :ref:`The NEURON Book <neuronbook>` Section on Calcium Dynamics
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3485 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3485>`_

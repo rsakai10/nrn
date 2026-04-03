@@ -1,0 +1,107 @@
+Arrays, Vectors, and Doubles in NEURON
+=======================================
+
+In NEURON's HOC language, understanding the distinction between arrays, Vectors, doubles, and objrefs is essential for proper variable declaration and manipulation.
+
+Double Arrays
+-------------
+Declaring an array of scalar numeric values (doubles) is done with the syntax:
+
+.. code-block:: hoc
+
+    double x[n]
+
+This creates an array of **n** double precision numbers indexed as `x[0]`, `x[1]`, ..., `x[n-1]`. For example:
+
+.. code-block:: hoc
+
+    double x[1]
+    x[0] = 10
+
+Here, `x` is a double array with one element assigned the value 10.
+
+Scalar doubles can also be declared without dimension:
+
+.. code-block:: hoc
+
+    double y
+    y = 3.14
+
+Note that variables that first appear as numeric values are implicitly typed as doubles.
+
+Objrefs and Object References
+-----------------------------
+An objref variable is a reference to an NEURON object, such as a Vector or Section. Declaring an objref array:
+
+.. code-block:: hoc
+
+    objref y[n]
+
+creates an array of **n** objrefs named `y[0]`, `y[1]`, etc., each capable of holding references to NEURON objects.
+
+Assigning a numeric value to an objref or an element of an objref array results in an error, because objrefs hold object pointers, not numeric scalars:
+
+.. code-block:: hoc
+
+    objref y[1]
+    y[0] = 10    // causes a type error
+
+Only NEURON objects can be assigned to objrefs:
+
+.. code-block:: hoc
+
+    objref z
+    z = new Vector()
+
+Attempting to assign a double to an objref variable raises an interpreter stack type error.
+
+Typing Rules in HOC
+-------------------
+The type of a variable in HOC is determined by its first appearance:
+
+- If first assigned a numeric scalar, it becomes a double (scalar).
+- If declared with `double varname` or `double varname[n]`, it is treated as a scalar or an array of doubles.
+- If declared with `objref varname` or `objref varname[n]`, it is a reference or array of references to NEURON objects.
+
+Mixed usage will result in errors, e.g.:
+
+.. code-block:: hoc
+
+    y = sin(0.1)    // y is a double scalar
+    print y[0]      // error: y is not an array
+
+Best Practices: Using Vectors for Flexible Arrays
+------------------------------------------------
+Arrays declared with `double varname[n]` have fixed size. For dynamic or resizable numeric arrays, NEURON provides the :class:`Vector` class, which offers methods such as :meth:`append()`, :meth:`insert()`, and :meth:`resize()` for flexible management of elements.
+
+Example Python usage of Vector:
+
+.. code-block:: python
+
+    from neuron import h
+    v = h.Vector()
+    v.append(10)
+    v.append(20)
+    print(list(v))
+
+Example HOC usage:
+
+.. code-block:: hoc
+
+    objref v
+    v = new Vector()
+    v.append(10)
+    v.append(20)
+    print(v)
+
+For collections of heterogeneous objects or dynamically sized collections, prefer using the :class:`List` class which can hold any NEURON objects and grow or shrink as needed.
+
+Summary
+-------
+- Use `double varname[n]` for fixed-size numeric arrays.
+- Use :class:`Vector` when you need dynamic arrays of numbers.
+- Use `objref varname` or `objref varname[n]` for object references or arrays thereof.
+- Variables are typed on first use; mixing types leads to errors.
+- Avoid using raw double arrays when flexibility is required; use Vectors or Lists instead.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1260 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1260>`_

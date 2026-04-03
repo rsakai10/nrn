@@ -1,0 +1,193 @@
+Synaptic Conductance Driven by a Prescribed Waveform
+=====================================================
+
+Modeling a synapse by dynamically changing the membrane conductance (instead of injecting a current) according to a predefined waveform can be achieved using a custom point process in NEURON. The example below illustrates a simple conductance clamp (`GClamp`) mechanism and explains how to load and play a time-varying conductance vector into it both via GUI and hoc scripting. 
+
+GClamp NMODL Mechanism
+----------------------
+
+This NMODL defines a point process that injects a membrane current proportional to a time-varying conductance `g` and a reversal potential `e`. The current `i` is computed as:
+
+.. math::
+
+   i = g \times (v - e)
+
+where :math:`v` is the membrane potential at the clamp site.
+
+The mechanism uses a :meth:`NONSPECIFIC_CURRENT` to correctly represent a membrane current with the correct sign and stability properties.
+
+.. code-block:: neuron
+
+    NEURON {
+       POINT_PROCESS GClamp
+       RANGE g, i, e
+       NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+       (mV) = (millivolt)
+       (uS) = (micromho)
+       (nA) = (nanoamp)
+    }
+
+    PARAMETER {
+       g (micromho)
+       e (millivolt)
+       v (millivolt)
+    }
+
+    ASSIGNED { 
+       i (nanoamp) 
+    }
+
+    INITIAL {
+       i = g*(v - e)
+    }
+
+    BREAKPOINT {
+       i = g*(v - e)
+    }
+
+Key Implementation Notes
+------------------------
+
+- Use `NONSPECIFIC_CURRENT i` instead of `ELECTRODE_CURRENT i` for membrane conductances to ensure simulation stability.
+- The current is defined as `i = g*(v - e)` which corresponds to a membrane conductance.
+- Setting `ELECTRODE_CURRENT i` with the same current formula can cause positive feedback and simulation instability.
+- The reversal potential `e` (in mV) must be set according to the ion species or driving force of the conductance.
+- The conductance `g` is a range variable and its value is typically time-varying, loaded from external data.
+
+Loading and Playing a Conductance Waveform Using Python or hoc
+--------------------------------------------------------------
+
+To simulate a synaptic conductance waveform, you need to load the conductance trace (and optionally corresponding times) into NEURON vectors and play them into the `g` parameter of the GClamp instance.
+
+### Step 1: Load waveform data from a file
+
+Assuming your conductance waveform file has two columns: time (ms) and conductance (microsiemens), load it into two :class:`Vector` objects (e.g. `tvec` and `gvec`).
+
+.. code-block:: hoc
+
+    objref tvec, gvec, f
+    tvec = new Vector()
+    gvec = new Vector()
+    f = new File()
+    f = new File("gclamp_waveform.txt")
+    tvec.resize(0)
+    gvec.resize(0)
+    while (f.good()) {
+        tvec.append(f.scanf())
+        gvec.append(f.scanf())
+    }
+    f.close()
+
+Or in Python with NEURON:
+
+.. code-block:: python
+
+    from neuron import h
+
+    tvec = h.Vector()
+    gvec = h.Vector()
+    times, gvalues = [], []
+    with open("gclamp_waveform.txt") as f:
+        for line in f:
+            t, g = map(float, line.split())
+            times.append(t)
+            gvalues.append(g)
+    tvec.from_python(times)
+    gvec.from_python(gvalues)
+
+### Step 2: Create and attach the GClamp point process
+
+Attach the `GClamp` point process to a desired location on a section (e.g., soma(0.5)) and set reversal potential `e`.
+
+.. code-block:: hoc
+
+    objref gclamp
+    soma gclamp = new GClamp(0.5)
+    gclamp.e = 0  // reversal potential (e.g. 0 mV for excitatory synapse)
+
+Or in Python:
+
+.. code-block:: python
+
+    soma = h.Section(name='soma')
+    gclamp = h.GClamp(0.5, sec=soma)
+    gclamp.e = 0  # reversal potential in mV
+
+### Step 3: Play the conductance waveform into GClamp.g
+
+Use the :meth:`Vector.play` method to drive the `g` variable of your `gclamp` point process with the loaded conductance vector. Supply the time vector as the second argument to specify when each conductance value applies.
+
+.. code-block:: hoc
+
+    gvec.play(&gclamp.g, tvec, 1)  // The "1" enables continuous interpolation between points
+
+Or in Python:
+
+.. code-block:: python
+
+    gvec.play(gclamp._ref_g, tvec, 1)  # continuous interpolation enabled
+
+Additional Recommendations and Troubleshooting
+----------------------------------------------
+
+- **Avoid negative conductance values.** Negative conductance is biophysically implausible and can cause simulation instability or "blowing up" voltage traces. If your waveform data contains small negative values (noise or baseline fluctuations), clip them to zero before playing.
+
+  ```python
+  # clip negative values to zero
+  gvalues_clipped = [max(g, 0) for g in gvalues]
+  gvec.from_python(gvalues_clipped)
+  ```
+
+- **Initialization of membrane potential and reversal potentials:** Ensure the initial membrane potential (`v_init`) is consistent with passive reversal potentials (`e_pas`) to avoid initial transients or drifting baseline voltage. For a passive model with `e_pas = -70 mV`, set `v_init` to `-70 mV` in the RunControl panel or via
+
+  .. code-block:: hoc
+
+      forall e_pas = v_init
+
+- **Integration method:** `GClamp` does not require special integration methods. `cnexp` or variable timestep integrators can be used as usual, but stability hinges on the correct `NONSPECIFIC_CURRENT` declaration and avoiding negative conductances.
+
+- **Dynamic clamp alternative:** Although the simple `GClamp` can be used, NEURON's built-in synaptic mechanisms like `AlphaSynapse` or `ExpSyn` can be driven by playing vectors into their conductance-related parameters. However, these have parameters (e.g., `tau`) defining kinetics, which make direct waveform playback less straightforward.
+
+Example Combined hoc Code
+-------------------------
+
+.. code-block:: hoc
+
+    // Load waveform data
+    objref tvec, gvec, f
+    tvec = new Vector()
+    gvec = new Vector()
+    f = new File("gclamp_waveform.txt")
+    while (f.good()) {
+        tvec.append(f.scanf())
+        gvec.append(f.scanf())
+    }
+    f.close()
+
+    // Create cell and attach GClamp
+    create soma
+    access soma
+    objref gclamp
+    soma gclamp = new GClamp(0.5)
+    gclamp.e = 0     // reversal potential in mV
+
+    // Play conductance waveform into GClamp
+    gvec.play(&gclamp.g, tvec, 1)
+
+Summary
+-------
+
+- Use a custom point process with `NONSPECIFIC_CURRENT i` and `i = g*(v - e)` for stable conductance-driven synapses.
+- Load time and conductance data into NEURON `Vector` objects and play conductance into the mechanism’s `g` variable.
+- Avoid negative conductance values to ensure biophysical plausibility and numerical stability.
+- Initialize membrane potentials and parameters consistently to avoid drift.
+- Use :meth:`Vector.play` to play time-varying conductance waveforms either in hoc or Python.
+
+.. seealso::
+
+   :mod:`Vector`, :class:`hoc.HocObject`, :class:`h.Section`, :class:`h.Vector.play`, :class:`h.AlphaSynapse`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2475 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2475>`_

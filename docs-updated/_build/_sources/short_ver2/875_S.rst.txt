@@ -1,0 +1,35 @@
+.. rubric:: Scheduling NetCon Events During Initialization
+
+When you call :meth:`NetCon.event` before initialization, the event is discarded because :func:`finitialize` sets the time to zero and clears the event queue. To schedule synaptic events correctly during initialization, use :class:`FInitializeHandler` as follows:
+
+.. code-block:: hoc
+
+    objref nc, biexcit, fih
+
+    create soma
+    soma {
+        insert pas
+        nseg = 1
+        diam = 20
+        L = 20
+        e_pas = -50
+        g_pas = 0.01 / cm
+        biexcit = new ExpSyn(0.5)
+        biexcit.tau = 1
+    }
+
+    nc = new NetCon(nil, biexcit)
+    nc.weight = 0.5
+    nc.delay = 0
+
+    proc schedule_events() {
+        nc.event(2.5)
+    }
+
+    fih = new FInitializeHandler("schedule_events()")
+
+.. note::
+
+    Define all NetCon :meth:`event` calls inside a procedure, then use an :class:`FInitializeHandler` to ensure these events are enqueued during the initialization phase. This prevents them from being discarded by the event queue reset.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=875 <https://neuron.yale.edu/phpBB/viewtopic.php?t=875>`_

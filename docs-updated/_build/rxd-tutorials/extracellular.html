@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extracellular reaction-diffusion tutorial &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Restricting reactions to a part of a region" href="Restricting%20reactions%20to%20certain%20sections.html" />
+    <link rel="prev" title="Reaction-diffusion thresholds" href="thresholds.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python RXD tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Reaction-Diffusion%20tutorial.html">Reaction-diffusion introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic-initialization.html">Initialization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Changing%20initial%20conditions%20and%20parameters.html">Varying initial concentrations and parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radial_diffusion.html">Radial diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thresholds.html">Reaction-diffusion thresholds</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Extracellular reaction-diffusion tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Download-files">Download files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Getting-started">Getting started</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Recording-from-a-single-voxel">Recording from a single voxel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Boundary-conditions">Boundary conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Extracellular-reactions">Extracellular reactions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Inhomogeneities">Inhomogeneities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Restricting%20reactions%20to%20certain%20sections.html">Restricting reactions to a part of a region</a></li>
+<li class="toctree-l2"><a class="reference internal" href="degradable_buffer.html">Example: Degradable buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circadian.html">Example: Circadian rhythm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calcium%20waves.html">Example: Calcium waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="combining%20currents%20from%20mod%20files%20with%20rxd.html">Example: combining MOD file ion channels with rxd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip3-demo.html">IP3 demo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python RXD tutorials</a></li>
+      <li class="breadcrumb-item active">Extracellular reaction-diffusion tutorial</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/rxd-tutorials/extracellular.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Extracellular-reaction-diffusion-tutorial">
+<h1>Extracellular reaction-diffusion tutorial<a class="headerlink" href="#Extracellular-reaction-diffusion-tutorial" title="Link to this heading"></a></h1>
+<p>We have expanded the capabilities the NEURON reaction diffusion module to support a macroscopic model of the extracellular space, described in a recent paper. Here is brief a tutorial that provides an overview of the Python interface.</p>
+<section id="Download-files">
+<h2>Download files<a class="headerlink" href="#Download-files" title="Link to this heading"></a></h2>
+<p><p>This tutorial uses two files. You need to have them in your working directory:</p>
+</p><ul><li><p>steady_k.mod</p>
+</li><li><p>c91662.CNG.swc</p>
+</li></ul><p><p>The first is simple mechanism written for this tutorial that releases potassium at a constant rate per surface area. The second is a morphology from NeuroMorpho.Org.</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s create the first one:</span>
+<span class="n">steady_k_mod</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">        SUFFIX steady_k</span>
+<span class="s2">        USEION k WRITE ik VALENCE 1</span>
+<span class="s2">        RANGE ik, rate</span>
+<span class="s2">}</span>
+
+<span class="s2">PARAMETER {</span>
+<span class="s2">    rate    (mA/cm2)</span>
+<span class="s2">}</span>
+
+<span class="s2">INITIAL {</span>
+<span class="s2">    rate = 1</span>
+<span class="s2">}</span>
+
+<span class="s2">ASSIGNED {</span>
+<span class="s2">    ik     (mA/cm2)</span>
+<span class="s2">}</span>
+
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    ik = rate</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;steady_k.mod&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">skmod</span><span class="p">:</span>
+    <span class="n">skmod</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">steady_k_mod</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download morphology</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlretrieve</span>
+
+<span class="n">urlretrieve</span><span class="p">(</span>
+    <span class="s2">&quot;https://raw.githubusercontent.com/neuronsimulator/resources/8b1290d5c8ab748dd6251be5bd46a4e3794d742f/notebooks/rxd/c91662.CNG.swc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;c91662.swc&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><p>Begin by compiling the mod file. On Linux and Mac, this can be done by running nrnivmodl from the command line. The same works for Windows beginning with NEURON 7.7; alternatively, on Windows regardless of NEURON version, one can use the graphical tool mknrndll.</p>
+</p><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">nrnivmodl</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Getting-started">
+<h2>Getting started<a class="headerlink" href="#Getting-started" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">n</span><span class="p">,</span> <span class="n">rxd</span>
+</pre></div>
+</div>
+</div>
+<p>For reaction diffusion in the extracellular space (ECS) you have to import the rxd from neuron. The first example we will place two single compartment neurons in a closed box of extracellular space.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">enable</span><span class="o">.</span><span class="n">extracellular</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+<p>To use extracellular reaction diffusion it must be enabled, it is enabled by default in NEURON 7.7 or later.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxd</span><span class="o">.</span><span class="n">nthread</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Extracellular rxd supports multithreaded parallelization.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;stdrun.hoc&quot;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;import3d.hoc&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Cell</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read geometry from a given SWC file and create a cell with a K+ source&quot;&quot;&quot;</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Import3d_SWC_read</span><span class="p">()</span>
+        <span class="n">cell</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">n</span><span class="o">.</span><span class="n">Import3d_GUI</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">i3d</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Import3d_GUI</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">i3d</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+            <span class="n">sec</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">L</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="n">sec</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;steady_k&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">extrema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Give the bounding box that contains the cell&quot;&quot;&quot;</span>
+        <span class="n">xlo</span> <span class="o">=</span> <span class="n">ylo</span> <span class="o">=</span> <span class="n">zlo</span> <span class="o">=</span> <span class="n">xhi</span> <span class="o">=</span> <span class="n">yhi</span> <span class="o">=</span> <span class="n">zhi</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+            <span class="n">n3d</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">n3d</span><span class="p">()</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">x3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">y3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">z3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+            <span class="n">my_xlo</span><span class="p">,</span> <span class="n">my_ylo</span><span class="p">,</span> <span class="n">my_zlo</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">xs</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">ys</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span>
+            <span class="n">my_xhi</span><span class="p">,</span> <span class="n">my_yhi</span><span class="p">,</span> <span class="n">my_zhi</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">xs</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">ys</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">xlo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">xlo</span><span class="p">,</span> <span class="n">ylo</span><span class="p">,</span> <span class="n">zlo</span> <span class="o">=</span> <span class="n">my_xlo</span><span class="p">,</span> <span class="n">my_ylo</span><span class="p">,</span> <span class="n">my_zlo</span>
+                <span class="n">xhi</span><span class="p">,</span> <span class="n">yhi</span><span class="p">,</span> <span class="n">zhi</span> <span class="o">=</span> <span class="n">my_xhi</span><span class="p">,</span> <span class="n">my_yhi</span><span class="p">,</span> <span class="n">my_zhi</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xlo</span><span class="p">,</span> <span class="n">ylo</span><span class="p">,</span> <span class="n">zlo</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">xlo</span><span class="p">,</span> <span class="n">my_xlo</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">ylo</span><span class="p">,</span> <span class="n">my_ylo</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">zlo</span><span class="p">,</span> <span class="n">my_zlo</span><span class="p">)</span>
+                <span class="n">xhi</span><span class="p">,</span> <span class="n">yhi</span><span class="p">,</span> <span class="n">zhi</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">xhi</span><span class="p">,</span> <span class="n">my_xhi</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">yhi</span><span class="p">,</span> <span class="n">my_yhi</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">zhi</span><span class="p">,</span> <span class="n">my_zhi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">xlo</span><span class="p">,</span> <span class="n">ylo</span><span class="p">,</span> <span class="n">zlo</span><span class="p">,</span> <span class="n">xhi</span><span class="p">,</span> <span class="n">yhi</span><span class="p">,</span> <span class="n">zhi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mycell</span> <span class="o">=</span> <span class="n">Cell</span><span class="p">(</span><span class="s2">&quot;c91662.swc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Create a cell from the given SWC file, in this example we use a CA1 pyramidal cell taken from NeuroMorpho.Org. We insert a current source <code class="docutils literal notranslate"><span class="pre">steady_k</span></code> into all sections as a simple proof of concept example.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xlo</span><span class="p">,</span> <span class="n">ylo</span><span class="p">,</span> <span class="n">zlo</span><span class="p">,</span> <span class="n">xhi</span><span class="p">,</span> <span class="n">yhi</span><span class="p">,</span> <span class="n">zhi</span> <span class="o">=</span> <span class="n">mycell</span><span class="o">.</span><span class="n">extrema</span><span class="p">()</span>
+<span class="n">padding</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">ecs</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Extracellular</span><span class="p">(</span>
+    <span class="n">xlo</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span>
+    <span class="n">ylo</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span>
+    <span class="n">zlo</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span>
+    <span class="n">xhi</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span>
+    <span class="n">yhi</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span>
+    <span class="n">zhi</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span>
+    <span class="n">dx</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="n">volume_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">tortuosity</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We define the extracellular region by specifying the left-bottom-back corner and right-upper-front corner of a box with voxel size dx<span class="math notranslate nohighlight">\(\times\)</span>dy<span class="math notranslate nohighlight">\(\times\)</span>dz, (if only one value is given the voxels are cubic). We use a macroscopic volume average approach, where the volume fraction or porosity is the free space in which particles can diffuse (typically 0.2 in the brain) and the tortuosity is the increase in path length particles take due to obstacles.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Species</span><span class="p">(</span><span class="n">ecs</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">2.62</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The species diffusing in the ECS are define in the same was as intracellular species.</p>
+<p>The extracellular concentrations are accessible by <code class="docutils literal notranslate"><span class="pre">states3d</span></code>. Here we animate the concentrations during a 20s simulation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span><span class="p">,</span> <span class="n">animation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="c1"># use a large timestep as this model only has slow diffusive dynamics.</span>
+<span class="n">n</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="c1"># Create an animation of average (over depth) of the concentrations</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">runsim</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">min_conc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_conc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">finitialize</span><span class="p">()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="n">ecs</span><span class="p">]</span><span class="o">.</span><span class="n">states3d</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="n">min_conc</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">max_conc</span><span class="p">)</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">():</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="n">ecs</span><span class="p">]</span><span class="o">.</span><span class="n">states3d</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">im</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">animate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+        <span class="n">n</span><span class="o">.</span><span class="n">fadvance</span><span class="p">()</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="n">ecs</span><span class="p">]</span><span class="o">.</span><span class="n">states3d</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">im</span><span class="p">]</span>
+
+    <span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">animate</span><span class="p">,</span> <span class="n">init_func</span><span class="o">=</span><span class="n">init</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="n">frames</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">)</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">anim</span><span class="o">.</span><span class="n">to_html5_video</span><span class="p">())</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ret</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runsim</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">min_conc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_conc</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Recording-from-a-single-voxel">
+<h3>Recording from a single voxel<a class="headerlink" href="#Recording-from-a-single-voxel" title="Link to this heading"></a></h3>
+<p>We can also record from the extracellular concentration in the same way other NEURON states are recorded. Here we record from a extracellular node by access it by location or index into the states3d matrix.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># record from an extracellular nodes given by the x,y,z location</span>
+<span class="n">kecs_vec0</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">kecs_vec0</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+    <span class="n">k</span><span class="p">[</span><span class="n">ecs</span><span class="p">]</span><span class="o">.</span><span class="n">node_by_location</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_value</span>
+<span class="p">)</span>  <span class="c1"># same as k[ecs].node_by_ijk(20,15,7)</span>
+
+<span class="c1"># record the same node by it&#39;s index into stated3d</span>
+<span class="n">kecs_vec1</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">kecs_vec1</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+    <span class="n">k</span><span class="p">[</span><span class="n">ecs</span><span class="p">]</span><span class="o">.</span><span class="n">node_by_ijk</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_value</span>
+<span class="p">)</span>  <span class="c1"># same as k[ecs].node_by_location(50,0,0)</span>
+
+<span class="c1"># record the time</span>
+<span class="n">t_vec</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">t_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+
+<span class="c1"># run the simulation</span>
+<span class="n">n</span><span class="o">.</span><span class="n">finitialize</span><span class="p">()</span>
+<span class="n">n</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="c1"># plot the concentations</span>
+<span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_vec</span><span class="p">,</span> <span class="n">kecs_vec0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;near the cell&quot;</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_vec</span><span class="p">,</span> <span class="n">kecs_vec1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;far from the cell&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Boundary-conditions">
+<h3>Boundary conditions<a class="headerlink" href="#Boundary-conditions" title="Link to this heading"></a></h3>
+<p>By default the extracellular region uses Neumann boundary conditions (where these is zero flux at the boundary), these means our simple example will eventually fill with K<span class="math notranslate nohighlight">\(^+\)</span>. One way to avoid this is to used Dirichlet boundary conditions where the concentration is set at the boundaries. In the following example we set the concentration to be the same as the initial conditions 3mM. You will see the increase in concentration is smaller, especially near the edge of the grid, than in the
+previous example.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">k</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Species</span><span class="p">(</span><span class="n">ecs</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">2.62</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ecs_boundary_conditions</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runsim</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">min_conc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_conc</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Extracellular-reactions">
+<h3>Extracellular reactions<a class="headerlink" href="#Extracellular-reactions" title="Link to this heading"></a></h3>
+<p>Extracellular reactions are specified in the same way as intracellular ones. For example, this simple phenomenological model of potassium buffering by astrocytes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron.rxd</span><span class="w"> </span><span class="kn">import</span> <span class="n">rxdmath</span>
+
+<span class="n">kb</span> <span class="o">=</span> <span class="mf">0.0008</span>
+<span class="n">kth</span> <span class="o">=</span> <span class="mf">15.0</span>
+<span class="n">kf</span> <span class="o">=</span> <span class="n">kb</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">rxdmath</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">kth</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.15</span><span class="p">))</span>
+<span class="n">Bmax</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Species</span><span class="p">(</span><span class="n">ecs</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;buffer&quot;</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="n">Bmax</span><span class="p">)</span>
+<span class="n">AK</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Species</span><span class="p">(</span><span class="n">ecs</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;bound&quot;</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The buffering uses two additional species, <code class="docutils literal notranslate"><span class="pre">A</span></code> is the unbound buffer and <code class="docutils literal notranslate"><span class="pre">AK</span></code> is the bound buffer.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">buffering</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Reaction</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="n">A</span><span class="p">,</span> <span class="n">AK</span><span class="p">,</span> <span class="n">kf</span><span class="p">,</span> <span class="n">kb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The reaction is specified in the same way as intracellular rxd. Here we animate the concentration of bound buffer during a 20s simulation, only a small proportion of the buffer is bound, so we plot a range of 0-10μM, i.e. up to 0.1% of <code class="docutils literal notranslate"><span class="pre">Bmax</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runsim</span><span class="p">(</span><span class="n">AK</span><span class="p">,</span> <span class="n">min_conc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_conc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Inhomogeneities">
+<h3>Inhomogeneities<a class="headerlink" href="#Inhomogeneities" title="Link to this heading"></a></h3>
+<section id="Initial-conditions">
+<h4>Initial conditions<a class="headerlink" href="#Initial-conditions" title="Link to this heading"></a></h4>
+<p>Initial condition in the ECS need not be a scalar concentration. Suppose we only want to apply the buffer shown above to a sphere in the middle of the ECS, this can be achieved by passing function that takes a node as an argument.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">A</span><span class="p">,</span> <span class="n">buffering</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Species</span><span class="p">(</span>
+    <span class="n">ecs</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;buffer&quot;</span><span class="p">,</span>
+    <span class="n">charge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">initial</span><span class="o">=</span><span class="k">lambda</span> <span class="n">nd</span><span class="p">:</span> <span class="mi">10</span> <span class="k">if</span> <span class="n">nd</span><span class="o">.</span><span class="n">x3d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">nd</span><span class="o">.</span><span class="n">y3d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">nd</span><span class="o">.</span><span class="n">z3d</span><span class="o">**</span><span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="o">**</span><span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">buffering</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Reaction</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="n">A</span><span class="p">,</span> <span class="n">AK</span><span class="p">,</span> <span class="n">kf</span><span class="p">,</span> <span class="n">kb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Anisotropy">
+<h4>Anisotropy<a class="headerlink" href="#Anisotropy" title="Link to this heading"></a></h4>
+<p>The diffusion coefficient for a species can be different in each direction. e.g. to limit diffusion to the x,y-plane;</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">A</span><span class="p">,</span> <span class="n">AK</span><span class="p">,</span> <span class="n">buffering</span><span class="p">,</span> <span class="n">k</span>
+<span class="n">k1</span> <span class="o">=</span> <span class="n">rxd</span><span class="o">.</span><span class="n">Species</span><span class="p">(</span><span class="n">ecs</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="p">(</span><span class="mf">2.62</span><span class="p">,</span> <span class="mf">2.62</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;k1&quot;</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Tissue-characteristics">
+<h4>Tissue characteristics<a class="headerlink" href="#Tissue-characteristics" title="Link to this heading"></a></h4>
+<p>The volume faction and tortuosity of the extracellular space can also vary with location by passing a function coordinates <code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z</span></code>. This is used in in ModelDB:238892 as a way to model edema following ischemic stroke.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="thresholds.html" class="btn btn-neutral float-left" title="Reaction-diffusion thresholds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Restricting%20reactions%20to%20certain%20sections.html" class="btn btn-neutral float-right" title="Restricting reactions to a part of a region" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

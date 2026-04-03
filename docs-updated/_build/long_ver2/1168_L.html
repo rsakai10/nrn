@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inhibition and Synaptic Weight Selection in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Inhibition and Synaptic Weight Selection in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1168_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="inhibition-and-synaptic-weight-selection-in-neuron">
+<h1>Inhibition and Synaptic Weight Selection in NEURON<a class="headerlink" href="#inhibition-and-synaptic-weight-selection-in-neuron" title="Link to this heading"></a></h1>
+<p>When modeling inhibitory synaptic connections in NEURON, selecting an appropriate synaptic weight is crucial for obtaining meaningful simulations. This section clarifies the interpretation of synaptic weights and provides guidance on choosing them in biophysical neuron models.</p>
+<section id="synaptic-weight-interpretation">
+<h2>Synaptic Weight Interpretation<a class="headerlink" href="#synaptic-weight-interpretation" title="Link to this heading"></a></h2>
+<p>The meaning of the synaptic weight parameter depends on the synapse and cell model used:</p>
+<ul>
+<li><p><strong>Artificial Spiking Cells (e.g., IntFire1, IntFire2, IntFire4)</strong>:</p>
+<ul>
+<li><p>Weight represents changes in the activation variable <em>m</em>, analogous to membrane potential.</p></li>
+<li><p>For <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire1" title="IntFire1"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire1</span></code></a>, a synaptic event causes an instantaneous jump:
+.. code-block:: python</p>
+<blockquote>
+<div><p>m += weight</p>
+</div></blockquote>
+</li>
+<li><p>For <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire2" title="IntFire2"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire2</span></code></a> and <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire4" title="IntFire4"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire4</span></code></a>, a synaptic weight produces a smooth, time-dependent conductance change with a peak magnitude equal to the absolute value of the weight (sign determining excitation or inhibition).</p></li>
+</ul>
+</li>
+<li><p><strong>Conductance-Based Synapses onto Biophysical Models (e.g., ExpSyn, Exp2Syn)</strong>:</p>
+<ul class="simple">
+<li><p>Weight specifies the <em>maximum conductance change</em> (unit: microsiemens, µS) induced by a synaptic event.</p></li>
+<li><p>Conductance weights must be non-negative (≥ 0).</p></li>
+<li><p>Whether the synapse is excitatory or inhibitory is determined by its reversal (equilibrium) potential, not the weight sign.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="effects-of-large-synaptic-weights">
+<h2>Effects of Large Synaptic Weights<a class="headerlink" href="#effects-of-large-synaptic-weights" title="Link to this heading"></a></h2>
+<p>Large synaptic weights (e.g., <cite>weight = 10000 µS</cite>) do not have an absolute physiological meaning in isolation because the postsynaptic effect depends on:</p>
+<ul class="simple">
+<li><p>The synaptic reversal potential relative to the postsynaptic resting potential.</p></li>
+<li><p>The time course (rise and decay) of the synaptic conductance.</p></li>
+<li><p>The location of the synapse on the postsynaptic neuron (electrotonic distance from the soma or spike initiation zone).</p></li>
+<li><p>The biophysical properties of the postsynaptic cell (membrane resistance, cytoplasmic resistivity).</p></li>
+</ul>
+<p>A very large conductance may saturate the postsynaptic effect or have little impact if the driving force (difference between membrane potential and synaptic reversal potential) is small.</p>
+</section>
+<section id="choosing-synaptic-weights">
+<h2>Choosing Synaptic Weights<a class="headerlink" href="#choosing-synaptic-weights" title="Link to this heading"></a></h2>
+<p>There is no universal “correct” synaptic weight; selection depends on modeling goals, experimental data, and network scale. Consider the following guidelines:</p>
+<ul class="simple">
+<li><p>Start with conductance values reported in experimental literature for synapses of the cell type you model.</p></li>
+<li><p>Adjust weights to produce realistic postsynaptic responses (e.g., inhibitory postsynaptic potentials or IPSPs of physiological amplitude).</p></li>
+<li><p>Verify that network firing behavior is within expected regimes (e.g., balanced excitation and inhibition).</p></li>
+<li><p>Use small incremental adjustments and observe the effect on the postsynaptic firing rate and membrane potential.</p></li>
+<li><p>Account for the number of synapses and neuron groups; weights often scale inversely with the number of inputs.</p></li>
+</ul>
+</section>
+<section id="example-creating-and-connecting-an-inhibitory-synapse-in-python">
+<h2>Example: Creating and Connecting an Inhibitory Synapse in Python<a class="headerlink" href="#example-creating-and-connecting-an-inhibitory-synapse-in-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Create two cells: presynaptic inhibitory cell and postsynaptic target cell</span>
+<span class="n">presyn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;presyn&#39;</span><span class="p">)</span>
+<span class="n">postsyn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;postsyn&#39;</span><span class="p">)</span>
+
+<span class="c1"># Insert Hodgkin-Huxley channels in postsynaptic cell</span>
+<span class="n">postsyn</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create an inhibitory Exp2Syn synapse at the postsynaptic soma</span>
+<span class="n">syn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Exp2Syn</span><span class="p">(</span><span class="n">postsyn</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">syn</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span>  <span class="c1"># reversal potential for GABAergic synapse (inhibitory)</span>
+<span class="n">syn</span><span class="o">.</span><span class="n">tau1</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># rise time (ms)</span>
+<span class="n">syn</span><span class="o">.</span><span class="n">tau2</span> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># decay time (ms)</span>
+
+<span class="c1"># Create a NetStim to generate presynaptic spikes</span>
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetStim</span><span class="p">()</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="c1"># Create a NetCon to connect presynaptic activity to synapse</span>
+<span class="n">nc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">stim</span><span class="p">,</span> <span class="n">syn</span><span class="p">)</span>
+<span class="n">nc</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># synaptic weight in microsiemens (uS)</span>
+
+<span class="c1"># Set up recording of postsynaptic membrane potential</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">postsyn</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">)</span>
+
+<span class="c1"># Run simulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-creating-and-connecting-an-inhibitory-synapse-in-hoc">
+<h2>Example: Creating and Connecting an Inhibitory Synapse in HOC<a class="headerlink" href="#example-creating-and-connecting-an-inhibitory-synapse-in-hoc" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create presyn, postsyn
+
+postsyn {
+    insert hh
+}
+
+objref syn, stim, nc
+
+syn = new Exp2Syn(0.5)
+syn.e = -80   // GABA reversal potential (mV)
+syn.tau1 = 0.5
+syn.tau2 = 5
+
+stim = new NetStim()
+stim.number = 5
+stim.start = 10
+stim.interval = 20
+
+nc = new NetCon(stim, syn)
+nc.weight[0] = 0.001  // synaptic weight (uS)
+</pre></div>
+</div>
+</section>
+<section id="further-considerations">
+<h2>Further Considerations<a class="headerlink" href="#further-considerations" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The synaptic weight parameter is usually in microsiemens for conductance-based synapses in NEURON.</p></li>
+<li><p>Negative weights are not used for conductance synapses; inhibition is controlled via reversal potential.</p></li>
+<li><p>The impact of synaptic weight on postsynaptic activity depends on the biophysical and anatomical context.</p></li>
+<li><p>Consult the <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#Exp2Syn" title="Exp2Syn"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exp2Syn</span></code></a>, and artificial cell classes (<a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire1" title="IntFire1"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire1</span></code></a>, etc.) documentation for specific synapse behavior.</p></li>
+<li><p>Consider experimental data and model hypotheses when determining values.</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#Exp2Syn" title="Exp2Syn"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exp2Syn</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire1" title="IntFire1"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire1</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire2" title="IntFire2"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire2</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IntFire4" title="IntFire4"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntFire4</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1168">https://neuron.yale.edu/phpBB/viewtopic.php?t=1168</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+Sections Connectivity and Electrical Properties
+===============================================
+
+Sections in NEURON models are connected end-to-end via their 0 and 1 ends, with the axial resistance (:math:`R_a`) representing the resistor between segments. The equivalent circuit of connected sections resembles cylindrical cable segments joined by axial resistors as shown in :class:`Section` diagrams (cf. The NEURON Book, Fig. 5.6D).
+
+.. note::
+   Total membrane capacitance is the integral of capacitance over the entire cell surface and can be calculated by summing capacitances of all segments across sections. However, this does *not* imply that membrane capacitances or resistances are simply in parallel, because finite axial resistivity separates membrane patches.
+
+Input Resistance and Membrane Resistance
+---------------------------------------
+
+- The input resistance (:math:`R_{in}`) is location-dependent and cannot be computed by directly combining resistances of individual sections with parallel or series formulas due to complex morphology and axial resistance.
+
+- Membrane resistance of an isolated compartment with only passive conductance (:math:`g_{pas}`) can be approximated as
+
+  .. code-block:: python
+
+     rm = 1.0 / h.g_pas[seg.x]  # specific membrane resistance (ohm cm²)
+     Rin_compartment = rm / seg.area()  # Input resistance approximation for that compartment
+
+- For the entire model or complex cells, measure :meth:`Rin` by applying current and measuring steady-state voltage:
+
+  .. code-block:: python
+
+     stim.amp = 0.1  # nA
+     h.finitialize(-65)
+     h.continuerun(100)
+     Rin = (v_final - v_rest) / stim.amp  # Ohm's law
+
+Membrane Time Constant (:math:`\tau_m`)
+---------------------------------------
+
+- Defined as :math:`\tau_m = R_m C_m` using *specific* membrane resistance (:math:`R_m`, ohm cm²) and *specific* membrane capacitance (:math:`C_m`, F/cm²), giving units of time (s).
+
+- Because increasing surface area proportionally increases capacitance and decreases resistance, :math:`\tau_m` is independent of membrane area.
+
+- In multi-compartment models, :math:`\tau_m` for the whole neuron is not a single value but a combination of exponentials reflecting cable properties. Numeric simulation and exponential fitting are needed rather than direct calculation.
+
+.. seealso::
+   :class:`Section`, :meth:`Section.connect`, :attr:`h.g_pas`, NEURON book chapter on cable theory.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4411 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4411>`_

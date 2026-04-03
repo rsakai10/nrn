@@ -1,0 +1,28 @@
+Using a Fixed Time-Step for Simulation in Python
+=================================================
+
+When running simulations with a fixed time-step in Python using NEURON, it is recommended to use NEURON’s standard run library rather than implementing a custom stepper.
+
+.. code-block:: python
+
+    from neuron import h, gui  # Loads standard run library and opens the NEURON Main Menu toolbar
+
+If you prefer not to display the NEURON Main Menu toolbar, load the standard GUI silently:
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file("stdgui.hoc")  # Loads run library without showing the toolbar
+
+After defining your model and simulation setup, set the desired time step and simulation duration:
+
+.. code-block:: python
+
+    h.dt = 0.025        # Set fixed time step (ms)
+    h.tstop = 100       # Set simulation duration (ms)
+    h.run()             # Run the simulation
+
+.. note::
+
+    Importing :mod:`neuron.gui` automatically loads the standard run library, which provides the :meth:`h.run` method for controlling simulations with fixed time-step integration.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=4050

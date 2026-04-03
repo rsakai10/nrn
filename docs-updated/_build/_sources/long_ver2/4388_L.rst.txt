@@ -1,0 +1,148 @@
+.. _netstim_randomness:
+
+Randomness Control with :class:`NetStim` and Independent Random Streams
+=======================================================================
+
+When using multiple :class:`NetStim` objects with noise enabled (e.g., ``noise=1``) to generate stochastic spike trains, all :class:`NetStim` instances share NEURON's single global pseudorandom number generator by default. This means that their random spike times are not truly independent: changing parameters of one :class:`NetStim` (such as interval, start time, or number) can alter the spike times of others.
+
+This behavior can lead to unintended correlations and difficulties in reproducibility when running simulations repeatedly or varying other model parameters in a loop.
+
+To obtain independent stochastic spike trains from multiple :class:`NetStim` objects and to be able to reproduce random sequences across runs, each :class:`NetStim` must be associated with its own independent random number generator based on :class:`Random`.
+
+Steps to use independent :class:`Random` streams with multiple :class:`NetStim`
+-------------------------------------------------------------------------------
+
+1. **Create separate :class:`Random` objects, one per stochastic :class:`NetStim`.** Initialize each random stream with distinct non-zero integer identifiers using the `Random123` method to ensure independent sequences.
+
+2. **Set the random distribution for each :class:`Random` to the interspike interval distribution expected by the :class:`NetStim`.** Normally, this is exponential with mean 1 (`negexp(1)`).
+
+3. **Create each :class:`NetStim` object and connect it to its corresponding :class:`Random` with :meth:`NetStim.noiseFromRandom`.**
+
+4. **Set any desired parameters (interval, number, start, noise) for each :class:`NetStim`.**
+
+5. **To reproduce the same patterns across simulation runs, reset each random stream's sequence position by calling :meth:`Random.seq(1)` before simulation.**
+
+Example in HOC
+--------------
+
+Below is a complete example that creates multiple stochastic :class:`NetStim` objects, each with its own independent random number generator to ensure independent and reproducible spike trains.
+
+.. code-block:: hoc
+
+   // Number of stochastic NetStims 
+   define NSNUM 5 
+
+   objref nslist, rslist
+   nslist = new List()  // Will hold NetStims
+   rslist = new List()  // Will hold Randoms
+
+   // Random123 stream IDs for seeded independent sequences
+   int id1 = 1
+   int id2 = 2
+   int id3 = 3
+
+   // Procedure to create NSNUM NetStims with independent Random streams
+   proc makenetstims() { local i, ns, rs
+     nslist = new List()
+     rslist = new List()
+     for i = 0, NSNUM-1 {
+       rs = new Random()
+       // Initialize independent random stream with distinct sequence numbers
+       rs.Random123(id1, id2, id3 + i)
+       rs.negexp(1)  // Set distribution to exponential with mean 1
+       rslist.append(rs)
+
+       ns = new NetStim()
+       nslist.append(ns)
+       ns.noiseFromRandom(rs)  // Use this random stream for noise
+     }
+   }
+
+   // Initialize NetStims and Randoms
+   makenetstims()
+
+   // Procedure to set parameters on all NetStims
+   proc setnsparams() { local i
+     for i = 0, nslist.count()-1 {
+       nslist.o(i).interval = 50    // mean interval in ms
+       nslist.o(i).number = 200     // number of spikes
+       nslist.o(i).start = 0        // start time in ms
+       nslist.o(i).noise = 1        // enable stochastic spike generation
+     }
+   }
+
+   setnsparams()
+
+   // Procedure to reset all random streams to the start of their sequences
+   proc restart_random_streams() { local i
+     for i = 0, rslist.count()-1 {
+       rslist.o(i).seq(1)
+     }
+   }
+
+   // Call restart_random_streams() before each run to reproduce the same spiking pattern
+   restart_random_streams()
+
+Example Python translation
+--------------------------
+
+The same approach can be implemented in Python using :class:`Random` objects and their methods to create independent random streams and associate them with :class:`NetStim` via :meth:`NetStim.noise_from_random`.
+
+.. code-block:: python
+
+   from neuron import h
+
+   NSNUM = 5
+
+   nslist = []
+   rslist = []
+
+   id1 = 1
+   id2 = 2
+   id3 = 3
+
+   def makenetstims(num):
+       for i in range(num):
+           rs = h.Random()
+           rs.Random123(id1, id2, id3 + i)
+           rs.negexp(1)
+           rslist.append(rs)
+
+           ns = h.NetStim()
+           ns.noise_from_random(rs)
+           nslist.append(ns)
+
+   def setnsparams(interval=50, number=200, start=0, noise=1):
+       for ns in nslist:
+           ns.interval = interval
+           ns.number = number
+           ns.start = start
+           ns.noise = noise
+
+   def restart_random_streams():
+       for rs in rslist:
+           rs.seq(1)
+
+   makenetstims(NSNUM)
+   setnsparams()
+   restart_random_streams()
+
+Notes
+-----
+
+- Using independent :class:`Random` streams per :class:`NetStim` ensures that adjusting parameters for one spike generator does not affect the stochastic spike times of others.
+
+- Calling the restart procedure (`restart_random_streams()`) before each simulation run resets the pseudorandom sequences to the same initial state for reproducibility.
+
+- Without assigning independent random number generators, all :class:`NetStim` objects share the global stream, making spike times interdependent and non-reproducible when parameters change.
+
+.. seealso::
+
+   :class:`NetStim`
+   :class:`Random`
+   :meth:`NetStim.noiseFromRandom`
+   :meth:`Random.Random123`
+   :meth:`Random.negexp`
+   :meth:`Random.seq`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4388 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4388>`_

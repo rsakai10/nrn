@@ -1,0 +1,113 @@
+E_pas and Setting Resting Potential in NEURON Models
+====================================================
+
+When inserting the passive membrane mechanism (:mod:`pas`) into a :class:`Section`, it is important to understand the roles of its parameters, especially :attr:`g_pas` and :attr:`e_pas`.
+
+Passive Parameters
+------------------
+- The membrane resistance per unit area (Rm) is commonly reported in units of ohm·cm².
+- In NEURON, the passive conductance (:attr:`g_pas`) is the inverse of Rm:
+
+.. code-block:: python
+
+    # Given Rm from literature in ohm·cm²
+    Rm = 20000  # example value
+    sec.insert('pas')
+    sec.g_pas = 1.0 / Rm  # siemens/cm²
+
+- The membrane capacitance per unit area (:attr:`cm`) is also set based on literature or experimental data:
+
+.. code-block:: python
+
+    sec.cm = 1.0  # typical value in uF/cm²
+
+Meaning and Use of e_pas
+------------------------
+- :attr:`e_pas` is the reversal (equilibrium) potential of the leak current mediated by the passive mechanism.
+- Conceptually, :attr:`e_pas` reflects the biophysical property of the passive conductance.
+- It is not an arbitrary initial condition, but a parameter dictating the "resting" voltage that passive currents tend to drive the membrane toward.
+
+Setting Initial Voltage (:attr:`v_init`) in Relation to e_pas
+------------------------------------------------------------
+- :attr:`v_init` is the initial membrane potential at the start of a simulation.
+- If a section has *only* the passive mechanism (:mod:`pas`) inserted, its resting membrane potential is determined by :attr:`e_pas`.
+- To start the simulation close to the resting state and avoid transients, set:
+
+.. code-block:: python
+
+    h.v_init = sec.e_pas
+
+- Setting :attr:`e_pas` equal to :attr:`v_init` is a common practice in simple passive models.
+
+More Complex Models with Multiple Ion Channels and Compartments
+---------------------------------------------------------------
+- In cells with active conductances in the soma (channels, pumps, exchangers) and passive dendrites:
+
+  - The resting potential of the cell is generally determined by the ensemble of all ionic currents.
+  - Each section’s :attr:`e_pas` in passive dendrites should ideally reflect the actual equilibrium potential for the leak currents of that compartment.
+  - Assigning :attr:`e_pas` to the overall cell resting potential (e.g., -65 mV) in passive sections can be reasonable if you conceptualize the passive dendrites as contributing this resting conductance.
+
+- When applying voltage clamp or holding the neuron at an imposed potential (e.g., -100 mV):
+
+  - The value of :attr:`e_pas` does not necessarily change.
+  - Voltage clamp sets membrane voltage externally, overriding currents.
+  - :attr:`e_pas` should remain consistent with the biological leakage reversal potential rather than being set equal to the clamp potential.
+
+Initialization and Model Dynamics
+---------------------------------
+- NEURON's default initialization simulates clamping the membrane at :attr:`v_init` until steady state is reached, then releases the clamp at t=0.
+- If ionic mechanisms and conductances are spatially nonuniform, the membrane potential may drift after initialization due to heterogeneous driving forces.
+- Ion concentration dynamics complicate initial steady state and often require extended simulations or specialized initialization routines (e.g., as discussed in advanced NEURON documentation).
+- Users should plan simulation initialization according to the model's complexity and goals:
+
+  1. For simple passive models, setting :attr:`v_init = e_pas` ensures initial resting state.
+  2. For complex models with multiple conductances and ion dynamics, allow for a pre-stimulus settling period or use explicit steady-state initialization methods.
+
+Summary
+-------
+- Set :attr:`g_pas = 1 / Rm` and :attr:`cm` according to literature values.
+- Set :attr:`e_pas` to the biologically realistic equilibrium potential of the leak current.
+- In purely passive models, initialize :attr:`v_init` to :attr:`e_pas` to start at resting potential.
+- In complex models, interpret :attr:`e_pas` as a biophysical parameter rather than an initial voltage; handle initialization carefully to reach physiological steady state before stimulation.
+
+Example Usage in Python
+-----------------------
+
+.. code-block:: python
+
+    from neuron import h
+
+    sec = h.Section(name='dendrite')
+    sec.L = 100  # length in microns
+    sec.diam = 1  # diameter in microns
+    sec.insert('pas')
+
+    Rm = 20000  # ohm·cm² from literature
+    Cm = 1.0    # uF/cm² typical membrane capacitance
+    
+    sec.g_pas = 1.0 / Rm  # S/cm²
+    sec.cm = Cm
+    sec.e_pas = -65       # mV, leak reversal potential from experimental data
+
+    h.v_init = sec.e_pas  # start simulation near resting membrane potential
+
+Example Usage in HOC
+-------------------
+
+.. code-block:: hoc
+
+    create dendrite
+    dendrite {
+        L = 100
+        diam = 1
+        insert pas
+        g_pas = 1/(20000)  // S/cm²
+        cm = 1
+        e_pas = -65         // mV
+    }
+    v_init = -65            // mV
+
+.. note::
+    Always align your model parameters and initialization strategy with the conceptual and experimental framework of your study. Proper initialization is critical to avoid artificial dynamics at simulation start.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=697 <https://neuron.yale.edu/phpBB/viewtopic.php?t=697>`_

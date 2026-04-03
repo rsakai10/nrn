@@ -1,0 +1,43 @@
+SectionList Iteration and Grouped Execution in HOC
+==================================================
+
+When iterating over a :class:`SectionList` with many sections, you may want to apply different commands to groups of sections (e.g., first 10, next 10, etc.). Since :class:`SectionList` does not support indexed access directly, use an auxiliary counter variable with :keyword:`forsec` to track position:
+
+.. code-block:: hoc
+
+    ii = 0
+    forsec seclist {
+      if (ii < 10) {
+        // statement 1
+      } else if (ii < 20) {
+        // statement 2
+      }
+      ii += 1
+    }
+
+To manage multiple commands cleanly, define a vector of :class:`String` objects containing commands and execute them via an index:
+
+.. code-block:: hoc
+
+    const NUMCMDS = 3
+    objref command[NUMCMDS]
+    for ii=0, NUMCMDS-1 command[ii] = new String()
+    command[0].s = "x = PI"
+    command[1].s = "x = sqrt(2)"
+    command[2].s = "x = exp(-1)"
+
+    proc docmd() {
+      execute(command[$1].s)
+    }
+
+    ii = 0
+    forsec seclist {
+      docmd(int(ii/10))
+      ii += 1
+    }
+
+.. note::
+
+  The order of iteration in :keyword:`forsec "prefix"` loops is by creation order, not alphabetical. To ensure a specific order, explicitly create and populate a :class:`SectionList` with sections in the desired sequence.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1191 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1191>`_

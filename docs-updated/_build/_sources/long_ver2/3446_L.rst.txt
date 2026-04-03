@@ -1,0 +1,102 @@
+Stimulating Multiple Axons with IClamp in NEURON
+=================================================
+
+When stimulating multiple axons using :class:`IClamp` in NEURON, it is important to understand that an :class:`IClamp` is a point process which can be attached to only one specific segment of one section. Thus, to stimulate multiple axons independently, each axon requires its own distinct :class:`IClamp` instance connected explicitly to that axon.
+
+Key Concepts
+------------
+
+- **Point processes and target segments**: An :class:`IClamp` delivers current only to the segment of the section it is attached to. 
+- **Specifying sections explicitly**: When creating a point process, explicitly specify the target section using the `sec=` keyword argument to avoid ambiguity caused by the "currently accessed section".
+- **Naming conventions**: Using consistent naming conventions for sections and their stimulators enhances code clarity and debugging.
+
+Example: Stimulating Two Axons with Separate IClamp Instances
+-------------------------------------------------------------
+
+```python
+from neuron import h
+import numpy as np
+from matplotlib import pyplot as plt
+
+h.celsius = 33    # temperature (°C)
+h.tstop = 30      # simulation duration (ms)
+h.dt = 0.025      # integration time step (ms)
+
+# Create two axons using hoc strings for clarity
+h('create axon0')
+h('create axon1')
+
+axon0 = h.axon0
+axon1 = h.axon1
+
+# Set biophysical properties for both axons
+for axon in [axon0, axon1]:
+    axon.L = 1000      # length (µm)
+    axon.diam = 1      # diameter (µm)
+    axon.nseg = 21     # number of segments (odd number recommended)
+    axon.insert('hh')  # Hodgkin-Huxley active conductances
+
+# Create distinct IClamp instances for each axon, explicitly specifying the section
+stim0 = h.IClamp(0.5, sec=axon0)  # position 0.5 (middle of section)
+stim0.delay = 0.1
+stim0.dur = 0.1
+stim0.amp = 1
+
+stim1 = h.IClamp(0.5, sec=axon1)
+stim1.delay = 1.1
+stim1.dur = 0.1
+stim1.amp = 1
+
+# Record membrane potentials at position 0 of each axon
+v0 = h.Vector().record(axon0(0)._ref_v)
+v1 = h.Vector().record(axon1(0)._ref_v)
+
+# Record simulation time
+t = h.Vector().record(h._ref_t)
+
+# Initialize and run simulation
+h.finitialize(-65)
+h.run()
+
+# Convert recorded vectors to numpy arrays for plotting
+time = np.array(t)
+voltage_axon0 = np.array(v0)
+voltage_axon1 = np.array(v1)
+
+# Plot results
+plt.plot(time, voltage_axon0, label='Axon 0')
+plt.plot(time, voltage_axon1, label='Axon 1')
+plt.xlabel('Time (ms)')
+plt.ylabel('Membrane potential (mV)')
+plt.title('Stimulation of multiple axons with separate IClamp')
+plt.legend()
+plt.show()
+```
+
+Important Notes
+---------------
+
+.. note::
+   When instantiating a point process like :class:`IClamp`, always specify the section explicitly with `sec=<section>` to ensure it is attached to the intended section. Calling ``h.IClamp(0, axon1)`` without the `sec=` keyword argument leads NEURON to interpret the segment based on the currently accessed section, which may not be the axon you expect.
+
+.. note::
+   It is recommended to use an odd number of segments (:attr:`nseg`) to center the point process at the middle of a segment. The d_lambda rule can be used to calculate appropriate values of :attr:`nseg` for accurate spatial discretization.
+
+.. note::
+   Each axon (section) can have only one segment at a given 3D spatial location, but when creating multiple sections named differently (e.g., "axon0", "axon1") their segments are distinct objects, even if their numerical addresses appear similar at the Python interface level.
+
+.. seealso::
+   :class:`IClamp` — Point process for current injection  
+   :meth:`Section.insert` — Inserting ion channel mechanisms  
+   NEURON Book chapters 5 and 6 — Detailed explanation of sections and point processes
+
+Summary
+-------
+
+- To stimulate multiple axons, create one :class:`IClamp` per axon.
+- Use the `sec=` keyword argument explicitly to specify the target section when constructing point processes.
+- Use consistent naming conventions for clarity.
+- Run short simulations with reasonable :attr:`dt` for efficient development and debugging.
+- Use odd values for :attr:`nseg` and consult the d_lambda rule for spatial accuracy.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3446 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3446>`_

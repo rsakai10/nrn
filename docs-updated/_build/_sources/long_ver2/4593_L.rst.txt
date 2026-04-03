@@ -1,0 +1,114 @@
+Cutting a Simulation into Multiple Runs and Modifying Parameters Midway
+=========================================================================
+
+When simulating a neuron model over a total time interval (e.g., 1000 ms), it is often useful to split the simulation into segments. This allows changing parameters or model states between runs while continuing seamlessly from the previous simulation state.
+
+This document explains how to run a simulation in two (or more) parts, make parameter changes in between, and properly handle recording of variables to capture the entire run or just a segment.
+
+Basic Workflow in Python
+------------------------
+
+1. **Run the first segment of the simulation.**  
+2. **Modify any model parameters as needed.**  
+3. **Reinitialize the solver state if required.**  
+4. **Continue the simulation for the remaining time period.**  
+5. **Record variables continuously across runs or reset recordings between runs as desired.**
+
+Example Python Code
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    from neuron import h, gui
+    from neuron.units import ms, mV
+
+    # Assume my_cell is an instantiated cell with a section named soma
+
+    # Recording vectors defined before any simulation
+    soma_v = h.Vector().record(my_cell.soma(0.5)._ref_v)
+    t = h.Vector().record(h._ref_t)
+
+    # Initialize and run first segment: 0 to 300 ms
+    h.finitialize(-65 * mV)
+    h.continuerun(300 * ms)
+
+    # Modify model parameters here (example: change conductance)
+    my_cell.gbar = 0.01  # Example parameter change
+
+    # Reinitialize solver state if variable time step method (CVODE) is active
+    if h.cvode.active():
+        h.cvode.re_init()
+    else:
+        h.fcurrent()  # Update currents for fixed time step solvers
+
+    # Continue simulation from 300 to 1000 ms
+    h.continuerun(1000 * ms)
+
+Recording Considerations
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Record vectors must be created and linked before simulation initialization** (`h.finitialize`).  
+- Recording vectors accumulate data continuously by default across simulation segments. That is, `soma_v` and `t` will contain time and voltage values starting from t=0 and extending through all continuous runs.  
+- To **reset the recording vectors between runs** and record only from the second segment onwards, use:
+
+  .. code-block:: python
+
+      h.frecord_init()
+
+  This call clears previously recorded data from all vectors defined via :meth:`Vector.record` and starts fresh recording from the current time.
+
+- Avoid creating new recording vectors after the first simulation segment as these will not receive data retroactively and that can cause confusion.
+
+Using HOC Syntax
+----------------
+
+The equivalent approach in HOC is:
+
+.. code-block:: hoc
+
+    // Recording vectors
+    objref soma_v, t
+    soma_v = new Vector()
+    t = new Vector()
+    soma_v.record(&my_cell.soma.v(0.5))
+    t.record(&t)
+
+    // First simulation segment
+    finitialize(-65)
+    continuerun(300)
+
+    // Modify parameters here
+    my_cell.gbar = 0.01
+
+    if (cvode.active()) {
+        cvode.re_init()
+    } else {
+        fcurrent()
+    }
+
+    // Continue simulation
+    continuerun(1000)
+
+Notes
+-----
+
+- The function :meth:`h.cvode.re_init` is essential to reset the solver internal state when using variable time step integration (:class:`h.CVode`), ensuring that the subsequent simulation segment continues correctly. For fixed-step simulations, calling :func:`h.fcurrent` is sufficient to update ionic currents and states to the new parameter values before continuing.  
+- :meth:`h.continuerun` continues the simulation from the current simulation time but requires that the argument time `newtstop` be greater than the previous simulation stop time.  
+- Plan your changes and simulation stops accordingly.  
+- For performance optimization when repeating simulations from intermediate states, consider using NEURON’s :meth:`h.SaveState` Class.
+
+Summary
+-------
+
+To split a NEURON simulation into multiple runs and change parameters in between:
+
+- Define recording vectors before initializing the simulation.  
+- Run the first simulation segment using :meth:`h.finitialize` and :meth:`h.continuerun`.  
+- Between runs, modify model parameters as needed.  
+- Reinitialize the solver using :meth:`h.cvode.re_init` if using CVODE, otherwise call :func:`h.fcurrent`.  
+- Continue simulation with :meth:`h.continuerun` to the new stop time.  
+- Use :meth:`h.frecord_init` if you want to clear recorded data and start fresh recordings at the new segment.  
+
+This method allows interactive simulation control and parameter adjustment with accurate continuation of states from one segment to the next.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4593 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4593>`_

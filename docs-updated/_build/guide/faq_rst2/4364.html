@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What are the units of ina and ik in the Hodgkin-Huxley mechanism in NEURON? &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What are the units of <cite>ina</cite> and <cite>ik</cite> in the Hodgkin-Huxley mechanism in NEURON?</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/4364.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="what-are-the-units-of-ina-and-ik-in-the-hodgkin-huxley-mechanism-in-neuron">
+<h1>What are the units of <cite>ina</cite> and <cite>ik</cite> in the Hodgkin-Huxley mechanism in NEURON?<a class="headerlink" href="#what-are-the-units-of-ina-and-ik-in-the-hodgkin-huxley-mechanism-in-neuron" title="Link to this heading"></a></h1>
+<p>In the Hodgkin-Huxley (<cite>hh</cite>) mechanism, the variables <cite>ina</cite> and <cite>ik</cite> represent the sodium and potassium transmembrane currents, respectively. These currents are expressed as <em>current densities</em> with units of <strong>mA/cm²</strong>.</p>
+<p>Note that although the <cite>hh</cite> mechanism calculates and writes to <cite>ina</cite> and <cite>ik</cite>, these variables are not accessible as Python or Hoc variables via <cite>axon(0.5).hh.ina</cite> or <cite>axon(0.5).hh.ik</cite>, because they are not declared as <cite>RANGE</cite> variables in the mod file. However, the total transmembrane current densities can be accessed directly from the segment, e.g., <cite>axon(0.5).ina</cite> and <cite>axon(0.5).ik</cite>.</p>
+<section id="example-in-python">
+<h2>Example in Python<a class="headerlink" href="#example-in-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">axon</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;axon&#39;</span><span class="p">)</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mf">18.8</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mf">18.8</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">Ra</span> <span class="o">=</span> <span class="mf">123.0</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SEClamp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">axon</span><span class="p">)</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur1</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">64.9737</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur2</span> <span class="o">=</span> <span class="mi">90</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp2</span> <span class="o">=</span> <span class="mi">90</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur3</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp3</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sodium current density (ina):&#39;</span><span class="p">,</span> <span class="n">axon</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ina</span><span class="p">,</span> <span class="s1">&#39;mA/cm²&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Potassium current density (ik):&#39;</span><span class="p">,</span> <span class="n">axon</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ik</span><span class="p">,</span> <span class="s1">&#39;mA/cm²&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-in-hoc">
+<h2>Example in Hoc<a class="headerlink" href="#example-in-hoc" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create axon
+axon {
+    nseg = 1
+    diam = 18.8
+    L = 18.8
+    Ra = 123.0
+    insert hh
+}
+
+objref stim
+stim = new SEClamp(0.5, axon)
+
+stim.dur1 = 10
+stim.amp1 = -64.9737
+stim.dur2 = 90
+stim.amp2 = 90
+stim.dur3 = 0
+stim.amp3 = 0
+
+finitialize(-65)
+tstop = 100
+run()
+
+print &quot;Sodium current density (ina): &quot;, axon.ina(0.5), &quot; mA/cm²&quot;
+print &quot;Potassium current density (ik): &quot;, axon.ik(0.5), &quot; mA/cm²&quot;
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>ina</cite> and <cite>ik</cite> are current densities (mA/cm²), not total currents.</p></li>
+<li><p>They are accessible only through the segment (e.g., <cite>axon(0.5).ina</cite>), not through the mechanism instance (e.g., <cite>axon(0.5).hh.ina</cite>).</p></li>
+<li><p>The leak current <cite>il</cite> is accessible from the mechanism interface as <cite>axon(0.5).hh.il</cite>.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4364">https://neuron.yale.edu/phpBB/viewtopic.php?t=4364</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

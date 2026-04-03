@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation of Consecutive Runs with Time-Varying Stimulation Using SaveState &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Simulation of Consecutive Runs with Time-Varying Stimulation Using SaveState</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2048_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="simulation-of-consecutive-runs-with-time-varying-stimulation-using-savestate">
+<h1>Simulation of Consecutive Runs with Time-Varying Stimulation Using SaveState<a class="headerlink" href="#simulation-of-consecutive-runs-with-time-varying-stimulation-using-savestate" title="Link to this heading"></a></h1>
+<p>When performing multiple consecutive current clamp simulations in NEURON where the stimulus waveform changes for each run (e.g., reading different input files <cite>stim1.dat</cite>, <cite>stim2.dat</cite>, etc.), one common requirement is to have each simulation start from the final state of the previous one. This can be achieved using the <a class="reference internal" href="../progref/simctrl/savstate.html#SaveState" title="SaveState"><code class="xref py py-class docutils literal notranslate"><span class="pre">SaveState</span></code></a> object, but care must be taken with the order of operations and event queue management.</p>
+<p>This section explains how to organize such simulations correctly in HOC, including managing stimulus vectors and SaveState usage.</p>
+<section id="key-points">
+<h2>Key Points<a class="headerlink" href="#key-points" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use a single <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> invocation before the first run and update the underlying <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> data for each subsequent run without calling <cite>play()</cite> again.</p></li>
+<li><p>Save the state <em>after</em> the first run completes.</p></li>
+<li><p>Restore the saved state <em>without</em> clearing the event queue. This is crucial to keep <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector.play</span></code></a> active.</p></li>
+<li><p>Reset simulation time (<cite>t=0</cite>) after restoring state, before rerunning.</p></li>
+<li><p>Create separate initialization routines that allow controlling when SaveState restoration occurs.</p></li>
+<li><p>Do not reload or replay stimulus vectors between save and restore calls; keep the same <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> reference intact.</p></li>
+</ul>
+</section>
+<section id="example-implementation-in-hoc">
+<h2>Example Implementation in HOC<a class="headerlink" href="#example-implementation-in-hoc" title="Link to this heading"></a></h2>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>hoc
+// Define stimulus parameters and objects
+objref stim
+stim = IClamp[0]      // Assuming IClamp electrode at some location
+stim.del = 0
+stim.dur = 1e9        // Long duration to allow continuous play
+stim.amp = 0          // Initial amplitude</p>
+<p>DT = 0.025            // Stimulus sampling interval (ms)</p>
+<p>objref r, f, svstate
+strdef filename</p>
+<p>// Create file and vector objects
+f = new File()
+r = new Vector()
+svstate = new SaveState()</p>
+<p>// Set up Vector to play into stim.amp once only
+r.play(&amp;stim.amp, DT)</p>
+<p>// Initialization procedure supporting SaveState restoration
+proc myinit() {</p>
+<blockquote>
+<div><p>finitialize(v_init)  // initialize voltages
+if (!$1) {          // $1 is a flag indicating first run</p>
+<blockquote>
+<div><p>// Restore saved state WITHOUT clearing event queue (argument 1)
+svstate.restore(1)
+t = 0           // Reset simulation time explicitly
+if (cvode.active()) { cvode.re_init() } else { fcurrent() }
+frecord_init()</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+<p>// Standard initialization and plotting setup
+proc mystdinit() {</p>
+<blockquote>
+<div><p>realtime = 0
+startsw()
+setdt()
+myinit($1)
+initPlot()</p>
+</div></blockquote>
+<p>}</p>
+<p>// Run a single simulation pass
+proc myrun() {</p>
+<blockquote>
+<div><p>mystdinit($1)
+continuerun(tstop)</p>
+</div></blockquote>
+<p>}</p>
+<p>// Batch run multiple simulations reading stimulus files
+proc batchrun() { local firstrun, i</p>
+<blockquote>
+<div><p>firstrun = 1
+for (i = 1; i &lt;= $1; i = i + 1) {</p>
+<blockquote>
+<div><p>sprint(filename, “stim%d.dat”, i)
+f.ropen(filename)</p>
+<p>// Read new stimulus waveform data into matrix
+objref mtrx
+mtrx = new Matrix(1, 2)
+mtrx.scanf(f)
+f.close()</p>
+<p>// Update vector r content preserving play object
+mtrx.getcol(1, r)</p>
+<p>myrun(firstrun)  // Run simulation
+svstate.save()   // Save current state after run</p>
+<p>firstrun = 0     // Flag for subsequent runs</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<section id="id5">
+<h3>}<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="stimulus-input-file-format-requirements">
+<h2>Stimulus Input File Format Requirements<a class="headerlink" href="#stimulus-input-file-format-requirements" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Files contain two columns (time and amplitude).</p></li>
+<li><p>The first line must specify the number of rows and columns (e.g. <cite>201 2</cite>).</p></li>
+<li><p>The remaining lines contain time-value pairs.</p></li>
+<li><p>Header lines (such as labels) should be removed before reading by <a class="reference internal" href="../progref-1/programming/math/matrix.html#Matrix.scanf" title="Matrix.scanf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Matrix.scanf()</span></code></a>.</p></li>
+</ul>
+<p><strong>Example stimulus file content:</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">201</span> <span class="pre">2</span>
+<span class="pre">0</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">0</span>
+<span class="pre">0.025</span>&#160;&#160; <span class="pre">0</span>
+<span class="pre">0.05</span>&#160;&#160;&#160; <span class="pre">0</span>
+<span class="pre">...</span>
+<span class="pre">`</span></code></p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="../progref/simctrl/savstate.html#SaveState.restore" title="SaveState.restore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SaveState.restore()</span></code></a> method must be called with the argument <cite>1</cite> to prevent clearing of the event queue, which otherwise prevents <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> from continuing to function.</p></li>
+<li><p>Call <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> once at the start to attach the vector to the current/voltage attribute; do not re-call it inside the loop.</p></li>
+<li><p>Update the vector data between runs to change the stimulus waveform dynamically without reattaching.</p></li>
+<li><p>Resetting time <cite>t=0</cite> after <a class="reference internal" href="../progref/simctrl/savstate.html#SaveState.restore" title="SaveState.restore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SaveState.restore()</span></code></a> allows the integrator to run correctly from the saved state but with simulation time restarted.</p></li>
+<li><p>This method preserves all biophysical states and running time-dependent processes.</p></li>
+</ul>
+</section>
+<section id="using-python">
+<h2>Using Python<a class="headerlink" href="#using-python" title="Link to this heading"></a></h2>
+<p>The same logic can be implemented using Python with NEURON’s Python interface, adapting the file reading and matrix operations accordingly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">stim</span><span class="o">.</span><span class="k">del</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">1e9</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.025</span>
+<span class="n">tstop</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># example stop time</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">svstate</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SaveState</span><span class="p">()</span>
+<span class="n">r</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">stim</span><span class="o">.</span><span class="n">_ref_amp</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">myinit</span><span class="p">(</span><span class="n">firstrun</span><span class="p">):</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">v_init</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">firstrun</span><span class="p">:</span>
+        <span class="n">svstate</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">active</span><span class="p">():</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">re_init</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">fcurrent</span><span class="p">()</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">frecord_init</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">myrun</span><span class="p">(</span><span class="n">firstrun</span><span class="p">):</span>
+    <span class="n">myinit</span><span class="p">(</span><span class="n">firstrun</span><span class="p">)</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">tstop</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">batchrun</span><span class="p">(</span><span class="n">num_runs</span><span class="p">):</span>
+    <span class="n">firstrun</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_runs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;stim</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.dat&quot;</span>
+        <span class="c1"># Read stimulus data from file into vector `r`</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="c1"># Parse and convert according to the specified format</span>
+        <span class="c1"># (Skip first header line, read second line for dims, etc.)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">time_pt</span><span class="p">,</span> <span class="n">amp_pt</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amp_pt</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">from_python</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">myrun</span><span class="p">(</span><span class="n">firstrun</span><span class="p">)</span>
+        <span class="n">svstate</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">firstrun</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ensure stimulus files are correctly formatted as described above to avoid reading errors.</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>This approach enables running multiple short-neuron simulations sequentially, each starting from the endpoint of the previous one and receiving unique time-varying stimuli from files. The key is to maintain the <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> connection across runs and to restore saved states without clearing scheduled events.</p>
+<p>This method is helpful for current clamp simulations with complex waveform stimuli divided into segments while preserving biophysical continuity across runs.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2048">https://neuron.yale.edu/phpBB/viewtopic.php?t=2048</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+NEURON Python Classes and Objects
+=================================
+
+NEURON exposes its internal objects and hoc templates as Python objects via an automatic
+conversion layer, effectively making all entities from the HOC stack available to a Python program.
+
+There are basically two main objects which expose most NEURON entities. The first is `hoc` which
+exposes a number of internal established classes and functions.
+
+.. code-block:: matlab
+
+    n = neuron.launch();
+    hoc = n.hoc;
+    hoc.List(
+    hoc.SectionList(
+    hoc.SectionRef(
+    hoc.Vector(
+        ...
+
+However, for *dynamic* entities NEURON provides the `n` gateway object. It gives access to internal
+classes (templates) and objects, even if they were just created. E.g.:
+
+.. code-block:: matlab
+
+    n = neuron.launch();
+    % Create objects in the hoc stack
+    n('objref vec');
+    n('vec = new Vector(5, 1)');
+    % Access to objects
+    vec_numpy = n.vec.as_numpy();
+    % Access to exposed types
+    vv = n.Vector(5, 2);
+    vv_numpy = vv.as_numpy();
+
+This is particularly useful as NEURON can dynamically load libraries with more functions and classes.
+
+Class Hierarchy
+---------------
+
+All NEURON's internal interpreter objects are instances of a global top-level type: `HocObject`.
+Until very recently they were considered direct instances, without any intermediate hierarchy.
+
+With #1858 Hoc classes are now associated with actual Python types, created dynamically. Such
+change enables type instances to be properly recognized as such, respecting e.g. `isinstance()`
+predicates and subclassing.
+
+.. code-block:: matlab
+
+    isinstance(hoc.Vector, 'type')
+    v = n.Vector();
+    isinstance(v, 'hoc.HocObject')
+    isinstance(v, 'hoc.Vector')
+    isa(v, 'hoc.Vector')  % direct subclass
+    isinstance(v, 'hoc.Deck')  % Not instance of other class
+
+Subclasses are also recognized properly. For creating them please inherit from `HocBaseObject`
+with `hoc_type` given as argument. E.g.:
+
+.. code-block:: matlab
+
+    classdef MyStim < neuron.HocBaseObject
+        properties (Constant)
+            _hoc_type = n.NetStim;
+        end
+    end
+    isa(MyStim, 'hoc.HocObject')
+    isa(MyStim, 'neuron.HocBaseObject')
+    MyStim._hoc_type == n.NetStim
+    stim = MyStim();
+    isa(stim, 'MyStim')
+    isa(stim, 'n.NetStim')
+    isa(stim, 'n.HocObject')
+

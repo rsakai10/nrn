@@ -1,0 +1,41 @@
+.. _coba_neuron:
+
+COBA Conductance-Based Neuron Model
+-----------------------------------
+
+The COBA neuron model implements synaptic interactions by incrementing synaptic conductances instantaneously upon spike events and allowing them to decay exponentially (e.g., 6 nS with 5 ms time constant for excitatory synapses). This is realized using built-in NEURON point processes such as :class:`ExpSyn`, instantiated in the :class:`CobaCell` template (defined in `cobacell.hoc`) where separate excitatory and inhibitory synapses are created.
+
+The :file:`spikeout.mod` mechanism functions as a spike event generator and a functional spike clamp. It employs a conductance variable *g* and a :meth:`BREAKPOINT` block with the assignment::
+
+    i = g*(v - vrefrac)
+
+which computes the clamping current at every time step to enforce a spike-like voltage trajectory. The mechanism's :meth:`NET_RECEIVE` block implements a state machine controlling the spike timing and refractory behavior through events flagged 1, 2, and 3, and a :rst:whatis:`WATCH` statement that continuously monitors the membrane potential crossing threshold.
+
+Example simplified :meth:`NET_RECEIVE` logic from :file:`spikeout.mod`::
+    
+    NET_RECEIVE(weight w) {
+      if (flag == 1) {
+        net_event(t)
+        net_send(refrac, 2)
+        g = grefrac
+        v = vrefrac
+      } else if (flag == 2) {
+        g = 0
+      } else if (flag == 3) {
+        WATCH (v > thresh) 1
+      }
+    }
+
+Parameters like spike threshold and refractory voltage are typically set externally in hoc code, accessed via global variables with names such as ``thresh_SpikeOut`` and ``refrac_SpikeOut``.
+
+To extend :file:`spikeout.mod` for more realistic spike waveforms, a modified mechanism (e.g., `xspikeout.mod`) introduces additional states and parameters allowing the membrane potential to track complex trajectories during refractory periods, controlled via additional flags and self-events.
+
+.. note::
+
+   The value of *g* (conductance in :file:`spikeout.mod`) affects spike reset strength only when nonzero and sufficiently large to shunt other currents. Setting *g* too small may fail to return the membrane potential below threshold promptly.
+
+.. seealso::
+
+   :class:`ExpSyn`, :class:`CobaCell`, Explanation of :meth:`NET_RECEIVE` event delivery and :meth:`WATCH` statement usage in spike generation.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2304 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2304>`_

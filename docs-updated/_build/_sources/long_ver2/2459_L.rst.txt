@@ -1,0 +1,184 @@
+Reproducing and Validating Ion Channel Models from QUB in NEURON
+=================================================================
+
+This section explains how to reproduce ion channel models originally developed in QUB using NEURON's :mod:`NMODL` language and verify their behavior via comparison with MATLAB implementations. It addresses common issues such as initialization of state probabilities and interpretation of kinetic schemes, with practical examples and code snippets.
+
+Introduction
+------------
+
+Ion channel models imported from QUB are often defined with kinetic schemes involving multiple states and voltage-dependent transition rates. When translating these models into NEURON's NMODL, differences in initialization and interpretation of rate parameters can cause discrepancies versus original QUB simulations or MATLAB reproductions.
+
+Key points include:
+
+- Initial steady state probabilities for channel states depend on the initial membrane voltage (:attr:`v_init`).
+- The order and assignment of forward and reverse rates in the kinetic block must correctly reflect the intended state transitions.
+- Careful synchronization of voltage clamp protocols and NEURON model initialization is required to reproduce QUB results.
+- Debugging NMODL code can use C-style ``printf()`` statements.
+
+Example of a Three-State Potassium Channel in NMODL
+---------------------------------------------------
+
+The following is an example NMODL file implementing a three-state voltage-dependent potassium channel imported from QUB:
+
+.. code-block:: mod
+
+    TITLE channel model imported from QUB
+
+    NEURON {
+      SUFFIX QUB_K_CHANNEL
+      USEION k READ ek WRITE ik
+      RANGE gbar, gk, ik
+      RANGE k0_C1_O1, k1_C1_O1, k0_O1_C1, k1_O1_C1
+      RANGE k0_C2_C1, k1_C2_C1, k0_C1_C2, k1_C1_C2
+    }
+
+    UNITS {
+      (mA) = (milliamp)
+      (mV) = (millivolt)
+      (pS) = (picosiemens)
+      (um) = (micron)
+    }
+
+    PARAMETER {
+      gbar = 0.001  (pS/um2)
+      k0_C1_O1 = 0.0005 (/ms)
+      k1_C1_O1 = 0.08 (/mV)
+      k0_O1_C1 = 0.0006 (/ms)
+      k1_O1_C1 = 0.04 (/mV)
+      k0_C2_C1 = 0.0008 (/ms)
+      k1_C2_C1 = 0.07 (/mV)
+      k0_C1_C2 = 0.002 (/ms)
+      k1_C1_C2 = 0.03 (/mV)
+    }
+
+    STATE {
+      O1 C2 C1
+    }
+
+    ASSIGNED {
+      v (mV)
+      ek (mV)
+      ik (mA/cm2)
+      gk (pS/um2)
+      C2C1 (/ms)
+      C1C2 (/ms)
+      C1O1 (/ms)
+      O1C1 (/ms)
+    }
+
+    INITIAL {
+      SOLVE states STEADYSTATE sparse
+    }
+
+    BREAKPOINT {
+      SOLVE states METHOD sparse
+      gk = gbar*O1
+      ik = (1e-4)*gk*(v - ek)
+    }
+
+    KINETIC states {
+      rates(v)
+
+      CONSERVE O1 + C2 + C1 = 1
+
+      ~ C1 <-> C2 (C2C1, C1C2)
+      ~ O1 <-> C1 (C1O1, O1C1)
+    }
+
+    PROCEDURE rates(v(millivolt)) {
+      C2C1 = k0_C2_C1 * exp(k1_C2_C1*v)
+      C1C2 = k0_C1_C2 * exp(k1_C1_C2*v)
+      C1O1 = k0_C1_O1 * exp(k1_C1_O1*v)
+      O1C1 = k0_O1_C1 * exp(k1_O1_C1*v)
+    }
+
+Defining State Transitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the :kinetic: block, the transition rates between states must be assigned with the correct directionality. The syntax:
+
+.. code-block:: mod
+
+    ~ StateA <-> StateB (rateAB, rateBA)
+
+means the forward rate from StateA to StateB is *rateAB*, and the backward rate from StateB to StateA is *rateBA*. It is critical to verify that parameters named `k0_x_y` and `k1_x_y` match this convention to avoid inverted kinetics.
+
+Initialization and Steady State
+------------------------------
+
+The initial state probabilities are set during the :keyword:`INITIAL` block by solving for steady state:
+
+.. code-block:: mod
+
+    INITIAL {
+      SOLVE states STEADYSTATE sparse
+    }
+
+The steady state depends on the initial membrane potential *v*, which defaults in NEURON to the value of the :data:`v_init` parameter, not the voltage clamp's command potential. For consistent results:
+
+- Set :data:`v_init` to the initial voltage step of your clamp or stimulus.
+- Ensure the first clamp command potential matches :data:`v_init`.
+
+Otherwise, you will observe discrepancies such as unexpectedly high open probabilities at simulation start.
+
+MATLAB Code to Compute Steady State
+-----------------------------------
+
+To compute steady-state probabilities independently (e.g., in MATLAB), set up the transition rate matrix *Q* from the forward and reverse rates and solve:
+
+.. code-block:: matlab
+
+    % Example for 2-state system at voltage V0
+    koc = k0_O1_C1 * exp(k1_O1_C1 * V0);
+    kco = k0_C1_O1 * exp(k1_C1_O1 * V0);
+
+    Q = [-koc, koc;
+          kco, -kco];
+
+    % Append conservation condition and solve
+    A = [Q; ones(1, size(Q,2))];
+    b = [zeros(size(Q,1),1); 1];
+    p = A \ b;  % steady state probabilities
+
+Debugging Output in NMODL
+-------------------------
+
+Add C-style ``printf()`` statements inside NMODL procedures for debugging:
+
+.. code-block:: mod
+
+    PROCEDURE rates(v(millivolt)) {
+      C2C1 = k0_C2_C1 * exp(k1_C2_C1*v)
+      C1C2 = k0_C1_C2 * exp(k1_C1_C2*v)
+      C1O1 = k0_C1_O1 * exp(k1_C1_O1*v)
+      O1C1 = k0_O1_C1 * exp(k1_O1_C1*v)
+
+      printf("Rates at v=%.2f mV: C2C1=%.6f, C1C2=%.6f, C1O1=%.6f, O1C1=%.6f\n",
+             v, C2C1, C1C2, C1O1, O1C1)
+    }
+
+Examples of Correct Initialization
+----------------------------------
+
+To set :data:`v_init` when running in HOC:
+
+.. code-block:: hoc
+
+    v_init = -20  // Set initial membrane voltage to -20 mV
+    stdinit()      // Initialize model states to steady state at v_init
+    run()          // Run simulation
+
+Correspondingly, in MATLAB simulations, initialize state probabilities to steady state values at the same voltage.
+
+Summary and Best Practices
+--------------------------
+
+- Always verify that :data:`v_init` matches your voltage clamp command potential (e.g., `amp1` parameter of :class:`SEClamp` or :class:`VClamp`), or explicitly initialize channel states accordingly.
+- Double-check the directionality of rates in the kinetic scheme to ensure forward and backward rates are assigned properly.
+- Use MATLAB or other numerical tools to independently verify steady state solutions for multi-state kinetic models.
+- Use printf debugging in NMODL to track computed rate constants and variables.
+- Naming conventions in mod files should be clear and concise to reduce human error.
+
+This guidance should help with reliable reproduction of QUB ion channel models in NEURON and facilitate debugging when differences arise.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2459 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2459>`_

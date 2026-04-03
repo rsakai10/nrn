@@ -1,0 +1,29 @@
+Using printf Statements for Debugging NMODL Code
+=================================================
+
+You can use C-style `printf` statements inside `BREAKPOINT` and `FUNCTION` blocks in NMODL files to facilitate debugging. Variable names should be referenced as they appear in the NMODL code, without suffixes or dot notation.
+
+Example:
+.. code-block:: mod
+
+    NEURON {
+      POINT_PROCESS PRtest
+      RANGE index
+    }
+    ASSIGNED {
+      v (mV)
+    }
+    PARAMETER {
+      index = 0
+    }
+    BREAKPOINT {
+      printf("BREAKPOINT\t index %d\t, t %g,\t v %g\n", index, t, v)
+    }
+    AFTER BREAKPOINT {
+      printf("AFTER BREAKPOINT\t index %d\t, t %g,\t v %g\n", index, t, v)
+    }
+
+.. note::
+   Use :meth:`hoc.HocObject.printf` style output carefully, as it may affect performance when used extensively during simulations.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2508 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2508>`_

@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choosing a random dendrite section from a SectionList &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Choosing a random dendrite section from a SectionList</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Choosing_a_random_dendrite_section_from_a_SectionList.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="choosing-a-random-dendrite-section-from-a-sectionlist">
+<h1>Choosing a random dendrite section from a SectionList<a class="headerlink" href="#choosing-a-random-dendrite-section-from-a-sectionlist" title="Link to this heading"></a></h1>
+<p>Q: How can I select a random dendrite section from a SectionList in NEURON to connect a synapse?</p>
+<p>A: While a SectionList does not provide direct methods to index and select individual sections, you can use the SectionRef class to create a List of SectionRefs referring to sections in your SectionList. This allows indexed access and random selection of sections. For placing synapses randomly with probability proportional to surface area, it is common to use a cumulative sum of areas to map random numbers to a particular segment.</p>
+<p><strong>Method 1: Using SectionRef to index sections</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref srlist
+srlist = new List()
+// Assuming sl is your SectionList containing dendrites
+forsec sl {
+    srlist.append(new SectionRef())
+}
+printf(&quot;Number of sections in srlist: %d\n&quot;, srlist.count())
+
+// Select a random section index
+srand(seed)  // seed with an integer
+int rand_index = int(rand()*srlist.count())
+sec = srlist.o(rand_index).sec
+printf(&quot;Randomly selected section: %s\n&quot;, secname())
+</pre></div>
+</div>
+<p><strong>Method 2: Random synapse placement proportional to surface area</strong></p>
+<ol class="arabic simple">
+<li><p>Compute cumulative sum of segment areas over all sections in the SectionList.</p></li>
+<li><p>Draw a random number between 0 and total surface area.</p></li>
+<li><p>Find the segment corresponding to this number.</p></li>
+<li><p>Place synapse at the position within the section corresponding to the segment.</p></li>
+</ol>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref myseclist, acusum
+myseclist = new SectionList()
+// populate myseclist with dendrite sections
+
+// Function to compute cumulative sum of area
+proc makecusum() { local i localobj tmpvec
+    tmpvec = new Vector()
+    forsec myseclist for (x,0) tmpvec.append(area(x))
+    for i=1,tmpvec.size()-1 tmpvec.x[i] += tmpvec.x[i-1]
+    return tmpvec
+}
+
+acusum = new Vector()
+acusum = makecusum()
+objref syn
+// total area is last element of acusum
+total_area = acusum.x[acusum.size()-1]
+
+// For each synapse to place:
+for i=0,49 {
+    randloc = total_area * rand()
+    index = acusum.nearest(randloc)  // find segment index
+    // find section and segment corresponding to index (exercise for user)
+    // attach synapse at that segment location
+    syn = new ExpSyn(section(x))
+    syn.tau = 2
+    // ...
+}
+</pre></div>
+</div>
+<p><strong>Method 3: Random selection uniformly from SectionList</strong></p>
+<p>If you want to select a random section uniformly (not weighted by surface area):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Assuming sl is a h.SectionList containing dendrites</span>
+<span class="n">num_sections</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">rand_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_sections</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># To access the section at rand_index, use SectionRef list</span>
+<span class="n">srlist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">:</span>
+    <span class="n">srlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">SectionRef</span><span class="p">(</span><span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">))</span>
+<span class="n">random_sec</span> <span class="o">=</span> <span class="n">srlist</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">rand_index</span><span class="p">)</span><span class="o">.</span><span class="n">sec</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Randomly chosen section: &quot;</span><span class="p">,</span> <span class="n">random_sec</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref sl, srlist
+sl = new SectionList()
+// populate sl
+
+srlist = new List()
+forsec sl {
+    srlist.append(new SectionRef())
+}
+int n = srlist.count()
+srand(seed)
+int rand_index = int(rand() * n)
+objref secref
+secref = srlist.o(rand_index)
+printf(&quot;Random section: %s\n&quot;, secname(secref.sec))
+</pre></div>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=245">https://neuron.yale.edu/phpBB/viewtopic.php?t=245</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

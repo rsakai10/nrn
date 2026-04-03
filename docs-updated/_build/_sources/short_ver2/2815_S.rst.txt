@@ -1,0 +1,49 @@
+Array of Point Processes
+========================
+
+When translating hoc code that uses indexed arrays of point process objects into Python, prefer Python lists to manage collections of synaptic mechanisms and NetCons. Python lists offer more flexibility and easier iteration than fixed-size arrays in hoc.
+
+Example hoc code using indexed arrays:
+
+.. code-block:: hoc
+
+    objref GABAinp[N_in], GABApre[N_in], GABAconn[N_in]
+    for ii=0,N_in-1 {
+      GABAinp[ii] = new Exp2Syn(0.5)
+      GABApre[ii] = new NetStim()
+      GABAconn[ii] = new NetCon(GABApre[ii], GABAinp[ii])
+      GABAconn[ii].weight = 0.0005
+    }
+
+Equivalent Python code using lists:
+
+.. code-block:: python
+
+    GABAinp = []
+    GABApre = []
+    GABAconn = []
+    for _ in range(N_in):
+        syn = h.Exp2Syn(0.5)
+        stim = h.NetStim()
+        nc = h.NetCon(stim, syn)
+        nc.weight = 0.0005
+        GABAinp.append(syn)
+        GABApre.append(stim)
+        GABAconn.append(nc)
+
+Iterate over all NetCon objects easily by:
+
+.. code-block:: python
+
+    for nc in GABAconn:
+        nc.weight = 0.0004
+
+.. note::
+
+   If the synaptic mechanism has linear dynamics, a single instance receiving multiple inputs produces the same total conductance as multiple instances each receiving separate inputs, due to superposition. This can improve computational efficiency.
+
+.. seealso::
+
+   :class:`h.List` for hoc list management, :class:`h.NetCon`, :class:`h.Exp2Syn`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2815 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2815>`_

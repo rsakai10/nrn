@@ -1,0 +1,165 @@
+Changing Units in NMODL
+=======================
+
+When writing NMODL code, ensuring dimensional consistency of units is critical to obtain correct simulation results. Consider the example of a synaptic conductance mechanism with current computed from conductance and voltage difference:
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS synAMPA
+        RANGE onset, taur, taud, gmax, e, i, Epsilon
+        NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+        (mV) = (millivolt)
+        (uS) = (microsiemens)  : or (nS) = (nanosiemens)
+    }
+
+    PARAMETER {
+        onset = 0 (ms)
+        taur = 1.0 (ms)
+        taud = 5.0 (ms)
+        gmax = 0.001 (uS)      : or 1 (nS)
+        e = 0 (mV)
+        Epsilon = 1e-6
+    }
+
+    ASSIGNED {
+        v (mV)
+        i (nA)
+        g (uS or nS)
+        Frac
+    }
+
+    BREAKPOINT {
+        at_time(onset)
+        g = gmax * (1/Frac) * wexpzero( -(t-onset)/taud , -(t-onset)/taur )
+        i = g * (v - e)
+    }
+
+In this example, the synaptic current ``i`` is computed as the product of conductance ``g`` and the driving force ``(v - e)``.
+
+Dimensional Consistency Issue
+-----------------------------
+
+If ``g`` is expressed in microsiemens (uS) and voltage in millivolts (mV), then the product:
+
+``g (uS) * (v - e) (mV)``
+
+yields a current in nanoamperes (nA), because
+
+1 microsiemens × 1 millivolt = 1 nanoampere
+
+However, if you change units to nanosiemens (nS) for conductance without adjusting the computation correspondingly, the units become inconsistent:
+
+``g (nS) * (v - e) (mV)``
+
+yields picoamperes (pA), not nanoamperes (nA), which leads to incorrect current magnitudes if assigned directly to ``i`` declared as nA.
+
+Checking for Unit Errors
+------------------------
+
+Use the ``:func:`modlunit` `` tool to check NMODL files for unit consistency. It will report missing conversion factors. For example, for the inconsistent multiplication above, it reports:
+
+.. code-block::
+
+    The previous primary expression with units: 1-12 coul/sec
+    is missing a conversion factor and should read:
+      (0.001)*()
+     at line XX in file your_mechanism.mod
+            i = g * (v - e)<<ERROR>>
+
+Fixing the Unit Mismatch
+------------------------
+
+To fix unit inconsistency, explicitly include the conversion factor between siemens units:
+
+- When using conductance in nanosiemens (nS), multiply the product by ``0.001`` to convert picoamperes to nanoamperes.
+
+Modify the BREAKPOINT block as:
+
+.. code-block:: mod
+
+    BREAKPOINT {
+        at_time(onset)
+        g = gmax * (1/Frac) * wexpzero( -(t-onset)/taud , -(t-onset)/taur )
+        i = 0.001 * g * (v - e)   : convert nS*mV to nA
+    }
+
+Summary
+-------
+
+- Always declare UNITS carefully and consistently.
+- Remember that *1 microsiemens × 1 millivolt = 1 nanoampere*, while *1 nanosiemens × 1 millivolt = 1 picoampere*.
+- When changing conductance units from microsiemens to nanosiemens without changing current units (e.g., nanoamperes), adjust the formulas with the appropriate conversion factor.
+- Use :func:`modlunit` before running simulations to detect unit inconsistencies.
+- Incorrect unit conversions can cause simulation results to differ by orders of magnitude.
+
+.. note::
+
+   Dimensional consistency in NMODL is crucial to ensure the physical correctness of the model and stable numerical results.
+
+Implementation Example
+----------------------
+
+Full example with conductance in nanosiemens fixed for unit consistency:
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS synAMPA
+        RANGE onset, taur, taud, gmax, e, i, Epsilon
+        NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+        (mV) = (millivolt)
+        (nS) = (nanosiemens)
+    }
+
+    PARAMETER {
+        onset = 0 (ms)
+        taur = 1.0 (ms)
+        taud = 5.0 (ms)
+        gmax = 1 (nS)
+        e = 0 (mV)
+        Epsilon = 1e-6
+    }
+
+    ASSIGNED {
+        v (mV)
+        i (nA)
+        g (nS)
+        Frac
+    }
+
+    INITIAL {
+        Frac = wexpzero( -taur/(taur-taud) * log(taur/taud) , -taud/(taur-taud) * log(taur/taud) )
+    }
+
+    BREAKPOINT {
+        at_time(onset)
+        g = gmax * (1/Frac) * wexpzero( -(t-onset)/taud , -(t-onset)/taur )
+        i = 0.001 * g * (v - e)   : convert nS*mV to nA
+    }
+
+    FUNCTION wexpzero(x, y) {
+        if (x > -Epsilon || y > -Epsilon) {
+            wexpzero = 0
+        } else {
+            wexpzero = expzero(x) - expzero(y)
+        }
+    }
+
+    FUNCTION expzero(x) {
+        if (x < -5 || x >= 0) {
+            expzero = 0
+        } else {
+            expzero = exp(x)
+        }
+    }
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1935 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1935>`_

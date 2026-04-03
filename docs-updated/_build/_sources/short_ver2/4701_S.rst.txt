@@ -1,0 +1,51 @@
+.. _chunked_simulation_with_frecord_init_and_multiprocessing:
+
+Chunked Simulation with :meth:`h.frecord_init` and Python Multiprocessing
+----------------------------------------------------------------------------
+
+When running long NEURON simulations in chunks (e.g., via repeated calls to :meth:`h.continuerun`) with recorded variables stored in :class:`h.Vector` objects, calling :meth:`h.frecord_init` after each chunk resets and resizes the recording vectors for the next chunk.
+
+If you use Python multiprocessing to asynchronously process the recorded data (e.g., passing :class:`h.Vector` data converted by :meth:`Vector.as_numpy` to worker processes), be aware that:
+
+- :meth:`Vector.as_numpy` returns a NumPy array that shares memory with the underlying NEURON Vector data.
+- Calling :meth:`h.frecord_init` immediately after starting async worker tasks will modify the original Vectors and thus modify the NumPy arrays in place.
+- This causes the worker processes that have not yet started to see truncated or overwritten data, leading to incorrect or constant output.
+
+To avoid this issue, **make a deep copy of the NumPy arrays before passing them to worker processes**; for example:
+
+.. code-block:: python
+
+    var_array = vec.as_numpy().copy()  # explicit memory copy
+
+Alternatively, introduce a delay (e.g., ``time.sleep()``) before calling :meth:`h.frecord_init`, but copying is preferred and safer.
+
+**Example chunked simulation loop with multiprocessing:**
+
+.. code-block:: python
+
+    for chunk_end_time in chunk_end_times:
+        h.continuerun(chunk_end_time)
+        time_array = rec_dict["Time"].as_numpy().copy()
+        for var, vec in rec_dict.items():
+            if var == "Time":
+                continue
+            var_array = vec.as_numpy().copy()
+            pool.apply_async(target=data_processor, args=(var, var_array, time_array))
+        h.frecord_init()
+
+.. note::
+
+   When using variable time step integration with :class:`h.CVode`, you can specify a fixed sampling interval or a time vector directly in :meth:`Vector.record` to obtain regularly sampled data:
+
+.. code-block:: python
+
+    dt = 0.1  # ms sampling interval
+    time_vec = h.Vector().indgen(0, run_time, dt)
+    v = h.Vector().record(sec(0.5)._ref_v, time_vec)  # fixed time vector sampling
+
+.. seealso::
+
+   - :meth:`Vector.record` documentation for variable timestep resampling.
+   - Using :class:`h.CVode` events and carefully aligning :attr:`h.t` to chunk boundaries to avoid data length mismatches in chunked runs.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4701 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4701>`_

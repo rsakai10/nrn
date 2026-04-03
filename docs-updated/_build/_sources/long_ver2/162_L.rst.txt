@@ -1,0 +1,158 @@
+Programmatically Changing Temperature and Other Parameters in NEURON
+=====================================================================
+
+Changing temperature or other parameters during a simulation can be accomplished in NEURON using hoc scripting and event delivery without modifying NMODL code to directly assign to special variables like `celsius`. The following sections describe recommended methods, including interpolated ramps and event-driven discrete parameter changes.
+
+Changing Temperature Over Time
+------------------------------
+
+The built-in variable `celsius` represents the system temperature but **cannot be assigned directly** in NMODL code. Attempting to assign to `celsius` in a mechanism’s `BREAKPOINT` block results in an error:
+
+.. code-block:: mod
+
+    NEURON {
+        SUFFIX TClamp
+        RANGE del, dur, temp1, temp2
+    }
+
+    PARAMETER {
+        del = 100 (ms)
+        dur = 300 (ms)
+        temp1 = 35 (degC)
+        temp2 = 20 (degC)
+    }
+
+    ASSIGNED {
+        celsius (degC)
+    }
+
+    BREAKPOINT {
+        at_time(del)
+        at_time(del+dur)
+
+        if (t < del + dur && t > del) {
+            celsius = temp2  // ERROR: celsius cannot be assigned
+        } else {
+            celsius = temp1
+        }
+    }
+
+Instead, use hoc `Vector.play()` to drive `celsius` as a function of time from hoc:
+
+.. code-block:: hoc
+
+    objref tempvec, tvec
+    tempvec = new Vector(3)
+    tvec = new Vector(3)
+
+    tempvec.x[0] = 6.3  // deg C start temperature
+    tvec.x[0] = 0
+
+    tempvec.x[1] = 20   // deg C at 100 ms
+    tvec.x[1] = 100
+
+    tempvec.x[2] = 20   // deg C long after ramp ends
+    tvec.x[2] = 1e9
+
+    // The 3rd argument (1) enables interpolation between points (linear ramp)
+    tempvec.play(&celsius, tvec, 1)
+
+**Notes:**
+
+- If your NMODL mechanism uses temperature-dependent kinetics, it must declare `DEPEND celsius` in a TABLE statement so that rate tables update automatically when `celsius` changes (see `hh.mod` for example).
+
+- Continuous changes to `celsius` (e.g., ramp) cause recalculation of rate tables at every time step, which slows simulation.
+
+- Once `celsius` becomes constant, simulation speed returns to normal.
+
+Abrupt Parameter Changes Using cvode.event()
+--------------------------------------------
+
+For abrupt jumps in parameters (e.g., temperature, current amplitude, NetCon weight), use the `cvode.event()` method with an event delivery procedure. This approach avoids writing new NMODL mechanisms to handle parameter changes.
+
+Example: Generating a sequence of current pulses by controlling an `IClamp` amplitude:
+
+.. code-block:: hoc
+
+    objref stim
+    stim = new IClamp(0.5)
+
+    // Parameters for pulse sequence
+    : duration of each pulse (ms)
+    define DUR 0.1
+    : pulse amplitude (nA)
+    define AMP 0.1
+    : time of first pulse (ms)
+    define START 5
+    : interval between pulse starts (ms)
+    define INTERVAL 25
+    // DUR < INTERVAL assumed
+
+    objref fih
+    fih = new FInitializeHandler("initi()")
+
+    // State variable to track pulse on/off
+    STIMON = 0
+
+    proc initi() {
+        STIMON = 0
+        stim.del = 0           // control amp from 0 ms
+        stim.dur = 1e9        // duration long enough to cover all pulses
+        cvode.event(START, "seti()")  // schedule first event
+    }
+
+    proc seti() {
+        if (STIMON == 0) {
+            STIMON = 1
+            stim.amp = AMP      // turn pulse on
+            cvode.event(t + DUR, "seti()")      // schedule pulse off
+            cvode.event(t + INTERVAL, "seti()") // schedule next pulse on
+        } else {
+            STIMON = 0
+            stim.amp = 0       // turn pulse off
+        }
+        // Reinitialize CVode or compute current after parameter change
+        if (cvode.active()) {
+            cvode.re_init()
+        } else {
+            fcurrent()
+        }
+    }
+
+**Key points:**
+
+- The `FInitializeHandler` starts the event-driven control during simulation initialization.
+
+- `cvode.event(time, "procedure()")` schedules procedure calls at specified simulation times.
+
+- After abrupt parameter changes, it is good practice to call `cvode.re_init()` if variable time step integration is active, or `fcurrent()` otherwise, to update the computation consistently.
+
+Changing Parameters Like NetCon Weights
+----------------------------------------
+
+You can change parameters such as NetCon weights at specified times using a similar event-driven approach:
+
+- Use an `FInitializeHandler` to schedule a `cvode.event()` that triggers a hoc procedure changing the weight(s).
+
+- Unlike the current pulse example, the procedure might simply assign new weights without conditionals.
+
+- Including the `cvode.re_init()` or `fcurrent()` call after changing parameters is recommended but may not always be necessary, depending on the parameter type.
+
+Summary
+-------
+
+- **Do not assign `celsius` inside NMODL mechanisms.**
+
+- Use hoc `Vector.play()` to smoothly vary temperature (`celsius`) during simulation.
+
+- Use `cvode.event()` and `FInitializeHandler` for abrupt/discrete changes in parameters such as temperature jumps, current amplitudes, or synaptic weights.
+
+- Re-initialize CVode integration with `cvode.re_init()` after abrupt changes when using variable time step integration.
+
+- Declare `DEPEND celsius` in NMODL TABLE statements for temperature-dependent rate recalculations.
+
+.. seealso::
+
+    :class:`Vector`, :meth:`Vector.play`, :meth:`cvode.event`, :class:`FInitializeHandler`, :func:`fcurrent`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=162 <https://neuron.yale.edu/phpBB/viewtopic.php?t=162>`_

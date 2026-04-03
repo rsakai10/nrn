@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The NMODL Transpiler &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="The NEURON MODeling language" href="language.html" />
+    <link rel="prev" title="About the NMODL transpiler" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The NMODL Transpiler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#about-nmodl">About NMODL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#try-nmodl">Try NMODL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-python-api">Using the Python API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#high-level-analysis-and-code-generation">High Level Analysis and Code Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#support-contribuition">Support / Contribuition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-benchmarks">Examples / Benchmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#funding-acknowledgment">Funding &amp; Acknowledgment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">The NMODL Transpiler</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/nmodl/transpiler/readme.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-nmodl-transpiler">
+<h1>The NMODL Transpiler<a class="headerlink" href="#the-nmodl-transpiler" title="Link to this heading"></a></h1>
+<p>The NMODL Transpiler is a code generation engine for the <strong>N</strong>EURON
+<strong>MOD</strong>eling <strong>L</strong>anguage (<a class="reference external" href="../../nmodl/language.html">NMODL</a>).
+It is designed with modern compiler and code generation techniques to:</p>
+<ul class="simple">
+<li><p>Provide <strong>modular tools</strong> for parsing, analysing and transforming
+NMODL</p></li>
+<li><p>Provide <strong>easy to use</strong>, high level Python API</p></li>
+<li><p>Generate <strong>optimised code</strong> for modern compute architectures
+including CPUs, GPUs</p></li>
+<li><p><strong>Flexibility</strong> to implement new simulator backends</p></li>
+<li><p>Support for <strong>full</strong> NMODL specification</p></li>
+</ul>
+<section id="about-nmodl">
+<h2>About NMODL<a class="headerlink" href="#about-nmodl" title="Link to this heading"></a></h2>
+<p>Simulators like NEURON use NMODL as a domain specific language (DSL) to
+describe a wide range of membrane and intracellular submodels. Here is an
+example of exponential synapse specified in NMODL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NEURON</span> <span class="p">{</span>
+    <span class="n">POINT_PROCESS</span> <span class="n">ExpSyn</span>
+    <span class="n">RANGE</span> <span class="n">tau</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span>
+    <span class="n">NONSPECIFIC_CURRENT</span> <span class="n">i</span>
+<span class="p">}</span>
+<span class="n">UNITS</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">nA</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">nanoamp</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">mV</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">millivolt</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">uS</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">microsiemens</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">PARAMETER</span> <span class="p">{</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="p">(</span><span class="n">ms</span><span class="p">)</span> <span class="o">&lt;</span><span class="mf">1e-9</span><span class="p">,</span><span class="mf">1e9</span><span class="o">&gt;</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">(</span><span class="n">mV</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">ASSIGNED</span> <span class="p">{</span>
+    <span class="n">v</span> <span class="p">(</span><span class="n">mV</span><span class="p">)</span>
+    <span class="n">i</span> <span class="p">(</span><span class="n">nA</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">STATE</span> <span class="p">{</span>
+    <span class="n">g</span> <span class="p">(</span><span class="n">uS</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">INITIAL</span> <span class="p">{</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="p">}</span>
+<span class="n">BREAKPOINT</span> <span class="p">{</span>
+    <span class="n">SOLVE</span> <span class="n">state</span> <span class="n">METHOD</span> <span class="n">cnexp</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">g</span><span class="o">*</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">DERIVATIVE</span> <span class="n">state</span> <span class="p">{</span>
+    <span class="n">g</span><span class="s1">&#39; = -g/tau</span>
+<span class="p">}</span>
+<span class="n">NET_RECEIVE</span><span class="p">(</span><span class="n">weight</span> <span class="p">(</span><span class="n">uS</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">+</span> <span class="n">weight</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>See
+<a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/docs/install/install_instructions.md">here</a>
+for detailed instructions of building the NMODL transpiler from source (as
+part of NEURON).</p>
+</section>
+<section id="try-nmodl">
+<h2>Try NMODL<a class="headerlink" href="#try-nmodl" title="Link to this heading"></a></h2>
+<p>The NMODL transpiler is distributed as part of NEURON.</p>
+<p>Once NEURON is installed, you can try the NMODL Python API discussed later in
+this README as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3
+Python 3.6.8 (default, Apr  8 2019, 18:17:52)
+&gt;&gt;&gt; from neuron.nmodl import dsl
+&gt;&gt;&gt; examples = dsl.list_examples()
+&gt;&gt;&gt; nmodl_string = dsl.load_example(examples[-1])
+...
+</pre></div>
+</div>
+<p>You can open and run all example notebooks provided in the
+<code class="docutils literal notranslate"><span class="pre">docs/nmodl/transpiler/notebooks</span></code> folder. You can also create new notebooks
+in <code class="docutils literal notranslate"><span class="pre">my_notebooks</span></code>, which will be stored in a subfolder <code class="docutils literal notranslate"><span class="pre">notebooks</span></code> at your
+current working directory.</p>
+</section>
+<section id="using-the-python-api">
+<h2>Using the Python API<a class="headerlink" href="#using-the-python-api" title="Link to this heading"></a></h2>
+<p>Once the NMODL transpiler is installed, you can use the Python parsing
+API to load NMOD file as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron.nmodl</span><span class="w"> </span><span class="kn">import</span> <span class="n">dsl</span>
+
+<span class="n">examples</span> <span class="o">=</span> <span class="n">dsl</span><span class="o">.</span><span class="n">list_examples</span><span class="p">()</span>
+<span class="n">nmodl_string</span> <span class="o">=</span> <span class="n">dsl</span><span class="o">.</span><span class="n">load_example</span><span class="p">(</span><span class="n">examples</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">dsl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">nmodl_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">parse_file</span></code> API returns Abstract Syntax Tree
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>)
+representation of input NMODL file. One can look at the AST by
+converting to JSON form as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">dsl</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">modast</span><span class="p">))</span>
+<span class="go">{</span>
+<span class="go">  &quot;Program&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;NeuronBlock&quot;: [</span>
+<span class="go">        {</span>
+<span class="go">          &quot;StatementBlock&quot;: [</span>
+<span class="go">            {</span>
+<span class="go">              &quot;Suffix&quot;: [</span>
+<span class="go">                {</span>
+<span class="go">                  &quot;Name&quot;: [</span>
+<span class="go">                    {</span>
+<span class="go">                      &quot;String&quot;: [</span>
+<span class="go">                        {</span>
+<span class="go">                          &quot;name&quot;: &quot;POINT_PROCESS&quot;</span>
+<span class="go">                        }</span>
+<span class="go">                    ...</span>
+</pre></div>
+</div>
+<p>Every key in the JSON form represent a node in the AST. You can also use
+visualization API to look at the details of AST as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron.nmodl</span><span class="w"> </span><span class="kn">import</span> <span class="n">ast</span>
+<span class="n">ast</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">modast</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which will open AST view in web browser:</p>
+<figure class="align-default" id="id1">
+<img alt="ast_viz" src="https://user-images.githubusercontent.com/666852/57329449-12c9a400-7114-11e9-8da5-0042590044ec.gif" />
+<figcaption>
+<p><span class="caption-text">Vizualisation of the AST in the NMODL transpiler</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The central <em>Program</em> node represents the whole MOD file and each of
+it’s children represent the block in the input NMODL file. Note that
+this requires X-forwarding if you are using the Docker image.</p>
+<p>Once the AST is created, one can use exisiting visitors to perform
+various analysis/optimisations. One can also easily write his own custom
+visitor using Python Visitor API. See <a class="reference external" href="docs/notebooks/nmodl-python-tutorial.ipynb">Python API
+tutorial</a> for details.</p>
+<p>The NMODL Transpiler also allows us to transform the AST representation back
+to NMODL form as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">dsl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">modast</span><span class="p">))</span>
+<span class="go">NEURON {</span>
+<span class="go">    POINT_PROCESS ExpSyn</span>
+<span class="go">    RANGE tau, e, i</span>
+<span class="go">    NONSPECIFIC_CURRENT i</span>
+<span class="go">}</span>
+
+<span class="go">UNITS {</span>
+<span class="go">    (nA) = (nanoamp)</span>
+<span class="go">    (mV) = (millivolt)</span>
+<span class="go">    (uS) = (microsiemens)</span>
+<span class="go">}</span>
+
+<span class="go">PARAMETER {</span>
+<span class="go">    tau = 0.1 (ms) &lt;1e-09,1000000000&gt;</span>
+<span class="go">    e = 0 (mV)</span>
+<span class="go">}</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+</section>
+<section id="high-level-analysis-and-code-generation">
+<h2>High Level Analysis and Code Generation<a class="headerlink" href="#high-level-analysis-and-code-generation" title="Link to this heading"></a></h2>
+<p>The NMODL transpiler provides rich model introspection and analysis
+capabilities using <a class="reference external" href="../../doxygen/group__visitor__classes.html">various
+visitors</a>.
+Here is an example of theoretical performance characterisation of
+channels and synapses from rat neocortical column microcircuit
+<a class="reference external" href="https://www.cell.com/cell/fulltext/S0092-8674%2815%2901191-5">published in
+2015</a>:</p>
+<figure class="align-default" id="id2">
+<img alt="nmodl-perf-stats" src="https://user-images.githubusercontent.com/666852/57336711-2cc0b200-7127-11e9-8053-8f662e2ec191.png" />
+<figcaption>
+<p><span class="caption-text">Performance results of the NMODL transpiler</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>To understand how you can write your own introspection and analysis
+tool, see <a class="reference internal" href="notebooks/nmodl-python-tutorial.html"><span class="doc">this
+tutorial</span></a>.</p>
+<p>Once analysis and optimization passes are performed, the NMODL transpiler
+can generate optimised code for modern compute architectures including
+CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example,
+C++, OpenACC and OpenMP backends are implemented and one can choose
+these backends on command line as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nmodl expsyn.mod sympy --analytic
+</pre></div>
+</div>
+<p>To know more about code generation backends, <a class="reference external" href="https://bluebrain.github.io/nmodl/html/doxygen/group__codegen__backends.html">see
+here</a>.
+NMODL transpiler provides number of options (for code generation,
+optimization passes and ODE solver) which can be listed as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nmodl -H
+NMODL : Source-to-Source Code Generation transpiler [version]
+Usage: /path/&lt;&gt;/nmodl [OPTIONS] file... [SUBCOMMAND]
+
+Positionals:
+  file TEXT:FILE ... REQUIRED           One or more MOD files to process
+
+Options:
+  -h,--help                             Print this help message and exit
+  -H,--help-all                         Print this help message including all sub-commands
+  --verbose=info                        Verbose logger output (trace, debug, info, warning, error, critical, off)
+  -o,--output TEXT=.                    Directory for backend code output
+  --scratch TEXT=tmp                    Directory for intermediate code output
+  --units TEXT=/path/&lt;&gt;/nrnunits.lib
+                                        Directory of units lib file
+
+Subcommands:
+host
+  HOST/CPU code backends
+  Options:
+    --c                                   C/C++ backend (true)
+
+acc
+  Accelerator code backends
+  Options:
+    --oacc                                C/C++ backend with OpenACC (false)
+
+sympy
+  SymPy based analysis and optimizations
+  Options:
+    --analytic                            Solve ODEs using SymPy analytic integration (false)
+    --pade                                Pade approximation in SymPy analytic integration (false)
+    --cse                                 CSE (Common Subexpression Elimination) in SymPy analytic integration (false)
+    --conductance                         Add CONDUCTANCE keyword in BREAKPOINT (false)
+
+passes
+  Analyse/Optimization passes
+  Options:
+    --inline                              Perform inlining at NMODL level (false)
+    --unroll                              Perform loop unroll at NMODL level (false)
+    --const-folding                       Perform constant folding at NMODL level (false)
+    --localize                            Convert RANGE variables to LOCAL (false)
+    --global-to-range                     Convert GLOBAL variables to RANGE (false)
+    --localize-verbatim                   Convert RANGE variables to LOCAL even if verbatim block exist (false)
+    --local-rename                        Rename LOCAL variable if variable of same name exist in global scope (false)
+    --verbatim-inline                     Inline even if verbatim block exist (false)
+    --verbatim-rename                     Rename variables in verbatim block (true)
+    --json-ast                            Write AST to JSON file (false)
+    --nmodl-ast                           Write AST to NMODL file (false)
+    --json-perf                           Write performance statistics to JSON file (false)
+    --show-symtab                         Write symbol table to stdout (false)
+
+codegen
+  Code generation options
+  Options:
+    --layout TEXT:{aos,soa}=soa           Memory layout for code generation
+    --datatype TEXT:{float,double}=soa    Data type for floating point variables
+    --force                               Force code generation even if there is any incompatibility
+    --only-check-compatibility            Check compatibility and return without generating code
+    --opt-ionvar-copy                     Optimize copies of ion variables (false)
+</pre></div>
+</div>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h2>
+<p>We are working on user documentation, you can find the current version as part of the NEURON readthedocs page:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://nrn.readthedocs.org/">Documentation</a></p></li>
+</ul>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
+<p>If you would like to know more about the the NMODL transpiler, see
+following paper:</p>
+<ul class="simple">
+<li><p>Pramod Kumbhar, Omar Awile, Liam Keegan, Jorge Alonso, James King,
+Michael Hines and Felix Schürmann. 2019. An optimizing multi-platform
+source-to-source compiler transpiler for the NEURON MODeling Language.
+In Eprint :
+<a class="reference external" href="https://arxiv.org/pdf/1905.02241.pdf">arXiv:1905.02241</a></p></li>
+</ul>
+</section>
+<section id="support-contribuition">
+<h2>Support / Contribuition<a class="headerlink" href="#support-contribuition" title="Link to this heading"></a></h2>
+<p>If you see any issue, feel free to <a class="reference external" href="https://github.com/neuronsimulator/nrn/issues/new">raise a
+ticket</a>. If you would
+like to improve this transpiler, see <a class="reference external" href="https://github.com/neuronsimulator/nrn/issues">open
+issues</a> and <a class="reference external" href="CONTRIBUTING.rst">contribution
+guidelines</a>.</p>
+</section>
+<section id="examples-benchmarks">
+<h2>Examples / Benchmarks<a class="headerlink" href="#examples-benchmarks" title="Link to this heading"></a></h2>
+<p>The benchmarks used to test the performance and parsing capabilities of
+NMODL transpiler are currently being migrated to GitHub. These benchmarks
+will be published soon in following repositories:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/neuronsimulator/nrnbench">NMODL Benchmark</a></p></li>
+<li><p><a class="reference external" href="https://github.com/neuronsimulator/nrndb">NMODL Database</a></p></li>
+</ul>
+</section>
+<section id="funding-acknowledgment">
+<h2>Funding &amp; Acknowledgment<a class="headerlink" href="#funding-acknowledgment" title="Link to this heading"></a></h2>
+<p>The development of this software was supported by funding to the Blue
+Brain Project, a research center of the École polytechnique fédérale de
+Lausanne (EPFL), from the Swiss government’s ETH Board of the Swiss
+Federal Institutes of Technology. In addition, the development was
+supported by funding from the National Institutes of Health (NIH) under
+the Grant Number R01NS11613 (Yale University) and the European Union’s
+Horizon 2020 Framework Programme for Research and Innovation under the
+Specific Grant Agreement No. 785907 (Human Brain Project SGA2).</p>
+<p>Copyright © 2017-2024 Blue Brain Project, EPFL</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="About the NMODL transpiler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="language.html" class="btn btn-neutral float-right" title="The NEURON MODeling language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

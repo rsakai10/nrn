@@ -1,0 +1,32 @@
+.. note::
+   
+   NEURON uses an implicit ("backward") Euler integration method by default, *not* an explicit ("forward") Euler method. This means that even with a large timestep (:attr:`h.dt`), the solver correctly integrates equations such as
+   
+   .. math::
+      C \frac{dv}{dt} = -g v
+      
+   reaching the steady-state voltage without overshoot. For example, with a membrane capacitance of 1 pF, conductance of 1 S, and initial voltage 10 mV, the voltage after one timestep of 0.1 ms will not be the naive forward Euler estimate (e.g., -1 MV), but rather the correct exponential decay, effectively reaching 0 mV.
+   
+   This implicit integration scheme ensures numerical stability and accuracy even for large time steps.
+   
+.. code-block:: python
+
+   from neuron import h
+   sec = h.Section()
+   sec.L = sec.diam = 10  # to create one segment
+   sec.cm = 1  # 1 uF/cm^2, adjust to get 1 pF total
+   stim = h.IClamp(sec(0.5))
+   stim.delay = 0
+   stim.dur = 1e9
+   stim.amp = -1e9  # large current approximation of i = g*v with g=1S
+   h.v_init = 10e-3
+   h.dt = 0.1
+   h.finitialize(h.v_init)
+   h.fadvance()
+   print("Voltage after 0.1 ms:", sec(0.5).v)
+
+.. seealso::
+   
+   :class:`h.Section`, :attr:`h.dt`, :meth:`h.finitialize`, :meth:`h.fadvance`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=136 <https://neuron.yale.edu/phpBB/viewtopic.php?t=136>`_

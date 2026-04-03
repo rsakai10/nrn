@@ -1,0 +1,39 @@
+Number of Sections, Compartments, and nseg
+==========================================
+
+- The parameter :attr:`Section.nseg` determines the spatial discretization accuracy of a section. Increasing :attr:`nseg` improves accuracy by subdividing the section into more segments.
+
+- To verify adequacy of :attr:`nseg`, plot the membrane potential (:math:`v`) at multiple locations (e.g., 0.1, 0.5, 0.9) along the section. Increase :attr:`nseg` by a factor of 3 using
+
+  .. code-block:: hoc
+
+     forall nseg *= 3
+
+  and rerun the simulation. Repeat until voltage traces no longer change significantly.
+
+- Dividing a section of length :math:`L` into multiple connected sections with :attr:`nseg`=1 in each effectively changes a one-compartment model into multiple compartments.
+
+- When :attr:`nseg` > 1 in a section, that section acts as multiple electrical compartments internally because the segment properties (e.g., conductances) can vary non-uniformly along its length:
+
+  .. code-block:: hoc
+
+     create A
+     access A
+     A.L = 100
+     A.diam = 2
+     insert hh
+     insert pas
+     print A.nseg  # usually 1
+     A.gnabar_hh(0:1) = 2 : 5
+     for (x) { print x, " ", A.gnabar_hh(x) }
+     A.nseg = 3
+     A.gnabar_hh(0:1) = 2 : 5
+     for (x) { print x, " ", A.gnabar_hh(x) }
+
+- Use the :ref:`d_lambda_rule` to choose a minimum sufficient :attr:`nseg` based on electrotonic length and accuracy requirements.
+
+.. note::
+
+   For detailed guidelines on selecting :attr:`nseg` and compartmentalization strategies, consult chapter 5 of *The NEURON Book* and the :class:`CellBuilder` tool which applies the :ref:`d_lambda_rule`.
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=773

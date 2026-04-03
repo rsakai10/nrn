@@ -1,0 +1,76 @@
+Vector Recording within a `forall` Loop in HOC
+==============================================
+
+When recording membrane potentials (or other variables) from multiple sections or segments using a `forall` loop in HOC with the :class:`Vector` class and its :meth:`record` method, it is important to create a new :class:`Vector` object for each recording target. 
+
+Otherwise, if the same :class:`Vector` object is reused inside the loop, all list entries will reference that single :class:`Vector`, which records only the last variable assigned to it.
+
+Problem Description
+-------------------
+The following pattern leads to unexpected results: a list with multiple entries, but all entries record the same variable, corresponding to the last section in the `forall` loop.
+
+```hoc
+objref results_list, tmpvec
+
+proc record_results() {
+    results_list = new List()
+    forall {
+        tmpvec.record(&v(0.5))
+        results_list.append(tmpvec)
+    }
+}
+```
+
+Because `tmpvec` is created only once and then re-used inside the loop, all entries inside `results_list` point to the same :class:`Vector` instance. This means after the loop finishes, all list entries contain identical recordings from the last section's midpoint.
+
+Correct Usage
+-------------
+To fix this, instantiate a new :class:`Vector` inside the loop, and then record from each respective segment. Append this new :class:`Vector` to the list. This ensures each list element uniquely records from the specific section.
+
+Example in HOC:
+
+```hoc
+objref results_list
+
+proc record_results() {
+    objref vvec
+    results_list = new List()
+    forall {
+        vvec = new Vector()
+        vvec.record(&v(0.5))
+        results_list.append(vvec)
+    }
+}
+```
+
+After this, `results_list` contains one :class:`Vector` per section, each recording the voltage at the 0.5 location of that section independently.
+
+Python Equivalent
+-----------------
+The same logic applies in Python:
+
+```python
+from neuron import h
+
+results_list = []
+
+def record_results():
+    results_list.clear()
+    for sec in h.allsec():
+        vec = h.Vector()
+        vec.record(sec(0.5)._ref_v)
+        results_list.append(vec)
+
+record_results()
+```
+
+Summary
+-------
+- Always create a new :class:`Vector` for each recording target to avoid multiple references to the same object.
+- Append each newly created :class:`Vector` to a :class:`List` if you want to keep multiple recordings.
+- Using a single :class:`Vector` for multiple recordings inside a loop results in all references in the list pointing to the last recorded variable.
+
+.. note::
+   This idiom allows you to record the time evolution of variables (such as voltage) from all sections or segments in your model efficiently and without overwriting previous recordings.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2489 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2489>`_

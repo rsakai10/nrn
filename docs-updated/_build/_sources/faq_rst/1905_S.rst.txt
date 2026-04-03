@@ -1,0 +1,88 @@
+Setting Basal Intracellular Calcium Concentration (:math:`[Ca^{2+}]_i`)
+=====================================================================
+
+When using calcium accumulation mechanisms such as :mod:`cdp.mod` in NEURON models, setting the basal intracellular calcium concentration (:math:`cai`) to a desired value (e.g., 116 nM) can be challenging due to the interactions of pumps, buffers, and voltage-gated calcium currents.
+
+.. note::
+   Do not insert multiple calcium accumulation mechanisms that write to :math:`cai` (e.g., :mod:`cdp.mod` and :mod:`cad.mod`) in the same compartment, as these produce conflicting calculations.
+
+Strategy for Setting Basal :math:`cai`
+-------------------------------------
+A practical approach to achieve an arbitrary basal :math:`cai` without disturbing model dynamics is to add a custom "calcium source" mechanism that balances all other calcium fluxes at rest:
+
+.. code-block:: mod
+
+    NEURON {
+      SUFFIX casrc
+      USEION ca WRITE ica
+      NONSPECIFIC_CURRENT ix
+      RANGE amp
+    }
+
+    UNITS {
+      (mA) = (milliamp)
+    }
+
+    PARAMETER {
+      amp (mA/cm2)
+    }
+
+    ASSIGNED {
+      ica (mA/cm2)
+      ix (mA/cm2)
+    }
+
+    BREAKPOINT {
+      ica = amp
+      ix = -ica
+    }
+
+Insert this mechanism into all relevant sections after other calcium mechanisms:
+
+.. code-block:: hoc
+
+    forall if (ismembrane("ca_ion")) insert casrc
+
+Custom Initialization Procedure
+-------------------------------
+Before simulation, set the initial intracellular calcium concentration and adjust the source amplitude to offset net calcium currents:
+
+.. code-block:: hoc
+
+    proc init() {
+      cai0_ca_ion = 116e-6  // set desired basal [Ca2+] in mM
+      forall if (ismembrane("casrc")) amp_casrc = 0
+      finitialize(v_init)
+      forall if (ismembrane("ca_ion")) {
+        for (x,0) {
+          amp_casrc(x) = -ica(x)  // balance other calcium fluxes
+        }
+      }
+      if (cvode.active()) {
+        cvode.re_init()
+      } else {
+        fcurrent()
+      }
+    }
+
+.. note::
+    - Correctly setting the parameter name as ``cai0_ca_ion`` is essential.
+    - Use a simple test model (e.g., one or two compartments) before applying this to complex morphologies.
+    - Employ odd values of :attr:`nseg` for spatial discretization to avoid numerical issues.
+    - Initialize the model biophysics (ion channels, morphology) *before* defining and calling the custom :meth:`init` procedure.
+
+Recommendations
+---------------
+- Adjust pump rate constants analytically to target resting :math:`cai` if possible; otherwise use the constant source method.
+- Perform a "warmup" simulation to let :math:`cai` settle to steady state before recording.
+- Use :class:`MultipleRunFitter` to tune parameters related to calcium buffering and pumps if needed.
+- Verify units carefully when implementing diffusion (e.g., :keyword:`LONGITUDINAL_DIFFUSION`) in mechanisms involving buffer approximations.
+
+References
+----------
+- The NEURON Book, Chapter 8 (Initialization methods)
+- Examples in NEURON distribution demonstrating calcium dynamics (e.g., :file:`cabpmp.mod` for pump and buffer dynamics)
+
+This approach ensures that the model maintains the chosen basal intracellular calcium level without perturbing the physiological calcium dynamics encoded in other mechanisms.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1905 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1905>`_

@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setting a Conductance to Zero Does Not Always Eliminate Its Effect Due to SectionList Membership &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setting a Conductance to Zero Does Not Always Eliminate Its Effect Due to SectionList Membership</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2245_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="setting-a-conductance-to-zero-does-not-always-eliminate-its-effect-due-to-sectionlist-membership">
+<h1>Setting a Conductance to Zero Does Not Always Eliminate Its Effect Due to SectionList Membership<a class="headerlink" href="#setting-a-conductance-to-zero-does-not-always-eliminate-its-effect-due-to-sectionlist-membership" title="Link to this heading"></a></h1>
+<p>When inserting ion channel mechanisms in NEURON models, you may expect that setting a channel’s maximal conductance parameter (<cite>gbar</cite>) to zero will effectively remove its influence (i.e., produce zero current). However, unexpected simulation results can arise if one is not careful with the sections to which mechanisms are inserted or how SectionLists are used.</p>
+<p>This document explains common pitfalls illustrated by the Mainen and Sejnowski 1996 model example, where adding a potassium channel (<cite>kv</cite>) to the dendritic compartments with <cite>gbar_kv = 0</cite> still alters the spiking output.</p>
+<section id="understanding-section-and-sectionlist-behavior">
+<h2>Understanding Section and SectionList Behavior<a class="headerlink" href="#understanding-section-and-sectionlist-behavior" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>In NEURON, a <em>Section</em> refers to a single cable compartment.</p></li>
+<li><p>A <em>SectionList</em> is a collection of Sections, which may include unexpected members if not carefully constructed.</p></li>
+</ul>
+<p>Important points and common mistakes:</p>
+<ol class="arabic">
+<li><p><strong>Using a SectionList as a Section</strong>
+Writing code like this:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>dendritic { insert kv; gbar_kv = 0 }
+</pre></div>
+</div>
+<p>is <em>not</em> equivalent to applying the insertion and setting to each section in the <cite>dendritic</cite> SectionList. Instead, the block executes in the context of the currently accessed section, which by default may be the <cite>soma</cite>. Hence, the code modifies the <cite>soma</cite> properties rather than the intended dendritic sections.</p>
+</li>
+<li><p><strong>forsec Iteration and Unexpected Section Membership</strong>
+When looping over a SectionList, e.g.:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forsec dendritic {
+    insert kv
+    gbar_kv = 0
+}
+</pre></div>
+</div>
+<p>if the SectionList <cite>dendritic</cite> includes the <cite>soma</cite> section (due to how it was built), this will affect the somatic conductance as well.</p>
+</li>
+</ol>
+</section>
+<section id="how-to-verify-and-avoid-these-issues">
+<h2>How to Verify and Avoid These Issues<a class="headerlink" href="#how-to-verify-and-avoid-these-issues" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong>Print section names within a SectionList:</strong>
+To check which sections are in a SectionList, use:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forsec dendritic { print secname() }
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If unexpected sections such as <cite>soma</cite> are printed, further action is needed.</p></li>
+</ul>
+</li>
+<li><p><strong>Exclude unwanted sections from a SectionList:</strong>
+For example, to remove <cite>soma</cite> from <cite>dendritic</cite>:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>dendritic_only = new SectionList()
+forsec dendritic dendritic_only.append()
+soma dendritic_only.remove()
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use `ifsec` filter to print or operate only on matching section names:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forsec dendritic ifsec &quot;som*&quot; { print secname() }
+</pre></div>
+</div>
+</li>
+<li><p><strong>Carefully insert mechanisms and set parameters in loops over appropriate SectionLists:</strong></p>
+<p>To insert <cite>kv</cite> channels with zero conductance strictly in dendrites excluding soma:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forsec dendritic_only {
+    insert kv
+    gbar_kv = 0
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="understanding-kv-mod-current-calculation">
+<h2>Understanding <cite>kv.mod</cite> Current Calculation<a class="headerlink" href="#understanding-kv-mod-current-calculation" title="Link to this heading"></a></h2>
+<p>In the <cite>kv.mod</cite> mechanism:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+    SOLVE states METHOD cnexp
+    gk = tadj * gbar * n
+    ik = (1e-4) * gk * (v - ek)
+}
+</pre></div>
+</div>
+<p>If <cite>gbar = 0</cite>, then <cite>gk = 0</cite> and consequently <cite>ik = 0</cite>. No channel current should be generated in that segment.</p>
+<p>However, if the mechanism is inserted in unintended sections (e.g., soma) where <cite>gbar</cite> may be nonzero or inadvertently changed, the overall simulation response changes.</p>
+</section>
+<section id="summary-and-recommendations">
+<h2>Summary and Recommendations<a class="headerlink" href="#summary-and-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>When modifying conductances or inserting channels in sets of sections, always verify the exact membership of your SectionLists.</p></li>
+<li><p>Avoid treating SectionLists as single Sections; use looping (<cite>forsec</cite>) with care.</p></li>
+<li><p>Use <cite>print secname()</cite>, <cite>ifsec</cite>, and other inspection tools at the interpreter prompt to diagnose unexpected behavior.</p></li>
+<li><p>Ensure that separate SectionLists exist for different compartmental domains when you want distinct channel distributions (e.g., <cite>dendritic_only</cite> excluding soma).</p></li>
+<li><p>Remember that a zero maximal conductance parameter (<cite>gbar</cite>) truly disables current only if the mechanism is present <em>solely</em> in those sections.</p></li>
+</ul>
+</section>
+<section id="example-correct-insertion-of-kv-with-zero-conductance-in-dendrites-only-python-and-hoc">
+<h2>Example: Correct Insertion of kv with Zero Conductance in Dendrites Only (Python and HOC)<a class="headerlink" href="#example-correct-insertion-of-kv-with-zero-conductance-in-dendrites-only-python-and-hoc" title="Link to this heading"></a></h2>
+<p><strong>HOC:</strong></p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Create dendritic-only SectionList excluding soma
+dendritic_only = new SectionList()
+forsec dendritic dendritic_only.append()
+soma dendritic_only.remove()
+
+// Insert kv channels with zero gbar in dendrites only
+forsec dendritic_only {
+    insert kv
+    gbar_kv = 0
+}
+</pre></div>
+</div>
+<p><strong>Python:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Assuming &#39;dendritic&#39; is a SectionList that includes soma</span>
+<span class="n">dendritic_only</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SectionList</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">SectionList</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_list</span><span class="o">=</span><span class="n">h</span><span class="o">.</span><span class="n">dendritic</span><span class="p">):</span>
+    <span class="n">dendritic_only</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+<span class="n">dendritic_only</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">soma</span><span class="p">)</span>
+
+<span class="c1"># Insert kv with zero gbar in dendritic sections only</span>
+<span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">dendritic_only</span><span class="p">:</span>
+    <span class="n">sec</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;kv&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">sec</span><span class="p">:</span>
+        <span class="n">seg</span><span class="o">.</span><span class="n">kv</span><span class="o">.</span><span class="n">gbar_kv</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Always check your model’s SectionLists carefully and verify the state of inserted mechanisms to ensure the model behaves as intended.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">forsec()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ifsec()</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/topology/seclist.html#SectionList" title="SectionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">SectionList</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.insert()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2245">https://neuron.yale.edu/phpBB/viewtopic.php?t=2245</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

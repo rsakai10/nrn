@@ -1,0 +1,74 @@
+Recording Spikes from Specific Locations Using `ParallelNetManager.want_all_spikes()`
+=========================================================================================
+
+When using the :class:`ParallelNetManager` in a parallelized NEURON model, the method :meth:`ParallelNetManager.want_all_spikes()` records spike times based on the global identifiers (gids) assigned to presynaptic cells' spike trigger zones. By default, these spike trigger zones are typically located at the soma or the canonical spike initiation site.
+
+If your model includes cells that generate action potentials (APs) in atypical locations—such as axo-axonic cells causing spikes in the distal axon that do not backpropagate to the soma—recording those spikes requires additional setup.
+
+How to Record Spikes from a Specific Section (e.g., Distal Axon)
+---------------------------------------------------------------
+
+1. **Attach additional :class:`NetCon` objects to the desired recording sites.**  
+   For each location where you want to detect spikes (e.g., distal axon segments), create a :class:`NetCon` attached to the membrane potential at that site. For example, you can attach it to the threshold-crossing voltage at that particular section and position (x-coordinate).
+
+2. **Assign unique gids to these :class:`NetCon` instances.**  
+   Each :class:`NetCon` must be assigned a unique global identifier (gid). These gids must be registered with the :class:`ParallelNetManager` for :meth:`want_all_spikes()` to collect spikes from these additional sites.
+
+3. **Modify the model setup to include these additional spike detectors.**  
+   Insert the initialization of these :class:`NetCon` objects and gid assignments at model creation before running the simulation.
+
+Example Procedure (Python)
+--------------------------
+
+```python
+from neuron import h
+from nrn import ParallelContext
+
+pc = ParallelContext()
+# Assume cell is your neuron cell object, and has a distal axon section "axon[distal_index]"
+
+# Define the threshold for spike detection
+threshold = 0
+
+# Create a NetCon attached to the distal axon section (e.g., at position 0.5)
+nc_axon = h.NetCon(cell.axon[distal_index](0.5)._ref_v, None, sec=cell.axon[distal_index])
+nc_axon.threshold = threshold
+
+# Assign a unique gid for this NetCon
+gid_axon = pc.get_gid()  # or manual assignment consistent with your gid map
+pc.set_gid2node(gid_axon, pc.id())  # Register gid to local node
+
+# Register the NetCon with this gid
+pc.cell(gid_axon, nc_axon.get_presynaptic())
+
+# Now request spikes from all gids including this new one
+pc.want_all_spikes()
+```
+
+Example Procedure (HOC)
+-----------------------
+
+```hoc
+objref nc_axon
+nc_axon = new NetCon(axon[distal_index](0.5)._ref_v, nil)
+nc_axon.threshold = 0
+
+gid_axon = pc.get_gid()
+pc.set_gid2node(gid_axon, pc.id())
+pc.cell(gid_axon, nc_axon.get_presynaptic())
+
+pc.want_all_spikes()
+```
+
+Notes
+-----
+
+- The usual spike trigger zone is often the soma or initial segment. Adding :class:`NetCon` objects to other compartments allows detection of locally generated spikes that may not propagate to the soma.
+- Ensure that gids are unique and properly registered with the :class:`ParallelNetManager`.
+- This approach applies only to models using parallelization with :class:`ParallelContext`.
+
+.. note::
+
+   The :meth:`want_all_spikes()` method collects spike times from all gids it knows about. Attaching additional :class:`NetCon` objects at desired locations and registering them with unique gids enables comprehensive spike recording beyond the default soma recordings.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3883 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3883>`_

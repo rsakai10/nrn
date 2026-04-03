@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isolating a Section from a Neuron &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Isolating a Section from a Neuron</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2926_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="isolating-a-section-from-a-neuron">
+<h1>Isolating a Section from a Neuron<a class="headerlink" href="#isolating-a-section-from-a-neuron" title="Link to this heading"></a></h1>
+<p>When working with complex neuron models composed of multiple connected sections with Hodgkin-Huxley (HH) mechanisms or other voltage-dependent conductances, one may want to isolate a particular section (e.g., section Y) from the rest of the neuron to analyze its intrinsic response. However, due to the distributed and nonlinear nature of the neuronal model, simply removing other sections and applying the same stimulus may not reproduce the original voltage response.</p>
+<p>This note explains how to perform such an isolation experiment in NEURON to reproduce the voltage response at a given site by recording, voltage-clamping, and then current-clamping the isolated section.</p>
+<section id="conceptual-approach">
+<h2>Conceptual Approach<a class="headerlink" href="#conceptual-approach" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Original Condition (Connected Neuron):</strong>
+Apply a current injection (e.g., an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a>) at section X and record the voltage at the point of interest in section Y.</p></li>
+<li><p><strong>Voltage-Clamp the Isolated Section:</strong>
+Disconnect section Y from its parent using the <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.disconnect" title="Section.disconnect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.disconnect()</span></code></a> method. Then, apply a voltage clamp (preferably an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> with very low series resistance) at the recording location in Y. Play back the previously recorded voltage waveform as the clamp command. Record the clamp current.</p></li>
+<li><p><strong>Current-Clamp the Isolated Section:</strong>
+Use the recorded current from the voltage clamp and replay it through an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> at the same location in Y to see if it reproduces the voltage waveform. Note that due to nonlinearity of active channels, the current-clamp response may differ from the original conditions.</p></li>
+</ol>
+</section>
+<section id="prerequisites-and-considerations">
+<h2>Prerequisites and Considerations<a class="headerlink" href="#prerequisites-and-considerations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> instead of <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#VClamp" title="VClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">VClamp</span></code></a> for accurate time-dependent voltage clamping at a single location.</p></li>
+<li><p>Set the voltage clamp’s series resistance (<code class="docutils literal notranslate"><span class="pre">rs</span></code>) to a very low value (e.g., 1e-3 MΩ) to minimize voltage errors.</p></li>
+<li><p>Record and play back waveforms using <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> with the <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a> and <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> methods.</p></li>
+<li><p>Implement the experiment in three distinct stages (hoc scripts or Python modules) to record data in each step and save/load files as needed.</p></li>
+<li><p>Be aware that the active conductances cause nonlinear dynamics; perfect reproduction may not be achievable.</p></li>
+<li><p>Keep the simulation time step (<code class="docutils literal notranslate"><span class="pre">dt</span></code>) consistent across steps to ensure accurate vector playback.</p></li>
+</ul>
+</section>
+<section id="example-workflow-in-hoc">
+<h2>Example Workflow in HOC<a class="headerlink" href="#example-workflow-in-hoc" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Step 1: Record voltage waveform at Y(0) in connected neuron
+objref vy0_vec, t_vec
+vy0_vec = new Vector()
+t_vec = new Vector()
+
+// Record membrane voltage at location 0 of section Y and simulation time
+Y { vy0_vec.record(&amp;v(0)) }
+cvode.record(&amp;t) // or t_vec.record(&amp;t)
+
+// Run stimulation and save recorded vectors after simulation for later use
+// e.g., vy0_vec.printf(&quot;vy0_data.dat&quot;)
+
+// Optional: copy vector to preserve data after resetting simulation
+objref vy0_copy
+vy0_copy = vy0_vec.c()
+
+// Step 2: Disconnect section Y and voltage clamp it with recorded waveform
+Y { disconnect() }
+
+objref clamp
+Y { clamp = new SEClamp(0) }
+clamp.dur1 = 1e9      // effectively infinite duration
+clamp.rs = 1e-3       // low series resistance
+clamp.amp1 = -65      // clamp initial voltage to resting potential
+
+// Play recorded voltage waveform into clamp.amp1 (assumes unchanged dt)
+Y { vy0_copy.play(&amp;clamp.amp1) }
+
+// Run simulation: voltage at Y replicates original recording; clamp current can be recorded.
+
+// Step 3: Use recorded clamp current as IClamp input to isolated section (optional)
+// Record clamp current during Step 2: clamp.i1 can be recorded with a Vector
+
+objref i_clamp_waveform
+i_clamp_waveform = new Vector()
+clamp.i1 // pointer to current through clamp at location 0
+
+Y { i_clamp_waveform.record(&amp;clamp.i1) }
+
+// Run Step 2 sim, save i_clamp_waveform, then in Step 3:
+
+objref iclamp
+Y { iclamp = new IClamp(0) }
+iclamp.del = 0
+iclamp.dur = 1e9
+
+// Play recorded clamp current as IClamp amplitude waveform
+Y { i_clamp_waveform.play(&amp;iclamp.amp) }
+
+// Run simulation: voltage at Y should approximate original waveform, but differences may arise due to active conductances.
+</pre></div>
+</div>
+</section>
+<section id="example-workflow-in-python">
+<h2>Example Workflow in Python<a class="headerlink" href="#example-workflow-in-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Setup section and stimulus</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="c1"># ...insert mechanisms, connect sections as needed...</span>
+
+<span class="c1"># Step 1: Record voltage at Y(0) with IClamp at X</span>
+<span class="n">vy0_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">time_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">vy0_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">Y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">)</span>
+<span class="n">time_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+
+<span class="c1"># Apply IClamp at X and run simulation</span>
+<span class="n">iclamp_X</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># define at section X</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Save recorded voltage waveform</span>
+<span class="n">vy0_copy</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">vy0_vec</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Disconnect Y and voltage clamp with recorded waveform</span>
+<span class="n">Y</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<span class="n">clamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SEClamp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">clamp</span><span class="o">.</span><span class="n">dur1</span> <span class="o">=</span> <span class="mf">1e9</span>
+<span class="n">clamp</span><span class="o">.</span><span class="n">rs</span> <span class="o">=</span> <span class="mf">1e-3</span>
+
+<span class="c1"># Play voltage vector into clamp amplitude</span>
+<span class="n">vy0_copy</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">clamp</span><span class="o">.</span><span class="n">_ref_amp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 1 ms dt assumed; adjust if needed</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Record clamp current if desired</span>
+<span class="n">clamp_i</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">clamp_i</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">clamp</span><span class="o">.</span><span class="n">_ref_i1</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Use clamp current as IClamp input to Y</span>
+<span class="n">iclamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">iclamp</span><span class="o">.</span><span class="k">del</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">iclamp</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">1e9</span>
+
+<span class="n">clamp_i</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">iclamp</span><span class="o">.</span><span class="n">_ref_amp</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Ensure consistent simulation step size (<code class="docutils literal notranslate"><span class="pre">dt</span></code>) for correct vector playback.</p></li>
+<li><p>The <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.disconnect" title="Section.disconnect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.disconnect()</span></code></a> method removes the connection of a section from its parent. If the section has child sections, consider the impact on the subtree.</p></li>
+<li><p>Voltage clamp and current clamp sites must correspond to the exact location where the voltage waveform was recorded.</p></li>
+<li><p>Active ion channel dynamics may cause nonlinear effects making exact replication challenging.</p></li>
+<li><p>Saving vectors to files (using <a class="reference internal" href="../progref-1/programming/io/file.html#File" title="File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a>) between steps can facilitate multi-stage workflows.</p></li>
+</ul>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To isolate a section and reproduce its voltage response from a connected neuron:</p>
+<ol class="arabic simple">
+<li><p>Record the voltage trace at the target location in the intact model.</p></li>
+<li><p>Disconnect the section and apply an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> voltage clamp playing back the recorded voltage waveform.</p></li>
+<li><p>Record the clamp current and replay it with an <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> current clamp on the isolated section.</p></li>
+</ol>
+<p>The stepwise approach compensates for the complex electrotonic interactions in the intact neuron and is the recommended method for such isolation experiments with active conductances.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2926">https://neuron.yale.edu/phpBB/viewtopic.php?t=2926</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

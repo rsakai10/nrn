@@ -1,0 +1,156 @@
+Changing Synaptic Conductance During a Sequence of Events
+==========================================================
+
+This section explains how to drive multiple synapses with a specific temporal sequence of activation events, and how to vary synaptic strength dynamically during a simulation in NEURON. It addresses common questions about whether to modify synaptic parameters such as `gmax` or synaptic weights, and provides a scalable and clean approach using :class:`VecStim` and :class:`NetCon`.
+
+Synapse Model Assumptions
+-------------------------
+- Synapses are implemented as point process mechanisms (e.g., :class:`ExpSyn`, AMPA/NMDA synapses).
+- Synaptic strength is controlled by the weight of the :class:`NetCon` delivering events to each synapse.
+- Synaptic mechanisms do **not** contain a `gmax` parameter that represents maximal conductance for each synaptic event.
+- Each synapse has its own :class:`NetCon`.
+
+Why Use Synaptic Weights and Not `gmax`
+----------------------------------------
+.. note::
+   For event-driven synaptic mechanisms, the synaptic strength should be controlled via the :meth:`NetCon.weight` parameter rather than a `gmax` variable inside the synapse model.
+
+Reasons:
+
+- Multiple synapses that are electrically close can be represented by a single synaptic mechanism instance; independent synaptic strengths are achieved by varying weights of individual :class:`NetCon`s.
+- Changing a global `gmax` in the synapse model affects *all* incoming inputs simultaneously, causing non-physiological heterosynaptic interactions.
+- Altering `gmax` dynamically violates causality by affecting ongoing conductance transients from prior synaptic events without any biological basis.
+
+Setting Up a Sequence of Synaptic Events with Dynamic Weights
+-------------------------------------------------------------
+
+Suppose you want to activate synapses at times contained in a Vector `stvec` with corresponding synaptic weights in Vector `swvec`. A clean way to implement this:
+
+1. Identify synaptic mechanisms and store them in a :class:`List` called `synlist`.
+
+2. Compute the minimum interevent interval in `stvec` and use half of it, `actdel`, as a safety margin to schedule changes to synaptic weights slightly before synapse activation times.
+
+3. Shift all times in `stvec` earlier by `actdel` so that weight updates occur before corresponding synaptic events.
+
+4. Create a :class:`VecStim` that generates events at the shifted times.
+
+5. For each synapse, create a :class:`NetCon` connecting the :class:`VecStim` to the synapse, with delay equal to `actdel` (so the synaptic activation occurs at original `stvec` times).
+
+6. Create another :class:`NetCon` from the same :class:`VecStim` to `nil` with zero delay, setting its `.record()` method to call a procedure that updates the weights for all :class:`NetCon`s connected to the synapses.
+
+7. Use an :class:`FInitializeHandler` to initialize a counter before simulation runs.
+
+Example HOC Code
+---------------
+
+.. code-block:: hoc
+
+   // Assumptions:
+   // synlist: List of synaptic mechanism instances (point processes).
+   // stvec: Vector of activation times (monotonically increasing, > 0).
+   // swvec: Vector of synaptic weights corresponding to activation times.
+
+   objref tmpvec, vecstim, nclist, ncx, fih
+
+   // 1. Compute half minimum inter-event interval
+   tmpvec = stvec.c
+   tmpvec.deriv()                 // first derivative, differences between times
+   actdel = tmpvec.min()/2        // half min interval between synaptic events
+   if (stvec.x[0] < actdel) {     // ensure no negative event times
+     actdel = stvec.x[0] / 2
+   }
+   stvec.sub(actdel)              // shift event times earlier by actdel
+
+   // 2. Create VecStim with shifted times
+   vecstim = new VecStim()
+   vecstim.play(stvec)
+
+   // 3. Create NetCons from VecStim to each synapse with delay = actdel
+   nclist = new List()
+   for ii=0, synlist.count()-1 {
+     nclist.append(new NetCon(vecstim, synlist.o(ii)))
+     nclist.o(ii).delay = actdel
+   }
+
+   // 4. Initialize global counter for weight updates
+   count = 0
+   fih = new FInitializeHandler("count = 0")
+
+   // 5. Define procedure to update synaptic weights before each synaptic event
+   proc setweights() {
+     local ii
+     for ii=0, nclist.count()-1 {
+       nclist.o(ii).weight = swvec.x[count]
+     }
+     count += 1
+   }
+
+   // 6. Create NetCon to call setweights() at shifted event times with zero delay
+   ncx = new NetCon(vecstim, nil)
+   ncx.delay = 0
+   ncx.record("setweights()")
+
+Notes on Code Adjustments
+-------------------------
+- Each :class:`NetCon` must connect a spike source (e.g., :class:`VecStim`) to a synaptic point process. The second argument to :class:`NetCon` must be a point process, not a :class:`NetCon` or an object wrapper.
+- When managing collections, use :class:`List` objects and remember to access elements with `.o(ii)`.
+- The `setweights` procedure is called slightly *before* each synaptic activation time, ensuring weights are updated in time.
+
+Python Example Snippet
+----------------------
+
+If you prefer Python, the same logic applies:
+
+.. code-block:: python
+
+   from neuron import h
+
+   synlist = h.List()
+   # Assume synlist is populated with point process synapses
+   stvec = h.Vector([10, 20, 30, 40, 50])  # event times in ms
+   swvec = h.Vector([0.1, 0.2, 0.15, 0.25, 0.1])  # corresponding weights
+
+   tmpvec = stvec.c()
+   tmpvec.deriv()
+   actdel = tmpvec.min() / 2
+   if stvec.x[0] < actdel:
+       actdel = stvec.x[0] / 2
+   stvec.sub(actdel)
+
+   vecstim = h.VecStim()
+   vecstim.play(stvec)
+
+   nclist = h.List()
+   for i in range(synlist.count()):
+       nclist.append(h.NetCon(vecstim, synlist.o(i)))
+       nclist.o(i).delay = actdel
+
+   count = 0
+
+   def setweights():
+       nonlocal count
+       for i in range(nclist.count()):
+           nclist.o(i).weight = swvec.x[count]
+       count += 1
+
+   ncx = h.NetCon(vecstim, None)
+   ncx.delay = 0
+   ncx.record(setweights)
+
+   def init():
+       global count
+       count = 0
+
+   h.FInitializeHandler(init)
+
+Summary Recommendations
+-----------------------
+- Use :class:`VecStim` and a single spike source for scalability, instead of scheduling individual events with :meth:`NetCon.event()`.
+- Control synaptic strengths with :meth:`NetCon.weight` rather than modifying synapse-internal parameters like `gmax`.
+- Schedule weight changes just before synaptic activations using a small offset delay.
+- Avoid introducing `gmax` in event-driven synaptic mechanisms since it affects all inputs simultaneously and violates temporal causality.
+
+.. seealso::
+   :class:`VecStim`, :class:`NetCon`, :class:`ExpSyn`, :class:`FInitializeHandler`, :meth:`NetCon.weight`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2840 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2840>`_

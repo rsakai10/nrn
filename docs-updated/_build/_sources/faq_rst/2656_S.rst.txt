@@ -1,0 +1,42 @@
+Plotting Separate Ionic Currents from Different Mechanisms
+============================================================
+
+When multiple mechanisms read and write the same ion current (e.g., `ina` for sodium), NEURON sums these contributions into a single `ina` variable. To plot the current contributed by each mechanism separately, define a dedicated intermediate variable in your `.mod` file.
+
+For example, in a `nap.mod` mechanism:
+
+.. code-block:: c
+
+   NEURON {
+       SUFFIX nap
+       USEION na READ ena WRITE ina
+       RANGE g, gbar, i
+   }
+
+   ASSIGNED {
+       ina (mA/cm2)
+       g
+       gbar
+       i (mA/cm2)  : intermediate current for plotting
+       ena (mV)
+       v (mV)
+   }
+
+   BREAKPOINT {
+       SOLVE states METHOD cnexp
+       g = gbar * w
+       i = g * (v - ena)      : assign intermediate current
+       ina = i                : pass current to total ion current
+   }
+
+This way, the variable ``i`` holds the mechanism-specific current and can be accessed or plotted separately from other sodium currents. Avoid duplicating mechanism names in variable names for cleaner code (e.g., use ``g``, ``gbar``, not ``gnap``, ``gnapbar``).
+
+.. note::
+
+    Each NMODL mechanism has its own namespace, so multiple mechanisms can safely use common names like ``g`` and ``gbar`` without conflict.
+
+.. seealso::
+
+   :class:`Section`, :meth:`h.Vector.record` for recording variables, and :func:`h.PlotShape` for visualization.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2656 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2656>`_

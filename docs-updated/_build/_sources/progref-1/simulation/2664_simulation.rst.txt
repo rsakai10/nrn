@@ -1,0 +1,14 @@
+.. note::
+
+   In NEURON's RunControl panel, the integration time step ``dt`` is not changed directly when using Implicit Fixed Step or C-N Fixed Step integration modes. Instead, the parameter ``steps_per_ms`` (labeled “Points plotted/ms”) controls the plotting intervals and governs ``dt``.
+
+   The ``setdt()`` method adjusts ``dt`` automatically to ensure that the time step size fits evenly into the plotting interval. This adjustment occurs whenever you:
+
+   - Change the numerical value next to the ``dt`` or ``Points plotted/ms`` fields,
+   - Call :meth:`h.stdinit()`, or
+   - Call :meth:`h.run()`
+
+.. seealso::
+
+   :meth:`h.setdt` - Adjusts the integration time step based on ``steps_per_ms``.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=2664

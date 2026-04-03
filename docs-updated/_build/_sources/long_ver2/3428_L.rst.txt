@@ -1,0 +1,251 @@
+Recording Synaptic Currents for LFP Approximation in NEURON
+===============================================================
+
+This section explains how to record synaptic currents (e.g., GABAergic, AMPAergic, and NMDAergic) from a cell population in NEURON to approximate local field potentials (LFP). It addresses common challenges when working with heterogeneous synaptic mechanisms and large-scale simulations, and provides strategies to efficiently record, sum, and analyze synaptic currents.
+
+Synopsis
+--------
+
+Synaptic mechanisms in NEURON are usually implemented as point processes producing transmembrane currents (units: nanoamperes). To approximate LFP as the sum of synaptic currents, one must record these currents from all relevant synapses over time and sum their absolute values to yield a single, time-varying signal.
+
+Basic Recording of Synaptic Currents
+------------------------------------
+
+Assuming each synaptic mechanism exposes a variable representing the current it produces (commonly `i`), and you have a `List` of synapse instances called `synlist`, record the time course of each synaptic current using `Vector.record()`:
+
+.. code-block:: hoc
+
+   create soma
+   objref syn
+   soma syn = new ExpSyn(0.5)  // attach ExpSyn to the middle of soma
+   objref tvec, ivec
+   tvec = new Vector()
+   tvec.record(&t)
+   ivec = new Vector()
+   ivec.record(&syn.i)
+
+If each synapse has its own current variable (e.g., `igaba`, `iampa`, `inmda`), and you want to record them separately, you must handle each current type appropriately.
+
+Differentiating Synapse Types and Current Variables
+---------------------------------------------------
+
+Many models use distinct variables for different synaptic currents within a synaptic mechanism. For example, GABAergic synapses may use `igaba`, whereas glutamatergic synapses may use `iampa` and `inmda`. If synapse objects are stored in a `List` called `synlist`, you can group and record their currents by:
+
+1. Adding a `RANGE` variable (e.g., `isampa`) to each synaptic mechanism in the NMODL files to tag synapse type:
+
+   - In the NEURON block:
+
+     .. code-block:: nrnmodl
+
+        RANGE i, isampa
+
+   - In the PARAMETER block:
+
+     For AMPAergic synapses:
+
+     .. code-block:: nrnmodl
+
+        isampa = 1  : do not change this!
+
+     For GABAergic synapses:
+
+     .. code-block:: nrnmodl
+
+        isampa = 0  : do not change this!
+
+   - In the BREAKPOINT block, define a general `i` variable combining currents:
+
+     For AMPAergic (with NMDA) synapses:
+
+     .. code-block:: nrnmodl
+
+        BREAKPOINT {
+            SOLVE release METHOD cnexp
+            inmda = ...
+            iampa = ...
+            i = inmda + iampa
+        }
+
+     For GABAergic synapses:
+
+     .. code-block:: nrnmodl
+
+        BREAKPOINT {
+           SOLVE release METHOD cnexp
+           igaba = ...
+           i = igaba
+        }
+
+2. After model instantiation and setup (but before simulation starts), create vectors to record currents from all synapses:
+
+   .. code-block:: hoc
+
+      objref ampaivecs, nmdaivecs, gabaivecs
+      ampaivecs = new List()
+      nmdaivecs = new List()
+      gabaivecs = new List()
+
+      proc makeiveclists() { local i  localobj tmpvec, tmpobj
+         for i=0, $o1.count()-1 {
+            tmpobj = $o1.o(i)
+            if (tmpobj.isampa == 1) { // AMPA/NMDA synapses
+               tmpvec = new Vector()
+               tmpvec.record(&tmpobj.iampa)
+               ampaivecs.append(tmpvec)
+               tmpvec = new Vector()
+               tmpvec.record(&tmpobj.inmda)
+               nmdaivecs.append(tmpvec)
+            } else { // GABA synapses
+               tmpvec = new Vector()
+               tmpvec.record(&tmpobj.igaba)
+               gabaivecs.append(tmpvec)
+            }
+         }
+      }
+
+      makeiveclists(synlist)
+
+Notes:
+
+- Use double equal signs `==` for comparisons in hoc conditionals.
+- `isampa` must be declared as a `RANGE` variable to access it per synapse instance (a `GLOBAL` variable cannot be accessed on individual objects).
+- The current variable `i` should be defined as a `RANGE` variable in your mod files for ease of general recording.
+
+Efficient Summation of Synaptic Currents to Approximate LFP
+-----------------------------------------------------------
+
+Recording all synaptic currents at every time step for large populations can be memory intensive. To reduce memory usage and maintain accuracy:
+
+- Record currents at a coarser temporal resolution if appropriate (e.g., every 1 ms instead of every simulation time step).
+- Break long simulations into shorter segments, process and sum currents after each segment, and accumulate results.
+
+Example implementation of breaking simulation into segments:
+
+.. code-block:: hoc
+
+   proc errexit() {
+     printf("%s\n", $s1)
+     stop
+   }
+
+   // Sum of absolute values of corresponding Vector elements in a list of Vectors
+   obfunc sumabsvecs() {
+     local i
+     localobj tmpvec, tmpsum
+     tmpsum = new Vector($o1.o(0).size())  // initialize to zero
+     for i=0, $o1.count()-1 {
+       tmpvec = $o1.o(i).c()
+       tmpvec.abs()
+       tmpsum.add(tmpvec)
+     }
+     return tmpsum
+   }
+
+   // Simulation in segments with synaptic current recording and summation
+   proc segrun() {
+     local i, interval, count, t2, lastpass
+     localobj segtvec, tvec, tmpvec, isynvecs, segsumabsisyn, sumabsisyn
+
+     if ($1 <= 0) errexit("stop time must be > 0")
+     if ($2 < 1) errexit("number of time intervals must be >= 1")
+
+     // Task-specific setup before simulation
+     segtvec = new Vector()
+     segtvec.record(&t)
+     tvec = new Vector()
+
+     isynvecs = new List()
+     for i=0, $o3.count()-1 {
+       tmpvec = new Vector()
+       tmpvec.record(&$o3.o(i).i)
+       isynvecs.append(tmpvec)
+     }
+
+     segsumabsisyn = new Vector()
+     sumabsisyn = new Vector()
+
+     interval = $1 / $2
+     count = 0
+     lastpass = 0
+     stdinit()  // Assumes v_init is set
+
+     while (t < $1) {
+       t2 = t + interval
+       if (t2 >= $1) {
+         t2 = $1
+         lastpass = 1
+       }
+       continuerun(t2)  // Continue simulation to t2
+
+       // Append recorded times for this segment
+       tvec.append(segtvec)
+
+       // Sum absolute synaptic currents this segment and append
+       segsumabsisyn = sumabsvecs(isynvecs)
+       sumabsisyn.append(segsumabsisyn)
+
+       printf("Interval #%d ended at time %g\n", count, t)
+       printf("Data points this interval: %d\n", segtvec.size())
+       printf("Total data points recorded: %d\n", tvec.size())
+
+       if (!lastpass) {
+         // Prevent duplicate last point when appending segments
+         tvec.remove(tvec.size() - 1)
+         sumabsisyn.remove(sumabsisyn.size() - 1)
+       }
+       frecord_init()  // Reset Vector recording positions
+       count += 1
+     }
+
+     // Output full records
+     $o4 = tvec.c
+     $o5 = sumabsisyn.c
+   }
+
+Parameters:
+
+- `$1`: Total simulation duration (ms)
+- `$2`: Number of segments
+- `$o3`: `List` containing all synapse instances to record
+- `$o4`: Output `Vector` for full time course
+- `$o5`: Output `Vector` for summed absolute synaptic currents
+
+Code Adaptations for Your Model
+-------------------------------
+
+- The above procedure assumes a single current variable `i` per synapse. If your synapses have multiple currents (e.g., `iampa` and `inmda`), modify the recording setup to create separate vectors for each current type and sum them accordingly.
+- If synapse types are heterogeneous and tagged via `isampa`, separate lists and Vector recordings per synapse type are advised.
+- Ensure that your NMODL synaptic mechanisms calculate synaptic currents in the `BREAKPOINT` block rather than the `DERIVATIVE` block to correctly influence the model’s membrane dynamics and yield accurate currents for recording. For example, move current calculations to `BREAKPOINT`:
+
+  .. code-block:: nrnmodl
+
+     BREAKPOINT {
+       SOLVE release METHOD cnexp
+       inmda = W_nmda * g_nmda * (v - Erev_nmda) * sfunc(v)
+       iampa = W * g_ampa * (v - Erev_ampa)
+       i = inmda + iampa  : combined current for recording
+     }
+
+Common Pitfalls and Tips
+------------------------
+
+- `GLOBAL` variables in NMODL are inaccessible via instance references; use `RANGE` instead for variables like `isampa` that must vary per synapse instance.
+- When testing for the existence of a variable or property in hoc, trying to access a non-existent public member causes errors; hence, tagging synapses with a variable like `isampa` is cleaner than conditionals checking the presence of current variables.
+- Parallel simulations require gathering synaptic current data from all compute nodes; this procedure works for serial simulations.
+- Avoid recording every time step if possible; use segmentwise recording or coarser time resolutions to save memory.
+- Sum synaptic currents by recording all currents into `Vector`s, then performing vectorized additions post-simulation for best performance.
+- Consult :class:`Vector` methods such as :meth:`Vector.record`, :meth:`Vector.append`, :meth:`Vector.abs`, and :meth:`Vector.add` for manipulating recorded data.
+
+Summary
+-------
+
+- Tag synapses with `RANGE` variables to identify current types.
+- Define and record synaptic currents via `Vector.record`.
+- Use segment-wise simulations to manage memory.
+- Sum absolute synaptic currents post-simulation using vector operations.
+- Ensure synaptic currents are computed in `BREAKPOINT` blocks.
+- Consider parallelization and memory limits when scaling up.
+
+This workflow enables recording and combining heterogeneous synaptic currents efficiently in NEURON, aiding LFP approximations based on synaptic transmembrane currents.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3428 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3428>`_

@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Does using POINTER in NET_RECEIVE significantly slow down simulations in NEURON? &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Does using POINTER in NET_RECEIVE significantly slow down simulations in NEURON?</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/4499.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="does-using-pointer-in-net-receive-significantly-slow-down-simulations-in-neuron">
+<h1>Does using POINTER in NET_RECEIVE significantly slow down simulations in NEURON?<a class="headerlink" href="#does-using-pointer-in-net-receive-significantly-slow-down-simulations-in-neuron" title="Link to this heading"></a></h1>
+<p>When separating state variables into different NMODL mechanisms and linking them via POINTERs, users may observe a significant slowdown, especially when combining NET_RECEIVE, WATCH statements, and variable time-step integration. This is often not caused by POINTER itself, but by the adaptive integrator handling many frequent self-events triggered by WATCH, due to fast oscillations and resetting of state variables.</p>
+<p>Key points and recommendations:</p>
+<ul class="simple">
+<li><p>Using WATCH to enforce hard boundaries (e.g., resetting a variable when it drops below zero) with variable time-step integrators can lead to many very small time steps and numerous self-events, causing a dramatic slowdown.</p></li>
+<li><p>POINTER usage alone generally does not cause a major computational penalty; the slowdown seen is mostly due to interaction with variable time-step and event handling.</p></li>
+<li><p>A better approach for enforcing boundary conditions with variable time-step integration is to replace hard resets with smooth “squashing” functions (e.g., logistic functions) applied to the forcing terms, to avoid rapid state variable resets.</p></li>
+<li><p>Fixed time-step integration allows simpler enforcement of boundary limits (checking and resetting state variables in BREAKPOINT) without the overhead of many self-events.</p></li>
+</ul>
+<p>Example of declaring two equations in one NMODL mechanism (no POINTER), with WATCH to reset ‘a’ if it goes below zero:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create model
+access model
+objref obj
+obj = new equations(0.5)
+objref cvode
+cvode = new CVode(1)
+cvode_active(1)
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NEURON</span> <span class="p">{</span>
+    <span class="n">POINT_PROCESS</span> <span class="n">equations</span>
+<span class="p">}</span>
+
+<span class="n">PARAMETER</span> <span class="p">{</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mf">0.628</span>
+<span class="p">}</span>
+
+<span class="n">STATE</span> <span class="p">{</span> <span class="n">a</span> <span class="n">b</span> <span class="p">}</span>
+
+<span class="n">BREAKPOINT</span> <span class="p">{</span>
+    <span class="n">SOLVE</span> <span class="n">states</span> <span class="n">METHOD</span> <span class="n">derivimplicit</span>
+<span class="p">}</span>
+
+<span class="n">INITIAL</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">net_send</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">DERIVATIVE</span> <span class="n">states</span> <span class="p">{</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b0</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">a</span><span class="s1">&#39; = a * (1 - a) - b</span>
+<span class="p">}</span>
+
+<span class="n">NET_RECEIVE</span><span class="p">(</span><span class="n">dummy_weight</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">WATCH</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="mi">2</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">net_event</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example of splitting into two mechanisms (using POINTER) — note that with WATCH + variable time-step, this can cause severe slowdown:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NEURON</span> <span class="p">{</span>
+    <span class="n">POINT_PROCESS</span> <span class="n">brain</span>
+    <span class="n">POINTER</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="n">ASSIGNED</span> <span class="p">{</span> <span class="n">b</span> <span class="p">}</span>
+
+<span class="n">STATE</span> <span class="p">{</span> <span class="n">a</span> <span class="p">}</span>
+
+<span class="n">BREAKPOINT</span> <span class="p">{</span>
+    <span class="n">SOLVE</span> <span class="n">states</span> <span class="n">METHOD</span> <span class="n">derivimplicit</span>
+<span class="p">}</span>
+
+<span class="n">INITIAL</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">net_send</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">DERIVATIVE</span> <span class="n">states</span> <span class="p">{</span>
+    <span class="n">a</span><span class="s1">&#39; = a * (1 - a) - b</span>
+<span class="p">}</span>
+
+<span class="n">NET_RECEIVE</span><span class="p">(</span><span class="n">dummy_weight</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">WATCH</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="mi">2</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">net_event</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NEURON</span> <span class="p">{</span>
+    <span class="n">POINT_PROCESS</span> <span class="n">body</span>
+<span class="p">}</span>
+
+<span class="n">PARAMETER</span> <span class="p">{</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mf">0.628</span>
+<span class="p">}</span>
+
+<span class="n">STATE</span> <span class="p">{</span> <span class="n">b</span> <span class="p">}</span>
+
+<span class="n">BREAKPOINT</span> <span class="p">{</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b0</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">INITIAL</span> <span class="p">{</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create model
+access model
+objref objBrain, objBody
+objBrain = new brain(0.5)
+objBody = new body(0.5)
+
+// Set pointer
+setpointer objBrain.b, objBody.b
+
+objref cvode
+cvode = new CVode(1)
+cvode_active(1)
+</pre></div>
+</div>
+<p>Best practices for boundary enforcement under variable time step:</p>
+<ul class="simple">
+<li><p>Avoid hard resets with WATCH and NET_RECEIVE if possible.</p></li>
+<li><p>Use smooth squashing functions on forcing terms to prevent state variables from becoming negative, for example:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">expit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">expit</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="n">PARAMETER</span> <span class="p">{</span>
+  <span class="n">k</span> <span class="o">=</span> <span class="mi">200</span>
+  <span class="n">c</span> <span class="o">=</span> <span class="mf">0.03</span>
+<span class="p">}</span>
+
+<span class="n">DERIVATIVE</span> <span class="n">states</span> <span class="p">{</span>
+  <span class="n">b</span> <span class="o">=</span> <span class="n">b0</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+  <span class="n">a</span><span class="s1">&#39; = a * (1 - a) - b * expit(k * (a - c))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>This approach avoids frequent event generation and small time steps, improving simulation efficiency with adaptive integrators.</p></li>
+</ul>
+<p>Summary:</p>
+<ul class="simple">
+<li><p>POINTERs themselves do not inherently cause slowdowns.</p></li>
+<li><p>Slowness arises from WATCH-triggered frequent events combined with variable time-step integration resetting state variables.</p></li>
+<li><p>Using fixed time-step or smooth nonlinear functions to enforce boundaries improves performance.</p></li>
+<li><p>For models requiring boundary enforcement on state variables and efficient simulation, prefer smooth boundary conditions over hard resets when using variable time-step integrators.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4499">https://neuron.yale.edu/phpBB/viewtopic.php?t=4499</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

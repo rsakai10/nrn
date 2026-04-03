@@ -1,0 +1,91 @@
+Initialization with the Init button
+===============================
+
+When modeling a neuron in NEURON, the "Init (mV)" control in the RunControl panel performs a steady-state initialization of the model under *voltage clamp* conditions rather than current clamp. It sets the entire cell's membrane potential to the specified value and computes the steady-state values of all voltage-dependent gating variables corresponding to that potential.
+
+How Init works
+--------------
+
+- Clicking the **Init** button clamps the model cell's membrane potential to the value shown next to it (e.g., -65 mV).
+- NEURON computes the steady-state values for all voltage-dependent state variables (such as gating variables for ion channels) at that potential.
+- This held state approximates the condition of having the entire cell clamped at the Init voltage until it reaches equilibrium.
+- After initialization, the membrane potential and gating variables are set to these values, but the model is not running dynamically.
+- Clicking **Init & Run** will do this initialization and *then* release the clamp, allowing the cell to evolve freely.
+
+Interpretation of different Init values
+---------------------------------------
+
+Consider the following simple model HOC code snippet:
+
+.. code-block:: hoc
+
+    create soma
+    access soma
+    insert hh
+    soma.nseg = 1
+
+If you plot `soma.v(0.5)`:
+
+- At **Init(mV) = -65**, the membrane potential stays approximately constant because `-65 mV` is near the Hodgkin-Huxley (hh) model resting potential.
+- At **Init(mV) = -90**, after release from the voltage clamp the membrane may exhibit anode break excitation leading to an action potential. This is because holding the membrane hyperpolarized de-inactivates Na⁺ channels, causing rebound excitation on release.
+- At **Init(mV) = -40**, voltage-dependent Na⁺ channels inactivate and K⁺ channels activate during the voltage clamp period. When released, the cell rapidly hyperpolarizes near the K⁺ reversal potential and then slowly depolarizes back.
+
+This behavior highlights that the Init voltage sets *both* membrane potential and the gating variables to the steady state of that potential, which is not the same as simply setting `v` to a value without adjusting gating variables.
+
+Comparison to current injection
+-------------------------------
+
+Setting a holding current in a patch clamp experiment or in a current clamp simulation is different:
+
+- Under current clamp, the voltage will settle to a new steady state based on the injected current and ion channel kinetics.
+- Under voltage clamp initialization with Init, the cell is assumed to be fixed at that voltage long enough for gating variables to equilibrate at that value.
+
+If you want to simulate current clamp behavior, you should insert a point process like an IClamp to inject current, not rely on Init.
+
+Summary
+-------
+
+.. note::
+
+    The **Init** button does a voltage clamp initialization of the *entire cell*, setting membrane potential and gating variables to steady-state values consistent with that voltage. This differs fundamentally from fixing initial membrane potential without adjusting gating variables, or from current injection via IClamp.
+
+For workflow:
+
+1. Insert mechanisms (e.g., `insert hh`) into your sections.
+2. Use **Init** to set the initial equilibrium state at your chosen membrane potential.
+3. Click **Init & Run** to initialize and then simulate the free evolution.
+4. For current clamp experiments, insert a current clamp point process like :class:`IClamp` and set its amplitude instead of relying on Init.
+
+Further customization
+---------------------
+
+Advanced initialization strategies can be employed for models that:
+
+- Have spontaneous activity
+- Require setting resting potentials not dictated by inserted mechanisms
+- Include ionic concentrations and advanced mechanisms requiring initialization of ion dynamics
+
+These are discussed in detail in NEURON documentation and *The NEURON Book*, Chapter 9.
+
+Example: Python usage
+--------------------
+
+.. code-block:: python
+
+    from neuron import h
+    h('create soma')
+    h.soma.insert('hh')
+    h.soma.nseg = 1
+    h.topology()
+
+    # Set the voltage for initialization
+    init_voltage = -65.0
+    h.init()
+    h.v_init = init_voltage
+    h.run()
+
+To perform voltage clamp initialization programmatically, you can set `h.v_init` before calling `h.finitialize()` (equivalent internally to Init) and then run the model freely with `h.continuerun()`.
+
+This clarifies that Init sets the *starting equilibrium state* of voltage and gating variables, enabling meaningful simulation from a known point of departure.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=524 <https://neuron.yale.edu/phpBB/viewtopic.php?t=524>`_

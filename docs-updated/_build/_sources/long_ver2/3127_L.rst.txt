@@ -1,0 +1,91 @@
+Custom Initialization Procedures and Proper Use of :func:`fadvance` in NEURON
+===============================================================================
+
+When implementing a custom initialization procedure (often a :meth:`hoc.backend.proc` named `init`) that calls :func:`fadvance` to advance the simulation time prior to the start of the main simulation (e.g., to reach steady state), it is crucial to ensure the initialization is fully correct to avoid subtle errors in recorded variables.
+
+Key Point
+---------
+
+If your custom init procedure includes one or more calls to :func:`fadvance`, **you must call** :func:`frecord_init` at the end of the initialization process. This resets the internal indices used by :class:`Vector` objects that record simulation variables, preventing timing shifts and misalignment of recorded data.
+
+This is necessary because each call to :func:`fadvance` increments internal indices that track recorded vectors, and without resetting them via :func:`frecord_init`, recordings will appear delayed or shifted.
+
+Common Practice in Default Init
+-------------------------------
+
+The default :func:`finitialize` method internally calls :func:`frecord_init`, so if you call :func:`finitialize` after :func:`fadvance` calls, you do not need to call :func:`frecord_init` explicitly. However, if your init procedure does not call :func:`finitialize` afterward, you must call :func:`frecord_init` explicitly.
+
+Illustration
+------------
+
+A minimal custom init procedure with calls to :func:`fadvance` should look like this:
+
+.. code-block:: hoc
+
+    proc init() {
+        finitialize(v_init)
+        fcurrent()
+        // save current dt and t if changing them
+        temp_dt = dt
+        dt = 10
+        for i=0,19 fadvance()  // advance to reach steady state
+        
+        dt = temp_dt
+        // reset recording vectors after fadvance calls
+        frecord_init()
+    }
+
+Alternatively, calling :func:`finitialize` at the end resets recordings as well:
+
+.. code-block:: hoc
+
+    proc init() {
+        finitialize(v_init)
+        fcurrent()
+        temp_dt = dt
+        dt = 10
+        for i=0,19 fadvance()
+        dt = temp_dt
+        
+        finitialize(v)      // also calls frecord_init internally
+        fcurrent()
+    }
+
+Explanation from NEURON Forum Discussion
+----------------------------------------
+
+- The recorded vectors' internal index increments with each call to :func:`fadvance`.
+
+- Not calling :func:`frecord_init` after advancing time during init causes all vector recordings to be offset by the number of :func:`fadvance` calls made.
+
+- This offset affects recorded signals but does not alter the actual simulation results (e.g., synaptic timings or membrane potentials).
+
+- The need for :func:`frecord_init` is less obvious than calls like :func:`finitialize` or :meth:`cvode.re_init`, so it is easy to overlook.
+
+Summary Recommendations
+-----------------------
+
+- If your :meth:`proc init` advances simulation time with :func:`fadvance`, always ensure that after all :func:`fadvance` calls you either:
+
+  - call :func:`frecord_init` explicitly, **or**
+
+  - call :func:`finitialize` (which calls :func:`frecord_init` internally).
+
+- Without this, Vector.recorded traces will be shifted, causing confusion and erroneous interpretation of simulation data.
+
+Additional Notes
+----------------
+
+- Calling :func:`frecord_init` or :func:`finitialize` resets recording indices but does **not** affect the actual model state (voltages, currents, etc.).
+
+- The problem manifests more seriously when multiple calls to :func:`fadvance` occur during init.
+
+- Spike times and NetCon timings are not affected by this issue.
+
+For further practical guidance, review the custom init procedures in example NEURON models that use :func:`fadvance`. Models that call :func:`finitialize` after :func:`fadvance` inherently avoid this issue, while those that do not must explicitly call :func:`frecord_init`.
+
+.. note::
+
+   This best practice helps prevent subtle bugs in recorded traces when implementing custom initialization routines that step simulation time before starting the main simulation epoch.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3127 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3127>`_

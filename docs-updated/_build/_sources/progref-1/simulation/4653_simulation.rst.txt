@@ -1,0 +1,40 @@
+Applying Sinusoidal Voltage to Membrane
+=======================================
+
+When intending to apply a sinusoidal voltage to a model axon, it is important to clarify whether the goal is to force the *membrane potential* or the *extracellular potential* to follow a sinusoidal time course.
+
+- To force membrane potential to follow a sinusoidal waveform, the :class:`SEClamp` is the appropriate tool, as it clamps the membrane potential to a specified waveform by injecting current on a per-segment basis. The older :class:`VClamp` is not recommended because it was designed for experimental squid axon voltage clamp studies.
+
+- Injecting a sinusoidal current via an :class:`IClamp` will not produce a sinusoidal membrane potential due to ionic channel dynamics.
+
+- For forcing the *extracellular potential* to follow a time-varying waveform (e.g., sinusoidal), one should not use clamps but rather modify the extracellular potential directly.
+
+A recommended approach for modeling time-varying extracellular stimulation in a purely resistive, linear extracellular medium is to use the *xstim* density mechanism, which drives :attr:`e_extracellular` through a :class:`POINTER` variable linked to a global stimulus waveform.
+
+.. code-block:: hoc
+
+    forall {
+        insert xstim
+        for (x=0) setpointer ex_xstim(x), e_extracellular(x)
+    }
+
+Here, the global variable controlling stimulation amplitude (e.g. :attr:`is_xstim`) is driven externally by a function generator (like ``Fsq`` or ``Fzap``) or by :meth:`Vector.play`. The parameter :attr:`rx` is set per segment based on the maximum local extracellular potential predicted by your COMSOL or other modeling tools, converted to mV:
+
+.. code-block:: hoc
+
+    rx = 1e-3 * (maximum local extracellular potential in Volts)
+
+This ensures the spatial and temporal profile of extracellular potential corresponds to your input waveform scaled appropriately per segment.
+
+.. note::
+
+   The extracellular potential waveform at any position *p* relates linearly to the input current stimulus waveform *i(t)*:
+
+   .. math::
+
+      v_{ext}(p, t) = r(p) \times i(t)
+
+   where :math:`r(p)` is a location-specific resistance factor.
+
+With this method, the time course of extracellular potential at all axon segments can be controlled precisely according to experimental or modeling data, allowing comparisons such as those inspired by Gaines et al. (2018).
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=4653

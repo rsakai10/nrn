@@ -1,0 +1,72 @@
+Units Checking and Fixing in MOD Files
+=======================================
+
+.. note::
+   The :func:`modlunit` tool is very strict about unit consistency and syntax in NMODL files. It stops checking upon encountering the first error, so a cycle of checking and fixing errors is often needed to fully clean a mod file.
+
+Common Issues and Fixes
+----------------------
+
+- Undefined or unrecognized units, e.g., using *mM* or *DegC* instead of *mM* or *degC*. Use standard lowercase units recognized by :func:`modlunit`:
+  
+  .. code-block:: none
+
+     UNITS {
+         (mM) = (milli/liter)
+         (degC) = (degC)
+     }
+
+- Dimensionless variables must be declared with units "(1)" rather than with time or voltage units:
+
+  .. code-block:: none
+
+     on (1)   // instead of on (ms)
+
+- When defining functions with units, all terms must have compatible units. For example, to fix:
+
+  .. code-block:: none
+
+     FUNCTION KTF(celsius (degC)) (mV) {
+         KTF = ((25. (mV)/293.15 (degC)) * (celsius + 273.15 (degC)))
+     }
+
+  This ensures the sum and product units are consistent.
+
+Guidelines for Iterative Unit Checking
+--------------------------------------
+
+1. Run :func:`modlunit` on the mod file.
+2. Fix the first reported error by adjusting unit declarations or expressions.
+3. Repeat until no errors are reported.
+
+Example: fixing a dimensionless variable in **ppsyn.mod**:
+
+.. code-block:: none
+
+   PARAMETER {
+       on (1)
+   }
+
+   BREAKPOINT {
+       gs = gsbar * on
+   }
+
+.. seealso::
+
+   :func:`modlunit` for unit consistency checking in mod files.
+
+Deleting Windows Temporary Mod Files in Cygwin
+----------------------------------------------
+
+Temporary files beginning with `~$` may be interpreted by the shell due to the `$` character. To remove such files, escape the `$` character:
+
+.. code-block:: shell
+
+   rm ~\$bgka.mod
+
+This escapes the `$` preventing shell variable expansion.
+
+.. note::
+   It is good practice to check directory contents carefully and remove unintended temporary files to avoid compilation errors.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3260 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3260>`_

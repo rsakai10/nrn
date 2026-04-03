@@ -1,0 +1,216 @@
+Optimal Spatial Discretization (`d_lambda`) for Measuring Propagation Speed in Myelinated Axon Models
+==========================================================================================================
+
+This section addresses the considerations and best practices for choosing spatial discretization parameters, specifically the `d_lambda` rule, when measuring action potential propagation speed in detailed myelinated axon models (e.g., McIntyre et al. 2002). The discussion is based on extensive testing and analysis of the model's sensitivities to section segmentation (`nseg`), time step (`dt`), and CVODE integration settings.
+
+Measuring Propagation Speed
+----------------------------
+
+A reliable method to measure conduction velocity (CV) involves recording the time at which the membrane potential crosses a threshold at two or more nodes of Ranvier and calculating velocity as the distance between nodes divided by the latency difference.
+
+Example HOC code snippet for setup and velocity measurement using NetCon with CVODE for second-order threshold detection:
+
+.. code-block:: hoc
+
+   load_file("MRGaxon.hoc")
+   cvode_active(1)
+   cvode.condition_order(2)  // Enables second order accurate spike time interpolation
+
+   istim = 0.5  // Reduced stimulation amplitude for controlled spike initiation
+
+   // Create NetCon objects at node centers to detect spikes crossing -40 mV threshold
+   objref null, nc[axonnodes], apt[axonnodes]
+   for i=0, axonnodes-1 {
+       node[i] nc[i] = new NetCon(&v(0.5), null, -40, 0, 0)
+       apt[i] = new Vector()  // To record spike times
+       nc[i].record(apt[i])
+   }
+
+   // Vector holding node distances along axon
+   objref s, time
+   s = new Vector(axonnodes)
+   time = new Vector(axonnodes)
+   for i=0, axonnodes-1 {
+       s.x(i) = i * deltax  // deltax is internode distance in microns
+   }
+
+   // Function to run simulation and compute conduction velocity between two nodes
+   func measure_propspeed() {
+       run()
+
+       for i=0, axonnodes-1 {
+           time.x(i) = apt[i].x(0)  // Spike time at each node
+       }
+
+       // Choose nodes away from stimulus and ends to avoid artifacts
+       start_node = 5
+       end_node = 15
+    
+       // Compute velocity (m/s), converting microns to meters
+       delta_x = (end_node - start_node) * deltax * 1e-6
+       delta_t = time.x(end_node) - time.x(start_node)
+       V = delta_x / delta_t
+       return V
+   }
+
+
+Spatial Discretization and `d_lambda` Rule
+-------------------------------------------
+
+The **d_lambda rule** is a well-known heuristic defining the maximal compartment length as a fraction of the membrane AC length constant at a defined frequency (often 100 Hz):
+
+.. code-block:: hoc
+
+   forsec all {
+       nseg = int((L / (0.1 * lambda_f(100)) + .999) / 2) * 2 + 1
+   }
+
+where `lambda_f(freq)` returns the AC length constant at frequency `freq` Hz.
+
+**However, in complex myelinated axon models using the extracellular mechanism (e.g., McIntyre et al. 2002), the standard implementation of the d_lambda rule is not sufficient** due to additional axial resistances (e.g., extracellular axial resistance `xraxial`). This necessitates different or more refined spatial discretization strategies:
+
+- The presence of extracellular axial resistance breaks some assumptions in the classical d_lambda rule.
+- Nodes of Ranvier require careful segmentation (`nseg`), often more than typical values (e.g., 9 or more segments) to achieve convergence.
+- Excessive segmentation (e.g., `nseg` > 9 in nodes) may cause integration errors or initialization failures with adaptive integrators like CVODE.
+
+Impact of Number of Segments (`nseg`)
+-------------------------------------
+
+Empirical findings in the McIntyre model demonstrate:
+
+- Propagation speed estimates vary substantially with the number of node segments.
+- Typical convergence is observed by increasing node `nseg` up to 27 or more.
+- Using 1 segment per node section tends to overestimate conduction velocity.
+- Fixed time step simulations with small `dt` and high `nseg` resolve more accurate conduction velocities but require significantly more computational resources.
+- Adaptive time stepping (CVODE) with proper initialization (`cvode.dae_init_dteps()` and setting appropriate `atol`) can yield accurate results with fewer segments but still requires higher `nseg` in nodes than in internodes.
+
+Proper Initialization and Avoiding Artifacts
+--------------------------------------------
+
+- Stimulus should be applied at one end (e.g., node 0), with adjusted amplitude to about twice threshold or halved amplitude compared to the model's original stimulus to avoid large initiation artifacts.
+- Measure latencies between nodes several internodes away (e.g., nodes 5 to 15) to avoid end effects and spike initiation zone distortions.
+- Allow the model to reach steady state (`run()` with a pre-stimulation period).
+- Use second order spike time detection via `cvode.condition_order(2)` and NetCon's `record()` method for precise latency measurement.
+- Avoid using `APCount` if possible, since threshold crossing times via sampling limited by `dt` can introduce larger timing errors.
+
+Example HOC code snippet to initialize stimulus location and measure velocity (including re-insertion of stimulus after changing `nseg`):
+
+.. code-block:: hoc
+
+   proc stimul() {
+       // Insert stimulus; needed after changing nseg
+       node[0] stim.loc(0.5)
+       stim.amp = istim
+   }
+
+   V = 0
+   xpanel("Propagation speed")
+   xbutton("Measure speed", "V = measure_propspeed()")
+   xfixedvalue("V")
+   xpanel(100, 400)
+
+
+Decoupling Node and Internode Discretization
+---------------------------------------------
+
+- A common practice is to use finer segmentation in the nodes (`nseg` = 9 to 27 or higher) to ensure accuracy.
+- Internodes can often be discretized using standard `d_lambda`-based rules, but must factor in parallel extracellular axial resistances.
+
+Accounting for Extracellular Axial Resistance in Internodes
+-----------------------------------------------------------
+
+For internodes modeled as nested cables with parallel axial paths (axon interior and extracellular space between axon membrane and myelin), the effective longitudinal resistance/length is:
+
+.. math::
+
+    R_{\text{total}} = R_a \frac{4}{\pi d^2} + \frac{R_{\text{ag}}}{w \pi d^2} =
+    \left(1 + \frac{R_{\text{ag}}}{4 w R_a}\right) R_a \frac{4}{\pi d^2}
+
+where:
+
+- \(d\) is axon diameter,
+- \(w = \frac{w_{\text{gap}}}{d}\) is the relative width of the gap,
+- \(R_a\) is cytoplasmic resistivity,
+- \(R_{\text{ag}}\) is extracellular gap resistivity.
+
+This suggests scaling cytoplasmic resistivity \(R_a\) by a factor \(k = 1 + \frac{R_{\text{ag}}}{4 w R_a}\) in length constant calculations used for segmentation of internodes.
+
+An example HOC procedure to adjust `nseg` accordingly:
+
+.. code-block:: hoc
+
+   proc chop_internodes() { local tmp, w
+     forsec $o1 {
+       tmp = Ra
+       w = wgap / diam(0.5)
+       Ra = Ra + Rag / (4 * w)
+       nseg = int((L / (0.1 * lambda_f(100)) + .999) / 2) * 2 + 1
+       Ra = tmp  // restore original Ra
+     }
+   }
+   chop_internodes(sralist)
+
+
+Common Pitfalls
+----------------
+
+- Using too few segments per node can significantly overestimate conduction velocity.
+- Excessive segmentation can cause IDA initialization failures with CVODE adaptive integrator, requiring parameter tuning (e.g., `cvode.dae_init_dteps()`).
+- The `d_lambda` rule as implemented is insufficient for sections with extracellular current flow.
+- Spike time artifacts arise if threshold crossing times are measured by sampling voltage at discrete times without interpolation.
+- Discontinuities or bugs in NMODL mechanisms (e.g., `vtrap2` functions in axnode mod) can introduce subtle errors; ensure latest corrected versions.
+
+Summary Recommendations
+------------------------
+
+- Use **NetCon record()** with `cvode.condition_order(2)` for second order accurate spike timing.
+- Stimulate near an axon end, reduce stimulus amplitude to about twice threshold or less.
+- Avoid recording spike latencies at nodes close to stimulus or cell ends (exclude first and last ~4 nodes).
+- Increase `nseg` in nodes of Ranvier to 27 or more for convergence; internodes may follow `d_lambda` rule adjusted for extracellular axial resistances.
+- Consider fixed time step simulations (e.g., `dt=1e-5 ms`) if adaptive integrator initialization issues arise with high `nseg`.
+- Verify convergence by varying `dt`, `nseg`, and `d_lambda`.
+- Account for extracellular axial resistance in internode discretization.
+
+.. note::
+
+   The classical d_lambda rule ignores longitudinal extracellular resistance (`xraxial`), which can be significant in myelinated axon models with extracellular mechanisms. Spatial discretization strategies must be adapted accordingly.
+
+.. seealso::
+
+   :class:`NetCon`, :meth:`NetCon.record`, :meth:`CVode.condition_order`, :func:`lambda_f`, :func:`cvode.dae_init_dteps`
+
+Example of Conduction Velocity Variation with Parameters
+---------------------------------------------------------
+
+Experimental results:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10 10
+
+   * - Parameter
+     - Value
+     - Velocity (m/s)
+   * - Node segments (`nseg` per node)
+     - 1
+     - ~50-56
+   * - Node segments
+     - 9 to 27
+     - ~40-45
+   * - Fixed timestep (`dt`)
+     - 1e-5 ms
+     - Velocity converges close to adaptive CVODE values
+   * - Adaptive integration tolerances (`atol`)
+     - 1e-4 to 1e-5
+     - Small influence on velocity, allowing accurate results
+   * - `d_lambda`
+     - 0.1 to 0.003
+     - Smaller values reduce velocity (improve accuracy) but increase computational cost
+
+Use of the d_lambda rule and segmentations must balance computational expense against the necessity of accuracy and convergence checking.
+
+---
+
+This guidance provides a structured approach to determine optimal compartmental discretization and simulation parameters for accurate measurement of action potential propagation speed in detailed myelinated axon NEURON models.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2271 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2271>`_

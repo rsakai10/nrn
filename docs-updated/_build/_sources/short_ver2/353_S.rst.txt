@@ -1,0 +1,74 @@
+Calculating and Plotting Instantaneous Average Synaptic Currents
+=================================================================
+
+To track the instantaneous average synaptic current across a population of synapses in a network, two primary methods can be used in NEURON.
+
+Method 1: Record-All and Postprocess
+------------------------------------
+Record each synaptic current into a separate :class:`Vector` during simulation, store these vectors in a :class:`List`, and postprocess after the run:
+
+.. code-block:: hoc
+
+    objref tvec, veclist, synlist, avgisyn
+    tvec = new Vector()
+    tvec.record(&t)
+
+    veclist = new List()
+    synlist = new List()
+
+    proc setsyn() { localobj tempsyn, tempvec
+      tempsyn = new ExpSyn($1)
+      // set parameters like tau and reversal potential here
+      synlist.append(tempsyn)
+      tempvec = new Vector()
+      tempvec.record(&tempsyn.i)
+      veclist.append(tempvec)
+    }
+
+    proc postprocess() { local i
+      avgisyn = new Vector()
+      avgisyn = veclist.object(0).c
+      for i=1, veclist.count()-1 avgisyn.add(veclist.object(i))
+      avgisyn.div(veclist.count())
+    }
+
+    proc run() {
+      stdinit()
+      continuerun(tstop)
+      postprocess()
+    }
+
+*Note:* For variable time step integration (:class:`CVode`), use its :meth:`record` method instead of :meth:`Vector.record`.
+
+Method 2: Real-time Averaging
+-----------------------------
+Accumulate currents at each time step during simulation, useful for interactive plotting but potentially slower:
+
+.. code-block:: hoc
+
+    double avgisyn
+    avgisyn = 0
+
+    proc init() {
+      finitialize(v_init)
+      avgisyn = 0
+      if (cvode.active()) {
+        cvode.re_init()
+      } else {
+        fcurrent()
+      }
+      frecord_init()
+    }
+
+    proc advance() { local i
+      fadvance()
+      avgisyn = 0
+      for i=0, synlist.count()-1 avgisyn += synlist.object(i).i
+      avgisyn /= synlist.count()
+    }
+
+.. note::
+   Choose Method 1 for faster large-scale simulations with offline analysis.
+   Use Method 2 if you need live plotting during simulations or have smaller models.
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=353

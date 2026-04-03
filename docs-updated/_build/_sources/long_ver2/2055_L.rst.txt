@@ -1,0 +1,257 @@
+.. _white_noise_current_injection:
+
+White Noise Current Injection in NEURON
+=======================================
+
+This section explains how to implement a current injection with additive white Gaussian noise in a NEURON point process mechanism using NMODL. It discusses common pitfalls and provides a robust example implementation.
+
+Problem Description
+-------------------
+You may want to model an external current input of the form:
+
+.. math::
+
+   I(t) = f(t) + D \cdot n(t)
+
+where :math:`f(t)` is a deterministic function of time, and :math:`n(t)` is white Gaussian noise with zero mean and standard deviation :math:`D`. A common naive approach is to use the built-in NMODL function :func:`normrand` inside the :code:`BREAKPOINT` block, e.g.,
+
+.. code-block:: neuron
+
+    BREAKPOINT {
+        if (t >= del && t <= del + dur) {
+            noise = normrand(0, std)
+            amp = f(t)
+            i = amp + noise + bias
+        } else {
+            i = 0
+        }
+    }
+
+However, this approach can cause numerical instability and warnings like
+``exp(###) out of range, returning exp(700)``, leading to unrealistic membrane potentials. This is due to the fact that the :code:`BREAKPOINT` block is executed twice per time step to calculate derivatives, causing multiple calls to :func:`normrand`, which introduces large, abrupt fluctuations in the injected current and its effective conductance, destabilizing the model.
+
+Correct Implementation Using BEFORE BREAKPOINT and NET_RECEIVE
+--------------------------------------------------------------
+
+To avoid this, compute the noisy current once per time step in the :code:`BEFORE BREAKPOINT` block, and use NEURON's event delivery system along with a state variable to control when the current injection is active. The :code:`BREAKPOINT` block only assigns the previously computed current value to :code:`i`.
+
+Below is a full example of a noise current clamp point process with delayed onset and finite duration, where the deterministic component smoothly varies, and the noise has standard deviation :code:`std`.
+
+.. code-block:: neuron
+
+    NEURON {
+        POINT_PROCESS IClampNoise
+        RANGE i, del, dur, f0, f1, r, torn, std, bias
+        ELECTRODE_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+    }
+
+    PARAMETER {
+        del = 50    (ms)     : delay before current starts
+        dur = 200   (ms)     : duration of current injection
+        torn = 500  (ms)     : time of transition in amp(t)
+        std = 0.2   (nA)     : noise standard deviation
+        f0 = 0.2    (nA)     : lower bound of deterministic amp
+        f1 = 0.8    (nA)     : upper bound of deterministic amp
+        r = 60                 : smoothing parameter (ms)
+        bias = 0    (nA)     : constant bias current
+    }
+
+    ASSIGNED {
+        ival (nA)    : intermediate current value
+        i (nA)       : electrode current
+        amp (nA)     : deterministic amplitude at time t
+        noise (nA)   : noise value sampled
+        on (1)       : state flag for current injection on/off
+    }
+
+    INITIAL {
+        i = 0
+        on = 0
+        net_send(del, 1)   : schedule event to start
+    }
+
+    PROCEDURE seed(x) {
+        : Set random seed from hoc at initialization, e.g.:
+        : objref rng
+        : rng = new Random()
+        : rng.MCellRan4(x, 0)
+        set_seed(x)
+    }
+
+    BEFORE BREAKPOINT {
+        if (on == 1) {
+            noise = normrand(0, std * 1(/nA)) * 1(nA) : generate noise with units
+            amp = f0 + 0.5 * (f1 - f0) * (tanh((t - torn) / (r / 3) - 3) + 1)
+            ival = amp + noise + bias
+        } else {
+            ival = 0
+        }
+    }
+
+    BREAKPOINT {
+        i = ival
+    }
+
+    NET_RECEIVE(flag) {
+        if (flag == 1) {
+            if (on == 0) {
+                on = 1
+                net_send(dur, 1)   : schedule event to stop after duration
+            } else {
+                on = 0
+            }
+        }
+    }
+
+Explanation
+-----------
+
+- The :code:`INITIAL` block initializes :code:`i` and turns the current injection off (:code:`on = 0`). It schedules a self-event after :code:`del` milliseconds to turn the current on.
+- The :code:`NET_RECEIVE` block toggles the state variable :code:`on` between 0 and 1 each time a self-event arrives, implementing a state machine that controls the injection time window.
+- The :code:`BEFORE BREAKPOINT` block executes once per time step before the :code:`BREAKPOINT` and generates a new noise value using :func:`normrand`. The deterministic amplitude :code:`amp` smoothly transitions according to a scaled hyperbolic tangent function.
+- Noise intensity :code:`std` is scaled carefully with units to avoid unit mismatch.
+- The :code:`BREAKPOINT` block assigns the precomputed total current :code:`ival` to the output :code:`i`. This avoids multiple noise samples per time step, stabilizing the simulation.
+
+Usage Notes
+-----------
+
+- Use the provided :meth:`seed` procedure to initialize the random number generator seed for reproducibility.
+- Avoid calling random number generators directly in :code:`BREAKPOINT` blocks because they are executed multiple times per time step.
+- Control injection timing with NEURON's event delivery system (:code:`net_send`) instead of deprecated functions like :code:`at_time()`.
+- The variable :code:`on` acts as a binary switch for current injection.
+
+Example Hoc Initialization
+---------------------------
+
+.. code-block:: hoc
+
+    objref iclamp
+    iclamp = new IClampNoise(0.5)
+    iclamp.del = 100
+    iclamp.dur = 500
+    iclamp.std = 0.1
+    iclamp.bias = 0
+    iclamp.seed(1234)  : sets random seed for reproducibility
+
+Discussion: Parameters :code:`torn` and :code:`r`
+-------------------------------------------------
+
+- :code:`torn` specifies the center time of the transition in the deterministic current amplitude.
+- :code:`r` controls the smoothness of the transition; larger values broaden the transition time.
+- The deterministic amplitude :code:`amp` is generated using a scaled hyperbolic tangent function to smoothly ramp from :code:`f0` to :code:`f1`.
+
+Additional Example: Noisy Conductance-Based Synapse
+---------------------------------------------------
+
+A similar approach applies to conductance-based synapses with noise, where noise generation is moved to :code:`BEFORE BREAKPOINT`, and current updates are controlled via event scheduling and state variables. For example:
+
+.. code-block:: neuron
+
+    NEURON {
+        POINT_PROCESS Alpha2SynNoise
+        RANGE tau1, tau2, e, i, mean, stddev, del, dur, g, on
+        NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+        (nA) = (nanoamp)
+        (mV) = (millivolt)
+        (uS) = (microsiemens)
+    }
+
+    PARAMETER {
+        tau1 = 0.1 (ms) <1e-9,1e9>
+        tau2 = 10 (ms) <1e-9,1e9>
+        e = 0 (mV)
+        del = 0 (ms)
+        dur = 0 (ms)
+        mean = 1
+        stddev = 0.2
+    }
+
+    ASSIGNED {
+        v (mV)
+        i (nA)
+        g (uS)
+        factor
+        gnoise
+        on
+    }
+
+    STATE {
+        A (uS)
+        B (uS)
+    }
+
+    INITIAL {
+        if (tau1/tau2 > 0.9999) {
+            tau1 = 0.9999 * tau2
+        }
+        A = 0
+        B = 0
+        LOCAL tp
+        tp = (tau1 * tau2) / (tau2 - tau1) * log(tau2 / tau1)
+        factor = -exp(-tp / tau1) + exp(-tp / tau2)
+        factor = 1 / factor
+        on = 1            : must be initialized ON to avoid segmentation fault
+        net_send(del, 1)
+    }
+
+    PROCEDURE seed(x) {
+        set_seed(x)
+    }
+
+    BEFORE BREAKPOINT {
+        if (on == 1) {
+            gnoise = normrand(mean, stddev)
+        } else {
+            gnoise = 0
+        }
+    }
+
+    BREAKPOINT {
+        SOLVE state METHOD cnexp
+        g = (B - A) * gnoise
+        i = g * (v - e)
+    }
+
+    DERIVATIVE state {
+        A' = -A / tau1
+        B' = -B / tau2
+    }
+
+    NET_RECEIVE(weight (uS)) {
+        A = A + weight * factor
+        B = B + weight * factor
+
+        if (flag == 1) {
+            if (on == 0) {
+                on = 1
+                net_send(dur, 1)
+            } else {
+                on = 0
+            }
+        }
+    }
+
+Note that in this example, initializing :code:`on = 1` in the :code:`INITIAL` block avoids segmentation faults related to the noise calculation before the event scheduling.
+
+.. note::
+   Always ensure state variables controlling noise generation are valid at simulation start to avoid crashes.
+
+Summary
+-------
+
+- Use the :code:`BEFORE BREAKPOINT` block for noise generation to ensure one random draw per integration step.
+- Use NEURON's event system (:code:`net_send` and :code:`NET_RECEIVE`) to schedule current onset and offset.
+- Avoid deprecated functions like :code:`at_time()`.
+- Initialize all state variables properly.
+- Use :meth:`seed` to control randomness and reproducibility.
+
+This approach produces stable, physically plausible noisy current injections suitable for modeling stochastic synaptic inputs or fluctuating current injections in biophysical neuron models.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2055 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2055>`_

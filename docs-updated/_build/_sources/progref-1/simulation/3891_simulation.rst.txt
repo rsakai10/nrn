@@ -1,0 +1,26 @@
+Using the Event Delivery System with Fixed Time Step Integration
+==================================================================
+
+When using fixed time step integration (`cvode.active() == 0`), scheduling events via :meth:`CVode.event` before simulation start can lead to events being discarded. This happens because :meth:`h.run` calls :meth:`h.finitialize` internally, which clears the event queue, removing any pre-placed events.
+
+.. note::
+   To ensure events occur as expected with fixed step integration and :meth:`h.run`, use :class:`FInitializeHandler` to schedule events during initialization. For example:
+
+   .. code-block:: python
+
+       def hi():
+           print('hi')
+
+       fih = h.FInitializeHandler(2.5, hi)  # event scheduled at t=2.5 ms
+       h.tstop = 5.0
+       h.run()
+
+Calling :meth:`CVode.solve` only makes sense when variable time step integration is active (`cvode.active(1)`). Using :meth:`CVode.solve` with fixed step mode is unsupported and can yield invalid simulation times.
+
+When generating events at regular intervals using fixed step integration, floating point roundoff errors can accumulate over long simulations. To minimize this:
+
+1. Choose a :attr:`h.dt` that is an exact binary fraction (a power-of-two fraction), e.g., 0.03125 or 0.0625.
+2. Ensure your sampling interval is a multiple of :attr:`h.dt`.
+
+This reduces timing inaccuracies caused by finite precision arithmetic.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=3891

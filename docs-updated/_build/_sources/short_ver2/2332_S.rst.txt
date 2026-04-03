@@ -1,0 +1,55 @@
+Surface Area of an Entire Neuron
+=================================
+
+You can calculate the total surface area of a neuron using the following approaches.
+
+Command Line Approach
+---------------------
+At the `oc>` prompt, initialize the model and sum areas of all segments:
+
+.. code-block:: hoc
+
+    finitialize()
+    _sum = 0
+    forall for (x,0) _sum += area(x)
+    print _sum  // total surface area in um²
+
+Reusable HOC Procedure
+---------------------
+Create a file `totalarea.hoc` with:
+
+.. code-block:: hoc
+
+    proc totalarea() { local sum
+      finitialize()
+      sum = 0
+      forall for (x,0) sum += area(x)
+      print "total surface area =", sum, "um2"
+    }
+    totalarea()
+
+Load this file with :meth:`xopen` or via the GUI and call :func:`totalarea()` to get updated values.
+
+Network Models
+--------------
+For neuron objects in a network, pass the cell instance as an argument:
+
+.. code-block:: hoc
+
+    proc totalarea() { local sum
+      finitialize()
+      sum = 0
+      forsec $o1.all for (x,0) sum += area(x)
+      print "total surface area =", sum, "um2"
+    }
+
+Call with a cell instance, e.g. :code:`totalarea(Pyr[24])`.
+
+Notes on Surface Area Calculation
+---------------------------------
+- The area reported excludes end caps; segments are treated as cylinders or frusta (truncated cones) depending on geometry specification (:meth:`pt3dadd` vs stylized diameter/length).
+- For stylized sections, area ≈ 2π * radius * length.
+- For sections with 3D geometry, area accounts for varying diameters between points.
+- Default boundary conditions are sealed ends, so end areas are not included.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2332 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2332>`_

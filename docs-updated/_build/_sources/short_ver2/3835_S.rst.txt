@@ -1,0 +1,45 @@
+Tracking Synaptic Current from Bouton to Soma
+=============================================
+
+When simulating distributed synaptic inputs using conductance-based synapses (e.g., :class:`AlphaSynapse`), the total synaptic current arriving at the soma from particular populations can be approximated by differences in soma current recordings between simulations that include or omit activation of those synapses:
+
+1. Run a simulation recording the soma transmembrane current (:meth:`Section.rec`) with all synapses active (control).
+2. Run another simulation with a subset of synapses (e.g., a particular bouton or population) inactive.
+3. Subtract the soma current trace without the synapse from the control trace to estimate that synapse's contribution.
+
+.. note::
+
+    This approach is approximate because synaptic conductance changes affect local membrane potentials and interact nonlinearly via shunting effects. Consequently, the transfer of synaptic current to the soma depends on the detailed biophysics, morphology, and spatiotemporal synaptic activation patterns.
+
+.. code-block:: python
+
+    # Example: record soma current with and without a synapse
+    from neuron import h, gui
+    soma = h.Section(name='soma')
+    syn = h.AlphaSynapse(soma(0.5))
+    syn.onset = 5
+    syn.gmax = 0.001
+    
+    isoma = h.Vector()
+    tvec = h.Vector()
+    tvec.record(h._ref_t)
+    isoma.record(soma(0.5)._ref_i_membrane_)
+    
+    h.finitialize(-65)
+    h.continuerun(40)
+    i_soma_control = isoma.to_python()
+    
+    syn.gmax = 0  # disable synapse
+    h.finitialize(-65)
+    h.continuerun(40)
+    i_soma_test = isoma.to_python()
+    
+    synaptic_current_contribution = [c - t for c, t in zip(i_soma_control, i_soma_test)]
+
+.. seealso::
+
+    :class:`AlphaSynapse`, :meth:`Section.rec`
+
+Because the synaptic current "loses its identity" once it enters the compartment, it cannot be tracked compartment-to-compartment as a distinct current. Instead, synaptic inputs alter local membrane potential, which spreads electrotonically through the neuron according to the cable equation solved by NEURON.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3835 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3835>`_

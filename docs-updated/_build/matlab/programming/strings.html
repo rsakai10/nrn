@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strings &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Strings</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/matlab/programming/strings.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><a href="#sprint" title="Link to this definition">sprint</a> &middot; <a href="#strcmp" title="Link to this definition">strcmp</a></p><section id="strings">
+<h1>Strings<a class="headerlink" href="#strings" title="Link to this heading"></a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="strfun.html">StringFunctions (String Manipulation Class)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="strfun.html#StringFunctions"><code class="docutils literal notranslate"><span class="pre">StringFunctions</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.len"><code class="docutils literal notranslate"><span class="pre">StringFunctions.len()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.substr"><code class="docutils literal notranslate"><span class="pre">StringFunctions.substr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.head"><code class="docutils literal notranslate"><span class="pre">StringFunctions.head()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.tail"><code class="docutils literal notranslate"><span class="pre">StringFunctions.tail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.right"><code class="docutils literal notranslate"><span class="pre">StringFunctions.right()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.left"><code class="docutils literal notranslate"><span class="pre">StringFunctions.left()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.is_name"><code class="docutils literal notranslate"><span class="pre">StringFunctions.is_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.alias"><code class="docutils literal notranslate"><span class="pre">StringFunctions.alias()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.alias_list"><code class="docutils literal notranslate"><span class="pre">StringFunctions.alias_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.references"><code class="docutils literal notranslate"><span class="pre">StringFunctions.references()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.is_point_process"><code class="docutils literal notranslate"><span class="pre">StringFunctions.is_point_process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="strfun.html#StringFunctions.is_artificial"><code class="docutils literal notranslate"><span class="pre">StringFunctions.is_artificial()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sscanf.html">String Parsing (sscanf)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sscanf.html#sscanf"><code class="docutils literal notranslate"><span class="pre">sscanf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="sprint">
+<span class="sig-name descname"><span class="pre">sprint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprint" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">.</span><span class="n">sprint</span><span class="p">(</span><span class="s">&#39;format&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>Description:</dt><dd><p>Prints to a NEURON (i.e. not Python) string. See <a class="reference internal" href="io/printf.html#printf" title="printf"><code class="xref py py-func docutils literal notranslate"><span class="pre">printf()</span></code></a> for the description of the format.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">strdef</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">sprint</span><span class="p">(</span><span class="n">strdef</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;There are %d %s.&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;dendrites&#39;</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">strdef</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Similar functionality is available for Python strings using the <code class="docutils literal notranslate"><span class="pre">%</span></code> operator or (for Python 2.6+) a
+string object’s <code class="docutils literal notranslate"><span class="pre">format</span></code> method or (for Python 3.6+) with f-strings.
+As Python strings are immutable, these approaches each create a new string.</p>
+<p>We can also use f-strings to update NEURON strings by writing to <code class="docutils literal notranslate"><span class="pre">strdef[0]</span></code>; for example:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+
+<span class="n">strdef</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">);</span>
+<span class="n">num_parts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="n">part</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;dendrites&quot;</span><span class="p">;</span>
+<span class="n">strdef</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">sprintf</span><span class="p">(</span><span class="s">&#39;There are %d %s.&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">num_parts</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="nb">disp</span><span class="p">(</span><span class="n">strdef</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="strcmp">
+<span class="sig-name descname"><span class="pre">strcmp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strcmp" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">strcmp</span><span class="p">(</span><span class="s">&quot;string1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;string2&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Description:</dt><dd><p>Returns negative, 0, or positive value
+depending on how the strings compare lexicographically.
+0 means they are identical. A positive value indicates
+<code class="docutils literal notranslate"><span class="pre">string1</span></code> comes after <code class="docutils literal notranslate"><span class="pre">string2</span></code>. This is a thin wrapper around
+the C standard library function <code class="docutils literal notranslate"><span class="pre">strcmp</span></code> and returns the
+same values it would return.</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">string1</span></code> and <code class="docutils literal notranslate"><span class="pre">string2</span></code> must contain <em>only</em> ASCII characters.
+All strings (whether or not they contain unicode) may be compared
+directly in Python via <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, etc.</p>
+<p>For example <code class="docutils literal notranslate"><span class="pre">&quot;apical&quot;</span> <span class="pre">&lt;</span> <span class="pre">&quot;basal&quot;</span></code> would return <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>Note that accented characters are not treated as equal to their
+non-accented counterparts. For example, <code class="docutils literal notranslate"><span class="pre">&quot;soma&quot;</span> <span class="pre">==</span> <span class="pre">&quot;sóma&quot;</span></code> would
+return <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+If you wish for accented and non-accented characters to be compared
+equal, one solution would be to use the third-party <code class="docutils literal notranslate"><span class="pre">unidecode</span></code> module,
+available via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">unidecode</span></code>, to remove accents before running
+the comparison.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

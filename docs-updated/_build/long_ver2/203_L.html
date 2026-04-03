@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Realistic Current Clamp Electrode Modeling with Electrode Resistance and Capacitance &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Realistic Current Clamp Electrode Modeling with Electrode Resistance and Capacitance</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/203_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="realistic-current-clamp-electrode-modeling-with-electrode-resistance-and-capacitance">
+<h1>Realistic Current Clamp Electrode Modeling with Electrode Resistance and Capacitance<a class="headerlink" href="#realistic-current-clamp-electrode-modeling-with-electrode-resistance-and-capacitance" title="Link to this heading"></a></h1>
+<p>When simulating current clamp recordings in NEURON, experimental data often exhibit artifacts at the beginning and end of the current pulse, commonly known as <em>bridge balance artifacts</em>. These arise primarily due to the electrode’s series resistance and capacitance. To faithfully reproduce these artifacts in a model, it is important to incorporate realistic electrode properties.</p>
+<section id="electrode-modeling-approaches">
+<h2>Electrode Modeling Approaches<a class="headerlink" href="#electrode-modeling-approaches" title="Link to this heading"></a></h2>
+<p>### Simple Electrode Model: Equivalent L Circuit</p>
+<p>The simplest model treats the electrode as an <strong>equivalent L circuit</strong>, where:</p>
+<ul class="simple">
+<li><p>The <em>series resistance</em> (access resistance) is lumped into a single resistor.</p></li>
+<li><p>The <em>electrode capacitance</em> is lumped into a single capacitor connected from the headstage end of the resistor to ground.</p></li>
+</ul>
+<p>This model approximates the electrode as a resistor in series with the cell, shunted by a capacitor to ground and is sufficient to capture basic bridge balance artifacts.</p>
+<p>Example of this approach is given in Chapter 3 of <em>The NEURON Book</em>, paired with a simple capacitive compensation circuit.</p>
+<p>### More Realistic Model: Equivalent T Circuit</p>
+<p>A more accurate representation uses an <strong>equivalent T circuit</strong> to better mimic observed abrupt voltage jumps at pulse onset and offset:</p>
+<ul class="simple">
+<li><p>The electrode series resistance is split into two equal resistors.</p></li>
+<li><p>The electrode capacitance is placed from the junction between these resistors to ground.</p></li>
+</ul>
+<p>This configuration places the lumped capacitor halfway along the electrode resistance, better approximating the distributed nature of electrode stray capacitance.</p>
+<p><strong>Rationale for Equivalent T Circuit:</strong></p>
+<ul class="simple">
+<li><p>Placing the electrode capacitor at one end (either proximal or distal) of the series resistance fails to realistically capture voltage behavior at the preamplifier input.</p></li>
+<li><p>The midpoint placement prevents perfect compensation and reproduces the need for capacitance compensation.</p></li>
+<li><p>Physically, the capacitor voltage node is at an intermediate potential:
+[
+V = V_m + frac{epsilon}{2}
+]
+where ( V_m ) is the membrane potential, and ( epsilon ) is the voltage drop across the electrode resistance.</p></li>
+</ul>
+</section>
+<section id="circuit-implementation-with-linear-circuit-builder">
+<h2>Circuit Implementation with Linear Circuit Builder<a class="headerlink" href="#circuit-implementation-with-linear-circuit-builder" title="Link to this heading"></a></h2>
+<p>NEURON includes a <strong>Linear Circuit Builder (LCB)</strong> GUI tool to facilitate constructing these equivalent circuit models and combining them with existing neuron models:</p>
+<ul class="simple">
+<li><p>Use LCB to create electrode circuits including resistors, capacitors, voltage sources, and compensation elements.</p></li>
+<li><p>The model can represent electrode resistance, capacitance, and optionally, compensation headstage properties with limited gain-bandwidth.</p></li>
+<li><p>The resulting electrode circuit is then connected to the cell model to simulate realistic current clamp recordings.</p></li>
+</ul>
+<p><strong>Note:</strong> The built-in <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> mechanism models a perfect single electrode clamp with series resistance but no capacitance. Use the Linear Circuit Builder when capacitance or complex frequency response properties must be included.</p>
+</section>
+<section id="biophysical-considerations">
+<h2>Biophysical Considerations<a class="headerlink" href="#biophysical-considerations" title="Link to this heading"></a></h2>
+<p>### Access Resistance vs. Series Resistance</p>
+<ul class="simple">
+<li><p>The <em>series resistance</em> in the electrode model usually represents the sum of:
+- Pipette resistance (axial resistance along the pipette lumen)
+- Residual resistance of the ruptured patch (access resistance)</p></li>
+</ul>
+<p>Experimentalists often estimate access resistance by performing I-V measurements with electrodes retracted after recording.</p>
+<p>### Seal Resistance</p>
+<ul class="simple">
+<li><p>Imperfect seals can be modeled as a linear resistor (leak) from the electrode-cell interface to ground.</p></li>
+<li><p>Depending on the biophysical nature of leak (e.g., ion channel-like vs. non-specific), the model can be adjusted accordingly.</p></li>
+<li><p>Seal resistance is often treated as a constant linear resistor in these models.</p></li>
+</ul>
+<p>### Modeling Electrodes as Cable Sections</p>
+<ul class="simple">
+<li><p>For detailed cases such as pipettes sunk deep into tissue, it may be feasible to model the electrode as a NEURON cable section with adjusted intracellular resistance (<a class="reference internal" href="../progref-1/modelspec/programmatic/topology/geometry.html#Ra" title="Ra"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Ra</span></code></a>) and membrane capacitance (<code class="xref py py-attr docutils literal notranslate"><span class="pre">cm</span></code>).</p></li>
+<li><p>However, this is more complex than necessary for many applications and the equivalent T circuit model via the Linear Circuit Builder suffices in most cases.</p></li>
+</ul>
+</section>
+<section id="practical-guidance">
+<h2>Practical Guidance<a class="headerlink" href="#practical-guidance" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Before modeling, understand the underlying theory of electrode resistance, capacitance, and clamp device frequency response. Classic texts like the <em>Axon Guide</em> are highly recommended.</p></li>
+<li><p>Measure or estimate electrode parameters (series resistance, capacitance) using experimental methods.</p></li>
+<li><p>Use the Linear Circuit Builder to configure electrode equivalent circuits and then integrate them with your neuron model (Python or HOC).</p></li>
+<li><p>For Python scripting examples, see <code class="xref py py-func docutils literal notranslate"><span class="pre">h.LinearCircuitBuilder()</span></code> usage and NEURON course materials on linear circuits.</p></li>
+</ul>
+<p>Minimal Python Example Snippet for Connecting Equivalent T Electrode Circuit:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Create Linear Circuit Builder instance</span>
+<span class="n">lcb</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">LinearCircuitBuilder</span><span class="p">()</span>
+
+<span class="c1"># Create two resistors representing the split series resistance</span>
+<span class="n">r1</span> <span class="o">=</span> <span class="n">lcb</span><span class="o">.</span><span class="n">addResistor</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>  <span class="c1"># 1 MOhm half series resistance</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">lcb</span><span class="o">.</span><span class="n">addResistor</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>  <span class="c1"># 1 MOhm half series resistance</span>
+
+<span class="c1"># Create capacitor connected at the junction of r1 and r2 to ground</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">lcb</span><span class="o">.</span><span class="n">addCapacitor</span><span class="p">(</span><span class="mf">10e-12</span><span class="p">)</span>  <span class="c1"># 10 pF electrode capacitance</span>
+
+<span class="c1"># Connect the resistors in series</span>
+<span class="n">lcb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+
+<span class="c1"># Connect capacitor from junction to ground</span>
+<span class="n">lcb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">lcb</span><span class="o">.</span><span class="n">gnd</span><span class="p">)</span>
+<span class="n">lcb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+
+<span class="c1"># Connect the distal resistor end to the neuron section for current clamp</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">lcb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="c1"># Create the circuit and run simulations as usual</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> — Single electrode clamp model with series resistance</p></li>
+<li><p>Linear Circuit Builder documentation and tutorials in <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LinearCircuitBuilder()</span></code></p></li>
+<li><p>The NEURON Book, Chapter 3 — Instrumentation modeling examples</p></li>
+<li><p>Experimental methods for measuring access resistance and electrode capacitance</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Realistic electrode modeling is essential for quantitative reproduction of recorded current clamp data. The equivalent T circuit model captures key features of electrode artifacts and is recommended over simpler lumped models for simulations involving uncompensated electrodes.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=203">https://neuron.yale.edu/phpBB/viewtopic.php?t=203</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

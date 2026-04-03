@@ -1,0 +1,91 @@
+Accessing Sections After Loading a Morphology File in NEURON
+==============================================================
+
+When loading a morphology file (e.g., a `.geo` file) in NEURON using Python, you may want to access and manipulate the sections created by the hoc statements in the file. This guide explains how to do so effectively.
+
+Loading the Morphology File
+---------------------------
+
+Use the `h.xopen()` function to load the morphology file. This executes the hoc statements in the file and creates the model cell sections.
+
+.. code-block:: python
+
+    from neuron import h
+    h.xopen("pyramidal264L.geo")  # Load the morphology file
+
+Accessing Sections
+------------------
+
+Sections created by the hoc statements are not automatically available as Python variables. Instead, access them via the NEURON hoc interpreter interface:
+
+- Use `h.allsec()` to iterate over all sections.
+- Use `sec.name()` to get the name of each section.
+- Access section properties via `h.<section_name>`, e.g., `h.soma.diam`.
+
+.. code-block:: python
+
+    for sec in h.allsec():
+        print(sec.name())
+
+    # Access diameter of the soma section
+    print(h.soma.diam)
+
+Accessing Segment Properties
+----------------------------
+
+To access properties of segments within sections, iterate over `sec.allseg()`:
+
+.. code-block:: python
+
+    for sec in h.allsec():
+        for seg in sec.allseg():
+            print(seg.diam)  # Diameter at this segment
+
+Extracting 3D Morphology Points
+-------------------------------
+
+To extract 3D points and diameters from each section:
+
+.. code-block:: python
+
+    points3d = []
+    for sec in h.allsec():
+        num_points = int(sec.n3d())  # Number of 3D points in the section
+        for i in range(num_points):
+            x = sec.x3d(i)
+            y = sec.y3d(i)
+            z = sec.z3d(i)
+            d = sec.diam3d(i)
+            points3d.append((x, y, z, d, sec.name()))
+
+Inserting Mechanisms into Sections
+----------------------------------
+
+You can insert mechanisms into sections created by loading a morphology file by referencing the section through `h`:
+
+.. code-block:: python
+
+    h.axon.insert('hh')  # Insert Hodgkin-Huxley mechanism into 'axon' section
+
+.. note::
+
+    Remember to prefix section names with `h.` when accessing them in Python, e.g., `h.somaA.diam`.
+
+Summary
+-------
+
+- Load morphology with `h.xopen("filename.geo")`.
+- Access sections via `h.allsec()` or `h.<section_name>`.
+- Iterate segments with `sec.allseg()`.
+- Extract 3D points with `sec.x3d(i)`, `sec.y3d(i)`, `sec.z3d(i)`, and `sec.diam3d(i)`.
+- Insert mechanisms using `h.<section_name>.insert('mechanism')`.
+
+.. seealso::
+
+    NEURON documentation on Python interface and morphology handling.
+
+Reference
+---------
+
+Original discussion thread:  
+`NEURON Forum - Access the section after loading a morphology file <https://www.neuron.yale.edu/phpBB/viewtopic.php?f=3&t=2100>`_

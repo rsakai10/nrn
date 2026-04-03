@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculating and Plotting Average Synaptic Currents &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Calculating and Plotting Average Synaptic Currents</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/353_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calculating-and-plotting-average-synaptic-currents">
+<h1>Calculating and Plotting Average Synaptic Currents<a class="headerlink" href="#calculating-and-plotting-average-synaptic-currents" title="Link to this heading"></a></h1>
+<p>This section describes how to compute and plot the instantaneous average postsynaptic synaptic current from a population of synapses in a NEURON network model. Two methods are provided: one stores and processes recorded data after the simulation (fast but memory intensive), and the other calculates the average incrementally during simulation (memory efficient but slower).</p>
+<section id="definitions">
+<h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Instantaneous average current</strong>: The average synaptic current across all synapses at each simulation time step.</p></li>
+<li><p><strong>Synaptic current</strong>: Current through synaptic mechanisms only (not including other transmembrane or ionic currents).</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p>Ensure you have:
+- Created synapse mechanisms (e.g. <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a> or <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#Exp2Syn" title="Exp2Syn"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exp2Syn</span></code></a>) for the neurons in your population.
+- A global fixed time step integration (<a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fadvance()</span></code></a>) or variable time step integration with special considerations (see below).</p>
+</section>
+<section id="method-1-postprocessing-using-vectors-and-lists">
+<h2>Method 1: Postprocessing Using Vectors and Lists<a class="headerlink" href="#method-1-postprocessing-using-vectors-and-lists" title="Link to this heading"></a></h2>
+<p>This method records each synaptic current into a separate <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, then sums and averages them after simulation.</p>
+<ol class="arabic simple">
+<li><p><strong>Create a Vector to record time</strong>:</p></li>
+</ol>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref tvec
+tvec = new Vector()
+tvec.record(&amp;t)
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Create Lists to hold synapses and their recorded currents</strong>:</p></li>
+</ol>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref synlist, veclist
+synlist = new List()
+veclist = new List()
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>When creating synapses, call a procedure to:</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Create a synapse at a specified location</p></li>
+<li><p>Append the synapse object to <cite>synlist</cite></p></li>
+<li><p>Create a Vector to record the synaptic current <cite>.i</cite></p></li>
+<li><p>Append the Vector to <cite>veclist</cite></p></li>
+</ul>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc setsyn() { localobj tempsyn, tempvec
+    tempsyn = new ExpSyn($1)  // $1 is the 1D position on section
+    // set kinetics, e.g.:
+    // tempsyn.tau = 2
+    synlist.append(tempsyn)
+    tempvec = new Vector()
+    tempvec.record(&amp;tempsyn.i)
+    veclist.append(tempvec)
+}
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>Run simulation with a custom run procedure that postprocesses averages:</strong></p></li>
+</ol>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref avgisyn
+
+proc postprocess() { local i
+    avgisyn = new Vector()
+    avgisyn = veclist.object(0).c  // copy first vector
+    for i=1, veclist.count()-1 {
+        avgisyn.add(veclist.object(i))
+    }
+    avgisyn.div(veclist.count())  // divide by number of synapses
+}
+
+proc run() {
+    stdinit()
+    continuerun(tstop)
+    postprocess()
+}
+</pre></div>
+</div>
+<p>At the end of the run, <cite>avgisyn</cite> contains the instantaneous average synaptic current at each recorded time point, and <cite>tvec</cite> contains the corresponding times.</p>
+<p><strong>Using variable time step integration (CVode):</strong>
+Vector recording with fixed time step is not directly compatible. Instead, use the <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a> class’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">record()</span></code> method for synaptic currents and time vectors for each cell. After the run, interpolate the recorded currents onto a common time base before summing and averaging.</p>
+<p>Plotting after the run can be done with <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.plot" title="Vector.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.plot()</span></code></a> in HOC or using matplotlib in Python by exporting the recorded data.</p>
+</section>
+<section id="method-2-incremental-averaging-during-simulation">
+<h2>Method 2: Incremental Averaging During Simulation<a class="headerlink" href="#method-2-incremental-averaging-during-simulation" title="Link to this heading"></a></h2>
+<p>This method calculates the average synaptic current on-the-fly during each integration step by iterating over the synapse objects.</p>
+<ol class="arabic simple">
+<li><p><strong>Initialize the average current variable:</strong></p></li>
+</ol>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>double avgisyn = 0
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Create the list of synapses as in Method 1, but without recording Vectors:</strong></p></li>
+</ol>
+<p>Only call the procedure appending synapses to <cite>synlist</cite>.</p>
+<ol class="arabic simple" start="3">
+<li><p><strong>Create custom `init()` and `advance()` procedures that perform initialization and stepping with averaging:</strong></p></li>
+</ol>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc init() {
+    finitialize(v_init)
+    avgisyn = 0
+    if (cvode.active()) {
+        cvode.re_init()
+    } else {
+        fcurrent()
+    }
+    frecord_init()
+}
+
+proc advance() { local i, total_i
+    fadvance()
+    total_i = 0
+    for i=0, synlist.count()-1 {
+        total_i += synlist.object(i).i
+    }
+    avgisyn = total_i / synlist.count()
+}
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>During the simulation loop, calling `advance()` will step the simulation one time step and update `avgisyn`.</strong></p></li>
+</ol>
+<p>This method allows plotting or logging <cite>avgisyn</cite> in real time, but may slow down simulations with many synapses.</p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>For large populations, Method 1 is recommended for speed and simpler postprocessing.</p></li>
+<li><p>If you require time-resolved instantaneous averages (e.g., for GUI plotting) and memory constraints are minor, Method 1 is convenient.</p></li>
+<li><p>For interactive or debugging purposes, Method 2 may be preferable despite computational overhead.</p></li>
+<li><p>This approach focuses on synaptic currents <cite>.i</cite> at synapses; adapt if you want membrane or ionic currents.</p></li>
+</ul>
+<p>Example Python Snippet for Method 1 (conceptual)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">synlist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="n">veclist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="n">tvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">tvec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">setsyn</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
+    <span class="n">syn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ExpSyn</span><span class="p">(</span><span class="n">sec</span><span class="p">(</span><span class="n">loc</span><span class="p">))</span>
+    <span class="n">synlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">syn</span><span class="p">)</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+    <span class="n">vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">syn</span><span class="o">.</span><span class="n">_ref_i</span><span class="p">)</span>
+    <span class="n">veclist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">syn</span>
+
+<span class="c1"># Create synapses using setsyn(...)</span>
+<span class="c1"># After simulation:</span>
+<span class="n">n_syn</span> <span class="o">=</span> <span class="n">veclist</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">avgisyn</span> <span class="o">=</span> <span class="n">veclist</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_syn</span><span class="p">):</span>
+    <span class="n">avgisyn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">veclist</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="n">avgisyn</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">n_syn</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tvec</span><span class="p">,</span> <span class="n">avgisyn</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Average Synaptic Current (nA)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector.record</span></code></a></p></li>
+<li><p><a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fadvance()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a> and <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode.record" title="CVode.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CVode.record()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> in HOC</p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#ExpSyn" title="ExpSyn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpSyn</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#Exp2Syn" title="Exp2Syn"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exp2Syn</span></code></a></p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=353">https://neuron.yale.edu/phpBB/viewtopic.php?t=353</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

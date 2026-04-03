@@ -1,0 +1,67 @@
+Simulation Time Step Restrictions and How to Set Larger Time Steps
+====================================================================
+
+When simulating biological neuron models in NEURON, you may encounter situations where attempting to set the integration time step (`dt`) to a value larger than 0.025 ms results in NEURON automatically resetting `dt` back to 0.025 ms during the simulation. This behavior can be confusing when you want to use a larger time step for faster simulations.
+
+Cause
+-----
+Certain models or built-in mechanisms in NEURON internally control the simulation time step by setting the variable `steps_per_ms`. This variable defines how many integration steps occur in one millisecond and constrains the allowed values of `dt`. Because
+
+.. math::
+
+   dt = \frac{1}{steps\_per\_ms}
+
+setting `steps_per_ms` will override any manual assignment of `dt` if they are inconsistent.
+
+Setting a Larger Time Step Properly
+-----------------------------------
+To use a larger time step (e.g., dt = 0.05 ms), you must update both `dt` and `steps_per_ms` in a consistent manner. The following relationship should hold:
+
+.. code-block:: python
+
+    h.dt = desired_dt           # e.g., 0.05
+    h.steps_per_ms = 1.0 / h.dt # e.g., 20
+
+This ensures that NEURON uses the specified `dt` during the simulation and does not override it automatically.
+
+Example
+-------
+
+In Python:
+
+.. code-block:: python
+
+    from neuron import h
+
+    desired_dt = 0.05  # ms, a time step larger than 0.025 ms
+    h.dt = desired_dt
+    h.steps_per_ms = 1.0 / desired_dt
+
+    # Proceed with model setup and simulation
+    h.finitialize()
+    h.continuerun(100)  # run simulation for 100 ms
+
+In HOC:
+
+.. code-block:: hoc
+
+    objref h
+    h = new NEURONObject
+    desired_dt = 0.05
+    dt = desired_dt   // Set dt
+    steps_per_ms = 1.0 / dt  // Set steps_per_ms accordingly
+    
+    finitialize()
+    continue(100)  // run simulation for 100 ms
+
+Note
+----
+- Always ensure that `h.steps_per_ms` matches the inverse of `h.dt`.
+- If `steps_per_ms` is not updated accordingly, NEURON will reset `dt` to match the pre-existing `steps_per_ms` value, often 0.025 ms.
+- Setting smaller time steps (`dt <= 0.025 ms`) generally does not cause this issue because the default `steps_per_ms` can accommodate these values.
+
+.. seealso::
+
+   :attr:`h.dt`, :attr:`h.steps_per_ms`, :meth:`h.finitialize`, :meth:`h.continuerun`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3693 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3693>`_

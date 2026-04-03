@@ -1,0 +1,50 @@
+.. note::
+
+   In hoc, the syntax ``for (x)`` loops over all segments of the currently accessed section,
+   with the loop variable ``x`` taking values from 0 to 1 at segment centers plus endpoints.
+   However, using ``for (x)`` to assign values to range variables can lead to unexpected behavior,
+   because assignments at the endpoints (0 and 1) affect diameters at adjacent segments.
+
+   To correctly assign values to range variables for all segments, use:
+
+   .. code-block:: hoc
+
+      for (x, 0) {
+          range_var(x) = f(x)
+      }
+
+   This excludes the endpoint values, iterating only over segment centers, ensuring assignments
+   correspond to the intended segments.
+
+   Using ``for (x)`` is appropriate for reading or accessing range variable values (e.g., membrane potential),
+   including at endpoints, where values are computed algebraically if attached to other sections or stimuli.
+
+.. seealso::
+
+   :meth:`Section.nseg`
+   
+.. code-block:: hoc
+
+   create axon
+   access axon
+   nseg = 1
+   diam = 2
+   for (x, 0) {
+       diam(x) = x
+   }
+   for (x) {
+       print x, diam(x)
+   }
+
+.. code-block:: python
+
+   from neuron import h
+   axon = h.Section(name='axon')
+   axon.nseg = 1
+   axon.diam = 2
+   for x in h.itersegments(axon, include_ends=False):
+       x.segment.diam = x.x
+   for x in h.itersegments(axon, include_ends=True):
+       print(x.x, x.segment.diam)
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2663 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2663>`_

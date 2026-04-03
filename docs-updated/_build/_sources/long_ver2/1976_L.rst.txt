@@ -1,0 +1,71 @@
+Maximum Time Step (dt) and Numerical Methods in NEURON
+=========================================================
+
+Setting the Time Step (dt)
+--------------------------
+
+In NEURON, the fixed time step used by the numerical integrator is controlled by the global variable :attr:`h.dt`. However, there is an additional parameter called :attr:`h.steps_per_ms` that governs the intervals at which points are recorded or plotted during a simulation.
+
+When using NEURON's standard run control system (e.g., :func:`h.run`), the internal procedure :func:`h.setdt` adjusts :attr:`h.dt` to ensure compatibility with :attr:`h.steps_per_ms`. Specifically, it enforces the relationship:
+
+.. math::
+
+    dt = \frac{1}{N \times steps\_per\_ms}
+
+where :math:`N` is an integer (1, 2, 3, ...). This means that you can only set :attr:`h.dt` values that evenly subdivide the interval defined by :attr:`h.steps_per_ms`. For example, if you start with the default :attr:`h.dt = 0.025` ms and :attr:`h.steps_per_ms = 20`, reducing :attr:`h.dt` by factors such as 2 (to 0.0125 ms) works because it corresponds to changing :math:`N`. Arbitrary values of :attr:`h.dt` that don't fit this pattern will be automatically adjusted.
+
+To control :attr:`h.dt` and :attr:`h.steps_per_ms` explicitly in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    h.steps_per_ms = 40   # number of steps per millisecond
+    h.setdt()             # adjust dt to be compatible
+    print(f"Adjusted dt: {h.dt} ms")
+
+In HOC:
+
+.. code-block:: hoc
+
+    steps_per_ms = 40
+    setdt()
+    print "Adjusted dt:", dt
+
+Discretization of Sections
+--------------------------
+
+Spatial discretization in NEURON involves subdividing each section into segments (compartments). The number of internal nodes where computations occur is given by the :attr:`nseg` property of a section. NEURON uses a central difference approximation for the second spatial derivative, leading to second-order accurate solutions evaluated at segment centers.
+
+For best accuracy, it is recommended to use odd values of :attr:`nseg`, so that a node falls exactly at the midpoint (0.5) of the section, providing symmetric spatial discretization.
+
+Numerical Integration Methods
+-----------------------------
+
+NEURON by default uses the implicit Euler (backward Euler) method as the integration scheme for the cable equations and other differential equations involved in the simulation. Additional integration options include:
+
+- Crank-Nicholson method
+- Adaptive order and adaptive time step integrators (variable time step methods)
+
+These alternative integrators can be enabled and configured via NEURON's programming interface and are detailed in the NEURON Programmer's Reference documentation.
+
+Summary
+-------
+
+- The :attr:`h.dt` parameter for fixed time step integration is constrained by :attr:`h.steps_per_ms` via :func:`h.setdt` such that:
+
+  .. math::
+
+      dt = \frac{1}{N \times steps\_per\_ms}, \quad N \in \mathbb{N}
+
+- Use odd :attr:`nseg` values for spatial discretization to ensure segment centers align nicely within sections.
+- NEURON's cable equation solver uses central difference spatial discretization and implicit Euler time integration by default, with alternative integrators available.
+
+.. note::
+
+    If you want to set a specific time step, first set :attr:`h.steps_per_ms` accordingly and then call :func:`h.setdt` to update :attr:`h.dt`. This guarantees the simulation runs with a compatible time step value.
+
+.. seealso::
+
+    :attr:`h.dt`, :attr:`h.steps_per_ms`, :func:`h.setdt`, :attr:`nseg`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1976 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1976>`_

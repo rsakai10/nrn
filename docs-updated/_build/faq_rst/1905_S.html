@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setting Basal Intracellular Calcium Concentration (\([Ca^{2+}]_i\)) &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setting Basal Intracellular Calcium Concentration (<span class="math notranslate nohighlight">\([Ca^{2+}]_i\)</span>)</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq_rst/1905_S.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="setting-basal-intracellular-calcium-concentration-ca-2-i">
+<h1>Setting Basal Intracellular Calcium Concentration (<span class="math notranslate nohighlight">\([Ca^{2+}]_i\)</span>)<a class="headerlink" href="#setting-basal-intracellular-calcium-concentration-ca-2-i" title="Link to this heading"></a></h1>
+<p>When using calcium accumulation mechanisms such as <code class="xref py py-mod docutils literal notranslate"><span class="pre">cdp.mod</span></code> in NEURON models, setting the basal intracellular calcium concentration (<span class="math notranslate nohighlight">\(cai\)</span>) to a desired value (e.g., 116 nM) can be challenging due to the interactions of pumps, buffers, and voltage-gated calcium currents.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not insert multiple calcium accumulation mechanisms that write to <span class="math notranslate nohighlight">\(cai\)</span> (e.g., <code class="xref py py-mod docutils literal notranslate"><span class="pre">cdp.mod</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">cad.mod</span></code>) in the same compartment, as these produce conflicting calculations.</p>
+</div>
+<section id="strategy-for-setting-basal-cai">
+<h2>Strategy for Setting Basal <span class="math notranslate nohighlight">\(cai\)</span><a class="headerlink" href="#strategy-for-setting-basal-cai" title="Link to this heading"></a></h2>
+<p>A practical approach to achieve an arbitrary basal <span class="math notranslate nohighlight">\(cai\)</span> without disturbing model dynamics is to add a custom “calcium source” mechanism that balances all other calcium fluxes at rest:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX casrc
+  USEION ca WRITE ica
+  NONSPECIFIC_CURRENT ix
+  RANGE amp
+}
+
+UNITS {
+  (mA) = (milliamp)
+}
+
+PARAMETER {
+  amp (mA/cm2)
+}
+
+ASSIGNED {
+  ica (mA/cm2)
+  ix (mA/cm2)
+}
+
+BREAKPOINT {
+  ica = amp
+  ix = -ica
+}
+</pre></div>
+</div>
+<p>Insert this mechanism into all relevant sections after other calcium mechanisms:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forall if (ismembrane(&quot;ca_ion&quot;)) insert casrc
+</pre></div>
+</div>
+</section>
+<section id="custom-initialization-procedure">
+<h2>Custom Initialization Procedure<a class="headerlink" href="#custom-initialization-procedure" title="Link to this heading"></a></h2>
+<p>Before simulation, set the initial intracellular calcium concentration and adjust the source amplitude to offset net calcium currents:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc init() {
+  cai0_ca_ion = 116e-6  // set desired basal [Ca2+] in mM
+  forall if (ismembrane(&quot;casrc&quot;)) amp_casrc = 0
+  finitialize(v_init)
+  forall if (ismembrane(&quot;ca_ion&quot;)) {
+    for (x,0) {
+      amp_casrc(x) = -ica(x)  // balance other calcium fluxes
+    }
+  }
+  if (cvode.active()) {
+    cvode.re_init()
+  } else {
+    fcurrent()
+  }
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Correctly setting the parameter name as <code class="docutils literal notranslate"><span class="pre">cai0_ca_ion</span></code> is essential.</p></li>
+<li><p>Use a simple test model (e.g., one or two compartments) before applying this to complex morphologies.</p></li>
+<li><p>Employ odd values of <code class="xref py py-attr docutils literal notranslate"><span class="pre">nseg</span></code> for spatial discretization to avoid numerical issues.</p></li>
+<li><p>Initialize the model biophysics (ion channels, morphology) <em>before</em> defining and calling the custom <code class="xref py py-meth docutils literal notranslate"><span class="pre">init()</span></code> procedure.</p></li>
+</ul>
+</div>
+</section>
+<section id="recommendations">
+<h2>Recommendations<a class="headerlink" href="#recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Adjust pump rate constants analytically to target resting <span class="math notranslate nohighlight">\(cai\)</span> if possible; otherwise use the constant source method.</p></li>
+<li><p>Perform a “warmup” simulation to let <span class="math notranslate nohighlight">\(cai\)</span> settle to steady state before recording.</p></li>
+<li><p>Use <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleRunFitter</span></code> to tune parameters related to calcium buffering and pumps if needed.</p></li>
+<li><p>Verify units carefully when implementing diffusion (e.g., <code class="xref std std-keyword docutils literal notranslate"><span class="pre">LONGITUDINAL_DIFFUSION</span></code>) in mechanisms involving buffer approximations.</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The NEURON Book, Chapter 8 (Initialization methods)</p></li>
+<li><p>Examples in NEURON distribution demonstrating calcium dynamics (e.g., <code class="file docutils literal notranslate"><span class="pre">cabpmp.mod</span></code> for pump and buffer dynamics)</p></li>
+</ul>
+<p>This approach ensures that the model maintains the chosen basal intracellular calcium level without perturbing the physiological calcium dynamics encoded in other mechanisms.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1905">https://neuron.yale.edu/phpBB/viewtopic.php?t=1905</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

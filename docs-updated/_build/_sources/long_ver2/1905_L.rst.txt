@@ -1,0 +1,182 @@
+Setting the Basal Level of Intracellular Calcium Concentration (cai) with Calcium Accumulation Mechanisms
+==========================================================================================================
+
+When modeling intracellular calcium dynamics using mechanisms such as the *cdp.mod* calcium diffusion and pump mechanism, it is often necessary to set or adjust the basal (resting) intracellular calcium concentration, *cai*, to a specific value (e.g., 116 nM) for physiological relevance.
+
+This section describes issues encountered and recommended strategies for setting the basal *cai* in the presence of complex calcium accumulation mechanisms, with example code and practical advice.
+
+.. note::
+   Inserting multiple calcium accumulation mechanisms (e.g., *cdp.mod* and *cad.mod*) that use the same calcium ion (:ion:`ca`) with WRITE permissions simultaneously in the same section leads to conflicts and meaningless results because each mechanism attempts to update the same :class:`cai` state independently. Choose one mechanism per section.
+
+Principle Difficulties
+----------------------
+
+1. **Interference among multiple calcium mechanisms**: Ensure only one calcium accumulation mechanism with `WRITE cai` per section.
+
+2. **Initialization of buffers and pump states**: The internal calcium buffering and pump states in *cdp.mod* affect resting *cai*. These variables require consistent initialization.
+
+3. **Nonlinear interdependence of parameters**: The desired basal *cai* depends on model parameters such as pump rate constants and membrane calcium currents; altering these to fix basal *cai* may change model dynamics.
+
+4. **Balancing calcium fluxes at rest**: Achieving the desired resting *cai* requires balancing calcium influx and efflux sources, which may include voltage-gated calcium currents, pumps, buffers, and constant calcium sources.
+
+Using a Constant Calcium Source to Set Basal \(\textit{cai}\)
+------------------------------------------------------------
+
+A practical strategy is to include in your model a custom density mechanism that acts as a constant calcium source or sink. This mechanism compensates for net calcium currents, maintaining the desired resting *cai* without altering pump or channel parameters.
+
+**NMODL mechanism for constant calcium source (`casrc.mod`):**
+
+.. code-block:: mod
+
+   NEURON {
+     SUFFIX casrc
+     USEION ca WRITE ica
+     NONSPECIFIC_CURRENT ix
+     RANGE amp
+   }
+
+   UNITS {
+     (mA) = (milliamp)
+   }
+
+   PARAMETER {
+     amp (mA/cm2)
+   }
+
+   ASSIGNED {
+     ica (mA/cm2)
+     ix (mA/cm2)
+   }
+
+   BREAKPOINT {
+     ica = amp
+     ix = -ica
+   }
+
+.. note::
+   The use of `NONSPECIFIC_CURRENT ix` ensures charge balance by cancelling the ionic current contribution to membrane potential.
+
+**Integrating the constant calcium source into your model:**
+
+1. Insert the `casrc` mechanism into sections that contain mechanisms writing calcium current (`ica`), e.g.:
+
+   .. code-block:: hoc
+
+      forall if (ismembrane("ca_ion")) insert casrc
+
+2. Define a custom initialization procedure that:
+
+   - Sets the initial resting calcium concentration via `cai0_ca_ion`.
+   - Initializes `amp_casrc = 0` so the source initially contributes no current.
+   - Computes `amp_casrc` in each segment to counterbalance other calcium currents, effectively enforcing zero net calcium flux.
+
+Example implementation of the custom initialization procedure in HOC:
+
+.. code-block:: hoc
+
+   proc init() {
+     cai0_ca_ion = 116e-6  // Set basal cai to 116 nM (in mM)
+     forall if (ismembrane("casrc")) amp_casrc = 0   // Disable casrc initially
+     finitialize(v_init)    // Initialize voltage and ions
+
+     // Adjust casrc amplitude to balance calcium currents segment-wise
+     forall if (ismembrane("ca_ion")) {
+       for (x,0) {
+         amp_casrc(x) = -ica(x)
+       }
+     }
+
+     if (cvode.active()) {
+       cvode.re_init()
+     } else {
+       fcurrent()
+     }
+   }
+
+Important Details:
+- Use `cai0_ca_ion` (not `ca0_ca_ion`), the NEURON internal variable that sets the initial intracellular calcium concentration.
+- Set `amp_casrc` for each segment after `finitialize()` to negate net calcium currents.
+- Use this initialization function before `run()` calls.
+- Test this initialization approach first on simplified "toy" models (e.g., single compartment with *cdp.mod*, *ca.mod*, and `casrc`) before applying to complex morphologies.
+- Avoid having multiple conflicting calcium accumulation mechanisms (e.g., both *cdp* and *cad* inserted in the same section).
+- Use odd number of segments (`nseg`) in sections to avoid numerical issues.
+
+Troubleshooting Tips
+--------------------
+
+- If encountering convergence errors in mechanisms like *cdp.mod* when simulating small compartments, try increasing compartment size (length or diameter) or increasing segment size.
+- Calling `ion_style()` to fix ionic concentrations or reversal potentials might interfere with proper calcium dynamics during initialization; omit or adapt accordingly.
+- Ordering of procedure calls matters: call mechanism insertions and set biophysical parameters before defining custom initialization procedures.
+- Persistent basal *cai* values (e.g., 50 nM) despite adjustments may result from internal steady states in the pump and buffer kinetics; the custom calcium source mechanism helps enforce the desired resting concentration.
+- Carefully verify the compilation of the `casrc.mod` mechanism; declare all assigned variables (e.g., `ix`) properly to avoid compiler warnings.
+- When adding longitudinal diffusion in calcium mechanisms, ensure consistency of units in the COMPARTMENT statement, volume definitions, and diffusion constants as outlined in the NEURON model code and compiler messages.
+
+Example Toy Model Initialization Sequence (HOC)
+-----------------------------------------------
+
+.. code-block:: hoc
+
+   load_file("nrngui.hoc")
+   create soma
+   soma { nseg = 3 diam = 15 L = 40 }
+
+   proc init_cell() {
+     soma {
+       insert pas
+       Ra = 150
+       cm = 0.75
+       g_pas = 1/30000
+       e_pas = -70
+       insert ca
+       insert cdp
+     }
+     forall if (ismembrane("ca_ion")) {
+       eca = 140
+       ion_style("ca_ion",0,1,0,0,0)
+     }
+     forall if (ismembrane("ca_ion")) insert casrc
+   }
+
+   proc init() {
+     cai0_ca_ion = 116e-6
+     forall if(ismembrane("casrc")) amp_casrc = 0
+     finitialize(-70)
+     forall if(ismembrane("ca_ion")) for (x,0) {
+       amp_casrc(x) = -ica(x)
+     }
+     if (cvode.active()) {
+       cvode.re_init()
+     } else {
+       fcurrent()
+     }
+   }
+
+   init_cell()
+   init()
+   run()
+
+Reference and Further Notes
+---------------------------
+
+- The *cdp.mod* mechanism models calcium diffusion, buffering, and pump kinetics with volume and membrane area compartments.
+- Proper initialization of *cai* requires balancing inward and outward calcium fluxes, which often involves adjusting model parameters or including additional compensation currents.
+- This approach falls into general methods for *initialization to desired steady state* and can be generalized to other ion species and accumulation mechanisms.
+- For detailed understanding of *cdp.mod*, refer to its NMODL source comments and the NEURON book chapter on calcium dynamics.
+- Ensure that all quantitative parameters (pump densities, buffering rates, etc.) are physiologically consistent before imposing forced set points for *cai*.
+- When fitting pump or buffer parameters to experimental data, use tools such as NEURON's :class:`MultipleRunFitter`.
+
+Summary
+-------
+
+To set a desired basal intracellular calcium concentration when using ion accumulation mechanisms like *cdp.mod*:
+
+- Avoid inserting multiple conflicting calcium accumulation mechanisms.
+- Use a custom constant calcium source/sink mechanism (`casrc`) that compensates for net calcium fluxes.
+- Initialize `cai0_ca_ion` to the desired resting concentration.
+- Adjust `amp_casrc` currents during initialization to balance inward and outward calcium currents.
+- Apply and test this procedure first in simple model configurations.
+- Take care with units, compartment sizes, and method ordering to ensure numerical stability and physiological correctness.
+
+This method helps maintain targeted resting *cai* without disrupting the model's calcium dynamics or pump kinetics.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1905 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1905>`_

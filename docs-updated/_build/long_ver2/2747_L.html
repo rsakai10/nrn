@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiple Runs in NEURON Producing Different Results &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multiple Runs in NEURON Producing Different Results</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2747_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="multiple-runs-in-neuron-producing-different-results">
+<h1>Multiple Runs in NEURON Producing Different Results<a class="headerlink" href="#multiple-runs-in-neuron-producing-different-results" title="Link to this heading"></a></h1>
+<p>When running multiple simulations in NEURON with identical parameters and initial conditions, one might expect to obtain identical results each time. However, differences in output across runs usually indicate improper initialization or the influence of pseudorandom number generators (PRNGs) within the model.</p>
+<section id="common-causes-and-diagnoses">
+<h2>Common Causes and Diagnoses<a class="headerlink" href="#common-causes-and-diagnoses" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Incorrect Initialization:</strong>
+The simulation should reset to the same initial state before each run. Failure to initialize all variables or states consistently, often due to errors in <cite>mod</cite> files, can cause variability.</p></li>
+<li><p><strong>Unreset Pseudorandom Number Generators:</strong>
+When models include stochastic components such as NetStims configured with randomness, their internal PRNGs must be re-seeded before each run to ensure reproducibility. Without reseeding, successive simulations produce different pseudo-random sequences, causing variation in network activity and resulting output.</p></li>
+</ul>
+</section>
+<section id="example-problem-setup">
+<h2>Example Problem Setup<a class="headerlink" href="#example-problem-setup" title="Link to this heading"></a></h2>
+<p>A simple multi-run procedure in HOC might look like this:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc run() {
+    running_ = 1
+    stdinit()
+    continuerun(tstop)
+}
+
+proc multi_run() {
+    for mi = 1, 2 {
+        // set_parameter(mi)    // Modify parameters here if needed
+        run()
+        save_data(mi)
+    }
+}
+
+multi_run()
+</pre></div>
+</div>
+<p>Despite identical parameters and calls to <cite>stdinit()</cite>, different results may appear due to unreinitialized random generators.</p>
+</section>
+<section id="diagnosing-prng-effects-on-netstims">
+<h2>Diagnosing PRNG Effects on NetStims<a class="headerlink" href="#diagnosing-prng-effects-on-netstims" title="Link to this heading"></a></h2>
+<p>NetStims are commonly used to generate spike trains with randomness:</p>
+<ul class="simple">
+<li><p>If multiple NetStims share the same PRNG, their spike trains depend on the sequence of random values drawn overall, making individual spike trains interdependent.</p></li>
+<li><p>Running multiple simulations without reseeding the PRNG before each run will cause different spike trains each time.</p></li>
+</ul>
+<p><strong>Procedure to observe this:</strong></p>
+<ol class="arabic">
+<li><p>Create a copy of your network HOC file (e.g., copy <cite>Net.hoc</cite> to <cite>testNet.hoc</cite>).</p></li>
+<li><p>In <cite>testNet.hoc</cite>, comment out the <cite>multi_run()</cite> line and insert code to record spike times and IDs of 150 NetStims:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>NSNUM = 150
+
+objref nsstvec, nsidvec, tnc
+nsstvec = new Vector()  // Times of NetStim events
+nsidvec = new Vector()  // IDs of corresponding NetStims
+
+for ii = 0, NSNUM - 1 {
+    tnc = new NetCon(NetStim[ii], nil)
+    tnc.record(nsstvec, nsidvec, ii)
+}
+</pre></div>
+</div>
+</li>
+<li><p>Add code to run two simulations and plot the spike rasters with different colors:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>NSSEED = 31  // Arbitrary seed for reproducibility
+
+proc onerun() {
+    mi = $1
+    print &quot;Run &quot;, mi
+    // Optionally reseed NetStim PRNG: NetStim[0].seed(NSSEED)
+    run()
+    save_data(mi)
+}
+
+objref g
+g = new Graph(0)
+g.size(0, 3, 0, 150)
+g.view(0, 0, 3, 150, 329, 25, 588.48, 472.96)
+
+onerun(1)
+print &quot;Run 1: black marks&quot;
+nsidvec.mark(g, nsstvec, &quot;|&quot;, 6, 1, 2)  // Thick black marks
+
+onerun(2)
+print &quot;Run 2: red marks&quot;
+nsidvec.mark(g, nsstvec, &quot;|&quot;, 6, 2, 1)  // Thin red marks
+</pre></div>
+</div>
+</li>
+<li><p>Execute <cite>testNet.hoc</cite> in NEURON. You will observe that the spike times of the NetStims differ significantly between runs, causing different voltage responses.</p></li>
+<li><p>Uncomment the reseeding line (<cite>NetStim[0].seed(NSSEED)</cite>), rerun, and observe that spike trains now replicate perfectly and voltage traces match across runs.</p></li>
+</ol>
+</section>
+<section id="important-points-about-netstim-seeding">
+<h2>Important Points About NetStim Seeding<a class="headerlink" href="#important-points-about-netstim-seeding" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Reseeding One NetStim Seeds Them All:</strong>
+By default, all NetStim objects share the same PRNG. Calling <cite>NetStim[0].seed(value)</cite> seeds the shared generator, affecting all NetStims.</p></li>
+<li><p><strong>Independent PRNG per NetStim:</strong>
+To have truly independent spike trains for each NetStim, each must be associated with its own <a class="reference internal" href="../progref-1/programming/math/random.html#Random" title="Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> instance. This is essential for parallel simulations to ensure independence regardless of the number of processors or cell distribution.</p></li>
+</ul>
+</section>
+<section id="example-in-python-reseeding-netstims-before-each-run">
+<h2>Example in Python: Reseeding NetStims Before Each Run<a class="headerlink" href="#example-in-python-reseeding-netstims-before-each-run" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">NSNUM</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">NSSEED</span> <span class="o">=</span> <span class="mi">31</span>
+
+<span class="c1"># Assume NetStim objects are created and stored in a list: netstims</span>
+
+<span class="k">def</span> <span class="nf">reinitialize_netstims_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
+    <span class="c1"># Resets the seed for the shared PRNG via one NetStim</span>
+    <span class="n">netstims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run_simulation</span><span class="p">():</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">stdinit</span><span class="p">()</span>       <span class="c1"># Reset simulation variables</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">tstop</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">multi_run</span><span class="p">(</span><span class="n">num_runs</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">mi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_runs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">reinitialize_netstims_seed</span><span class="p">(</span><span class="n">NSSEED</span><span class="p">)</span>
+        <span class="n">run_simulation</span><span class="p">()</span>
+        <span class="n">save_data</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span>  <span class="c1"># Implement according to model needs</span>
+</pre></div>
+</div>
+</section>
+<section id="notes-on-using-object-references">
+<h2>Notes on Using Object References<a class="headerlink" href="#notes-on-using-object-references" title="Link to this heading"></a></h2>
+<p>Using object names like <cite>NetStim[0]</cite> directly in code is <strong>not recommended</strong> for programming purposes, as object notation may not be stable or consistent across sessions. Instead, use <code class="xref py py-class docutils literal notranslate"><span class="pre">objref</span></code> variables to maintain references to your simulation objects and manipulate them through these references.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To ensure reproducible results across multiple runs in NEURON:</p>
+<ul class="simple">
+<li><p>Always call <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.stdinit()</span></code> or an equivalent to reset simulation states before running.</p></li>
+<li><p>Properly initialize all mechanisms and state variables.</p></li>
+<li><p>Reseed all pseudorandom number generators, especially when using multiple stochastic sources like NetStims, before each run.</p></li>
+<li><p>For independent stochastic processes (e.g., multiple NetStims), assign separate PRNG instances per source.</p></li>
+<li><p>Avoid relying on object name indices (<cite>NetStim[0]</cite>) for programming; use explicit references instead.</p></li>
+</ul>
+<p>By following these guidelines, you can obtain run-to-run reproducibility essential for parameter variation studies and automated simulation workflows.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2747">https://neuron.yale.edu/phpBB/viewtopic.php?t=2747</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

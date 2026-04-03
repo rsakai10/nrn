@@ -1,0 +1,137 @@
+SectionList Access and Indexed Execution of Commands in HOC
+============================================================
+
+When working with a :class:`SectionList` in NEURON that contains many sections (e.g., more than 50), you might want to iterate over subsets of the sections (such as the first 10, the second 10, etc.) and execute different commands for each subset. However, a :class:`SectionList` does not provide direct indexed access to its elements by default, which requires some workarounds.
+
+Iterating Over Sections with an Auxiliary Index
+-----------------------------------------------
+
+You can use an auxiliary integer variable to track the position within the :class:`SectionList` during a :hoc:`forsec` iteration and execute different statements depending on the index range:
+
+.. code-block:: hoc
+
+   ii = 0
+   forsec seclist {
+       if (ii < 10) {
+           // Statement 1
+       } else if (ii < 20) {
+           // Statement 2
+       } else {
+           // Additional statements...
+       }
+       ii += 1
+   }
+
+Improving Code Manageability Using Command Strings and the String Class
+----------------------------------------------------------------------
+
+Having multiple `if` conditions can quickly become unwieldy. A more maintainable approach uses:
+
+- The standard :class:`String` class defined in NEURON's run library to hold command strings.
+- A helper procedure that executes a command selected by an index.
+
+This method emulates the behavior of indexed strings containing commands.
+
+Example implementation:
+
+.. code-block:: hoc
+
+   // Number of command cases
+   NUMCMDS = 3
+   objref command[NUMCMDS]
+   for ii = 0, NUMCMDS - 1 {
+       command[ii] = new String()
+   }
+
+   // Define the commands as hoc statements inside strings
+   command[0].s = "x = PI"
+   command[1].s = "x = sqrt(2)"
+   command[2].s = "x = exp(-1)"
+
+   // Procedure to execute the command by index
+   proc docmd() { local idx
+       idx = $1
+       execute(command[idx].s)
+   }
+
+   // Example of usage
+   for ii = 0, NUMCMDS - 1 {
+       docmd(ii)
+       print "command ", ii, " sets x to ", x
+   }
+
+Integration with SectionList iteration:
+
+.. code-block:: hoc
+
+   ii = 0
+   forsec seclist {
+       docmd(int(ii / 10))  // Runs command 0 for first 10 sections, command 1 for next 10, etc.
+       ii += 1
+   }
+
+Guidelines on Using forsec with Section Name Patterns
+----------------------------------------------------
+
+When you write:
+
+.. code-block:: hoc
+
+   forsec "den" { 
+       // code
+   }
+
+the loop iterates over all sections whose names start with `"den"`. However, the iteration order corresponds to the order in which the sections were created (creation order), not alphabetical order.
+
+.. note::
+
+   The exact order over which :hoc:`forsec "prefix"` iterates is not guaranteed by the NEURON API and may change between versions. Relying on this implicit ordering can lead to fragile code.
+
+Best Practice: Use Explicit SectionList for Ordered Access
+----------------------------------------------------------
+
+If the order of iterating over sections is important for your application, explicitly create and fill a :class:`SectionList` with sections in the desired order:
+
+.. code-block:: hoc
+
+   objref ordered_seclist
+   ordered_seclist = new SectionList()
+
+   // Append sections in the order you want
+   ordered_seclist.append(sec1)
+   ordered_seclist.append(sec2)
+   // ...
+
+Then iterate explicitly over `ordered_seclist`:
+
+.. code-block:: hoc
+
+   ii = 0
+   forsec ordered_seclist {
+       // your code here
+       ii += 1
+   }
+
+This practice ensures:
+
+- Robustness against changes in section creation order.
+- Portability of your model to other simulators.
+- Easier maintenance and debugging.
+
+Summary
+-------
+
+- :class:`SectionList` cannot be directly indexed like a vector of strings, so use an auxiliary counter during :hoc:`forsec`.
+- Use the :class:`String` class to store executable command strings and index them for cleaner command dispatch.
+- Avoid relying on the undocumented order of :hoc:`forsec "name_prefix"`; instead, explicitly build ordered :class:`SectionList`s.
+- This approach increases code clarity, robustness, and maintenance ease.
+
+See Also
+--------
+
+- :class:`SectionList`
+- :class:`String`
+- :hoc:`forsec`
+- :meth:`SectionList.append`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1191 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1191>`_

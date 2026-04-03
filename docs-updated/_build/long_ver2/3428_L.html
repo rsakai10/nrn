@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recording Synaptic Currents for LFP Approximation in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Recording Synaptic Currents for LFP Approximation in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3428_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="recording-synaptic-currents-for-lfp-approximation-in-neuron">
+<h1>Recording Synaptic Currents for LFP Approximation in NEURON<a class="headerlink" href="#recording-synaptic-currents-for-lfp-approximation-in-neuron" title="Link to this heading"></a></h1>
+<p>This section explains how to record synaptic currents (e.g., GABAergic, AMPAergic, and NMDAergic) from a cell population in NEURON to approximate local field potentials (LFP). It addresses common challenges when working with heterogeneous synaptic mechanisms and large-scale simulations, and provides strategies to efficiently record, sum, and analyze synaptic currents.</p>
+<section id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<p>Synaptic mechanisms in NEURON are usually implemented as point processes producing transmembrane currents (units: nanoamperes). To approximate LFP as the sum of synaptic currents, one must record these currents from all relevant synapses over time and sum their absolute values to yield a single, time-varying signal.</p>
+</section>
+<section id="basic-recording-of-synaptic-currents">
+<h2>Basic Recording of Synaptic Currents<a class="headerlink" href="#basic-recording-of-synaptic-currents" title="Link to this heading"></a></h2>
+<p>Assuming each synaptic mechanism exposes a variable representing the current it produces (commonly <cite>i</cite>), and you have a <cite>List</cite> of synapse instances called <cite>synlist</cite>, record the time course of each synaptic current using <cite>Vector.record()</cite>:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+objref syn
+soma syn = new ExpSyn(0.5)  // attach ExpSyn to the middle of soma
+objref tvec, ivec
+tvec = new Vector()
+tvec.record(&amp;t)
+ivec = new Vector()
+ivec.record(&amp;syn.i)
+</pre></div>
+</div>
+<p>If each synapse has its own current variable (e.g., <cite>igaba</cite>, <cite>iampa</cite>, <cite>inmda</cite>), and you want to record them separately, you must handle each current type appropriately.</p>
+</section>
+<section id="differentiating-synapse-types-and-current-variables">
+<h2>Differentiating Synapse Types and Current Variables<a class="headerlink" href="#differentiating-synapse-types-and-current-variables" title="Link to this heading"></a></h2>
+<p>Many models use distinct variables for different synaptic currents within a synaptic mechanism. For example, GABAergic synapses may use <cite>igaba</cite>, whereas glutamatergic synapses may use <cite>iampa</cite> and <cite>inmda</cite>. If synapse objects are stored in a <cite>List</cite> called <cite>synlist</cite>, you can group and record their currents by:</p>
+<ol class="arabic">
+<li><p>Adding a <cite>RANGE</cite> variable (e.g., <cite>isampa</cite>) to each synaptic mechanism in the NMODL files to tag synapse type:</p>
+<ul>
+<li><p>In the NEURON block:</p>
+<div class="highlight-nrnmodl notranslate"><div class="highlight"><pre><span></span>RANGE i, isampa
+</pre></div>
+</div>
+</li>
+<li><p>In the PARAMETER block:</p>
+<p>For AMPAergic synapses:</p>
+<div class="highlight-nrnmodl notranslate"><div class="highlight"><pre><span></span>isampa = 1  : do not change this!
+</pre></div>
+</div>
+<p>For GABAergic synapses:</p>
+<div class="highlight-nrnmodl notranslate"><div class="highlight"><pre><span></span>isampa = 0  : do not change this!
+</pre></div>
+</div>
+</li>
+<li><p>In the BREAKPOINT block, define a general <cite>i</cite> variable combining currents:</p>
+<p>For AMPAergic (with NMDA) synapses:</p>
+<div class="highlight-nrnmodl notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+    SOLVE release METHOD cnexp
+    inmda = ...
+    iampa = ...
+    i = inmda + iampa
+}
+</pre></div>
+</div>
+<p>For GABAergic synapses:</p>
+<div class="highlight-nrnmodl notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+   SOLVE release METHOD cnexp
+   igaba = ...
+   i = igaba
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>After model instantiation and setup (but before simulation starts), create vectors to record currents from all synapses:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref ampaivecs, nmdaivecs, gabaivecs
+ampaivecs = new List()
+nmdaivecs = new List()
+gabaivecs = new List()
+
+proc makeiveclists() { local i  localobj tmpvec, tmpobj
+   for i=0, $o1.count()-1 {
+      tmpobj = $o1.o(i)
+      if (tmpobj.isampa == 1) { // AMPA/NMDA synapses
+         tmpvec = new Vector()
+         tmpvec.record(&amp;tmpobj.iampa)
+         ampaivecs.append(tmpvec)
+         tmpvec = new Vector()
+         tmpvec.record(&amp;tmpobj.inmda)
+         nmdaivecs.append(tmpvec)
+      } else { // GABA synapses
+         tmpvec = new Vector()
+         tmpvec.record(&amp;tmpobj.igaba)
+         gabaivecs.append(tmpvec)
+      }
+   }
+}
+
+makeiveclists(synlist)
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Use double equal signs <cite>==</cite> for comparisons in hoc conditionals.</p></li>
+<li><p><cite>isampa</cite> must be declared as a <cite>RANGE</cite> variable to access it per synapse instance (a <cite>GLOBAL</cite> variable cannot be accessed on individual objects).</p></li>
+<li><p>The current variable <cite>i</cite> should be defined as a <cite>RANGE</cite> variable in your mod files for ease of general recording.</p></li>
+</ul>
+</section>
+<section id="efficient-summation-of-synaptic-currents-to-approximate-lfp">
+<h2>Efficient Summation of Synaptic Currents to Approximate LFP<a class="headerlink" href="#efficient-summation-of-synaptic-currents-to-approximate-lfp" title="Link to this heading"></a></h2>
+<p>Recording all synaptic currents at every time step for large populations can be memory intensive. To reduce memory usage and maintain accuracy:</p>
+<ul class="simple">
+<li><p>Record currents at a coarser temporal resolution if appropriate (e.g., every 1 ms instead of every simulation time step).</p></li>
+<li><p>Break long simulations into shorter segments, process and sum currents after each segment, and accumulate results.</p></li>
+</ul>
+<p>Example implementation of breaking simulation into segments:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc errexit() {
+  printf(&quot;%s\n&quot;, $s1)
+  stop
+}
+
+// Sum of absolute values of corresponding Vector elements in a list of Vectors
+obfunc sumabsvecs() {
+  local i
+  localobj tmpvec, tmpsum
+  tmpsum = new Vector($o1.o(0).size())  // initialize to zero
+  for i=0, $o1.count()-1 {
+    tmpvec = $o1.o(i).c()
+    tmpvec.abs()
+    tmpsum.add(tmpvec)
+  }
+  return tmpsum
+}
+
+// Simulation in segments with synaptic current recording and summation
+proc segrun() {
+  local i, interval, count, t2, lastpass
+  localobj segtvec, tvec, tmpvec, isynvecs, segsumabsisyn, sumabsisyn
+
+  if ($1 &lt;= 0) errexit(&quot;stop time must be &gt; 0&quot;)
+  if ($2 &lt; 1) errexit(&quot;number of time intervals must be &gt;= 1&quot;)
+
+  // Task-specific setup before simulation
+  segtvec = new Vector()
+  segtvec.record(&amp;t)
+  tvec = new Vector()
+
+  isynvecs = new List()
+  for i=0, $o3.count()-1 {
+    tmpvec = new Vector()
+    tmpvec.record(&amp;$o3.o(i).i)
+    isynvecs.append(tmpvec)
+  }
+
+  segsumabsisyn = new Vector()
+  sumabsisyn = new Vector()
+
+  interval = $1 / $2
+  count = 0
+  lastpass = 0
+  stdinit()  // Assumes v_init is set
+
+  while (t &lt; $1) {
+    t2 = t + interval
+    if (t2 &gt;= $1) {
+      t2 = $1
+      lastpass = 1
+    }
+    continuerun(t2)  // Continue simulation to t2
+
+    // Append recorded times for this segment
+    tvec.append(segtvec)
+
+    // Sum absolute synaptic currents this segment and append
+    segsumabsisyn = sumabsvecs(isynvecs)
+    sumabsisyn.append(segsumabsisyn)
+
+    printf(&quot;Interval #%d ended at time %g\n&quot;, count, t)
+    printf(&quot;Data points this interval: %d\n&quot;, segtvec.size())
+    printf(&quot;Total data points recorded: %d\n&quot;, tvec.size())
+
+    if (!lastpass) {
+      // Prevent duplicate last point when appending segments
+      tvec.remove(tvec.size() - 1)
+      sumabsisyn.remove(sumabsisyn.size() - 1)
+    }
+    frecord_init()  // Reset Vector recording positions
+    count += 1
+  }
+
+  // Output full records
+  $o4 = tvec.c
+  $o5 = sumabsisyn.c
+}
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><cite>$1</cite>: Total simulation duration (ms)</p></li>
+<li><p><cite>$2</cite>: Number of segments</p></li>
+<li><p><cite>$o3</cite>: <cite>List</cite> containing all synapse instances to record</p></li>
+<li><p><cite>$o4</cite>: Output <cite>Vector</cite> for full time course</p></li>
+<li><p><cite>$o5</cite>: Output <cite>Vector</cite> for summed absolute synaptic currents</p></li>
+</ul>
+</section>
+<section id="code-adaptations-for-your-model">
+<h2>Code Adaptations for Your Model<a class="headerlink" href="#code-adaptations-for-your-model" title="Link to this heading"></a></h2>
+<ul>
+<li><p>The above procedure assumes a single current variable <cite>i</cite> per synapse. If your synapses have multiple currents (e.g., <cite>iampa</cite> and <cite>inmda</cite>), modify the recording setup to create separate vectors for each current type and sum them accordingly.</p></li>
+<li><p>If synapse types are heterogeneous and tagged via <cite>isampa</cite>, separate lists and Vector recordings per synapse type are advised.</p></li>
+<li><p>Ensure that your NMODL synaptic mechanisms calculate synaptic currents in the <cite>BREAKPOINT</cite> block rather than the <cite>DERIVATIVE</cite> block to correctly influence the model’s membrane dynamics and yield accurate currents for recording. For example, move current calculations to <cite>BREAKPOINT</cite>:</p>
+<div class="highlight-nrnmodl notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+  SOLVE release METHOD cnexp
+  inmda = W_nmda * g_nmda * (v - Erev_nmda) * sfunc(v)
+  iampa = W * g_ampa * (v - Erev_ampa)
+  i = inmda + iampa  : combined current for recording
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="common-pitfalls-and-tips">
+<h2>Common Pitfalls and Tips<a class="headerlink" href="#common-pitfalls-and-tips" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>GLOBAL</cite> variables in NMODL are inaccessible via instance references; use <cite>RANGE</cite> instead for variables like <cite>isampa</cite> that must vary per synapse instance.</p></li>
+<li><p>When testing for the existence of a variable or property in hoc, trying to access a non-existent public member causes errors; hence, tagging synapses with a variable like <cite>isampa</cite> is cleaner than conditionals checking the presence of current variables.</p></li>
+<li><p>Parallel simulations require gathering synaptic current data from all compute nodes; this procedure works for serial simulations.</p></li>
+<li><p>Avoid recording every time step if possible; use segmentwise recording or coarser time resolutions to save memory.</p></li>
+<li><p>Sum synaptic currents by recording all currents into <a href="#id1"><span class="problematic" id="id2">`</span></a>Vector`s, then performing vectorized additions post-simulation for best performance.</p></li>
+<li><p>Consult <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> methods such as <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.append" title="Vector.append"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.append()</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.abs" title="Vector.abs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.abs()</span></code></a>, and <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.add" title="Vector.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.add()</span></code></a> for manipulating recorded data.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Tag synapses with <cite>RANGE</cite> variables to identify current types.</p></li>
+<li><p>Define and record synaptic currents via <cite>Vector.record</cite>.</p></li>
+<li><p>Use segment-wise simulations to manage memory.</p></li>
+<li><p>Sum absolute synaptic currents post-simulation using vector operations.</p></li>
+<li><p>Ensure synaptic currents are computed in <cite>BREAKPOINT</cite> blocks.</p></li>
+<li><p>Consider parallelization and memory limits when scaling up.</p></li>
+</ul>
+<p>This workflow enables recording and combining heterogeneous synaptic currents efficiently in NEURON, aiding LFP approximations based on synaptic transmembrane currents.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3428">https://neuron.yale.edu/phpBB/viewtopic.php?t=3428</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

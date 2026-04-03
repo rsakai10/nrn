@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calcium Ion Concentration Initialization with Point Processes &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Calcium Ion Concentration Initialization with Point Processes</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4325_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calcium-ion-concentration-initialization-with-point-processes">
+<h1>Calcium Ion Concentration Initialization with Point Processes<a class="headerlink" href="#calcium-ion-concentration-initialization-with-point-processes" title="Link to this heading"></a></h1>
+<p>When modeling neurons with calcium dynamics and synapses that read or write calcium concentrations, initialization of internal (<cite>cai</cite>) and external (<cite>cao</cite>) calcium ion concentrations must be handled carefully. This section explains common issues and recommended solutions when using <code class="xref py py-class docutils literal notranslate"><span class="pre">h.ion_style</span></code>, calcium dynamics mechanisms, and calcium-dependent synaptic point processes.</p>
+<section id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
+<p>In models where a <code class="xref py py-class docutils literal notranslate"><span class="pre">POINT_PROCESS</span></code> synapse reads and writes calcium via a USEION statement (e.g., <cite>USEION ca READ cai,cao WRITE ica</cite>), initial calcium concentrations provided programmatically may be unexpectedly overwritten during the call to <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.finitialize()</span></code>.</p>
+<p>Specifically, the built-in NEURON defaults <cite>h.cai0_ca_ion</cite> and <cite>h.cao0_ca_ion</cite> (defaulting to 5.0e-5 mM and 2.0 mM respectively) override previously assigned segment values of <cite>cai</cite> and <cite>cao</cite> in segments with such synapses attached. This behavior may happen even if ion concentrations were set explicitly beforehand.</p>
+</section>
+<section id="cause">
+<h2>Cause<a class="headerlink" href="#cause" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Ionic concentrations are initialized based on NEURON’s internal default constants unless the mechanism’s NMODL code explicitly initializes the ions.</p></li>
+<li><p>Many calcium dynamics mechanisms (e.g., <cite>CaDynamics_E2.mod</cite>) often have no <code class="xref std std-keyword docutils literal notranslate"><span class="pre">INITIAL</span></code> block that assigns initial values to <cite>cai</cite> or <cite>cao</cite>.</p></li>
+<li><p>The <cite>USEION ca</cite> statement in these mechanisms often only <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WRITE`s</span> <span class="pre">`cai</span></code> but not <cite>cao</cite>, leaving <cite>cao</cite> controlled by the default constant.</p></li>
+<li><p>Use of <code class="xref py py-func docutils literal notranslate"><span class="pre">h.ion_style()</span></code> with a <cite>cinit</cite> parameter attempts to initialize internal ion concentrations, but later insertion of a mechanism that reads or writes the ion can <em>promote</em> the ion style, resulting in re-initialization according to defaults.</p></li>
+</ul>
+</section>
+<section id="recommendations-for-proper-initialization">
+<h2>Recommendations for Proper Initialization<a class="headerlink" href="#recommendations-for-proper-initialization" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Set Default Extracellular Calcium Concentration Globally</strong></p>
+<p>You can globally assign the default external calcium concentration by setting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="o">.</span><span class="n">cao0_ca_ion</span> <span class="o">=</span> <span class="mf">1.2</span>  <span class="c1"># desired extracellular calcium concentration in mM</span>
+</pre></div>
+</div>
+<p>Place this in your main script outside of any cell class definitions (e.g., after class definitions but before simulation). This sets the default initial value for <cite>cao</cite> in all segments where it is not explicitly controlled by a mechanism.</p>
+</li>
+<li><p><strong>Modify Calcium Dynamics Mechanism to Initialize `cai` and `cao`</strong></p>
+<p>Edit your <cite>CaDynamics_E2.mod</cite> (or equivalent) as follows:</p>
+<ul>
+<li><p>Add a new parameter for initial internal calcium concentration:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>PARAMETER {
+<span class="gi">+    cai0 = 1e-3 (mM)</span>
+<span class="w"> </span>    ...
+}
+</pre></div>
+</div>
+</li>
+<li><p>Add an <code class="xref std std-keyword docutils literal notranslate"><span class="pre">INITIAL</span></code> block to initialize internal and external calcium concentrations:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>INITIAL {
+<span class="gi">+    cai = cai0</span>
+<span class="gi">+    cao = cao0</span>
+}
+</pre></div>
+</div>
+</li>
+<li><p>Declare <cite>cao0</cite> as a new parameter with a default, e.g., 1.2 mM:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>PARAMETER {
+<span class="w"> </span>   ...
+<span class="gi">+    cao0 = 1.2 (mM)</span>
+}
+</pre></div>
+</div>
+</li>
+<li><p>Add <cite>cao</cite> as a <code class="xref std std-keyword docutils literal notranslate"><span class="pre">STATE</span></code> variable, and add a zero-derivative to keep it constant:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>STATE {
+<span class="gi">+    cao (mM)</span>
+<span class="w"> </span>   ...
+}
+
+DERIVATIVE state {
+<span class="gi">+    cao&#39; = 0</span>
+<span class="w"> </span>   ...
+}
+</pre></div>
+</div>
+</li>
+<li><p>Modify the <cite>USEION ca</cite> statement to write both internal and external ion concentrations:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>NEURON {
+<span class="gd">-    USEION ca READ ica WRITE cai</span>
+<span class="gi">+    USEION ca READ ica WRITE cai,cao</span>
+<span class="w"> </span>   ...
+}
+</pre></div>
+</div>
+</li>
+<li><p>In the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block, change the numerical method from <cite>cnexp</cite> to <cite>derivimplicit</cite> for stability.</p></li>
+</ul>
+</li>
+<li><p><strong>Remove Redundant Calls to `ion_style`</strong></p>
+<p>If you modify the mechanism as above, remove or avoid using <code class="xref py py-func docutils literal notranslate"><span class="pre">h.ion_style()</span></code> calls in your Python or HOC code, as they may cause unwanted ion style promotion and re-initialization. For example, remove code such as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">secname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">secname</span> <span class="o">==</span> <span class="s2">&quot;axon&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">ion_style</span><span class="p">(</span><span class="s2">&quot;ca_ion&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">secname</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">secname</span><span class="p">]</span><span class="o">.</span><span class="n">cao</span> <span class="o">=</span> <span class="mf">1.2</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">secname</span><span class="p">]:</span>
+        <span class="n">seg</span><span class="o">.</span><span class="n">cai</span> <span class="o">=</span> <span class="mf">0.001</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Attach Synapses and Initialize the Model</strong></p>
+<p>Attach synapses reading calcium ion concentrations to segments normally:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xsyn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">AMPAandNMDAplastic</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">apical_section</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then run:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">fcurrent</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">frecord_init</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Internal and external calcium concentrations will now remain as assigned, without unexpected changes in individual segments.</p>
+</li>
+</ol>
+</section>
+<section id="background-and-explanation-of-h-ion-style-promotion-rules">
+<h2>Background and Explanation of <code class="xref py py-func docutils literal notranslate"><span class="pre">h.ion_style()</span></code> Promotion Rules<a class="headerlink" href="#background-and-explanation-of-h-ion-style-promotion-rules" title="Link to this heading"></a></h2>
+<p>The <cite>ion_style</cite> function controls how NEURON treats ion concentrations internally for each section. The internal “promotion” rules determine whether calcium concentrations are treated as parameters, assigned variables, or state variables, based on the collection of inserted mechanisms.</p>
+<ul class="simple">
+<li><p>Ion style promotion occurs when new mechanisms are inserted after calling <cite>ion_style</cite>.</p></li>
+<li><p>If a mechanism uses the ion as a <code class="xref std std-keyword docutils literal notranslate"><span class="pre">STATE</span></code> variable, NEURON promotes the ion style accordingly.</p></li>
+<li><p>Such promotion may also toggle internal flags that cause re-initialization of <cite>cai</cite> and <cite>cao</cite> during <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.finitialize()</span></code>.</p></li>
+<li><p>This can cause localized discrepancies where only particular segments have ion concentrations reset to default constants, making bugs difficult to detect.</p></li>
+</ul>
+<p>Therefore, it is recommended to:</p>
+<ul class="simple">
+<li><p>Define initial calcium concentrations explicitly in the mechanisms that WRITE to the ions.</p></li>
+<li><p>Avoid <cite>ion_style</cite> manipulations that might be overridden by later inserted mechanisms.</p></li>
+<li><p>Control extracellular calcium as a parameter within the calcium dynamics mechanism instead of relying on external defaults.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To ensure consistent initialization of calcium concentrations in models with calcium-dependent synapses:</p>
+<ul class="simple">
+<li><p>Set <cite>h.cao0_ca_ion</cite> in your script to change default extracellular calcium for all segments.</p></li>
+<li><p>Modify calcium dynamics mechanisms (e.g., <cite>CaDynamics_E2.mod</cite>) to include proper <code class="xref std std-keyword docutils literal notranslate"><span class="pre">PARAMETER</span></code>, <code class="xref std std-keyword docutils literal notranslate"><span class="pre">INITIAL</span></code>, <code class="xref std std-keyword docutils literal notranslate"><span class="pre">STATE</span></code>, and <code class="xref std std-keyword docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks to initialize and maintain intracellular (<cite>cai</cite>) and extracellular (<cite>cao</cite>) calcium.</p></li>
+<li><p>Remove or avoid unnecessary use of <code class="xref py py-func docutils literal notranslate"><span class="pre">h.ion_style()</span></code> to prevent unexpected re-initialization caused by ion style promotion.</p></li>
+<li><p>After attaching synapses and mechanisms, run <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.finitialize()</span></code> normally.</p></li>
+</ul>
+<p>This approach provides a robust and maintainable way to manage calcium ion concentration initialization so that values assigned in code will persist after model initialization.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These recommendations assume extracellular calcium concentration (<cite>cao</cite>) is fixed during simulations. If you require dynamic <cite>cao</cite>, additional modifications to the mechanisms are needed.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">h.finitialize()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">h.ion_style()</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">POINT_PROCESS</span></code> with <code class="xref std std-keyword docutils literal notranslate"><span class="pre">USEION</span></code>, NEURON NMODL <cite>INITIAL</cite> and <cite>DERIVATIVE</cite> blocks.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4325">https://neuron.yale.edu/phpBB/viewtopic.php?t=4325</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Templates with a Variable Number of Sections &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Templates with a Variable Number of Sections</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3209_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="templates-with-a-variable-number-of-sections">
+<h1>Templates with a Variable Number of Sections<a class="headerlink" href="#templates-with-a-variable-number-of-sections" title="Link to this heading"></a></h1>
+<p>When creating NEURON models using <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> in HOC, you might want to define a variable number of sections (e.g., dendrites) that can be changed between simulation runs. This is especially common when the simulation control is managed in Python, but the cell model itself is written in HOC templates.</p>
+<p>This section explains how to implement templates with a variable number of sections, overcoming the limitation that <cite>create</cite> statements must appear at the top level (outside of procedures) in HOC.</p>
+<section id="how-section-creation-works-in-hoc">
+<h2>How Section Creation Works in HOC<a class="headerlink" href="#how-section-creation-works-in-hoc" title="Link to this heading"></a></h2>
+<p>In HOC, user-declared names (tokens) default to scalars unless declared otherwise using top-level statements such as:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>strdef name        // Declares a string variable
+double name[n]     // Declares an array of doubles
+objref name        // Declares a reference to an object instance
+create name        // Declares a Section named &#39;name&#39;
+</pre></div>
+</div>
+<p><strong>Important:</strong> These declarations must be at top level (outside of any <a class="reference internal" href="../hoc/programming/hocsyntax.html#proc"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">proc</span></code></a> or <a class="reference internal" href="../hoc/programming/hocsyntax.html#func"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">func</span></code></a>).</p>
+</section>
+<section id="declaring-arrays-of-sections">
+<h2>Declaring Arrays of Sections<a class="headerlink" href="#declaring-arrays-of-sections" title="Link to this heading"></a></h2>
+<p>You can declare an array of sections at the top level using <code class="xref std std-keyword docutils literal notranslate"><span class="pre">create</span></code> with an array size:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create dend[1] // declares an array of sections, initially with one element: dend[0]
+</pre></div>
+</div>
+<p>This declares <cite>dend</cite> as an array of sections. The array size can be adjusted at runtime by calling <cite>create</cite> inside a procedure, but only after the initial declaration at top-level.</p>
+</section>
+<section id="example-template-with-variable-number-of-sections">
+<h2>Example Template with Variable Number of Sections<a class="headerlink" href="#example-template-with-variable-number-of-sections" title="Link to this heading"></a></h2>
+<p>Below is an example of a template <code class="docutils literal notranslate"><span class="pre">Foo</span></code> that accepts the desired number of dendrites as a constructor argument. It declares an array of sections at top-level and dynamically resizes it inside the <cite>init</cite> procedure.</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>begintemplate Foo
+  public dend
+
+  // Declare an array of sections with initial size 1 at top-level
+  create dend[1]
+
+  proc init() { local i
+    // Resize the dendrite array to size given by first argument stored in $1
+    create dend[$1]
+
+    for i = 0, $1 - 1 {
+      // Now customize each dendrite section, for example:
+      dend[i].L = 100
+      dend[i].diam = 1
+      dend[i].nseg = 1
+      dend[i].insert(&quot;pas&quot;)
+    }
+  }
+endtemplate
+</pre></div>
+</div>
+</section>
+<section id="usage-in-python-and-hoc">
+<h2>Usage in Python and HOC<a class="headerlink" href="#usage-in-python-and-hoc" title="Link to this heading"></a></h2>
+<p>From Python, you can instantiate and use the template as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Create an instance of Foo with 27 dendrites</span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Foo</span><span class="p">(</span><span class="mi">27</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In HOC, you can create an instance similarly:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref bar
+bar = new Foo(27)
+</pre></div>
+</div>
+<p>This results in an object <cite>bar</cite> with 27 dendrites accessible as <cite>bar.dend[0]</cite> through <cite>bar.dend[26]</cite>.</p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The first <cite>create dend[1]</cite> at top-level declares <cite>dend</cite> as an array of sections, which allows the later dynamic resizing with <cite>create dend[$1]</cite> inside the <cite>init</cite> procedure.</p></li>
+<li><p>If you omit the top-level declaration, <cite>create dend[$1]</cite> inside <cite>init</cite> will result in a syntax error.</p></li>
+<li><p>This approach lets you flexibly define variable numbers of sections per template instance.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> objects is often more flexible for managing collections of objects, but for sections, the array approach shown here is straightforward and efficient.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3209">https://neuron.yale.edu/phpBB/viewtopic.php?t=3209</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

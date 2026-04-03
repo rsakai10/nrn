@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IClamp and Its Effect on Membrane Potential When the Amplitude Is Zero &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">IClamp and Its Effect on Membrane Potential When the Amplitude Is Zero</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3294_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="iclamp-and-its-effect-on-membrane-potential-when-the-amplitude-is-zero">
+<h1>IClamp and Its Effect on Membrane Potential When the Amplitude Is Zero<a class="headerlink" href="#iclamp-and-its-effect-on-membrane-potential-when-the-amplitude-is-zero" title="Link to this heading"></a></h1>
+<p>When using <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> to deliver current stimuli in simulations, it may be observed that even when the amplitude (<cite>amp</cite>) parameter is set to zero, changes in the stimulus duration (<cite>dur</cite>) can cause slight differences in the recorded membrane potential. This behavior is especially noticeable when using variable time step integration (adaptive integration) via CVODE.</p>
+<section id="cause-of-the-effect">
+<h2>Cause of the Effect<a class="headerlink" href="#cause-of-the-effect" title="Link to this heading"></a></h2>
+<p>This effect arises because <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> objects trigger re-initialization of the variable time step integrator at the onset (<cite>t == del</cite>) and offset (<cite>t == del + dur</cite>) of the stimulus. These re-initializations occur regardless of whether the amplitude is zero. The re-initialization changes the solver’s internal state and the precise times at which the solution is sampled, thereby slightly perturbing the numerical trajectory of the solution.</p>
+<p>Key points:</p>
+<ul class="simple">
+<li><p>Adaptive integration controls error by dynamically changing step sizes.</p></li>
+<li><p>Discontinuities in system parameters (such as current injection onset and offset) force the solver to reset step sizes and re-initialize.</p></li>
+<li><p>Even a zero-amplitude <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> constitutes a parameter discontinuity due to its on/off times, causing solver resets.</p></li>
+<li><p>The changes in solution timing are small and typically do not qualitatively affect simulation outcomes, but may alter quantitative results such as phase response curve (PRC) calculations.</p></li>
+</ul>
+</section>
+<section id="numerical-details">
+<h2>Numerical Details<a class="headerlink" href="#numerical-details" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The perturbation is related to the solver’s absolute error tolerance, which defaults to <cite>atol=1e-3</cite>.</p></li>
+<li><p>The solver treats any change in parameters at discontinuity times as potential events to trigger re-initialization.</p></li>
+<li><p>Attempts to optimize by skipping re-initialization when amplitude is zero would be error-prone, because amplitudes below floating point epsilon (see <cite>float_epsilon</cite> in NEURON’s Programmer’s Reference) would inconsistently apply this logic.</p></li>
+</ul>
+</section>
+<section id="recommendations">
+<h2>Recommendations<a class="headerlink" href="#recommendations" title="Link to this heading"></a></h2>
+<p>To mitigate or avoid this effect, consider the following strategies:</p>
+<ol class="arabic">
+<li><p><strong>Use Fixed Time Step Integration</strong>
+Replace adaptive integration with fixed time steps when precise repeatability is needed. This can be done by not activating CVODE or by calling <cite>cvode.active(0)</cite> in HOC or <cite>h.cvode.active(0)</cite> in Python.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># disable variable time step integration</span>
+</pre></div>
+</div>
+<p>or in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>cvode.active(0)
+</pre></div>
+</div>
+</li>
+<li><p><strong>Adjust CVODE Error Tolerances</strong>
+Reduce the absolute error tolerance of CVODE to decrease numerical perturbations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">atol</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>  <span class="c1"># default is 1e-3, use smaller for more accuracy</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use atolscale for State Variables</strong>
+Apply scaled tolerances on different state variables with <cite>cvode.atolscale()</cite>. See the Programmer’s Reference for guidance.</p></li>
+<li><p><strong>Warmup and Save State</strong>
+If using fixed time steps, simulations can be slow. To speed repeated runs:</p>
+<ul class="simple">
+<li><p>Run a single warm-up simulation until the model reaches a steady state.</p></li>
+<li><p>Use <a class="reference internal" href="../progref/simctrl/savstate.html#SaveState" title="SaveState"><code class="xref py py-class docutils literal notranslate"><span class="pre">SaveState</span></code></a> to capture and save the model state at this point.</p></li>
+<li><p>Restore the state in future simulations instead of rerunning the full warm-up each time.</p></li>
+</ul>
+</li>
+<li><p><strong>Evaluate Impact Relative to Other Error Sources</strong>
+Remember that all experimental and computational PRC estimation methods have inherent approximations. Consider whether the perturbation introduced by adaptive integration is significant compared to:</p>
+<ul class="simple">
+<li><p>Model parameter uncertainties</p></li>
+<li><p>Numerical integration errors</p></li>
+<li><p>Experimental measurement noise</p></li>
+</ul>
+<p>A useful computational experiment is:</p>
+<ul class="simple">
+<li><p>Generate PRCs using fixed time steps for several decreasing values of <cite>dt</cite>.</p></li>
+<li><p>Generate a PRC using adaptive integration.</p></li>
+<li><p>Compare results to assess convergence and relative differences.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Variable time step integration causes slight perturbations at <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> on/off times, even if <code class="xref py py-attr docutils literal notranslate"><span class="pre">amp</span></code> is zero.</p></li>
+<li><p>This is expected behavior due to solver re-initialization at discontinuities.</p></li>
+<li><p>You can eliminate or reduce disturbances by switching to fixed time steps or tuning solver tolerances.</p></li>
+<li><p>Consider trade-offs in simulation speed and numerical accuracy when selecting integration methods.</p></li>
+<li><p>Use <a class="reference internal" href="../progref/simctrl/savstate.html#SaveState" title="SaveState"><code class="xref py py-class docutils literal notranslate"><span class="pre">SaveState</span></code></a> to efficiently manage initialization if needing many repeated runs.</p></li>
+</ul>
+</section>
+<section id="example-disabling-variable-time-step-integration-in-python">
+<h2>Example: Disabling variable time step integration in Python<a class="headerlink" href="#example-disabling-variable-time-step-integration-in-python" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="c1"># Disable adaptive integration</span>
+<span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Create an IClamp with zero amplitude</span>
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># ms</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">10</span>       <span class="c1"># ms</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mi">0</span>        <span class="c1"># nA (zero amplitude)</span>
+
+<span class="c1"># Run simulation</span>
+<span class="n">h</span><span class="o">.</span><span class="n">tstop</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">tstop</span><span class="p">:</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">fadvance</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="example-enabling-variable-time-step-integration-with-reduced-tolerance">
+<h2>Example: Enabling variable time step integration with reduced tolerance<a class="headerlink" href="#example-enabling-variable-time-step-integration-with-reduced-tolerance" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span><span class="p">,</span> <span class="n">gui</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># enable adaptive integration</span>
+<span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">atol</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>   <span class="c1"># set tighter absolute tolerance</span>
+
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">tstop</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">tstop</span><span class="p">:</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">fadvance</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This explanation specifically applies when using <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#IClamp" title="IClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">IClamp</span></code></a> objects and CVODE with adaptive time stepping. The behavior of other stim types or solvers may differ.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3294">https://neuron.yale.edu/phpBB/viewtopic.php?t=3294</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

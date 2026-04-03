@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building NEURON wheels &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Morphology loading in NEURON" href="../morphology/morphology.html" />
+    <link rel="prev" title="Workflow Code Paths" href="../workflow-code-paths.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">NEURON Development topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../HOCInterpreter/HOCInterpreter.html">HOC Interpreter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how-do-i/how-do-i.html">How-Do-I Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data-structures.html">Data structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gpu-testing.html">Testing GPU functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflow-code-paths.html">Workflow Code Paths</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building NEURON wheels</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyproject-toml">pyproject.toml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-details">Build details</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-frontend">Build frontend</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#build-backend">Build backend</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#distributable-wheels">Distributable wheels</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#before-the-build">Before the build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#after-the-build">After the build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#directory-layout">Directory layout</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-development-python-package">Creating a Development Python Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customizing-the-wheel">Customizing the wheel</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../morphology/morphology.html">Morphology loading in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hocdomain-sphinx.html">HOC Sphinx Domain</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">NEURON Development topics</a></li>
+      <li class="breadcrumb-item active">Building NEURON wheels</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+        
+        <a href="../../..html/../dev/hoc/wheels.html" >  Switch to HOC</a>
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/dev/python/wheels.md.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-neuron-wheels">
+<h1>Building NEURON wheels<a class="headerlink" href="#building-neuron-wheels" title="Link to this heading"></a></h1>
+<section id="pyproject-toml">
+<h2>pyproject.toml<a class="headerlink" href="#pyproject-toml" title="Link to this heading"></a></h2>
+<p>NEURON has several Python extensions:</p>
+<ul class="simple">
+<li><p>the HOC module</p></li>
+<li><p>three Rx3D extensions (Cython extensions)</p></li>
+<li><p>MUSIC (Cython extension)</p></li>
+</ul>
+<p>Since version 9, these extensions are all built using CMake itself. However, when building a Python wheel, we use a build tool compatible with the modern Python standards, notably, PEP 517, and use <a class="reference external" href="https://scikit-build-core.readthedocs.io/"><code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code></a> as a thin wrapper around CMake.</p>
+<p>Furthermore, we use <a class="reference external" href="https://cibuildwheel.pypa.io/"><code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code></a> to build redistributable wheels on Linux and MacOS.</p>
+</section>
+<section id="build-details">
+<h2>Build details<a class="headerlink" href="#build-details" title="Link to this heading"></a></h2>
+<p>Here is a rough outline of how the build procedure works for NEURON wheels. It is composed of two parts, a <em>build frontend</em>, and a <em>build backend</em>.
+In our case, the build frontend is <code class="docutils literal notranslate"><span class="pre">pip</span></code>, and the build backend is <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code>.</p>
+<section id="build-frontend">
+<h3>Build frontend<a class="headerlink" href="#build-frontend" title="Link to this heading"></a></h3>
+<p>A Python build frontend is in charge of the following tasks:</p>
+<ol class="arabic simple">
+<li><p>It parses the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file, and reports any errors in the configuration</p></li>
+<li><p>It creates an isolated virtual environment, and installs all of the Python <strong>build dependencies</strong> there</p></li>
+<li><p>It parses any command-line options (which could also override options in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>), and passes them to the build backend</p></li>
+</ol>
+</section>
+<section id="build-backend">
+<h3>Build backend<a class="headerlink" href="#build-backend" title="Link to this heading"></a></h3>
+<p>A Python build backend is in charge of the following tasks:</p>
+<ol class="arabic simple">
+<li><p>It creates a build directory, and calls CMake from that build directory, while adding some custom CMake variables of its own (for a complete list, see <a class="reference external" href="https://scikit-build-core.readthedocs.io/en/latest/guide/cmakelists.html#accessing-information">here</a>)</p></li>
+<li><p>Once the CMake build finishes, it installs the package in another directory</p></li>
+<li><p>Finally, it creates a <code class="docutils literal notranslate"><span class="pre">.whl</span></code> file which contains the NEURON installation, wheel metadata (author information, compatible Python versions, runtime dependencies, etc.), and any additional data (such as scripts) that should be distributed, but is not part of the regular CMake build</p></li>
+</ol>
+</section>
+</section>
+<section id="distributable-wheels">
+<h2>Distributable wheels<a class="headerlink" href="#distributable-wheels" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> is a tool for making distributable Python wheels. In addition to the above, it adds the following steps:</p>
+<section id="before-the-build">
+<h3>Before the build<a class="headerlink" href="#before-the-build" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>If building on Linux, it starts up a Docker container, and copies the project to the container. We use the <a class="reference external" href="https://hub.docker.com/r/neuronsimulator/neuron_wheel"><code class="docutils literal notranslate"><span class="pre">neuronsimulator/neuron_wheel</span></code></a> image for building the wheel, which is based on <code class="docutils literal notranslate"><span class="pre">manylinux_2_28</span></code>.</p></li>
+<li><p>If building on MacOS, it checks that an <a class="reference external" href="https://www.python.org/downloads/macos/">official MacOS Python installation</a> is available on the machine, and uses that as the Python version.</p></li>
+</ul>
+</section>
+<section id="after-the-build">
+<h3>After the build<a class="headerlink" href="#after-the-build" title="Link to this heading"></a></h3>
+<p>In order to make a redistributable wheel, we need to set the correct <a class="reference external" href="https://en.wikipedia.org/wiki/Rpath">rpath</a> for the libraries and executables, as well as copy any libraries to the wheel that would not be found on the user’s system at run-time. <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> does this using <a class="reference external" href="https://github.com/pypa/auditwheel/"><code class="docutils literal notranslate"><span class="pre">auditwheel</span></code></a> on Linux, and <a class="reference external" href="https://pypi.org/project/delocate/"><code class="docutils literal notranslate"><span class="pre">delocate</span></code></a> on MacOS.</p>
+</section>
+<section id="directory-layout">
+<h3>Directory layout<a class="headerlink" href="#directory-layout" title="Link to this heading"></a></h3>
+<p>The directory layout used by NEURON wheels is slightly different from the one used by an ordinary CMake install. This is controlled by two internal CMake variables, <code class="docutils literal notranslate"><span class="pre">NRN_INSTALL_PYTHON_PREFIX</span></code>, and <code class="docutils literal notranslate"><span class="pre">NRN_INSTALL_DATA_PREFIX</span></code>.</p>
+<p>When building a wheel, <code class="docutils literal notranslate"><span class="pre">NRN_INSTALL_PYTHON_PREFIX</span></code> is set to <code class="docutils literal notranslate"><span class="pre">neuron</span></code>, and all of the Python-related files (the above mentioned modules + any pure Python ones) are placed there, while <code class="docutils literal notranslate"><span class="pre">NRN_INSTALL_DATA_PREFIX</span></code> is set to <code class="docutils literal notranslate"><span class="pre">neuron/.data</span></code>, and everything else (for instance, HOC scripts, NEURON libraries and executables, etc.) is installed there, under its corresponding subdirectories (<code class="docutils literal notranslate"><span class="pre">lib</span></code>, <code class="docutils literal notranslate"><span class="pre">bin</span></code>, etc.).</p>
+<p>On the other hand, when not building a wheel, <code class="docutils literal notranslate"><span class="pre">NRN_INSTALL_PYTHON_PREFIX</span></code> is set to <code class="docutils literal notranslate"><span class="pre">lib/python</span></code>, while <code class="docutils literal notranslate"><span class="pre">NRN_INSTALL_DATA_PREFIX</span></code> is left empty, so all of the files are installed in their standard locations, prepended by <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>.</p>
+</section>
+</section>
+<section id="creating-a-development-python-package">
+<h2>Creating a Development Python Package<a class="headerlink" href="#creating-a-development-python-package" title="Link to this heading"></a></h2>
+<p><strong>NOTE</strong>: it is recommended to update <code class="docutils literal notranslate"><span class="pre">pip</span></code> to a recent version by running <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--upgrade</span> <span class="pre">pip</span></code> before running any of the below <code class="docutils literal notranslate"><span class="pre">pip</span></code> commands.</p>
+<p>To see how all of the above works in action, you can clone the git repository, and then run <code class="docutils literal notranslate"><span class="pre">pip</span></code> via:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>wheel<span class="w"> </span>--no-deps<span class="w"> </span>.
+</pre></div>
+</div>
+<p>from the top-level directory of the repository. This will create a wheel called <code class="docutils literal notranslate"><span class="pre">neuron_nightly-[version]-[platform_specifier].whl</span></code> in your current directory, which can then be installed via <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">[filename]</span></code>. Note that any non-Python dependencies (such as bison, MPI, etc.) must be installed beforehand.</p>
+<p>A simple wrapper for the above is available at <code class="docutils literal notranslate"><span class="pre">packaging/python/build_wheels.bash</span></code>. The wrapper can be run in two modes: in <code class="docutils literal notranslate"><span class="pre">pip</span></code> mode, and in <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> mode.</p>
+<p>To use the <code class="docutils literal notranslate"><span class="pre">pip</span></code> mode, run it via:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>packaging/python/build_wheels.bash<span class="w"> </span>CI<span class="w"> </span><span class="o">[</span>python_interp<span class="o">]</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">[python_interp]</span></code> should be the full path to a working Python interpreter. This will create a wheel in the <code class="docutils literal notranslate"><span class="pre">wheelhouse</span></code> subdirectory.</p>
+<p>To use the <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> mode, run it via:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>packaging/python/build_wheels.bash<span class="w"> </span><span class="o">[</span>platform<span class="o">]</span><span class="w"> </span><span class="o">[</span>python_version<span class="o">(</span>s<span class="o">)]</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">[platform]</span></code> is one of {linux, Linux, osx, Darwin}, and <code class="docutils literal notranslate"><span class="pre">[python_version(s)]</span></code> is a list of Python versions for which to build the wheel. The above will create a redistributable wheel under the <code class="docutils literal notranslate"><span class="pre">wheelhouse</span></code> subdirectory. To build wheels for all Python versions, use <code class="docutils literal notranslate"><span class="pre">'3*'</span></code> (note the quotation marks). To build wheels for only selected versions, use a space-separated list of versions surrounded by quotation marks, without any dots between the major and minor version (for example, <code class="docutils literal notranslate"><span class="pre">'39</span> <span class="pre">310'</span></code>).</p>
+<p>Note that, for the <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> mode, on Linux you must have either Docker or podman installed (by default, <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> uses Docker, and to use podman one must set the environmental variable <code class="docutils literal notranslate"><span class="pre">CIBW_CONTAINER_ENGINE=podman</span></code>), and on MacOS you must have the official MacOS Python installation for that particular Python version.</p>
+</section>
+<section id="customizing-the-wheel">
+<h2>Customizing the wheel<a class="headerlink" href="#customizing-the-wheel" title="Link to this heading"></a></h2>
+<p>The built wheel can be customized using either environmental variables which have the same names as their CMake define counterparts, or using <code class="docutils literal notranslate"><span class="pre">pip</span></code>s <code class="docutils literal notranslate"><span class="pre">--config-settings</span></code> flag. For instance, if you want to enable coreNEURON support for the wheel, you can run the wrapper using:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">NRN_ENABLE_CORENEURON</span><span class="o">=</span>ON
+bash<span class="w"> </span>packaging/python/build_wheels.bash<span class="w"> </span>linux<span class="w"> </span><span class="m">39</span>
+</pre></div>
+</div>
+<p>The equivalent using <code class="docutils literal notranslate"><span class="pre">pip</span></code> is:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>wheel<span class="w"> </span>--no-deps<span class="w"> </span>.<span class="w"> </span>--config-settings<span class="o">=</span>cmake.define.NRN_ENABLE_CORENEURON<span class="o">=</span>ON
+</pre></div>
+</div>
+<p>For multiple options, one can add additional <code class="docutils literal notranslate"><span class="pre">--config-settings</span></code> flags. For a list of default values for building a wheel, have a look at the <code class="docutils literal notranslate"><span class="pre">tool.scikit-build.cmake.define</span></code> section of the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file. Note that the <code class="docutils literal notranslate"><span class="pre">build_wheels.bash</span></code> script uses <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> behind the scenes, and overrides some of the variables (as the script is used in the CI); for a list of those, have a look under the <code class="docutils literal notranslate"><span class="pre">tool.cibuildwheel.linux.environment</span></code> and <code class="docutils literal notranslate"><span class="pre">tool.cibuildwheel.macos.environment</span></code> sections of the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file (for Linux and MacOS, respectively).</p>
+<p>The build files are by default placed in <code class="docutils literal notranslate"><span class="pre">build_wheel</span></code>, however one can customize this using <code class="docutils literal notranslate"><span class="pre">--config-settings=build-dir=/some/build/dir</span></code>.</p>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
+<p>Once built, the NEURON Python package may be imported and used normally. You might, however, need to set up
+<code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> accordingly for the import to work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;&lt;NRNDIR&gt;/build_wheel/lib/python:$PYTHONPATH&quot;</span>
+
+<span class="c1"># Run Neuron base tests</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;import neuron; neuron.test()&quot;</span>
+</pre></div>
+</div>
+<p>Note that if installing the (locally built) wheel, changing the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> is not necessary.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../workflow-code-paths.html" class="btn btn-neutral float-left" title="Workflow Code Paths" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../morphology/morphology.html" class="btn btn-neutral float-right" title="Morphology loading in NEURON" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

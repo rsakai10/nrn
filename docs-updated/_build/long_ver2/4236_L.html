@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finding the Middle Coordinates of a Section in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Finding the Middle Coordinates of a Section in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4236_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="finding-the-middle-coordinates-of-a-section-in-neuron">
+<h1>Finding the Middle Coordinates of a Section in NEURON<a class="headerlink" href="#finding-the-middle-coordinates-of-a-section-in-neuron" title="Link to this heading"></a></h1>
+<p>When working with spatial models in NEURON, such as determining the minimal extracellular current to elicit an action potential, it is often important to find the accurate 3D coordinates corresponding to the middle of a section or segments within that section. The commonly used approaches relying on raw <cite>pt3d</cite> points or averages of these points can lead to inconsistent or incorrect results. This guide explains the correct methodology to obtain these coordinates and clarifies common pitfalls.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The indices and coordinates of <cite>pt3d</cite> points (retrieved with <cite>sec.x3d(i)</cite>, <cite>sec.y3d(i)</cite>, <cite>sec.z3d(i)</cite>) define the 3D shape of a section but are not guaranteed to correspond directly to the segment centers or to be evenly spaced along the cable.</p></li>
+<li><p>Simply averaging the <cite>pt3d</cite> points will not produce a coordinate on the section’s cable and can be incorrect, especially for curved or branched morphologies.</p></li>
+<li><p>Using <cite>sec(0.5)</cite> returns the midpoint of the section in normalized cable coordinates, but the 3D coordinates of that point require interpolation along the section’s path length.</p></li>
+<li><p>The function <cite>h.define_shape()</cite> updates the section’s 3D morphology but does <strong>not</strong> generate new 3D points at segment centers when the morphology is defined via <cite>pt3dadd</cite>.</p></li>
+<li><p>To find segment centers accurately, one must interpolate linearly along the path length defined by the <cite>pt3d</cite> points.</p></li>
+</ul>
+</section>
+<section id="correct-method-to-find-3d-coordinates-for-section-or-segment-positions">
+<h2>Correct Method to Find 3D Coordinates for Section or Segment Positions<a class="headerlink" href="#correct-method-to-find-3d-coordinates-for-section-or-segment-positions" title="Link to this heading"></a></h2>
+<p>Below is an example Python function that computes the 3D coordinate (x, y, z) of any position along a NEURON section by interpolation of the 3D points as a piecewise linear function of arc length:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">Point</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">coordinate</span><span class="p">(</span><span class="n">seg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return 3D coordinates of a segment or location seg within a section.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seg : Segment or Section(0 &lt;= x &lt;= 1)</span>
+<span class="sd">        NEURON segment or section location to query (e.g., sec(0.5)).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Point</span>
+<span class="sd">        Named tuple with fields .x, .y, .z giving the interpolated coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sec</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">sec</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="s1">&#39;sec&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">seg</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">x</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.5</span>  <span class="c1"># default to midsection if needed</span>
+
+    <span class="n">n3d</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">n3d</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">n3d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Section has no 3D points (pt3d).&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Path lengths corresponding to each pt3d point</span>
+    <span class="n">arcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">arc3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">x3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">y3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">z3d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n3d</span><span class="p">)]</span>
+
+    <span class="c1"># Position along section in microns</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">sec</span><span class="o">.</span><span class="n">L</span>
+
+    <span class="c1"># Linear interpolation of coordinates based on arc length</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">arcs</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+    <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">arcs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+    <span class="n">zi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">arcs</span><span class="p">,</span> <span class="n">zs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Point</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">zi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Usage example: plotting the coordinates at intervals along a non-linear soma section</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">pt3dadd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">pt3dadd</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">pt3dadd</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">soma</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mf">0.1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">)]</span>
+<span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">coordinate</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">]</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Coordinates interpolated along a soma section&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X (um)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Y (um)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Calling <cite>coordinate(sec(0.5))</cite> returns the 3D coordinate of the midpoint of the section, consistent with NEURON’s cable geometry.</p></li>
+<li><p>The <cite>pt3d</cite> points provide the morphological skeleton of the section but do <strong>not</strong> correspond to segment centers unless the section is discretized into very few segments or special care is taken.</p></li>
+<li><p>If the morphology is defined with explicit <cite>pt3dadd</cite> statements, invoking <cite>h.define_shape()</cite> will correct section positions for visualization but will <strong>not</strong> create new 3D points at segment centers.</p></li>
+<li><p>To find segment center coordinates for sections with multiple segments (<cite>nseg &gt; 1</cite>), interpolate at positions:</p>
+<div class="math notranslate nohighlight">
+\[x_i = \frac{0.5 + i}{nseg}, \quad i = 0, \ldots, nseg - 1\]</div>
+</li>
+<li><p>Every segment in the section is exposed to the extracellular field during stimulation; do not limit assignments of extracellular potentials (<cite>e_extracellular</cite>) or analyses (such as attaching <code class="xref py py-class docutils literal notranslate"><span class="pre">h.APCount</span></code>) to only segments nearest the midpoint.</p></li>
+<li><p>Attaching <code class="xref py py-class docutils literal notranslate"><span class="pre">h.APCount</span></code> to segment midpoints distant from the stimulation site can reduce detection of stimulus artifacts mistaken for action potentials.</p></li>
+<li><p>Evaluate spatial discretization adequacy by increasing <cite>nseg</cite> (preferably odd numbers) and observing stability of simulation results.</p></li>
+</ul>
+</section>
+<section id="common-mistakes-and-their-consequences">
+<h2>Common Mistakes and Their Consequences<a class="headerlink" href="#common-mistakes-and-their-consequences" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Averaging all `pt3d` points</strong>: Computes the centroid of the 3D skeleton, which need not lie on the cable and often underestimates or overestimates distances.</p></li>
+<li><p><strong>Using only midpoint between two center indices for even `n3d`</strong>: May select a position that does not correspond to any physical cable location or segment midpoint.</p></li>
+<li><p><strong>Assuming `pt3d` points relate directly to numerical discretization</strong>: The geometry points only describe shape; segment positions are governed by <cite>nseg</cite> and normalized cable coordinates.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To reliably find the middle of a section or exact segment locations in 3D space:</p>
+<ol class="arabic simple">
+<li><p>Ensure morphology is fully defined with <cite>pt3dadd</cite> or geometry parameters.</p></li>
+<li><p>Call <cite>h.define_shape()</cite> after setting all morphologies and discretizations.</p></li>
+<li><p>Use linear interpolation of <cite>pt3d</cite> points along <cite>arc3d()</cite> path lengths to find coordinates.</p></li>
+<li><p>For segment centers, calculate positions at <cite>x = (0.5 + i) / nseg</cite>.</p></li>
+<li><p>Apply stimulation and analysis (e.g., assign extracellular potentials and attach <cite>h.APCount</cite>) at all relevant segments, not just the midpoint.</p></li>
+</ol>
+<p>This approach provides consistent and morphologically accurate positions for spatially-dependent simulations in NEURON.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4236">https://neuron.yale.edu/phpBB/viewtopic.php?t=4236</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

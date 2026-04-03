@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vector.play Memory-Efficient Implementation for Scaling Synaptic Conductances &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Vector.play Memory-Efficient Implementation for Scaling Synaptic Conductances</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4303_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vector-play-memory-efficient-implementation-for-scaling-synaptic-conductances">
+<h1>Vector.play Memory-Efficient Implementation for Scaling Synaptic Conductances<a class="headerlink" href="#vector-play-memory-efficient-implementation-for-scaling-synaptic-conductances" title="Link to this heading"></a></h1>
+<p>When simulating many synapses that share the same temporal conductance pattern scaled differently, using many separate scaled vectors with <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector.play</span></code> can consume excessive memory. This documentation describes a memory-efficient approach where a single vector is played into all synapses, and each synapse applies its own scale factor internally.</p>
+<section id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
+<p>Suppose you have a synaptic conductance waveform (e.g., loaded from a file as a NumPy array) defined by a vector <cite>syn_gmax_vec</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;some_trace.txt&#39;</span><span class="p">)</span>  <span class="c1"># recorded or precomputed conductance time course</span>
+<span class="n">syn_gmax_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You want to apply scaled versions of this waveform to many synapses, where the scale differs per synapse (e.g., normalized by the number of incoming connections for that cell). A naive approach is to create many scaled vectors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">syn_veclist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cellList</span><span class="p">:</span>
+    <span class="n">norm_vec</span> <span class="o">=</span> <span class="n">syn_gmax_vec</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">cell</span><span class="o">.</span><span class="n">inDeg</span><span class="p">)</span>  <span class="c1"># scale factor per cell</span>
+    <span class="n">syn_veclist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">norm_vec</span><span class="p">)</span>
+    <span class="n">syn_veclist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">synlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_ref_gmax</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This requires storing a separate scaled vector for each synapse, which uses a lot of memory for long simulations and large networks.</p>
+</section>
+<section id="solution-single-vector-with-per-synapse-scaling-in-nmodl">
+<h2>Solution: Single Vector with Per-Synapse Scaling in NMODL<a class="headerlink" href="#solution-single-vector-with-per-synapse-scaling-in-nmodl" title="Link to this heading"></a></h2>
+<p>Instead of scaling in Python and storing multiple vectors, implement a synaptic mechanism that exposes two parameters:</p>
+<ul class="simple">
+<li><p><cite>gnorm</cite> — A conductance variable driven by a vector played from the single shared vector.</p></li>
+<li><p><cite>k</cite> — A scale factor unique to each synapse instance.</p></li>
+</ul>
+<p>The synaptic conductance (<cite>gs</cite>) is computed as the product:</p>
+<div class="math notranslate nohighlight">
+\[g_s = k \cdot g_{norm}\]</div>
+<p>You then play the single shared vector into all synapses’ <cite>gnorm</cite> variable, and set the scale parameter <cite>k</cite> individually.</p>
+</section>
+<section id="example-nmodl-implementation-vecsyn">
+<h2>Example NMODL Implementation: VecSyn<a class="headerlink" href="#example-nmodl-implementation-vecsyn" title="Link to this heading"></a></h2>
+<p>Below is an example NMODL synapse <cite>VecSyn.mod</cite> implementing this approach:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>COMMENT
+VecSyn: Synapse driven by Vector.play with per-instance scale.
+
+* Actual synaptic conductance is gs = k * gnorm.
+* gnorm (microsiemens) is the variable played by a single Vector.
+* k is the dimensionless scale factor (set per instance).
+* erev is the reversal potential.
+* Conductance and current are zero or positive.
+ENDCOMMENT
+
+NEURON {
+   POINT_PROCESS VecSyn
+   GLOBAL gnorm  : (parameter but GLOBAL to remind user)
+   RANGE k, erev, gs
+   NONSPECIFIC_CURRENT i
+}
+
+PARAMETER {
+   gnorm = 0 (microsiemens)
+   k = 1 (1)
+   erev = 0 (millivolt)
+}
+
+ASSIGNED {
+   gs (microsiemens)
+   i (nanoamp)
+   v (millivolt)
+}
+
+BREAKPOINT {
+   gs = k * gnorm
+   if (gs &lt; 0) {
+     i = 0
+   } else {
+     i = gs * (v - erev)
+   }
+}
+</pre></div>
+</div>
+</section>
+<section id="usage-in-python">
+<h2>Usage in Python<a class="headerlink" href="#usage-in-python" title="Link to this heading"></a></h2>
+<p>Load the synapse mechanism and create synapse instances, then play the shared vector into all synapses’ <cite>gnorm</cite> variables. Set <cite>k</cite> to scale conductance per synapse:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">syn_gmax_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>  <span class="c1"># single vector loaded once</span>
+
+<span class="n">synapse_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cellList</span><span class="p">:</span>
+    <span class="n">syn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">VecSyn</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1"># example location</span>
+    <span class="n">syn</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">cell</span><span class="o">.</span><span class="n">inDeg</span>        <span class="c1"># unique scale factor</span>
+    <span class="n">syn</span><span class="o">.</span><span class="n">erev</span> <span class="o">=</span> <span class="mi">0</span>                    <span class="c1"># set reversal potential as needed</span>
+    <span class="n">synapse_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">syn</span><span class="p">)</span>
+    <span class="n">syn_gmax_vec</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">syn</span><span class="o">.</span><span class="n">_ref_gnorm</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="benefits">
+<h2>Benefits<a class="headerlink" href="#benefits" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Only one long vector is stored in memory rather than multiple scaled copies.</p></li>
+<li><p>Each synapse can be scaled individually via parameter <cite>k</cite> without extra memory.</p></li>
+<li><p><cite>Vector.play</cite> remains efficient as it is only called once per time step.</p></li>
+<li><p>The synapse NMODL code ensures current goes to zero if scaled conductance is negative.</p></li>
+</ul>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Make sure the vector time step (<code class="xref py py-attr docutils literal notranslate"><span class="pre">h.dt</span></code>) matches the simulation time step.</p></li>
+<li><p>Choose an appropriate synaptic location to instantiate the <cite>VecSyn</cite> point process.</p></li>
+<li><p>This method applies best when the waveform is fixed and shared, scaled by constants.</p></li>
+<li><p>If scale factors change dynamically, additional mechanisms are needed.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">h.Vector</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.play()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4303">https://neuron.yale.edu/phpBB/viewtopic.php?t=4303</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

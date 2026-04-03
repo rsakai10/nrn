@@ -1,0 +1,22 @@
+.. note::
+   The :meth:`ParallelNetManager.want_all_spikes` method records spikes based on NetCons associated with cell spike trigger zones, typically at the soma. To record spikes occurring at other locations (e.g., distal axon), you must manually attach additional :class:`NetCon` objects to those sections and assign unique gids to them.
+
+.. code-block:: python
+
+   # Example: Attach a NetCon to a distal axon segment and assign a gid
+   nc = h.NetCon(cell.axon[distal_index](0.5)._ref_v, None, sec=cell.axon[distal_index])
+   nc.threshold = 0
+   parallel_net_manager.set_gid2node(gid_for_axon_spike, rank)
+   parallel_net_manager.gid_connect(nc, gid_for_axon_spike)
+
+.. code-block:: hoc
+
+   objref nc
+   nc = new NetCon(&axon(0.5).v(0), nil)
+   nc.threshold = 0
+   parent_parallel_net_manager.gid_connect(nc, gid_for_axon_spike)
+
+.. note::
+   This approach allows :meth:`want_all_spikes` to capture spikes generated away from the soma, such as axonal action potentials that do not backpropagate.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3883 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3883>`_

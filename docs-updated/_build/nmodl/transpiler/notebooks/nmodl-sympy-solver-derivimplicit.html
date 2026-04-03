@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMODL SympySolver - derivimplicit &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="NMODL LINEAR solver" href="nmodl-linear-solver.html" />
+    <link rel="prev" title="NMODL SympySolver - sparse" href="nmodl-sympy-solver-sparse.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">NMODL SympySolver - derivimplicit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-2">Ex. 2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">NMODL SympySolver - derivimplicit</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/nmodl/transpiler/notebooks/nmodl-sympy-solver-derivimplicit.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="NMODL-SympySolver---derivimplicit">
+<h1>NMODL SympySolver - derivimplicit<a class="headerlink" href="#NMODL-SympySolver---derivimplicit" title="Link to this heading"></a></h1>
+<p>This notebook describes the implementation of the <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> part of the <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code>, which solves the systems of ODEs defined in <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks when these ODEs are <em>nonlinear</em>.</p>
+<p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
+<p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
+<hr class="docutils" />
+<section id="Implementation">
+<h2>Implementation<a class="headerlink" href="#Implementation" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> for solver method <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> does the following:</p>
+<ul class="simple">
+<li><p>Construct the implicit Euler equations to convert the sysytem of ODEs to a <code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block</p></li>
+<li><p>This <code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block is then solved as described in <a class="reference internal" href="nmodl-nonlinear-solver.html"><span class="doc">nmodl-nonlinear-solver</span></a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="Implementation-Tests">
+<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Link to this heading"></a></h2>
+<p>The unit tests may be helpful to understand what these functions are doing</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> tests are located in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/nmodl/unit/visitor/sympy_solver.cpp">test/nmodl/transpiler/unit/visitor/sympy_solver.cpp</a>, and tests involving the <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> solver method have the tag “<code class="docutils literal notranslate"><span class="pre">[derivimplicit]</span></code>”</p></li>
+</ul>
+</section>
+<section id="Examples">
+<h2>Examples<a class="headerlink" href="#Examples" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">neuron</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">neuron.nmodl.dsl</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nmodl</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_sympy_solver</span><span class="p">(</span><span class="n">mod_string</span><span class="p">,</span> <span class="n">cse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># parse NMDOL file (supplied as a string) into AST</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+    <span class="n">AST</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+    <span class="c1"># run SymtabVisitor to generate Symbol Table</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># constant folding, inlining &amp; local variable renaming passes</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">ConstantFolderVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">InlineVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">LocalVarRenameVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># run SympySolver visitor</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">SympySolverVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># return new DERIVATIVE block</span>
+    <span class="k">return</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span>
+        <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">AST</span><span class="p">,</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DERIVATIVE_BLOCK</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Ex.-1">
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Link to this heading"></a></h3>
+<p>2 coupled linear ODEs</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD sparse</span>
+<span class="s2">}</span>
+<span class="s2">STATE {</span>
+<span class="s2">    mc m</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    mc&#39; = -a*mc + b*m</span>
+<span class="s2">    m&#39; = a*mc - b*m</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex1</span><span class="p">,</span> <span class="n">cse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE states {
+    LOCAL old_mc, old_m, tmp0, tmp1, tmp2
+    old_mc = mc
+    old_m = m
+    tmp0 = a*dt
+    tmp1 = b*dt
+    tmp2 = 1/(tmp0+tmp1+1)
+    mc = tmp2*(old_m*tmp1+old_mc*tmp1+old_mc)
+    m = tmp2*(old_m*tmp0+old_m+old_mc*tmp0)
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-2">
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Link to this heading"></a></h3>
+<p>5 coupled linear ODEs</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    c1 o1 o2 p0 p1</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT  {</span>
+<span class="s2">    SOLVE ihkin METHOD sparse</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE ihkin {</span>
+<span class="s2">    LOCAL alpha, beta, k3p, k4, k1ca, k2</span>
+<span class="s2">    evaluate_fct(v, cai)</span>
+<span class="s2">    c1&#39; = (-1*(alpha*c1-beta*o1))</span>
+<span class="s2">    o1&#39; = (1*(alpha*c1-beta*o1))+(-1*(k3p*o1-k4*o2))</span>
+<span class="s2">    o2&#39; = (1*(k3p*o1-k4*o2))</span>
+<span class="s2">    p0&#39; = (-1*(k1ca*p0-k2*p1))</span>
+<span class="s2">    p1&#39; = (1*(k1ca*p0-k2*p1))</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DERIVATIVE ihkin {
+    EIGEN_LINEAR_SOLVE[5]{
+        LOCAL alpha, beta, k3p, k4, k1ca, k2, old_c1, old_o1, old_o2, old_p0, old_p1
+    }{
+        evaluate_fct(v, cai)
+        old_c1 = c1
+        old_o1 = o1
+        old_o2 = o2
+        old_p0 = p0
+        old_p1 = p1
+    }{
+        X[0] = c1
+        X[1] = o1
+        X[2] = o2
+        X[3] = p0
+        X[4] = p1
+        F[0] = -old_c1
+        F[1] = -old_o1
+        F[2] = -old_o2
+        F[3] = -old_p0
+        F[4] = -old_p1
+        J[0] = -alpha*dt-1
+        J[5] = beta*dt
+        J[10] = 0
+        J[15] = 0
+        J[20] = 0
+        J[1] = alpha*dt
+        J[6] = -beta*dt-dt*k3p-1
+        J[11] = dt*k4
+        J[16] = 0
+        J[21] = 0
+        J[2] = 0
+        J[7] = dt*k3p
+        J[12] = -dt*k4-1
+        J[17] = 0
+        J[22] = 0
+        J[3] = 0
+        J[8] = 0
+        J[13] = 0
+        J[18] = -dt*k1ca-1
+        J[23] = dt*k2
+        J[4] = 0
+        J[9] = 0
+        J[14] = 0
+        J[19] = dt*k1ca
+        J[24] = -dt*k2-1
+    }{
+        c1 = X[0]
+        o1 = X[1]
+        o2 = X[2]
+        p0 = X[3]
+        p1 = X[4]
+    }{
+    }
+}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nmodl-sympy-solver-sparse.html" class="btn btn-neutral float-left" title="NMODL SympySolver - sparse" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nmodl-linear-solver.html" class="btn btn-neutral float-right" title="NMODL LINEAR solver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

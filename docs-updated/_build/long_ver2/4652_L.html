@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conditional Termination of Simulation Based on Inter-Spike Interval Convergence &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Conditional Termination of Simulation Based on Inter-Spike Interval Convergence</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4652_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="conditional-termination-of-simulation-based-on-inter-spike-interval-convergence">
+<h1>Conditional Termination of Simulation Based on Inter-Spike Interval Convergence<a class="headerlink" href="#conditional-termination-of-simulation-based-on-inter-spike-interval-convergence" title="Link to this heading"></a></h1>
+<p>This section explains how to run a NEURON simulation that terminates automatically when the difference between the most recent inter-spike interval (ISI) and the second-most-recent ISI falls below a prescribed threshold. This is useful, for example, in single neuron simulations with adaptation currents where steady-state firing properties are of interest.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The simulation uses a <code class="xref py py-class docutils literal notranslate"><span class="pre">h.NetCon</span></code> to detect spikes and a callback function that monitors spike times and ISIs. When the difference between two consecutive ISIs is smaller than a tolerance, the simulation is stopped using <code class="xref py py-attr docutils literal notranslate"><span class="pre">h.stoprun</span></code>.</p>
+<p>Key steps:
+- Initialize tracking variables at the start of each simulation run.
+- Use a <code class="xref py py-class docutils literal notranslate"><span class="pre">h.NetCon</span></code> with a voltage threshold to detect spikes.
+- Define a spike event handler function that updates ISI values, checks the convergence condition, and stops the simulation if met.
+- Use <code class="xref py py-class docutils literal notranslate"><span class="pre">h.FInitializeHandler</span></code> to reset variables on each simulation initialization (useful especially for GUI-driven or interactive workflows).</p>
+</section>
+<section id="example-implementation-in-python">
+<h2>Example Implementation in Python<a class="headerlink" href="#example-implementation-in-python" title="Link to this heading"></a></h2>
+<p>This example assumes:</p>
+<ul class="simple">
+<li><p>A single section named <code class="docutils literal notranslate"><span class="pre">soma</span></code> with Hodgkin-Huxley channels.</p></li>
+<li><p>An applied current via an <code class="xref py py-class docutils literal notranslate"><span class="pre">h.IClamp</span></code>.</p></li>
+<li><p>The use of the standard RunControl panel (e.g., default <code class="docutils literal notranslate"><span class="pre">tstop</span></code>), but the simulation will stop earlier if the ISI convergence criterion is met.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;stdrun.hoc&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create a soma section with hh channels</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># 100 um2 area approx</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="c1"># Inject a current</span>
+<span class="n">stim</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">1e9</span>  <span class="c1"># effectively long duration</span>
+<span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># nA</span>
+
+<span class="c1"># Define tolerance for ISI convergence (can be smaller than h.dt if desired)</span>
+<span class="n">TOL</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">dt</span>
+
+<span class="c1"># Variables to track spike count and ISIs:</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>       <span class="c1"># number of spikes detected</span>
+<span class="n">isi</span> <span class="o">=</span> <span class="mi">0</span>         <span class="c1"># most recent inter-spike interval</span>
+<span class="n">previsi</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c1"># inter-spike interval before the most recent</span>
+<span class="n">tsp</span> <span class="o">=</span> <span class="mi">0</span>         <span class="c1"># time of last spike</span>
+
+<span class="c1"># Initialization function called on every simulation initialize</span>
+<span class="k">def</span> <span class="nf">reset_variables</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span><span class="p">,</span> <span class="n">isi</span><span class="p">,</span> <span class="n">previsi</span><span class="p">,</span> <span class="n">tsp</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Assign clearly distinct initial dummy values so they don&#39;t trigger early stopping</span>
+    <span class="n">isi</span> <span class="o">=</span> <span class="mf">1e3</span>    <span class="c1"># a large ISI value (ms)</span>
+    <span class="n">previsi</span> <span class="o">=</span> <span class="mf">2e3</span>  <span class="c1"># a different large ISI value</span>
+    <span class="n">tsp</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation initialized: count reset, ISI values cleared.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Register the initialization handler</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">FInitializeHandler</span><span class="p">(</span><span class="n">reset_variables</span><span class="p">)</span>
+
+<span class="c1"># Set the voltage threshold for spike detection (mV)</span>
+<span class="n">nc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">nc</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>  <span class="c1"># threshold can be adjusted</span>
+
+<span class="c1"># Spike event callback function</span>
+<span class="k">def</span> <span class="nf">on_spike</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span><span class="p">,</span> <span class="n">isi</span><span class="p">,</span> <span class="n">previsi</span><span class="p">,</span> <span class="n">tsp</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">tsp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span>
+        <span class="c1"># Leave isi and previsi as initialized</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">previsi</span> <span class="o">=</span> <span class="n">isi</span>
+        <span class="n">isi</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">tsp</span>
+        <span class="n">tsp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">t</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spike </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">: t = </span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">t</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> ms, ISI = </span><span class="si">{</span><span class="n">isi</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, previous ISI = </span><span class="si">{</span><span class="n">previsi</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">isi</span> <span class="o">-</span> <span class="n">previsi</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ISI convergence reached. Stopping simulation.&quot;</span><span class="p">)</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">stoprun</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Connect the NetCon to the spike callback</span>
+<span class="n">nc</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">on_spike</span><span class="p">)</span>
+
+<span class="c1"># Initialize simulation membrane potential</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+
+<span class="c1"># Run the simulation (tstop can be longer than needed, the callback will stop early)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="notes-on-implementation">
+<h2>Notes on Implementation<a class="headerlink" href="#notes-on-implementation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The use of <code class="xref py py-class docutils literal notranslate"><span class="pre">h.FInitializeHandler</span></code> ensures the spike count and ISI variables are reset before each simulation run. This is especially helpful in interactive sessions or GUI-based workflows where multiple simulations are started without exiting NEURON.</p></li>
+<li><p>Variables like <code class="docutils literal notranslate"><span class="pre">count</span></code>, <code class="docutils literal notranslate"><span class="pre">isi</span></code>, <code class="docutils literal notranslate"><span class="pre">previsi</span></code>, and <code class="docutils literal notranslate"><span class="pre">tsp</span></code> are defined as global Python variables to be accessible and mutable inside the spike callback. This is a simple and effective approach for this use case.</p></li>
+<li><p>The spike detection threshold is set via <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.threshold" title="NetCon.threshold"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NetCon.threshold</span></code></a> to a suitable value (commonly between -30 mV and 0 mV depending on cell and recording location).</p></li>
+<li><p>The callback function prints spike and ISI information for monitoring during simulation.</p></li>
+</ul>
+</section>
+<section id="alternative-approaches">
+<h2>Alternative Approaches<a class="headerlink" href="#alternative-approaches" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>A pure Python approach avoids the need for custom NMODL mechanisms or instrumenting sections with additional variables.</p></li>
+<li><p>Alternative state-handling within the spike callback using argument passing and return values is possible but less straightforward to integrate with <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.record" title="NetCon.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.record()</span></code></a>.</p></li>
+<li><p>If desired, one could implement a delayed termination mechanism (e.g., continue simulation a few milliseconds after detected convergence) by scheduling <code class="xref py py-func docutils literal notranslate"><span class="pre">h.cvode.event()</span></code> to stop the simulation.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>This method effectively allows a NEURON simulation to stop conditionally based on spike train statistics computed online. It leverages <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a> spike detection and <a class="reference internal" href="../progref-1/simctrl/programmatic.html#FInitializeHandler" title="FInitializeHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">FInitializeHandler</span></code></a> for clean variable resetting, requiring only Python code without custom mechanisms.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use global Python variables or class attributes to store evolving state accessed by a NetCon callback. Passing and returning variables via callback arguments is not supported by the <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.record" title="NetCon.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.record()</span></code></a> interface.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4652">https://neuron.yale.edu/phpBB/viewtopic.php?t=4652</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

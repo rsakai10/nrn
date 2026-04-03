@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected? &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected?</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/2926.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="is-it-possible-to-isolate-a-section-from-a-neuron-and-reproduce-its-voltage-response-as-if-it-were-still-connected">
+<h1>Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected?<a class="headerlink" href="#is-it-possible-to-isolate-a-section-from-a-neuron-and-reproduce-its-voltage-response-as-if-it-were-still-connected" title="Link to this heading"></a></h1>
+<p>To isolate a section (e.g., section Y) from a neuron and reproduce the voltage response recorded when it was connected to other sections (e.g., section X with IClamp), follow these three steps:</p>
+<ol class="arabic simple">
+<li><p><strong>Record the voltage waveform at the section Y when it is connected.</strong></p></li>
+<li><p><strong>Use a voltage clamp on the isolated section Y to replay the recorded voltage waveform.</strong></p></li>
+<li><p><strong>Inject the clamp current recorded from step 2 into the isolated section Y using a current clamp to reproduce the voltage response.</strong></p></li>
+</ol>
+<p>This approach recognizes that simply removing sections or setting KCL=0 and trying to mimic the input current at Y will not replicate the original voltage waveform due to the complex spatial and membrane properties.</p>
+<p>Example workflow and code snippets:</p>
+<ul class="simple">
+<li><p><strong>Step 1: Record voltage at Y and time vector</strong></p></li>
+</ul>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref vy0_vec, t_vec
+vy0_vec = new Vector()
+t_vec = new Vector()
+Y { vy0_vec.record(&amp;v(0)) }
+Y { t_vec.record(&amp;t) }
+// Run simulation to record voltage at Y(0)
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 2: Disconnect Y and apply voltage clamp to replay voltage waveform</strong></p></li>
+</ul>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>Y { disconnect() }        // Isolate section Y
+objref clamp
+Y { clamp = new SEClamp(0) }
+clamp.dur1 = 1e9            // Very long duration
+clamp.rs = 1e-3             // Very low series resistance
+clamp.amp1 = -65            // Holding voltage (initial)
+Y { vy0_vec.play(&amp;clamp.amp1) }   // Play recorded voltage waveform into clamp
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 3: Record clamp current, then use it in a current clamp to reproduce voltage</strong></p></li>
+</ul>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref i_clamp_current
+i_clamp_current = new Vector()
+clamp.current(&amp;t)            // Record clamp current (example, actual vector recording code needed)
+
+// Now use an IClamp to inject the recorded current into isolated Y
+objref iclamp
+Y { iclamp = new IClamp(0) }
+iclamp.del = 0
+iclamp.dur = 1e9
+i_clamp_current.play(&amp;iclamp.amp)   // Play recorded current into current clamp
+</pre></div>
+</div>
+<p>Corresponding Python usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># Step 1: Record voltage at Y(0)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">vy0_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">t_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">vy0_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_v</span><span class="p">)</span>
+<span class="n">t_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+<span class="c1"># Run simulation for connected model</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Disconnect Y and apply SEClamp to replay recorded voltage</span>
+<span class="n">y</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<span class="n">clamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SEClamp</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">clamp</span><span class="o">.</span><span class="n">dur1</span> <span class="o">=</span> <span class="mf">1e9</span>
+<span class="n">clamp</span><span class="o">.</span><span class="n">rs</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="n">clamp</span><span class="o">.</span><span class="n">amp1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">65</span>  <span class="c1"># initial voltage</span>
+<span class="n">vy0_vec</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">clamp</span><span class="o">.</span><span class="n">_ref_amp1</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Record clamp current and use IClamp with recorded current to reproduce voltage</span>
+<span class="n">i_clamp_current</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="c1"># i_clamp_current.record(clamp._ref_i)  # example: attach record to clamp current, run sim, save vector</span>
+
+<span class="n">iclamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">iclamp</span><span class="o">.</span><span class="k">del</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">iclamp</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">1e9</span>
+<span class="n">i_clamp_current</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">iclamp</span><span class="o">.</span><span class="n">_ref_amp</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Please note that if the section Y contains active voltage-gated channels, the exact voltage responses may differ due to nonlinear dynamics. This method works best for passive or linear regimes. For more details, consult the NEURON Programmer’s Reference for <cite>SEClamp</cite>, <cite>IClamp</cite>, and the <cite>Vector</cite> class methods <cite>record()</cite> and <cite>play()</cite>.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2926">https://neuron.yale.edu/phpBB/viewtopic.php?t=2926</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

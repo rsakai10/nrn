@@ -1,0 +1,151 @@
+Multiple Runs in NEURON Producing Different Results
+====================================================
+
+When running multiple simulations in NEURON with identical parameters and initial conditions, one might expect to obtain identical results each time. However, differences in output across runs usually indicate improper initialization or the influence of pseudorandom number generators (PRNGs) within the model.
+
+Common Causes and Diagnoses
+---------------------------
+
+- **Incorrect Initialization:**  
+  The simulation should reset to the same initial state before each run. Failure to initialize all variables or states consistently, often due to errors in `mod` files, can cause variability.
+
+- **Unreset Pseudorandom Number Generators:**  
+  When models include stochastic components such as NetStims configured with randomness, their internal PRNGs must be re-seeded before each run to ensure reproducibility. Without reseeding, successive simulations produce different pseudo-random sequences, causing variation in network activity and resulting output.
+
+Example Problem Setup
+---------------------
+
+A simple multi-run procedure in HOC might look like this:
+
+.. code-block:: hoc
+
+   proc run() {
+       running_ = 1
+       stdinit()
+       continuerun(tstop)
+   }
+
+   proc multi_run() {
+       for mi = 1, 2 {
+           // set_parameter(mi)    // Modify parameters here if needed
+           run()
+           save_data(mi)
+       }
+   }
+
+   multi_run()
+
+Despite identical parameters and calls to `stdinit()`, different results may appear due to unreinitialized random generators.
+
+Diagnosing PRNG Effects on NetStims
+-----------------------------------
+
+NetStims are commonly used to generate spike trains with randomness:
+
+- If multiple NetStims share the same PRNG, their spike trains depend on the sequence of random values drawn overall, making individual spike trains interdependent.
+- Running multiple simulations without reseeding the PRNG before each run will cause different spike trains each time.
+
+**Procedure to observe this:**
+
+1. Create a copy of your network HOC file (e.g., copy `Net.hoc` to `testNet.hoc`).
+
+2. In `testNet.hoc`, comment out the `multi_run()` line and insert code to record spike times and IDs of 150 NetStims:
+
+   .. code-block:: hoc
+
+      NSNUM = 150
+
+      objref nsstvec, nsidvec, tnc
+      nsstvec = new Vector()  // Times of NetStim events
+      nsidvec = new Vector()  // IDs of corresponding NetStims
+
+      for ii = 0, NSNUM - 1 {
+          tnc = new NetCon(NetStim[ii], nil)
+          tnc.record(nsstvec, nsidvec, ii)
+      }
+
+3. Add code to run two simulations and plot the spike rasters with different colors:
+
+   .. code-block:: hoc
+
+      NSSEED = 31  // Arbitrary seed for reproducibility
+
+      proc onerun() {
+          mi = $1
+          print "Run ", mi
+          // Optionally reseed NetStim PRNG: NetStim[0].seed(NSSEED)
+          run()
+          save_data(mi)
+      }
+
+      objref g
+      g = new Graph(0)
+      g.size(0, 3, 0, 150)
+      g.view(0, 0, 3, 150, 329, 25, 588.48, 472.96)
+
+      onerun(1)
+      print "Run 1: black marks"
+      nsidvec.mark(g, nsstvec, "|", 6, 1, 2)  // Thick black marks
+
+      onerun(2)
+      print "Run 2: red marks"
+      nsidvec.mark(g, nsstvec, "|", 6, 2, 1)  // Thin red marks
+
+4. Execute `testNet.hoc` in NEURON. You will observe that the spike times of the NetStims differ significantly between runs, causing different voltage responses.
+
+5. Uncomment the reseeding line (`NetStim[0].seed(NSSEED)`), rerun, and observe that spike trains now replicate perfectly and voltage traces match across runs.
+
+Important Points About NetStim Seeding
+--------------------------------------
+
+- **Reseeding One NetStim Seeds Them All:**  
+  By default, all NetStim objects share the same PRNG. Calling `NetStim[0].seed(value)` seeds the shared generator, affecting all NetStims.
+
+- **Independent PRNG per NetStim:**  
+  To have truly independent spike trains for each NetStim, each must be associated with its own :class:`Random` instance. This is essential for parallel simulations to ensure independence regardless of the number of processors or cell distribution.
+
+Example in Python: Reseeding NetStims Before Each Run
+-------------------------------------------------------
+
+.. code-block:: python
+
+   from neuron import h
+
+   NSNUM = 150
+   NSSEED = 31
+
+   # Assume NetStim objects are created and stored in a list: netstims
+
+   def reinitialize_netstims_seed(seed):
+       # Resets the seed for the shared PRNG via one NetStim
+       netstims[0].seed(seed)
+
+   def run_simulation():
+       h.stdinit()       # Reset simulation variables
+       h.continuerun(h.tstop)
+
+   def multi_run(num_runs=2):
+       for mi in range(1, num_runs + 1):
+           reinitialize_netstims_seed(NSSEED)
+           run_simulation()
+           save_data(mi)  # Implement according to model needs
+
+Notes on Using Object References
+-------------------------------
+
+Using object names like `NetStim[0]` directly in code is **not recommended** for programming purposes, as object notation may not be stable or consistent across sessions. Instead, use :class:`objref` variables to maintain references to your simulation objects and manipulate them through these references.
+
+Summary
+-------
+
+To ensure reproducible results across multiple runs in NEURON:
+
+- Always call :meth:`h.stdinit()` or an equivalent to reset simulation states before running.
+- Properly initialize all mechanisms and state variables.
+- Reseed all pseudorandom number generators, especially when using multiple stochastic sources like NetStims, before each run.
+- For independent stochastic processes (e.g., multiple NetStims), assign separate PRNG instances per source.
+- Avoid relying on object name indices (`NetStim[0]`) for programming; use explicit references instead.
+
+By following these guidelines, you can obtain run-to-run reproducibility essential for parameter variation studies and automated simulation workflows.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2747 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2747>`_

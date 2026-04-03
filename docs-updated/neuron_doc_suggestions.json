@@ -1,0 +1,1452 @@
+[
+  {
+    "header": "CVode",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   NEURON's default integration method is implicit (\"backward\") Euler. This method allows the states of a passive system to reach their \"infinite time\" values in a single integration step when dt is much larger than the largest time constant. This is distinct from the explicit (\"forward\") Euler method, which NEURON does not use by default.",
+    "flag": null,
+    "excel_row": 1
+  },
+  {
+    "header": "NetCon.record",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``record()`` can accept a string that specifies a procedure to be called when an event occurs. This allows for custom actions, such as counting spikes or stopping the simulation after a certain number of spikes. Example usage:\n\n   .. code-block:: none\n\n      MAXNUM = 3\n      proc counter() {\n        stv.append(t)  // record time of source event\n        if (stv.size() == MAXNUM) stoprun = 1\n      }\n\n      nc.record(\"counter()\")\n\n   Note that when using a procedure, the standard run system will not automatically clear the vector during initialization. Use an ``FInitializeHandler`` to manage this:\n\n   .. code-block:: none\n\n      proc reset_stv() {\n        stv = new Vector()\n      }\n\n      objref fih\n      fih = new FInitializeHandler(\"reset_stv()\")  // clear stv before start of run",
+    "excel_row": 2
+  },
+  {
+    "header": "CVode.event",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``CVode.event()`` can be used to schedule an action to occur at a specific time, which can be useful for allowing time for events to affect their targets before stopping a simulation. Example usage:\n\n   .. code-block:: none\n\n      WAIT = 8\n      proc counter() {\n        stv.append(t)  // record time of source event\n        if (stv.size() == MAXNUM) cvode.event(t + WAIT, \"stoprun = 1\")\n      }\n\n   This code allows 8 ms for the source event to be delivered and affect its target. ``CVode.event()`` can also call a function or procedure, enabling actions like printing spike times:\n\n   .. code-block:: none\n\n      proc wrapup() {\n        print \"spike times:\"\n        stv.printf\n        stoprun = 1\n      }\n\n      proc counter() {\n        stv.append(t)  // record time of source event\n        if (stv.size() == MAXNUM) cvode.event(t + WAIT, \"wrapup()\")\n      }",
+    "excel_row": 2
+  },
+  {
+    "header": "CVode.event",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": "``CVode.event()`` can be used to schedule events that trigger procedural changes during a simulation. For example, it can be used to change parameters such as the amplitude of a stimulus or the weight of a NetCon at specific times. This is done by scheduling an event with ``cvode.event(time, \"proc_name()\")`` where ``proc_name`` is a procedure that executes the desired changes. If the parameter change affects a kinetic scheme or an ODE, it may be necessary to call ``cvode.re_init()`` to ensure the solver's internal state is consistent. Example:\n\n.. code-block:: none\n\n    objref fih\n    fih = new FInitializeHandler(\"initi()\")\n\n    proc initi() {\n      cvode.event(START, \"seti()\")\n    }\n\n    proc seti() {\n      stim.amp = AMP\n      cvode.event(t + DUR, \"seti()\")\n      cvode.event(t + INTERVAL, \"seti()\")\n    }",
+    "excel_row": 3
+  },
+  {
+    "header": "FInitializeHandler",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": "``FInitializeHandler`` can be used to set up initial conditions and schedule events at the start of a simulation. It is particularly useful for initializing parameters and launching events that control parameter changes during the simulation. Example usage involves creating an instance of ``FInitializeHandler`` with a procedure that sets initial conditions and schedules the first event:\n\n.. code-block:: none\n\n    objref fih\n    fih = new FInitializeHandler(\"initi()\")\n\n    proc initi() {\n      stim.amp = 0\n      cvode.event(START, \"seti()\")\n    }",
+    "excel_row": 3
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": "``Vector.play()`` can be used to drive changes in parameters over time by interpolating between values in a vector. This is useful for creating continuous changes in parameters such as temperature. The method is called with the syntax ``tempvec.play(&celsius, tvec, 1)``, where ``tempvec`` contains the parameter values, ``tvec`` contains the corresponding times, and the third argument specifies interpolation. Example:\n\n.. code-block:: none\n\n    objref tempvec, tvec\n    tempvec = new Vector(3)\n    tvec = new Vector(3)\n    tempvec.x[0] = 6.3  // deg C\n    tvec.x[0] = 0\n    tempvec.x[1] = 20   // deg C\n    tvec.x[1] = 100\n    tempvec.x[2] = 20   // deg C\n    tvec.x[2] = 1e9\n\n    tempvec.play(&celsius, tvec, 1)",
+    "excel_row": 3
+  },
+  {
+    "header": "Electrode",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/electrod.rst",
+    "new_doc": ".. note::\n\n   For a more realistic current clamp model that incorporates electrode resistance and capacitance, consider using the Linear Circuit Builder. This allows for the modeling of bridge balance artifacts by representing the electrode as an equivalent L or T circuit. The equivalent L circuit lumps the series resistance and capacitance into single elements, while the equivalent T circuit splits the series resistance into two halves with the capacitance spanning from their junction to ground. This can better mimic the abrupt voltage changes observed at the start and end of current pulses.",
+    "excel_row": 4
+  },
+  {
+    "header": "SEClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The SEClamp class models an electrode with series resistance but no capacitance. To account for electrode capacitance or limited frequency response, use the Linear Circuit Builder. This tool allows for the inclusion of electrode capacitance and compensation circuitry, providing a more comprehensive model of the electrode and clamp system.",
+    "excel_row": 4
+  },
+  {
+    "header": "SectionList",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/seclist.rst",
+    "new_doc": ".. note::\n\n   To randomly select a section from a ``SectionList``, you can convert the ``SectionList`` to a Python list and use the ``Random`` class to choose an index. For example:\n\n   .. code-block:: python\n\n       import random\n\n       # Assuming sl is a SectionList\n       sections = list(sl)\n       random_section = random.choice(sections)\n\n   This approach allows you to leverage Python's list handling capabilities for random selection.",
+    "excel_row": 5
+  },
+  {
+    "header": "SectionRef",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology.rst",
+    "new_doc": ".. note::\n\n   ``SectionRef`` can be used to manage sections as objects. For example, you can create a ``List`` of ``SectionRef`` objects to manage sections more flexibly:\n\n   .. code-block:: none\n\n       objref srlist\n       srlist = new List()\n       forall srlist.append(new SectionRef())\n\n   This allows you to use ``List`` methods such as ``count()`` and ``object()`` to manage sections.",
+    "excel_row": 5
+  },
+  {
+    "header": "USEION",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   When dealing with multiple currents carried by the same ion, it is advisable to specify each current in its own MOD file. This allows for individual contributions to be plotted separately. For example, a rapidly inactivating sodium current can be specified in a `nat.mod` file, and a non-inactivating sodium current can be specified in a `nap.mod` file. Both files would use the `USEION na READ ena WRITE ina` statement to contribute to the total sodium current `ina`.",
+    "flag": null,
+    "excel_row": 6
+  },
+  {
+    "header": "RANGE",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   To make individual ionic currents accessible for plotting, declare them as `RANGE` variables in the `NEURON` block of the MOD file. For example, to access the sodium current `ina` from a specific mechanism, add `RANGE ina` in the `NEURON` block. This allows the current to be plotted separately from the total ionic current.",
+    "flag": null,
+    "excel_row": 6
+  },
+  {
+    "header": "TOKEN_ERROR",
+    "rst_file": null,
+    "new_doc": null,
+    "flag": "Failed: Error code: 400 - {'error': {'message': \"This model's maximum context length is 8192 tokens, however you requested 50720 tokens (50720 in your prompt; 0 for the completion). Please reduce your prompt; or completion length.\", 'type': 'invalid_request_error', 'param': None, 'code': None}}",
+    "excel_row": 7
+  },
+  {
+    "header": "Section.nseg",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   ``nseg`` determines the spatial accuracy of the simulation. Increasing ``nseg`` by a factor of 3 can improve accuracy, but it is essential to verify this by observing changes in the plots of membrane potential vs. time. If the plots change with increased ``nseg``, the original value was insufficient, and further increases may be necessary until no further changes are observed.",
+    "excel_row": 8
+  },
+  {
+    "header": "Section",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   Dividing a section into multiple parts and connecting them can change the simulation from a single-compartment to a multi-compartment model, provided each new section has ``nseg = 1``. This is a way to manually increase the number of compartments in a model.",
+    "excel_row": 8
+  },
+  {
+    "header": "IntFire1",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    For the IntFire1 class, a synapse with weight ``w`` causes an instantaneous jump from ``m`` to ``m + weight``. The weight affects the \"activation variable\" ``m``, which is analogous to membrane potential. Positive weight means excitation and negative weight means inhibition.",
+    "excel_row": 9
+  },
+  {
+    "header": "IntFire2",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    For the IntFire2 class, a synapse with weight ``w`` causes a smooth \"bump\" in the time course of ``m`` which reaches a peak some time after the arrival of the synaptic event. If the cell is initially resting, the magnitude of the peak is given by the absolute value of weight, and its sign depends on the sign of weight.",
+    "excel_row": 9
+  },
+  {
+    "header": "IntFire4",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    For the IntFire4 class, a synapse with weight ``w`` causes a smooth \"bump\" in the time course of ``m`` which reaches a peak some time after the arrival of the synaptic event. If the cell is initially resting, the magnitude of the peak is given by the absolute value of weight, and its sign depends on the sign of weight.",
+    "excel_row": 9
+  },
+  {
+    "header": "ExpSyn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    For NEURON's built-in conductance change synaptic mechanisms like ExpSyn, weight specifies the maximum conductance change (in microsiemens) caused by a synaptic event. The effect of a synaptic conductance change on a postsynaptic cell depends on factors such as the time course and equilibrium potential of the conductance change, and the location of the synapse on the postsynaptic cell.",
+    "excel_row": 9
+  },
+  {
+    "header": "Exp2Syn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    For NEURON's built-in conductance change synaptic mechanisms like Exp2Syn, weight specifies the maximum conductance change (in microsiemens) caused by a synaptic event. The effect of a synaptic conductance change on a postsynaptic cell depends on factors such as the time course and equilibrium potential of the conductance change, and the location of the synapse on the postsynaptic cell.",
+    "excel_row": 9
+  },
+  {
+    "header": "USEION",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   When using ``USEION`` to manage ion concentrations, ensure that initial values like ``cai0`` are properly set. If ``cai0`` is declared as a ``RANGE`` variable in the ``NEURON`` block, it can be controlled by hoc statements, allowing for consistent initialization across multiple mechanisms. This avoids discrepancies between expected and actual initial concentrations.",
+    "excel_row": 10
+  },
+  {
+    "header": "initialize()",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. warning::\n\n   Custom initialization procedures, such as ``initialize()``, should reset time ``t`` to 0 and restore ``dt`` to its original value. Failure to do so can lead to unexpected simulation results, especially when using adaptive integration. Refer to the NEURON Book, section 8.4.2, for more details on writing initialization routines.",
+    "excel_row": 10
+  },
+  {
+    "header": "cai",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   When implementing calcium concentration dynamics, ensure that the equation for ``cai`` correctly accounts for the surface area to volume ratio. The expression should be of the form ``cai' = -(ica/(2*FARADAY))*4/diam`` to reflect the correct physical dimensions. This ensures that the effect of calcium current on concentration is accurately modeled.",
+    "excel_row": 10
+  },
+  {
+    "header": "STATE",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   STATE variables that are defined as arrays are automatically treated as RANGE variables in NEURON. This means they are accessible from HOC or Python without needing to be explicitly declared as RANGE variables in the NEURON block. For example, if a STATE variable is defined as an array in NMODL, it can be accessed in HOC using the syntax ``statename_suffix[index](range)``. This allows for easy access and manipulation of STATE variables during simulations without the need for additional RANGE declarations.\n\n   Example:\n\n   .. code-block:: none\n\n       NEURON {\n         SUFFIX cadifus\n         DEFINE Nannuli 4\n       }\n\n       STATE {\n         ca[Nannuli] (mM) <1e-10>\n       }\n\n   In this example, the STATE variable ``ca`` is defined as an array with 4 elements. Each element can be accessed in HOC as ``ca_cadifus[0](x)``, ``ca_cadifus[1](x)``, etc., where ``x`` is the range value.",
+    "flag": null,
+    "excel_row": 11
+  },
+  {
+    "header": "hh",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The amplitude of action potentials generated by the ``hh`` mechanism can vary significantly with changes in model parameters such as cell diameter and channel densities. For example, reducing the diameter of a compartment can increase input resistance, leading to more spikes but potentially lower spike amplitudes. Adjusting channel densities, such as ``gnabar_hh`` and ``gkbar_hh``, can influence the excitability and peak amplitude of action potentials. Increasing ``gnabar_hh`` can make the cell more excitable, potentially generating action potentials even without injected current. However, achieving a specific action potential amplitude may require careful tuning of these parameters.",
+    "excel_row": 12
+  },
+  {
+    "header": "PointProcessManager",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/hocmech.rst",
+    "new_doc": ".. note::\n\n   Creating multiple instances of ``PointProcessManager`` can lead to exponential slowing of simulations. It is recommended to use lightweight alternatives like ``IClamp`` for better performance when dealing with a large number of instances.",
+    "excel_row": 13
+  },
+  {
+    "header": "VectorPlay",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/hocmech.rst",
+    "new_doc": ".. note::\n\n   ``VectorPlay`` can be replaced with the ``Vector`` class's ``play`` method for driving ``IClamp.amp`` directly. This change can significantly increase execution speed and reduce memory usage.",
+    "excel_row": 13
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   ``Vector.play`` can be used to drive ``IClamp.amp`` directly, providing a more efficient alternative to ``VectorPlay``. This method is suitable for delivering simple waveforms like pulses or sine waves.",
+    "excel_row": 13
+  },
+  {
+    "header": "Isin",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. code-block:: none\n\n   COMMENT\n   isin.mod\n   Delivers sinusoidal current i = amp*sin(f*(t - del) + phi)\n   starting at t==del and ending at t==del+dur\n   where f is frequency in radians/s and phi is phase in radians\n   3/13/2009 NTC\n   ENDCOMMENT\n\n   NEURON {\n     POINT_PROCESS Isin\n     RANGE del, dur, f, phi, amp, i\n     ELECTRODE_CURRENT i\n   }\n\n   UNITS {\n     (nA) = (nanoamp)\n     PI = (pi) (1)\n     (Radian) = (1)\n   }\n\n   PARAMETER {\n     del (ms)           : time at which current starts\n     dur (ms) <0, 1e9>  : duration\n     f (Radian/s) <0, 1e9> : frequency in radians/s\n     phi (Radian)       : phase shift in radians\n     amp (nA)\n   }\n\n   ASSIGNED {\n     i (nA)\n     on (1)\n   }\n\n   INITIAL {\n     i = 0\n     on = 0\n     net_send(del, 1)\n   }\n\n   FUNCTION fsin(t (ms)) {\n     fsin = sin(f*(t - del)/(1000) + phi)\n   }\n\n   BREAKPOINT {\n     i = on*amp*fsin(t)\n   }\n\n   NET_RECEIVE (w) {\n     if (flag == 1) {\n       if (on == 0) {\n         on = 1\n         net_send(dur, 1)\n       } else {\n         on = 0\n       }\n     }\n   }",
+    "excel_row": 13
+  },
+  {
+    "header": "external",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   By default, names defined at the top level (i.e., outside of a template) cannot be accessed by code inside an object (i.e., statements inside the template that defines the object's class). The ``external`` keyword is used to allow the object to access top-level variables. Similarly, names declared inside a template are by default inaccessible from the top level unless they are declared as ``public``.",
+    "excel_row": 14
+  },
+  {
+    "header": "TOKEN_ERROR",
+    "rst_file": null,
+    "new_doc": null,
+    "flag": "Failed: Error code: 400 - {'error': {'message': \"This model's maximum context length is 8192 tokens, however you requested 10514 tokens (10514 in your prompt; 0 for the completion). Please reduce your prompt; or completion length.\", 'type': 'invalid_request_error', 'param': None, 'code': None}}",
+    "excel_row": 15
+  },
+  {
+    "header": "modlunit",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   ``modlunit`` is a tool used to check the dimensional consistency of NMODL files. It ensures that the units of the expressions are consistent throughout the model. For example, if a conductance is defined in nanosiemens and a voltage in millivolts, the resulting current should be in nanoamps. If there is a dimensional inconsistency, ``modlunit`` will provide an error message indicating the missing conversion factor. For instance, if a statement in the BREAKPOINT block results in a current that is 1e3 times too large due to unit inconsistency, ``modlunit`` will suggest revising the statement to include the appropriate conversion factor, such as multiplying by 0.001.",
+    "excel_row": 16
+  },
+  {
+    "header": "APCount",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using ``APCount`` with multiple sections or nodes, consider using lists instead of arrays for managing multiple instances. Lists dynamically resize and do not require pre-defined sizes, making them suitable for models with varying numbers of segments. Example usage:\n\n   .. code-block:: none\n\n       objref apclist\n       apclist = new List()\n       forall for (x,0) {\n           objref tobj\n           tobj = new APCount(x)\n           apclist.append(tobj)\n       }\n\n   This approach avoids the need for hardcoded sizes and allows flexible management of ``APCount`` instances.",
+    "flag": null,
+    "excel_row": 17
+  },
+  {
+    "header": "setdt",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/ste.rst",
+    "new_doc": ".. note::\n\n   ``setdt()`` ensures that ``dt`` is compatible with ``steps_per_ms`` by setting ``dt = 1/(N*steps_per_ms)`` where ``N`` is a whole number (1, 2, 3, ...). This allows for reducing ``dt`` by whole number factors.",
+    "excel_row": 18
+  },
+  {
+    "header": "dt",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/ste.rst",
+    "new_doc": ".. note::\n\n   ``dt`` is the time step used by the numerical integrator in NEURON. It can be reduced by whole number factors, and its compatibility with ``steps_per_ms`` is managed by ``setdt()``.",
+    "excel_row": 18
+  },
+  {
+    "header": "steps_per_ms",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/ste.rst",
+    "new_doc": ".. note::\n\n   ``steps_per_ms`` controls the intervals at which points are plotted in NEURON's standard run system. It affects the fixed time step integration by ensuring that ``dt`` is compatible with it through the ``setdt()`` procedure.",
+    "excel_row": 18
+  },
+  {
+    "header": "SectionList",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using a ``SectionList``, be cautious about the sections it includes. A common mistake is to assume a ``SectionList`` only contains specific sections like dendrites, but it may include others such as the soma. This can lead to unexpected behavior when modifying properties like conductance. Use ``forsec`` to iterate over sections and verify their inclusion with ``secname()`` or ``psection()``.\n\n   Example:\n\n   .. code-block:: hoc\n\n       forsec dendritic ifsec \"som*\" print secname()  // Prints sections starting with \"som\"\n\n   To ensure modifications apply only to intended sections, create a refined ``SectionList``:\n\n   .. code-block:: hoc\n\n       dendritic_only = new SectionList()\n       forsec dendritic dendritic_only.append()\n       soma dendritic_only.remove()",
+    "flag": null,
+    "excel_row": 19
+  },
+  {
+    "header": "forsec",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``forsec`` command is useful for iterating over sections in a ``SectionList``. It allows for conditional operations on sections, such as checking section names or properties. This can help identify unexpected sections within a list.\n\n   Example:\n\n   .. code-block:: hoc\n\n       forsec dendritic ifsec \"som*\" print secname()  // Prints sections starting with \"som\"\n\n   This is particularly useful when debugging or verifying the composition of a ``SectionList``.",
+    "flag": null,
+    "excel_row": 19
+  },
+  {
+    "header": "ifsec",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``ifsec`` is a conditional statement used within ``forsec`` loops to perform actions based on section names or properties. It is particularly useful for filtering sections by name patterns.\n\n   Example:\n\n   .. code-block:: hoc\n\n       forsec dendritic ifsec \"som*\" print secname()  // Prints sections starting with \"som\"\n\n   This functionality aids in managing and debugging complex models where sections are grouped in ``SectionLists``.",
+    "flag": null,
+    "excel_row": 19
+  },
+  {
+    "header": "TOKEN_ERROR",
+    "rst_file": null,
+    "new_doc": null,
+    "flag": "Failed: Error code: 400 - {'error': {'message': \"This model's maximum context length is 8192 tokens, however you requested 9935 tokens (9935 in your prompt; 0 for the completion). Please reduce your prompt; or completion length.\", 'type': 'invalid_request_error', 'param': None, 'code': None}}",
+    "excel_row": 20
+  },
+  {
+    "header": "USEION",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   When using the ``USEION`` statement, NEURON does not automatically create a unique identifier for the current produced by a mechanism. To plot the current specific to a mechanism, declare an intermediate variable in the ``ASSIGNED`` block and make it a ``RANGE`` variable in the ``NEURON`` block. Calculate its value in the ``BREAKPOINT`` block. For example:\n\n   .. code-block::\n\n       NEURON {\n           SUFFIX nap\n           USEION na READ ena WRITE ina\n           RANGE gnap, gnapbar, i\n           GLOBAL winf, tauw\n       }\n\n       ASSIGNED {\n           ina (mA/cm2)\n           winf\n           gnap\n           tauw\n           i (mA/cm2)\n       }\n\n       BREAKPOINT {\n           SOLVE states METHOD cnexp\n           gnap = gnapbar * w\n           i = gnap * (v - ena)\n           ina = i\n       }\n\n   This allows you to plot the specific current for the mechanism, such as ``i_nap``.",
+    "excel_row": 21
+  },
+  {
+    "header": "Shape.observe",
+    "rst_file": "nrn/docs/progref/visualization/shape.rst",
+    "new_doc": ".. note::\n\n    To display only specific sections such as dendrites and soma in a Shape plot, create a SectionList containing those sections and use the ``observe()`` method. This will restrict the Shape plot to only show the sections in the SectionList.\n\n    Example:\n\n    .. code-block:: none\n\n        objref some\n        some = new SectionList()\n        forsec \"dendrite_1\" some.append()\n        objref myshape\n        myshape = new Shape() // shows the entire cell\n        myshape.observe(some) // shows only the apical tree\n        myshape.exec_menu(\"View = plot\")",
+    "excel_row": 22
+  },
+  {
+    "header": "SEClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``SEClamp`` can be used in a 'for' loop to reproduce current-voltage relationships observed in vitro following voltage-clamp experiments. It is important to ensure that the model cell has the same input resistance and time constant as observed experimentally to validate the simulation results. Additionally, ``SEClamp`` can be used to simulate dual voltage clamp experiments by injecting current at one location and recording membrane potential at another location, though this is not a dual voltage clamp in the traditional sense.",
+    "flag": null,
+    "excel_row": 23
+  },
+  {
+    "header": "IClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``IClamp`` can be used in a 'for' loop to reproduce spiking patterns observed in vitro following current clamp experiments. When using ``IClamp`` in a single compartment model, injecting current at one point and measuring potential at another is effectively the same as measuring at the point of injection due to the model's lack of spatial resolution.",
+    "flag": null,
+    "excel_row": 23
+  },
+  {
+    "header": "range variables",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   Range variables allow algorithmic assignment of diameter and biophysical properties as functions of position along a section. For example, you can set different densities of ion channels at specific points along a section using range variables. This is particularly useful for simulating spatially varying properties without altering the section's geometry.\n\n   **Example:**\n\n   .. code-block:: none\n\n      oc>soma nseg=3\n      oc>soma gnabar_hh(.1)=0.01\n      oc>soma gnabar_hh(.5)=0.05\n      oc>soma gnabar_hh(.9)=0.09\n\n   This example sets different sodium channel densities at different positions along the soma section. The values can be accessed and verified using:\n\n   .. code-block:: none\n\n      oc>print gnabar_hh(.9)  // Outputs: 0.09\n      oc>print gnabar_hh(.5)  // Outputs: 0.05\n      oc>print gnabar_hh(.1)  // Outputs: 0.01\n\n   Note the use of the \"for (x,0)\" syntax for iterating over segment positions.",
+    "excel_row": 24
+  },
+  {
+    "header": "MechanismStandard",
+    "rst_file": "nrn/docs/progref/programming/mechstan.rst",
+    "new_doc": ".. note::\n\n    Parameters declared as RANGE in the NEURON block will appear as buttons and edit fields in GUI tools such as the CellBuilder and PointProcessManager. This allows for different values at different locations. If a parameter is not appearing, ensure it is correctly declared as RANGE and check for typos in the declaration.",
+    "excel_row": 25
+  },
+  {
+    "header": "PointProcessManager",
+    "rst_file": "nrn/docs/progref/modelspec/guitools/pointman.rst",
+    "new_doc": ".. note::\n\n    For a parameter of a point process to appear as a button in the GUI, it must be declared as a RANGE variable in the NEURON block. This ensures that the parameter can be edited directly in the PointProcessManager window.",
+    "excel_row": 25
+  },
+  {
+    "header": "NetStim.seed",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/parnet.rst",
+    "new_doc": ".. method:: NetStim.seed\n\n    .. tab:: Python\n\n        Syntax:\n            ``netstim.seed(seed_value)``\n\n        Description:\n            Sets the seed for the pseudorandom number generator used by the NetStim object.\n            By default, all NetStim objects share the same pseudorandom sequence generator.\n            Seeding one NetStim seeds them all, unless each NetStim is associated with its own\n            pseudorandom sequence generator.\n\n        Example:\n\n        .. code-block:: python\n\n            netstim = h.NetStim()\n            netstim.seed(31)  # Sets the seed for the shared pseudorandom generator\n\n    .. tab:: HOC\n\n        Syntax:\n            ``netstim.seed(seed_value)``\n\n        Description:\n            Sets the seed for the pseudorandom number generator used by the NetStim object.\n            By default, all NetStim objects share the same pseudorandom sequence generator.\n            Seeding one NetStim seeds them all, unless each NetStim is associated with its own\n            pseudorandom sequence generator.\n\n        Example:\n\n        .. code-block:: none\n\n            netstim = new NetStim()\n            netstim.seed(31)  // Sets the seed for the shared pseudorandom generator",
+    "excel_row": 26
+  },
+  {
+    "header": "VecStim",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``VecStim`` can be used to generate events at specified times, which can be useful for driving synaptic mechanisms with precomputed event times. This approach can improve model scalability compared to manually loading events into the event queue. Example usage:\n\n   .. code-block:: none\n\n      objref vecstim, stvec\n      vecstim = new VecStim()\n      stvec = new Vector()\n      stvec.append(1, 2, 3)  // event times\n      vecstim.play(stvec)\n\n   Attach the ``VecStim`` to synapses using ``NetCon`` with appropriate delays to control activation timing.",
+    "flag": null,
+    "excel_row": 27
+  },
+  {
+    "header": "NetCon",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   When using ``NetCon`` to connect a ``VecStim`` to synaptic mechanisms, ensure that each synapse has its own ``NetCon`` instance. This allows independent control of synaptic weights for each activation. Example:\n\n   .. code-block:: none\n\n      objref nclist, synlist\n      nclist = new List()\n      synlist = new List()\n      for ii=0,synlist.count()-1 {\n         nclist.append(new NetCon(vecstim, synlist.o(ii)))\n         nclist.o(ii).delay = actdel\n      }\n\n   This setup ensures that each synapse is activated at the correct time with the specified weight.",
+    "flag": null,
+    "excel_row": 27
+  },
+  {
+    "header": "FInitializeHandler",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``FInitializeHandler`` can be used to initialize variables or execute procedures at the start of a simulation. This is useful for setting up conditions that must be true before the simulation begins. Example:\n\n   .. code-block:: none\n\n      objref fih\n      fih = new FInitializeHandler(\"count = 0\")\n\n   This ensures that the variable ``count`` is reset to 0 at the start of each simulation run.",
+    "flag": null,
+    "excel_row": 27
+  },
+  {
+    "header": "SEClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When isolating a section and using ``SEClamp`` to reproduce a voltage trajectory, set the series resistance ``rs`` to a very low value, such as 1e-3 megohm, to ensure accurate reproduction of the voltage waveform. Use the ``Vector`` class's ``play()`` method to drive the time course of the ``SEClamp``'s ``amp1`` parameter. Set ``dur1`` to a very large value, e.g., 1e9, to maintain the clamp throughout the simulation.\n\n   Example:\n\n   .. code-block:: python\n\n      objref clamp\n      Y { clamp = new SEClamp(0) }\n      clamp.dur1 = 1e9\n      clamp.amp1 = -65\n      clamp.rs = 1e-3\n      Y { vy0_copy.play(&clamp.amp1) }",
+    "flag": null,
+    "excel_row": 28
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``Vector.play()`` can be used to drive the time course of parameters in a clamp, such as ``SEClamp``'s ``amp1``. Ensure that the time vector is synchronized with the data vector if ``dt`` changes. For constant ``dt``, the time vector can be omitted.\n\n   Example:\n\n   .. code-block:: python\n\n      objref vy0_copy\n      vy0_copy = vy0_vec.c()\n      Y { vy0_copy.play(&clamp.amp1) }",
+    "flag": null,
+    "excel_row": 28
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   Use ``Vector.record()`` to capture the time course of variables such as membrane potential. This is useful for reproducing voltage trajectories in isolated sections using clamps.\n\n   Example:\n\n   .. code-block:: python\n\n      objref vy0_vec, t_vec\n      vy0_vec = new Vector()\n      t_vec = new Vector()\n      Y { vy0_vec.record(&v(0)) }\n      Y { t_vec.record(&t) }",
+    "flag": null,
+    "excel_row": 28
+  },
+  {
+    "header": "Vector.indgen",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/hocmech.rst",
+    "new_doc": ".. note::\n\n    ``indgen()`` is a method of the Vector class that fills the vector with a sequence of numbers starting from 0, incremented by a specified value. For example, ``svec.indgen(0.1)`` will fill ``svec`` with values 0, 0.1, 0.2, etc.",
+    "excel_row": 29
+  },
+  {
+    "header": "run",
+    "rst_file": "nrn/docs/progref/simctrl/stdrun.rst",
+    "new_doc": ".. note::\n\n    When using the standard run system, ensure that any changes to ``dt`` are made before calling ``run()``. The value of ``dt`` will be used as the time step for the simulation.",
+    "excel_row": 29
+  },
+  {
+    "header": "CVode.active",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n    To specify the integration mode in hoc code when using the standard run system, use ``cvode.active()`` to activate or deactivate the variable time step method. This can be combined with the ``VariableTimeStep`` tool for error tolerance adjustments.",
+    "excel_row": 29
+  },
+  {
+    "header": "load_file",
+    "rst_file": "nrn/docs/progref/simctrl/stdrun.rst",
+    "new_doc": ".. note::\n\n    ``load_file()`` can be used to load session files that configure the VariableTimeStep tool for adaptive integration. Ensure that the session file is loaded before running simulations to apply the desired settings.",
+    "excel_row": 29
+  },
+  {
+    "header": "NetStim",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using ``NetStim`` with ``noise=1``, the intervals between events follow a negative exponential distribution, which is a continuous distribution. Therefore, the Fano factor, which applies to discrete distributions like spike counts, should be calculated over a specific time window to verify that it approaches 1, as expected for a Poisson distribution. Example code for calculating the Fano factor:\n\n   .. code-block:: none\n\n      objref sti\n      sti = new NetStim()\n      sti.interval = 100\n      sti.start = 10\n      sti.number = 1e9\n      sti.noise = 1\n\n      objref con, nil, vec\n      con  = new NetCon(sti,nil)\n      vec = new Vector()\n      con.record(vec)\n\n      tstop = 35000\n      cvode_active(1)\n      run()\n\n      objref isivec, hist\n\n      proc analyze() {\n        isivec = new Vector()\n        isivec.deriv(vec,1,1)\n        print \"mean ISI \", isivec.mean(), \"based on \", isivec.size(), \"samples\"\n        print \"ISI stdev \", isivec.stdev()\n        print \"stdev/mean \", isivec.stdev()/isivec.mean()\n        print \" \"\n        hist = vec.histogram(0,tstop,20)\n        print \"estimate from spike counts over 20 ms intervals: \", hist.var()/hist.mean()\n      }\n\n      analyze()",
+    "flag": null,
+    "excel_row": 30
+  },
+  {
+    "header": "cvode_active",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   ``cvode_active()`` is a procedure included in the standard run library, not built into hoc. It calls ``cvode.active`` and performs additional tasks to ensure the standard run system functions correctly when adaptive integration is used. To ensure compatibility, especially for MSWin users, include ``load_file(\"stdgui.hoc\")`` at the beginning of your hoc file to load the standard run library.",
+    "flag": null,
+    "excel_row": 30
+  },
+  {
+    "header": "VecStim",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. class:: VecStim\n\n    .. tab:: Python\n\n      Description:\n        VecStim is used to generate spike events at specified times, similar to an artificial spiking cell.\n        It is defined in `vecevent.mod`, which can be found in the NEURON examples directory.\n        To use VecStim, compile `vecevent.mod` with `mknrndll` or `nrnivmodl`.\n\n      Example:\n        .. code-block:: python\n\n          from neuron import h\n\n          # Create a VecStim object\n          objref vs\n          vs = h.VecStim()\n\n          # Vector of spike times\n          spt = h.Vector([10, 20, 30])\n\n          # Play spike times into VecStim\n          vs.play(spt)\n\n          # Connect VecStim to a synapse or other target\n          syn = h.ExpSyn(0.5)\n          nc = h.NetCon(vs, syn)\n\n        Ensure the spike time vector is filled with positive, monotonically increasing times before calling `run()`.",
+    "flag": null,
+    "excel_row": 31
+  },
+  {
+    "header": "MulRunFitter",
+    "rst_file": "nrn/docs/progref/analysis/guitools/mulfit.rst",
+    "new_doc": ".. note::\n\n   When fitting data sampled at irregular intervals, MulRunFitter interpolates the model trajectory to match the data trajectory. The error value is calculated using only the resulting values at the data locations. This means the number of points at which the error is evaluated equals the number of points provided in the data trajectory. Linear interpolation is used if required to evaluate the model values at the desired timestamps.",
+    "excel_row": 32
+  },
+  {
+    "header": "create",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology.rst",
+    "new_doc": ".. note::\n\n   In HOC, the ``create`` statement must be used at the top level of the interpreter's stack, outside of any procedures or functions. This is because HOC is a typed language with a single-pass parse, and each user-declared token is treated as a scalar unless first declared otherwise at the top level. To create an array of sections, use ``create name[n]`` where ``name`` is the base name and ``n`` is the number of sections. This allows resizing of the array within procedures, as HOC recognizes ``name`` as an array of sections.",
+    "flag": null,
+    "excel_row": 33
+  },
+  {
+    "header": "modlunit",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   ``modlunit`` is a tool used to check for units consistency and syntax errors in mod files. It stops checking after finding the first error and its error messages may seem unclear but are generally informative. To resolve errors, repeatedly run ``modlunit``, fix the errors it reports, and rerun until no errors are found. Common issues include undeclared units or unrecognized unit names. For example, changing ``DegC`` to ``degC`` resolves recognition issues. Use ``(1)`` to indicate dimensionless variables. Be aware that fixing units errors may not affect numerical results but ensures compatibility with ``modlunit``.",
+    "flag": null,
+    "excel_row": 34
+  },
+  {
+    "header": "NetCon.record",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   The ``NetCon.record()`` method can be used to capture the times at which the observed variable crosses a defined threshold, effectively recording spike times. This is useful for analyzing spike train outputs from neuron models. If you already have membrane potential recordings, consider using the ``Vector.indwhere`` method to find threshold crossings.",
+    "excel_row": 35
+  },
+  {
+    "header": "proc",
+    "rst_file": "nrn/docs/progref/programming/hoc-from-python.rst",
+    "new_doc": ".. note::\n\n   In hoc, ``$o1`` refers to the first argument of a procedure that is expected to be an object reference. The prefix 'o' indicates that the argument is an object. If the first argument were a scalar, it would be referred to as ``$1``.\n\n   .. code-block:: none\n\n      proc init() {\n         netstimA = $o1\n      }\n\n   This syntax is part of hoc's way of handling function and procedure arguments.",
+    "flag": null,
+    "excel_row": 36
+  },
+  {
+    "header": "USEION",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   In models where calcium diffusion is represented by concentric cylindrical shells, the concentration of calcium in the outermost shell is often used as the model output ``cai``. This value is not the average intracellular calcium concentration but rather the local concentration near the membrane, which is relevant for mechanisms that detect calcium concentration, such as ion channels and pumps. If the average intracellular calcium concentration is needed, it should be computed as a weighted average of the shell concentrations.",
+    "excel_row": 37
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``Vector.record()`` can be used to capture the time course of synaptic currents generated by point processes. For example, to record the current from an ``ExpSyn`` instance:\n\n   .. code-block:: none\n\n      create soma\n      objref syn\n      soma syn = new ExpSyn(0.5) // attaches a new instance of ExpSyn to middle of soma\n      objref tvec, ivec\n      tvec = new Vector()\n      tvec.record(&t)\n      ivec = new Vector()\n      ivec.record(&syn.i)\n\n   This captures the time course of the current generated by an ``ExpSyn`` instance in the pair of Vectors ``tvec`` and ``ivec``.",
+    "flag": null,
+    "excel_row": 38
+  },
+  {
+    "header": "fadvance",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``fadvance()`` can be used to advance the simulation by one time step. It is possible to record synaptic currents at each time step by iterating over synaptic instances and summing their absolute values. However, this approach may be inefficient for large models. Instead, consider breaking the simulation into intervals and processing data in segments to manage memory usage effectively.",
+    "flag": null,
+    "excel_row": 38
+  },
+  {
+    "header": "proc segrun",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``proc segrun()`` is a procedure to execute a long simulation as a series of shorter segments. This approach helps manage memory usage by recording data in intervals that fit into memory. The procedure involves setting up Vector recording for each segment and appending results to a cumulative record.\n\n   Example usage:\n\n   .. code-block:: none\n\n      proc segrun() { local i, interval, count, t2, lastpass\n        localobj segtvec, tvec, tmpvec, isynvecs, segsumabsisyn, sumabsisyn\n        // Setup recording Vectors and Lists\n        // Main computational loop\n        while (t<$1) {\n          // Execute simulation segment\n          // Process and store results\n        }\n      }",
+    "flag": null,
+    "excel_row": 38
+  },
+  {
+    "header": "Vector.deriv",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``Vector.deriv()`` can be used to calculate the first or second derivative of a recorded variable after a simulation has been executed. Ensure that the vector contains at least two points before calling this method. For simulations using adaptive integration, use the ``Vector.interpolate()`` method to resample recorded values at evenly spaced intervals if needed. Example usage:\n\n   .. code-block:: none\n\n       objref spike, deriv_1, deriv_2\n       spike = new Vector()\n       deriv_1 = new Vector()\n       deriv_2 = new Vector()\n\n       spike.record(&soma.v(0.5))\n       run()\n       deriv_1 = deriv_1.deriv(spike, 0.025)\n       deriv_2 = deriv_2.deriv(deriv_1, 0.025)\n\n   Ensure that ``Vector.deriv()`` is called after the simulation to avoid errors related to insufficient data points.",
+    "flag": null,
+    "excel_row": 39
+  },
+  {
+    "header": "Vector.interpolate",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``Vector.interpolate()`` is useful for resampling recorded values at evenly spaced intervals, especially when using adaptive integration methods that produce results spaced unevenly in time. This can be particularly helpful for post-simulation analysis, such as calculating derivatives or generating plots.",
+    "flag": null,
+    "excel_row": 39
+  },
+  {
+    "header": "proc postproc",
+    "rst_file": "nrn/docs/progref/simctrl/stdrun.rst",
+    "new_doc": ".. note::\n\n   ``proc postproc()`` is a user-defined procedure intended for post-simulation analysis. It operates on recorded variables to derive additional data such as derivatives, integrals, or spike frequency. This procedure should be called after the simulation ends and can be customized to include various analyses. Example usage:\n\n   .. code-block:: none\n\n       proc postproc() {\n         netca = integr(i_ca_soma, tvec, t0, t1)\n         soma netca *= area(0.5)*(1e-8)\n         // Additional analysis code\n       }\n\n   Ensure that ``postproc()`` is verified to work correctly before integrating it into the simulation workflow.",
+    "flag": null,
+    "excel_row": 39
+  },
+  {
+    "header": "proc myrun",
+    "rst_file": "nrn/docs/progref/simctrl/stdrun.rst",
+    "new_doc": ".. note::\n\n   ``proc myrun()`` is a custom procedure that automates the execution of a simulation followed by post-simulation analysis. It typically calls ``run()`` to execute the simulation and then invokes ``postproc()`` or similar procedures for data analysis. Example usage:\n\n   .. code-block:: none\n\n       proc myrun() {\n         run()\n         postproc()\n       }\n\n   This procedure simplifies the workflow by combining simulation and analysis into a single callable function.",
+    "flag": null,
+    "excel_row": 39
+  },
+  {
+    "header": "BREAKPOINT",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   When using random number generators in a ``BREAKPOINT`` block, it is important to avoid calling them directly within the block. This is because the ``BREAKPOINT`` block is executed twice per time step to estimate conductance, which can lead to incorrect results if the random number generator is called directly. Instead, move the random number generator call to a separate ``PROCEDURE`` and use a ``SOLVE`` statement in the ``BREAKPOINT`` block to call this procedure. This ensures that the random number generator is only called once per time step, preventing discontinuities and incorrect conductance estimates.",
+    "flag": null,
+    "excel_row": 40
+  },
+  {
+    "header": "SOLVE",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   A ``SOLVE`` statement in a ``BREAKPOINT`` block that calls a ``PROCEDURE`` ensures that the procedure is executed only once per time step, even though the ``BREAKPOINT`` block itself is executed twice. This is particularly useful for procedures involving random number generation, as it prevents the generation of different random values during the same time step, which can lead to incorrect model behavior.",
+    "flag": null,
+    "excel_row": 40
+  },
+  {
+    "header": "h.celsius",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   To set the temperature in a NEURON simulation using Python, use the following syntax:\n\n   .. code-block:: python\n\n       from neuron import h\n       h.celsius = 20\n\n   This sets the simulation temperature to 20 degrees Celsius. Ensure that you have imported the NEURON module and assigned `h` appropriately, as in `h = neuron.h` or `from neuron import h`.",
+    "excel_row": 41
+  },
+  {
+    "header": "Spatial discretization for radial diffusion",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   When modeling calcium dynamics with radial diffusion, the spatial discretization can significantly affect the results. It is recommended to empirically determine the appropriate shell thickness by computational experimentation. For example, using a model with shells of 0.1 um thickness can provide a more accurate representation of calcium dynamics compared to a crude 4 compartment model. However, the ultimate test is the impact on the model's behavior, such as the integral of BK current over a relevant time interval, rather than just the peak calcium concentration.",
+    "excel_row": 42
+  },
+  {
+    "header": "COMPARTMENT statement",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   When defining compartments for calcium dynamics, it is possible to specify different volume distributions for cytoplasm and endoplasmic reticulum (ER). For example, using 83% of the volume for cytoplasm and 17% for ER can be implemented in the COMPARTMENT statement within the KINETIC block. This allows for modeling calcium changes in both the cytoplasm and ER.",
+    "excel_row": 42
+  },
+  {
+    "header": "SERCA mechanism",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   The SERCA pump mechanism can be implemented in the KINETIC block to model calcium uptake into the ER. The flux can be defined as a function of calcium concentration, and the changes in cytoplasmic and ER calcium can be specified using the COMPARTMENT statement. It is important to verify the implementation through test simulations to ensure the results are consistent with expected physiological behavior.",
+    "excel_row": 42
+  },
+  {
+    "header": "LoadBalance.cell_complexity",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/parnet.rst",
+    "new_doc": ".. note::\n\n    ``cell_complexity()`` can be used as a rough proxy for relative computation time by counting the number of states. It is less accurate than counting the number of compartments. Multisplit is useful if TotalNumberOfStatesForAllCells/nhost < NumberOfStatesOfLargestCell. This method can help determine if load balancing improvements are needed in heterogeneous networks.",
+    "flag": null,
+    "excel_row": 43
+  },
+  {
+    "header": "LoadBalance.ExperimentalMechComplex",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/parnet.rst",
+    "new_doc": ".. note::\n\n    ``ExperimentalMechComplex()`` provides a better proxy for complexity than counting states. It generates a file `mcomplex.dat` that contains relative computation times of various mechanisms. This method is parallelized to distribute mechanism experiments across different ranks and safely writes a single `mcomplex.dat` file. Mechanisms that should not be performance tested can be excluded by adding their names as arguments.",
+    "flag": null,
+    "excel_row": 43
+  },
+  {
+    "header": "LoadBalance.read_mcomplex",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/parnet.rst",
+    "new_doc": ".. note::\n\n    ``read_mcomplex()`` reads the `mcomplex.dat` file generated by ``ExperimentalMechComplex()``. This file provides a more accurate proxy for cell complexities, which can be used for load balancing in simulations.",
+    "flag": null,
+    "excel_row": 43
+  },
+  {
+    "header": "LoadBalance.lpt",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/parnet.rst",
+    "new_doc": ".. note::\n\n    ``lpt()`` is a Python implementation of the least processing time algorithm, which is more efficient than the hoc implementation. It uses the `heapq` module to distribute cells across ranks based on their complexities, aiming to achieve better load balance. This method can be used to improve load balancing in networks with heterogeneous cell complexities.",
+    "flag": null,
+    "excel_row": 43
+  },
+  {
+    "header": "h.dt",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   When setting ``h.dt`` to a value greater than 0.025 ms, NEURON may automatically reset it to 0.025 ms during simulation. To maintain a larger time step, ensure that ``h.steps_per_ms`` is set to ``1.0/h.dt``. This adjustment allows NEURON to use the desired time step throughout the simulation.",
+    "excel_row": 44
+  },
+  {
+    "header": "h.steps_per_ms",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   To maintain a specific time step ``h.dt`` during simulation, set ``h.steps_per_ms`` to ``1.0/h.dt``. This ensures that NEURON does not automatically reset the time step to a default value such as 0.025 ms.",
+    "excel_row": 44
+  },
+  {
+    "header": "Gfluct",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. class:: Gfluct\n\n    .. tab:: Python\n\n        Syntax:\n            ``syn = n.Gfluct(section(x))``\n\n        Description:\n            Fluctuating conductance model for synaptic bombardment. This model is implemented as a nonspecific current defined as a point process. It uses an Ornstein-Uhlenbeck process to simulate fluctuating synaptic conductances.\n\n            The current is calculated as:\n\n            .. math::\n                i = g_e * (v - E_e) + g_i * (v - E_i)\n\n            where :math:`g_e` and :math:`g_i` are excitatory and inhibitory conductances, respectively.\n\n            The sign convention follows the standard neurophysiological practice: depolarizing current is negative, and hyperpolarizing current is positive.\n\n            .. note::\n                Ensure that :math:`tau_e` and :math:`tau_i` are non-zero to avoid incorrect results. If they are zero, the conductances will fluctuate as white noise.\n\n            See the reference implementation by Destexhe et al. for more details on the theoretical background.\n\n    .. tab:: HOC\n\n        Syntax:\n            ``syn = new Gfluct(x)``\n\n        Description:\n            Similar to the Python tab, this class simulates fluctuating synaptic conductances using an Ornstein-Uhlenbeck process. The current is calculated using the same formula and follows the same sign convention.",
+    "flag": null,
+    "excel_row": 45
+  },
+  {
+    "header": "fadvance",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   ``fadvance`` is responsible for integrating the equations that describe the neuron's behavior over time. It updates the global time variable, ``t``, by ``dt`` and computes new values for voltages, currents, and concentrations. When a synapse is activated, it adds a term to the right-hand side of the ordinary differential equations (ODEs) that describe the neuron's behavior. This affects the total charge in the compartment where the synapse is located, which in turn perturbs the membrane potential and influences neighboring compartments through coupling terms in the cable equation.",
+    "excel_row": 46
+  },
+  {
+    "header": "IClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using ``IClamp`` with a fixed time step, ensure that the duration of the current injection is not shorter than the time step ``dt``. If the duration is shorter, the current injection may not be captured at any calculated time points, resulting in no observable voltage response. For accurate simulation of short-duration stimuli, consider using a variable time step method, which automatically adjusts ``dt`` to capture the time course of the stimulus.",
+    "excel_row": 47
+  },
+  {
+    "header": "NetCon",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n    In NEURON, the weight parameter of a NetCon that targets a conductance change synaptic mechanism, such as ExpSyn or Exp2Syn, specifies the peak amplitude of the conductance change elicited by a single presynaptic spike. The weight should never be negative unless modeling a non-physical scenario, as negative conductance would imply ion flux opposite to the electrochemical gradient.",
+    "flag": null,
+    "excel_row": 48
+  },
+  {
+    "header": "Exp2Syn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    The reversal potential (e) in Exp2Syn is a parameter that determines the direction and magnitude of the synaptic current. It is a RANGE variable, allowing each instance of Exp2Syn to have its own reversal potential. The weight parameter of the NetCon determines the peak conductance change, and should not be negative for physical accuracy.",
+    "flag": null,
+    "excel_row": 48
+  },
+  {
+    "header": "Vector.insrt",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. method:: Vector.insrt(index, *args)\n\n    Inserts values into the Vector starting at the specified index.\n    The method takes a variable number of arguments, allowing multiple values to be inserted at once.\n\n    Example:\n\n    .. code-block:: python\n\n        objref foo\n        foo = new Vector()\n        foo.insrt(0, PI, sqrt(2), sin(PI/6))\n        foo.printf()  # Outputs: 3.14159 1.41421 0.5\n\n    This method is useful for initializing a Vector with multiple values in a single call.",
+    "excel_row": 49
+  },
+  {
+    "header": "TABLE",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n    The ``TABLE`` statement in NMODL is used to create lookup tables for voltage- or concentration-dependent variables, which can speed up simulations. However, if parameters affecting these variables can be changed from hoc or Python, the ``TABLE`` statement should include a ``DEPEND`` clause listing those parameters. This ensures that the tables are recalculated when the parameters change. If multiple parameters affect different variables, separate ``TABLE`` statements are required for each variable, each with its own ``DEPEND`` clause. Note that only one ``TABLE`` statement is allowed per function, so consider splitting the function into multiple procedures if necessary.",
+    "excel_row": 50
+  },
+  {
+    "header": "usetable",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n    The ``usetable`` variable can be set to 0 to disable the use of lookup tables in NMODL, forcing recalculation of variables at each time step. This is useful when parameters affecting the variables are changed from hoc or Python, but it may slow down simulations. Alternatively, use the ``DEPEND`` clause in the ``TABLE`` statement to specify parameters that trigger table recalculation.",
+    "excel_row": 50
+  },
+  {
+    "header": "Section",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``Section`` is used to represent the properties of an unbranched neurite. Attributes such as ``Ra`` (axial resistance) and ``cm`` (membrane capacitance) are not mechanisms but are intrinsic properties of sections. These attributes are crucial for defining the electrical properties of the neurite and are typically included in all compartments of a multi-compartment model to ensure accurate simulation of electrical behavior.",
+    "excel_row": 51
+  },
+  {
+    "header": "pas",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``pas`` mechanism represents passive membrane properties, characterized by a constant conductance and a reversal potential. It is often added to dendritic compartments in multi-compartment models to simulate passive electrical properties. When using ``pas``, ensure that the reversal potential ``e_pas`` is consistent across compartments to avoid discrepancies in local resting potentials.",
+    "excel_row": 51
+  },
+  {
+    "header": "BREAKPOINT",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   The ``BREAKPOINT`` block is essential for mechanisms that generate currents. It must contain a statement that assigns a value to the current variable to affect the model's charge balance equations. For example:\n\n   .. code-block:: none\n\n       BREAKPOINT {\n           i = amp\n       }\n\n   Here, ``amp`` is an intermediate variable whose value is set during model initialization and incremented upon receiving an event. Ensure that all variables used in the ``BREAKPOINT`` block are properly declared in the ``ASSIGNED`` block.",
+    "excel_row": 52
+  },
+  {
+    "header": "INITIAL",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   The ``INITIAL`` block is used to set initial values for variables when the model is initialized. For example, to reset a variable ``amp`` to its initial value ``amp0``:\n\n   .. code-block:: none\n\n       INITIAL {\n           amp = amp0\n       }\n\n   This ensures that the mechanism starts with the correct initial conditions.",
+    "excel_row": 52
+  },
+  {
+    "header": "NET_RECEIVE",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   The ``NET_RECEIVE`` block handles events received by a point process. It can be used to modify variables in response to events. For example, to increment a variable ``amp`` by ``delta`` when an event is received:\n\n   .. code-block:: none\n\n       NET_RECEIVE(weight (uS)) {\n           amp = amp + delta\n       }\n\n   Ensure that all variables used in ``NET_RECEIVE`` are declared and that units are consistent.",
+    "excel_row": 52
+  },
+  {
+    "header": "numpy_element_ref",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   ``numpy_element_ref`` is used to obtain a pointer to a numpy array element, allowing NEURON mechanisms to access numpy arrays directly without copying data. This is particularly useful for large arrays that need to be shared across multiple instances of a mechanism. Example usage:\n\n   .. code-block:: python\n\n      import numpy\n      from neuron import h, numpy_element_ref\n\n      data = numpy.random.random(200)\n      ptr = numpy_element_ref(data, 0)\n\n      # Assign pointer to a mechanism\n      for pp in pps:\n          pp._ref_foo = ptr\n\n   This function requires NEURON 7.7.2 or newer.",
+    "flag": null,
+    "excel_row": 53
+  },
+  {
+    "header": "h.setpointer",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   ``h.setpointer`` is used to set a POINTER variable in a NEURON mechanism to a specific memory address. This is essential when sharing data between Python and NEURON, especially for older NEURON versions that do not support the ``_ref`` syntax. Example usage:\n\n   .. code-block:: python\n\n      # Assign pointer to a mechanism\n      for pp in pps:\n          h.setpointer(ptr, 'foo', pp)\n\n   This method is necessary for NEURON versions older than 7.7.2.",
+    "flag": null,
+    "excel_row": 53
+  },
+  {
+    "header": "Section.parentseg",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology.rst",
+    "new_doc": ".. note::\n\n   The ``parentseg()`` method returns the segment of the parent section to which the child section is connected. The x value of this segment does not directly correspond to any specific 3D point index in the parent section's 3D data. Instead, it represents the normalized path distance from the 0 end of the parent section to the connection point.",
+    "excel_row": 54
+  },
+  {
+    "header": "Section.connect",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology.rst",
+    "new_doc": ".. note::\n\n   The ``connect()`` method allows a child section to be connected to any node of the parent section, not just the 0 or 1 ends. This flexibility is useful for modeling complex morphologies, such as attaching spines to dendrites at internal nodes. However, it is generally recommended to connect the 0 end of a child section to the 1 end of its parent, except in specific cases like attaching branches to a soma.",
+    "excel_row": 54
+  },
+  {
+    "header": "Section.pt3dadd",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   The ``pt3dadd()`` function is used to specify the 3D coordinates and diameter of points along a section. These points define the section's shape and are used in rendering and calculations. When sections are connected, the 3D points of a child section are translated to align with the parent section, unless ``pt3dstyle()`` is used to prevent this translation.",
+    "excel_row": 54
+  },
+  {
+    "header": "Section.define_shape",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   The ``define_shape()`` function recalculates the 3D shape of a section based on its current 3D points. If a section is connected to a parent, its 3D points are translated to align with the parent section's connection point. This can affect the visual representation of the model, especially when branches are connected to different parts of a soma.",
+    "excel_row": 54
+  },
+  {
+    "header": "h.define_shape",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   ``h.define_shape()`` should be called after all sections have been created, connected, and assigned their geometries via L and diam or pt3dadd statements, and their nseg parameters have been set. This ensures that every section will have its own pt3d data that includes the correct xyz coordinates of its 0 and 1 ends and of the centers of each of its segments. However, note that ``h.define_shape()`` does not create new points for sections whose morphology was defined by calling the pt3dadd method. For example, if a section is defined with pt3dadd and has nseg set, calling ``h.define_shape()`` will not increase the number of 3D points to match the number of segments.",
+    "excel_row": 55
+  },
+  {
+    "header": "coordinate",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. function:: coordinate\n\n   Returns the (x, y, z) coordinates of a given segment's position along the section's path.\n\n   :param seg: The segment for which to find the coordinates.\n   :type seg: Segment\n   :return: A named tuple Point with fields x, y, z representing the coordinates.\n   :rtype: namedtuple\n\n   Example usage:\n\n   .. code-block:: python\n\n       from collections import namedtuple\n       import numpy as np\n       from neuron import h\n\n       Point = namedtuple('Point', ['x', 'y', 'z'])\n\n       def coordinate(seg):\n           sec = seg.sec\n           n3d = sec.n3d()\n           d = seg.x * sec.L\n           xs = [sec.x3d(i) for i in range(n3d)]\n           ys = [sec.y3d(i) for i in range(n3d)]\n           zs = [sec.z3d(i) for i in range(n3d)]\n           arcs = [sec.arc3d(i) for i in range(n3d)]\n           return Point(np.interp(d, arcs, xs), np.interp(d, arcs, ys), np.interp(d, arcs, zs))\n\n       soma = h.Section(name='soma')\n       soma.pt3dadd(0, 0, 0, 1)\n       soma.pt3dadd(5, 5, 0, 2)\n       soma.pt3dadd(10, 5, 0, 2)\n\n       pt = coordinate(soma(0.5))\n       print(pt)",
+    "excel_row": 55
+  },
+  {
+    "header": "FInitializeHandler",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n    ``FInitializeHandler`` can be used to register Python callbacks that are executed once at the start of a simulation. This is useful for setting initial conditions or performing setup tasks. Example usage:\n\n    .. code-block:: python\n\n        from neuron import h\n\n        def called_once():\n            print(\"called_once, t={:g}\".format(h.t))\n\n        fih = h.FInitializeHandler(called_once)\n\n    This will print the message \"called_once, t=0\" at the start of the simulation.",
+    "flag": null,
+    "excel_row": 56
+  },
+  {
+    "header": "CVode.event",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n    ``CVode.event()`` allows scheduling a Python callback to be executed at a specific simulation time. This is useful for triggering events during a simulation. Example usage:\n\n    .. code-block:: python\n\n        from neuron import h\n\n        def called_on_event():\n            print('called_on_event, t={:g}'.format(h.t))\n\n        event = h.CVode().event(0.1, called_on_event)\n\n    This will print the message \"called_on_event, t=0.1\" when the simulation time reaches 0.1 ms.",
+    "flag": null,
+    "excel_row": 56
+  },
+  {
+    "header": "CVode.extra_scatter_gather",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n    ``CVode.extra_scatter_gather()`` can be used to register a Python callback that is executed at every time step during a simulation. This is useful for monitoring or modifying state variables continuously. Example usage:\n\n    .. code-block:: python\n\n        from neuron import h\n\n        def called_often():\n            print(\"called_often, t={:g}\".format(h.t))\n\n        esg = h.CVode().extra_scatter_gather(0, called_often)\n\n    This will print the message \"called_often, t={current_time}\" at each time step.",
+    "flag": null,
+    "excel_row": 56
+  },
+  {
+    "header": "Section.vext",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    In Python, if a section has the extracellular mechanism inserted, the potential just outside the cell membrane at a location `x` is accessed via `section(x).vext[0]`. This value is relative to ground, which is assumed to be 0 mV.\n\n    Example:\n\n    .. code-block:: python\n\n        from neuron import h\n        section = h.Section(name='foo')\n        section.insert('extracellular')\n        vext_value = section(0.5).vext[0]\n\n    This retrieves the extracellular potential at the midpoint of the section.",
+    "flag": null,
+    "excel_row": 57
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    To capture the time course of a variable during a simulation, use the `Vector.record()` method. This is useful for post-simulation analysis, such as calculating intracellular potentials by summing membrane and extracellular potentials.\n\n    Example:\n\n    .. code-block:: python\n\n        from neuron import h\n        v_vec = h.Vector().record(section(0.5)._ref_v)\n        vext_vec = h.Vector().record(section(0.5)._ref_vext[0])\n        h.run()  # executes a simulation\n        vintracell = v_vec + vext_vec  # vintracell contains the intracellular potential time course",
+    "flag": null,
+    "excel_row": 57
+  },
+  {
+    "header": "range_assignment",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. function:: range_assignment(sec, var, start, stop)\n\n    Linearly assign values between start and stop to each segment's variable in a section.\n\n    :param sec: The section in which the assignment is to be made.\n    :param var: The name of the variable to assign values to.\n    :param start: The starting value for the linear assignment.\n    :param stop: The ending value for the linear assignment.\n\n    This function iterates over the segments of a section and assigns values to the specified variable using linear interpolation based on the segment's normalized position.\n\n    .. code-block:: python\n\n        from neuron import h\n        import numpy as np\n\n        def range_assignment(sec, var, start, stop):\n            delta = stop - start\n            for seg in sec:\n                setattr(seg, var, start + seg.x * delta)\n\n        axon = h.Section(name='axon')\n        axon.nseg = 5\n        range_assignment(axon, 'diam', 1.5, 0.5)\n        print([seg.diam for seg in axon])\n\n    Note: This function is useful for specifying gradients of parameters like diameters or conductances along a section.",
+    "flag": null,
+    "excel_row": 58
+  },
+  {
+    "header": "NetCon.event",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   The ``event()`` method can be used to activate a synaptic connection without a presynaptic cell firing. \n   Create a ``NetCon`` with a ``None`` source and use ``event(tdeliver)`` to specify the event delivery time.\n\n   Example in Python:\n\n   .. code-block:: python\n\n       from neuron import h\n\n       nc = h.NetCon(None, target)\n       nc.event(5.0)  # Deliver an event at 5 ms\n\n   Example in HOC:\n\n   .. code-block:: hoc\n\n       objref nil, nc\n       nc = new NetCon(nil, target)\n       nc.event(5.0)  // Deliver an event at 5 ms",
+    "excel_row": 59
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   For memory efficiency when using ``Vector.play`` with multiple synaptic instances that require scaled versions of the same vector, consider using a custom synaptic mechanism like ``VecSyn``. This mechanism allows a single vector to drive the conductance of multiple synapses by playing into a parameter (e.g., ``gnorm``) and using a scale factor (e.g., ``k``) to adjust the conductance for each synapse instance. This approach reduces memory usage by avoiding the need to store multiple copies of scaled vectors.\n\n   Example usage with ``VecSyn``:\n\n   .. code-block:: python\n\n       from neuron import h\n       import numpy as np\n\n       # Load the signal from a file\n       signal = np.loadtxt('path_to_signal_file.txt')\n       syn_gmax_vec = h.Vector(signal)\n\n       # Create a VecSyn instance\n       syn = h.VecSyn()\n\n       # Play the vector into gnorm\n       syn_gmax_vec.play(syn._ref_gnorm, h.dt)\n\n       # Set the scale factor for each synapse\n       syn.k = 0.5  # Example scale factor\n\n   This method is particularly useful for simulations with large numbers of neurons and long durations, where memory efficiency is crucial.",
+    "excel_row": 60
+  },
+  {
+    "header": "ion_style",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/ions.rst",
+    "new_doc": ".. warning::\n\n    The use of ``ion_style`` is surrounded by caveats. If other mechanisms are inserted subsequent to a call of this function, the style will be \"promoted\" according to the rules associated with adding the used ions to the style previously in effect. For example, if you set the ``cinit`` slot to 0 and later add a synapse that READs ``cai``, it may promote ``cinit`` (for that segment only) back to 1. This is due to the internal \"nrn_promote\" function rules, which specify that if ``c_style`` is STATE, then ``cinit`` is set to 1. This can lead to a mismatch between the conceptual model and the actual implementation, especially if changes are localized to specific segments.",
+    "excel_row": 61
+  },
+  {
+    "header": "hh.ina",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``hh`` mechanism calculates and assigns values to ``ina`` and ``ik``, which are the transmembrane sodium and potassium currents, respectively. These currents are in units of current density, specifically mA/cm\u00b2. However, these variables are not accessible via Python or hoc because they are not declared as ``RANGE`` in the ``hh.mod`` file. To access the total sodium or potassium current density in a segment, use the section's shorthand, e.g., ``axon(0.5).ina`` or ``axon(0.5).ik``.",
+    "excel_row": 62
+  },
+  {
+    "header": "hh.ik",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``hh`` mechanism calculates and assigns values to ``ina`` and ``ik``, which are the transmembrane sodium and potassium currents, respectively. These currents are in units of current density, specifically mA/cm\u00b2. However, these variables are not accessible via Python or hoc because they are not declared as ``RANGE`` in the ``hh.mod`` file. To access the total sodium or potassium current density in a segment, use the section's shorthand, e.g., ``axon(0.5).ina`` or ``axon(0.5).ik``.",
+    "excel_row": 62
+  },
+  {
+    "header": "NetStim.noiseFromRandom",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. method:: noiseFromRandom(r)\n\n    Associates a NetStim instance with a specific random number generator instance of the :class:`Random` class.\n    This ensures that the NetStim does not share a random number generator with other NetStim instances, allowing for independent random sequences.\n\n    Example:\n\n    .. code-block:: python\n\n        from neuron import h\n\n        ns = h.NetStim()\n        r = h.Random()\n        r.Random123(1, 2, 3)  # Initialize Random123 stream\n        r.negexp(1)  # Specify negexp distribution with mean = 1\n        ns.noiseFromRandom(r)\n\n    This method is useful for ensuring that each NetStim has its own random sequence, preventing interference between multiple NetStim instances.",
+    "excel_row": 63
+  },
+  {
+    "header": "Random.Random123",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. method:: Random123(id1, id2, id3)\n\n    Initializes a Random instance with a Random123 pseudorandom stream using the specified nonzero integer identifiers.\n    This allows for the creation of independent random streams for use with multiple NetStim instances.\n\n    Example:\n\n    .. code-block:: python\n\n        from neuron import h\n\n        r = h.Random()\n        r.Random123(1, 2, 3)  # Initialize Random123 stream\n\n    This method is particularly useful when multiple random number generators are needed, each with its own independent sequence.",
+    "excel_row": 63
+  },
+  {
+    "header": "Random.seq",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. method:: seq(seed)\n\n    Resets the random number generator to the start of its sequence using the specified seed.\n    This is useful for ensuring reproducibility in simulations by starting the random sequence from the same point.\n\n    Example:\n\n    .. code-block:: python\n\n        from neuron import h\n\n        r = h.Random()\n        r.Random123(1, 2, 3)\n        r.seq(1)  # Reset to start of sequence\n\n    By calling this method, you can ensure that each simulation run uses the same random sequence, aiding in reproducibility.",
+    "excel_row": 63
+  },
+  {
+    "header": "h.allobjects",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. method:: h.allobjects\n\n    .. tab:: Python\n\n    \n        Syntax:\n            .. code-block::\n                python\n\n                h.allobjects(\"classname\")\n\n\n        Description:\n            Returns the names of all instances of the specified class, \"classname\", along with the reference count for each object instance.\n            This can be useful for verifying the existence or nonexistence of objects of a particular class.\n\n        Example:\n\n            .. code-block::\n                python\n\n                >>> from neuron import h\n                >>> soma = h.Section(name=\"soma\")\n                >>> stim = h.IClamp(soma(0.5))\n                >>> h.allobjects(\"IClamp\")\n                IClamp[0] with 1 refs\n                0.0\n\n        .. warning::\n\n            Ensure that the class name is correctly specified to avoid unexpected results.\n\n    .. tab:: HOC\n\n        Syntax:\n            ``h.allobjects(\"classname\")``\n\n        Description:\n            Similar to the Python method, this returns the names and reference counts of all instances of the specified class.\n\n        .. warning::\n\n            Ensure that the class name is correctly specified to avoid unexpected results.",
+    "excel_row": 64
+  },
+  {
+    "header": "section.connect",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   Sections in NEURON are connected in a manner similar to segments, with a resistor representing axial resistance between them. When connecting sections, the 0 end of one section is typically connected to the 1 end of another. This connection reflects the equivalent circuit where axial resistance is present, and capacitances are not simply in parallel due to the finite axial and extracellular resistances.",
+    "excel_row": 65
+  },
+  {
+    "header": "total membrane capacitance",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   Total membrane capacitance is calculated as the integral over the entire surface of the cell, summing the capacitance across all segments of all sections. It is not the same as the input capacitance seen by a patch electrode at a specific point, due to the finite axial and extracellular resistances separating different membrane patches.",
+    "excel_row": 65
+  },
+  {
+    "header": "input resistance (Rin)",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   Input resistance (Rin) is typically measured by applying a current, recording the steady-state voltage, and applying Ohm's law. It is not simply the sum of resistances across sections due to the finite axial resistance. Rin is often used to refer to measurements at a specific location in an intact cell, rather than isolated compartments.",
+    "excel_row": 65
+  },
+  {
+    "header": "time constant (tau)",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   The time constant (tau) of a neuron is defined as tau = rm * cm, where rm is the specific membrane resistance (in ohm cm\u00b2) and cm is the specific membrane capacitance (in F/cm\u00b2). This calculation assumes the neuron is electrotonically compact. In multicompartment models, the time constant of individual compartments can be calculated, but the whole neuron model's time constant is typically analyzed through simulation and fitting to exponential functions.",
+    "excel_row": 65
+  },
+  {
+    "header": "POINTER",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   Using ``POINTER`` to access state variables between different ``POINT_PROCESS`` can significantly reduce efficiency and increase run time, especially when combined with ``NET_RECEIVE``, ``WATCH``, and variable time-step methods. This is due to the increased computational burden of managing inter-process communication and event handling.",
+    "excel_row": 66
+  },
+  {
+    "header": "NET_RECEIVE",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   When using ``NET_RECEIVE`` with ``WATCH`` to enforce boundary conditions, ensure that the integrator's time step is appropriately managed to avoid excessive self-events and inefficiencies. Fixed time-step integration may be more suitable for models with hard boundary conditions.",
+    "excel_row": 66
+  },
+  {
+    "header": "WATCH",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   ``WATCH`` can be used to detect when a state variable crosses a threshold, but it may lead to inefficiencies if the variable oscillates around the threshold, causing frequent self-events. Consider using a squashing function to manage the forcing function and prevent the state variable from crossing the threshold unnecessarily.",
+    "excel_row": 66
+  },
+  {
+    "header": "fcurrent",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n    ``fcurrent()`` can be used to reinitialize the current state of the simulation when CVode is not active. This is useful when splitting a simulation into multiple runs with parameter changes in between. After making changes to the model parameters, call ``fcurrent()`` before continuing the simulation with ``continuerun()``.",
+    "flag": null,
+    "excel_row": 67
+  },
+  {
+    "header": "CVode.re_init",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n    ``CVode.re_init()`` is used to reinitialize the solver state when CVode is active. This is particularly useful when you want to pause a simulation, make changes to model parameters, and then continue the simulation. Ensure that ``re_init()`` is called after parameter changes and before ``continuerun()``.",
+    "flag": null,
+    "excel_row": 67
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n    ``Vector.record()`` must be set up before the simulation is initialized. If you wish to record data from a second simulation run without retaining data from the first, use ``h.frecord_init()`` before starting the second run. This clears the existing recorded data, allowing the same vectors to be reused for the new simulation segment.",
+    "flag": null,
+    "excel_row": 67
+  },
+  {
+    "header": "h.frecord_init",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. function:: frecord_init()\n\n    Clears all recorded data from vectors that have been set up with ``Vector.record()``. This is useful when splitting a simulation into multiple segments and you want to discard data from previous segments. Call ``frecord_init()`` just before ``continuerun()`` to start fresh data recording for the new simulation segment.",
+    "flag": null,
+    "excel_row": 67
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   When using ``Vector.play`` to assign values to a variable in each segment of a cell, ensure that the variable is declared as a RANGE in the NMODL file. This allows each segment to store different values. Using a POINTER is necessary to play into a variable, but POINTERs do not store values locally. For example, use ``seg.playtest._ref_xx`` instead of ``.xx``.\n\n   Example:\n\n   .. code-block:: python\n\n       from neuron import h\n       data = h.Vector([0, 1, 5, 17, 2, 4, 38, 22, 43, 1, 1])\n       time = h.Vector([1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n\n       cell = h.Section(\"neurite\")\n       cell.nseg = 3\n       for sec in cell.wholetree():\n           sec.insert(h.playtest)\n           for seg in sec:\n               data.play(seg.playtest._ref_xx, time, True)\n\n       t = h.Vector().record(h._ref_t)\n       xxp1 = h.Vector().record(cell(0.1).playtest._ref_xx)\n       xxp2 = h.Vector().record(cell(0.9).playtest._ref_xx)\n\n       h.finitialize(-65)\n       h.continuerun(10)\n\n       plt.plot(t, xxp1, label=\"xxp1\")\n       plt.plot(t, xxp2, label=\"xxp2\")\n       plt.legend()\n       plt.show()",
+    "excel_row": 68
+  },
+  {
+    "header": "NEURON installation",
+    "rst_file": "nrn/docs/progref/index.rst",
+    "new_doc": ".. note::\n\n   When installing NEURON on Windows 10 Pro 64bit with Python 3.11 in Anaconda3, use the installer from nrn.readthedocs.io to avoid the \"no module named hoc\" error. The version available there is 8.2.3, which resolves this issue.",
+    "excel_row": 69
+  },
+  {
+    "header": "NetCon.record",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``record()`` can be used to execute a callback function each time an event occurs. The callback function can be used to monitor conditions and terminate the simulation when specific criteria are met. For example, to terminate a simulation when the inter-spike interval stabilizes within a threshold, use a callback function to update spike count and intervals, and set ``h.stoprun = 1`` when the condition is met.\n\n   Example:\n\n   .. code-block:: python\n\n      def spike_callback():\n          global spike_count, tnow, isinow, isiprev\n          spike_count += 1\n          if spike_count == 1:\n              tnow = h.t\n              isinow = 1e9\n          elif spike_count > 1:\n              isiprev = isinow\n              isinow = h.t - tnow\n              if abs(isiprev - isinow) < epsilon:\n                  h.stoprun = 1\n              tnow = h.t\n\n      nc.record(spike_callback)\n\n   Ensure that all variables used in the callback are properly initialized and accessible within the function scope.",
+    "flag": null,
+    "excel_row": 70
+  },
+  {
+    "header": "FInitializeHandler",
+    "rst_file": "nrn/docs/progref/simctrl/programmatic.rst",
+    "new_doc": ".. note::\n\n   ``FInitializeHandler`` can be used to initialize variables at the start of a simulation. This is particularly useful for setting up conditions that need to be reset before each run, such as spike counts or other state variables. This allows for interactive simulations where parameters can be adjusted and runs can be repeated without restarting the entire program.\n\n   Example:\n\n   .. code-block:: python\n\n      def reset_variables():\n          global spike_count, isi, previsi\n          spike_count = 0\n          isi = 1e3\n          previsi = 2e3\n\n      fih = h.FInitializeHandler(reset_variables)\n\n   This ensures that the simulation starts with a clean state, facilitating iterative testing and parameter tweaking.",
+    "flag": null,
+    "excel_row": 70
+  },
+  {
+    "header": "AlphaSynapse",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    ``AlphaSynapse`` can be used to model multiple inhibitory synapses on the same compartment. If all synapses are to be activated simultaneously, scale the peak conductance of the ``AlphaSynapse``. For activation at different times, create separate instances for each synapse.",
+    "flag": null,
+    "excel_row": 71
+  },
+  {
+    "header": "Exp2Syn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    ``Exp2Syn`` can describe the conductance transient with two time constants. To model multiple inhibitory synapses activated at different times, use a ``NetStim`` to generate a train of events with desired timings.",
+    "flag": null,
+    "excel_row": 71
+  },
+  {
+    "header": "TOKEN_ERROR",
+    "rst_file": null,
+    "new_doc": null,
+    "flag": "Failed: Error code: 400 - {'error': {'message': \"This model's maximum context length is 8192 tokens, however you requested 8250 tokens (8250 in your prompt; 0 for the completion). Please reduce your prompt; or completion length.\", 'type': 'invalid_request_error', 'param': None, 'code': None}}",
+    "excel_row": 72
+  },
+  {
+    "header": "CVode.cache_efficient",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    ``cache_efficient`` is a setting that can influence simulation run time by optimizing the use of CPU cache. Enabling this option may reduce cache swapping, especially in models with complex branching or a large number of segments. This can lead to faster simulation times if more of the model fits into the cache. To enable this setting, refer to the Python or HOC documentation of ``CVode.cache_efficient`` at nrn.readthedocs.io.",
+    "excel_row": 73
+  },
+  {
+    "header": "Plot What",
+    "rst_file": "nrn/docs/progref/visualization/grapher.rst",
+    "new_doc": ".. note::\n\n   When dealing with a large number of sections, the 'Plot What' menu may only display a subset of available sections. This is normal behavior to prevent overwhelming the interface. To specify a section not listed, manually enter the desired section name in the 'Plot What' field. For example, to plot a variable from `dend[31]`, replace `dend[1].variable` with `dend[31].variable`.\n\n   If you need to verify section names, use the following commands at the `oc>` prompt:\n\n   .. code-block:: none\n\n       forall print secname()\n\n   This will print all section names. To filter sections by a substring, use:\n\n   .. code-block:: none\n\n       forsec \"substring\" print secname\n\n   This prints all section names containing the specified substring.",
+    "flag": null,
+    "excel_row": 74
+  },
+  {
+    "header": "xopen",
+    "rst_file": "nrn/docs/progref/programming/dynamiccode.rst",
+    "new_doc": ".. note::\n\n   ``xopen()`` executes in the context of the object when called from within a template, allowing access to variables defined within the template. This differs from ``load_file()``, which executes at the top level of the interpreter. Using ``xopen()`` within a procedure in a template can be useful for accessing template-specific variables, but care should be taken if the file being opened declares any new names, as this can affect the template's namespace.",
+    "excel_row": 75
+  },
+  {
+    "header": "load_file",
+    "rst_file": "nrn/docs/progref/programming/dynamiccode.rst",
+    "new_doc": ".. note::\n\n   ``load_file()`` executes ``xopen`` at the top level of the interpreter, making it suitable for loading files intended to be loaded only once, such as those containing templates. This behavior ensures that the file is searched for in standard locations and is not reloaded if already loaded. However, it does not execute in the context of an object, unlike ``xopen()``.",
+    "excel_row": 75
+  },
+  {
+    "header": "Random.Random123",
+    "rst_file": "nrn/docs/progref/programming/math/random.rst",
+    "new_doc": ".. note::\n\n   ``Random123`` is a high-quality PRNG available from Python/HOC/NMODL in NEURON. It provides a large number of independent random streams parameterized by 3 numbers, which is extremely convenient for creating reproducible randomness in a parallel computing environment. The algorithm used by Random123 is one of the Philox algorithms, introduced in the paper:\n\n   Salmon, J. K., Moraes, M. A., Dror, R. O., & Shaw, D. E. (2011, November). Parallel random numbers: as easy as 1, 2, 3. In Proceedings of 2011 International Conference for High Performance Computing, Networking, Storage and Analysis (pp. 1-12). https://doi.org/10.1145/2063384.2063405\n\n   Note that Mersenne Twister is not a cryptographically secure PRNG, as only the first 624 values are free to vary independently.",
+    "excel_row": 76
+  },
+  {
+    "header": "nseg",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   It is not advisable to use an even value for ``nseg`` as it can make the value of range variables at the midpoint (0.5) ambiguous. For example, with ``nseg = 4``, the value at ``v(0.5)`` could be interpreted as the value at 0.375 or 0.675, leading to potential roundoff errors. For better spatial accuracy, consider using an odd value for ``nseg``.",
+    "excel_row": 78
+  },
+  {
+    "header": "range variables",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   To access and modify range variables such as channel densities across different segments of a section, you can iterate over the segments and set the desired values. For example, to apply a Gaussian distribution of Na+ channel density, calculate the density for each segment based on its position and assign it accordingly. This allows for non-uniform distribution of channels across a section.",
+    "excel_row": 78
+  },
+  {
+    "header": "NetStim.noise",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``noise`` parameter in ``NetStim`` determines the randomness of spike intervals.\n   - When ``noise=0``, spikes occur at deterministic intervals of ``n*interval``.\n   - When ``noise=1``, intervals follow a Poisson-like negative exponential distribution.\n   - For intermediate values (0 < noise < 1), each interval is a combination of a fixed duration ``(1 - noise)*interval`` and a negexp interval with mean duration ``noise*interval``.\n   - The most likely negexp interval is 0, meaning that the probability density function for the negexp distribution is highest at 0.\n\n   Example:\n\n   .. code-block:: python\n\n      from neuron import h\n\n      ns = h.NetStim()\n      ns.interval = 10\n      ns.noise = 0.1\n\n   This configuration will have intervals that are a mix of deterministic and stochastic components.",
+    "flag": null,
+    "excel_row": 79
+  },
+  {
+    "header": "TOKEN_ERROR",
+    "rst_file": null,
+    "new_doc": null,
+    "flag": "Failed: Error code: 400 - {'error': {'message': \"This model's maximum context length is 8192 tokens, however you requested 8772 tokens (8772 in your prompt; 0 for the completion). Please reduce your prompt; or completion length.\", 'type': 'invalid_request_error', 'param': None, 'code': None}}",
+    "excel_row": 80
+  },
+  {
+    "header": "ExpSyn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``ExpSyn`` is a built-in point process in NEURON used to model synaptic conductances. When a spike occurs, the synaptic conductance is incremented by a quantum value and decays exponentially with a specified time constant. This mechanism is defined in the ``expsyn.mod`` file, which can be found in the NEURON source directory.",
+    "excel_row": 81
+  },
+  {
+    "header": "SpikeOut",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``SpikeOut`` is a mechanism that emulates a spike by generating a transient conductance change. It uses a ``BREAKPOINT`` block to calculate the current as ``i = g * (v - vrefrac)``. The conductance ``g`` is set to ``grefrac`` during the relative refractory period. The ``NET_RECEIVE`` block handles events and updates the conductance accordingly. This mechanism is used in conductance-based models like COBA cells.",
+    "excel_row": 81
+  },
+  {
+    "header": "WATCH",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``WATCH`` statements are used to monitor variables for threshold crossings. Once executed during initialization, a ``WATCH`` statement continuously monitors the specified condition throughout the simulation until the next initialization. This allows for efficient event handling in mechanisms like ``SpikeOut``.",
+    "excel_row": 81
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n    When using ``Vector.record`` in a loop, ensure that a new ``Vector`` instance is created for each iteration. If the same ``Vector`` instance is reused, all records will point to the same data, resulting in identical recordings for each section. Use a local object within the loop to avoid this issue.\n\n    Example:\n\n    .. code-block:: hoc\n\n        objref results_list\n\n        proc record_results() { localobj tobj\n          results_list = new List()\n          forall {\n            tobj = new Vector()\n            tobj.record(&v(0.5))\n            results_list.append(tobj)\n          }\n        }\n",
+    "flag": null,
+    "excel_row": 82
+  },
+  {
+    "header": "printf",
+    "rst_file": "nrn/docs/progref/programming/io/printf.rst",
+    "new_doc": ".. note::\n\n   ``printf`` statements can be used inside BREAKPOINT and FUNCTION blocks in NMODL source code for debugging purposes. The syntax is identical to that used by C. Variable names should be used as they are known inside the NMODL source code without suffix or dot notation.\n\n   Example:\n\n   .. code-block:: none\n\n       NEURON {\n         POINT_PROCESS PRtest\n         RANGE index\n       }\n       ASSIGNED {\n         v (mV)\n       }\n       PARAMETER {\n         index = 0\n       }\n       BREAKPOINT {\n         printf(\"BREAKPOINT\\t index %d\\t, t %g,\\t v %g\\n\", index, t, v)\n       }\n       AFTER BREAKPOINT {\n         printf(\"AFTER BREAKPOINT\\t index %d\\t, t %g,\\t v %g\\n\", index, t, v)\n       }",
+    "excel_row": 83
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   Ensure that the simulation is run before attempting to print or access the recorded data in the vector. The ``record()`` method marks the vector for storing data during the simulation, but the data will not be available until after the simulation has been executed.\n\n   Example:\n\n   .. code-block:: hoc\n\n       objref rect, recv\n       rect = new Vector()\n       recv = new Vector()\n       recv.record(&SThcells[0].soma.v(0.5))\n       rect.record(&t)\n       run()  // Ensure the simulation is executed\n       recv.printf()  // Now the vector contains the recorded data\n",
+    "excel_row": 84
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``record()`` can be used to track synaptic currents over time. When setting up a network, create a Vector for each synapse of interest and use ``record()`` to track the synapse's current. Append each Vector to a List for post-processing. This method is efficient but may require significant storage.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "CVode.record",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   ``CVode.record()`` is necessary for recording data with local variable time step integration. Ensure to record a time vector for each cell and interpolate current values at regular intervals during post-processing.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "List.append",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``append()`` can be used to add Vectors to a List for tracking synaptic currents. This is useful for post-processing to calculate average currents across synapses.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "List.count",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``count()`` returns the number of Vectors in a List, which is useful for calculating average synaptic currents by dividing the sum of currents by this count.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "Vector.add",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``add()`` can be used to sum the elements of Vectors in a List to compute the total synaptic current across multiple synapses.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "Vector.div",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   ``div()`` is used to divide the elements of a Vector by a scalar, such as the number of synapses, to compute average synaptic currents.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "fadvance",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``fadvance()`` can be customized to calculate the average synaptic current at each time step by iterating over a List of synapses and summing their currents.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "finitialize",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``finitialize()`` can be customized to reset the average synaptic current to zero at the start of each simulation run.",
+    "flag": null,
+    "excel_row": 85
+  },
+  {
+    "header": "topology",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``topology()`` is a command that can be used at the xterm's oc> prompt to display how sections are assembled into a model's branched architecture. This is particularly useful for understanding the structure of models like the \"stylized\" model in NEURON DEMO.",
+    "excel_row": 86
+  },
+  {
+    "header": "forall psection",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   ``forall psection()`` is a command that can be used at the xterm's oc> prompt to display hoc statements that, when executed, will set the anatomical and biophysical properties of each section in a model. This is useful for examining the properties of models such as the \"stylized\" model in NEURON DEMO.",
+    "excel_row": 86
+  },
+  {
+    "header": "Model View",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``Model View`` tool can be accessed via NEURON Main Menu / Tools / Model View. It provides a compact display of parameters for NEURON models, allowing users to discover the biophysical specification of models like the \"stylized\" model without delving into the source code. More information can be found on NEURON's Documentation page under \"ModelView: Compact display of parameters for NEURON models.\"",
+    "excel_row": 86
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   Ensure that the ``run()`` command is executed after setting up the ``record()`` method to capture the data correctly. The recording process begins after ``finitialize()`` and ``fadvance()`` are called, typically during a simulation run. Example usage:\n\n   .. code-block:: hoc\n\n       objref recina\n       recina = new Vector()\n       recina.record(&soma.i_na(0.5))\n       run()\n\n   This ensures that the vector captures the data during the simulation.",
+    "flag": null,
+    "excel_row": 87
+  },
+  {
+    "header": "SaveState.restore",
+    "rst_file": "nrn/docs/progref/simctrl/bbsavestate.rst",
+    "new_doc": ".. note::\n\n   ``restore()`` can be called with an argument of 1 to prevent clearing the event queue. This allows ``Vector.play`` to function correctly across multiple simulation runs, ensuring that each run's initial conditions are the conditions at the end of the previous run, except for time ``t``, which is reset to 0.",
+    "excel_row": 88
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using ``SaveState`` to manage simulation states, ensure that ``Vector.play`` is set up before any ``SaveState.save`` or ``SaveState.restore`` calls. If ``SaveState.restore`` is called with an argument of 1, it will not clear the event queue, allowing ``Vector.play`` to continue functioning correctly across simulation runs.",
+    "excel_row": 88
+  },
+  {
+    "header": "for (var)",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The ``for (var)`` loop iterates over all segments of the currently accessed section. The variable ``var`` begins at 0 and ends at 1, and in between, it is set to the center position of each segment. This means the loop executes ``nseg+2`` times. It is important to verify that the code behaves as expected, especially when assigning values to range variables. For such assignments, use ``for (var, 0)`` to avoid incorrect values in the last segment. Example:\n\n   .. code-block:: none\n\n      for (x, 0) diam(x) = x\n\n   This ensures that assignments do not include the 0 or 1 points, preventing errors in the last segment.",
+    "flag": null,
+    "excel_row": 89
+  },
+  {
+    "header": "connect",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology.rst",
+    "new_doc": ".. note::\n\n   The ``connect`` method can be used within a block to attach multiple child sections to a parent section. For example:\n\n   .. code-block:: none\n\n       soma[0] {\n           connect soma[1](0), 1\n           connect basal[0](0), 0\n           connect basal[20](0), 0\n           connect basal[23](0), 0\n           connect basal[41](0), 0\n       }\n\n   This syntax allows multiple connections to be made with ``soma[0]`` as the currently accessed section. The number after the comma specifies the location on the parent section where the child section will be attached.",
+    "flag": null,
+    "excel_row": 90
+  },
+  {
+    "header": "CurrentlyAccessedSection",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   Using the ``sectionname { ... }`` syntax allows multiple statements to be executed with ``sectionname`` as the currently accessed section. This is useful for connecting multiple sections to a parent section in a concise manner.",
+    "flag": null,
+    "excel_row": 90
+  },
+  {
+    "header": "v_init",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The default initialization in NEURON is a \"global voltage clamp\" initialization. It sets the membrane potential throughout the entire model to `v_init` (whose numeric value appears next to the Init button), and forces all voltage-dependent variables to their steady state values for that membrane potential. This is different from injecting a hyperpolarizing current, which does not result in uniform membrane potential throughout the cell unless the cell is very small and the current pulse is long enough for all mechanisms to reach their steady state.",
+    "flag": null,
+    "excel_row": 91
+  },
+  {
+    "header": "Random",
+    "rst_file": "nrn/docs/progref/programming/math/random.rst",
+    "new_doc": ".. note::\n\n   To achieve true stochastic behavior in simulations, use a different random number seed for each instance and/or simulation run. A reasonable strategy is to create a set of seeds in advance. For reproducibility, consider recording a log file that contains important information for each run, such as parameter values including the value of any random seed(s) that were used.",
+    "excel_row": 92
+  },
+  {
+    "header": "Init",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    The ``Init`` button in the RunControl panel performs a \"steady state initialization under voltage clamp.\" This sets the membrane potential to the specified value and initializes all voltage-dependent states to their steady state values for that potential. Clicking \"Init & Run\" will initialize the model and then allow it to run freely, similar to releasing a cell from a voltage clamp after holding it at a specific potential.",
+    "excel_row": 93
+  },
+  {
+    "header": "sscanf",
+    "rst_file": "nrn/docs/progref/programming/sscanf.rst",
+    "new_doc": ".. note::\n\n   ``sscanf`` can be used to convert strings to integers in HOC. For example, to read integers in hex, octal, and decimal formats:\n\n   .. code-block:: none\n\n       strdef s\n       double x[20]\n\n       sscanf(\"0xff 010 25\", \"%i%i%i\", &x[0], &x[1], &x[2])\n       print x[0], x[1], x[2]  # Outputs: 255.0 8.0 25.0\n\n   This demonstrates the ability of ``sscanf`` to parse different integer formats directly from strings.",
+    "excel_row": 94
+  },
+  {
+    "header": "SectionList",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   ``SectionList`` can be used to collect sections based on naming patterns. For example, to collect all sections with 'dend' in their name:\n\n   .. code-block:: none\n\n       objref dendriticSections\n       dendriticSections = new SectionList()\n       forsec \"dend\" {\n           dendriticSections.append()\n       }\n\n   This allows iteration over the collected sections:\n\n   .. code-block:: none\n\n       forsec dendriticSections {\n           // perform operations on each section\n       }",
+    "excel_row": 95
+  },
+  {
+    "header": "forsec",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   ``forsec`` can be used with a ``SectionList`` to iterate over specific sections. For example:\n\n   .. code-block:: none\n\n       objref dendriticSections\n       dendriticSections = new SectionList()\n       forsec \"dend\" {\n           dendriticSections.append()\n       }\n\n       forsec dendriticSections {\n           // perform operations on each section\n       }\n\n   This allows for efficient operations on a subset of sections.",
+    "excel_row": 95
+  },
+  {
+    "header": "func",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   Custom functions can be defined and used within ``forsec`` loops to perform calculations on each section:\n\n   .. code-block:: none\n\n       func myfunc() {\n           return diam\n       }\n\n       forsec dendriticSections {\n           print myfunc()\n       }\n\n   This allows for dynamic calculations based on section properties.",
+    "excel_row": 95
+  },
+  {
+    "header": "NetCon.event",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``NetCon.event()`` must be called during the initialization process to ensure events are not discarded. Use an ``FInitializeHandler`` to schedule the event call during initialization. For example:\n\n   .. code-block:: none\n\n       objref fih\n       fih = new FInitializeHandler(\"nc.event(2.5)\")\n\n   This ensures that the event is loaded into the event queue after initialization, preventing it from being cleared.",
+    "flag": null,
+    "excel_row": 96
+  },
+  {
+    "header": "SectionList",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/seclist.rst",
+    "new_doc": ".. note::\n\n   ``SectionList`` does not support direct indexing to retrieve specific sections. To iterate over specific groups of sections, use an auxiliary variable to track the index within a loop. For example:\n\n   .. code-block:: none\n\n       ii = 0\n       forsec seclist {\n         if (ii < 10) {\n           statement1\n         }\n         if ((ii >= 10) && (ii < 20)) {\n           statement2\n         }\n         ii += 1\n       }\n\n   This approach allows for executing different statements based on the index of the section within the list.",
+    "flag": null,
+    "excel_row": 97
+  },
+  {
+    "header": "forsec",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   The iteration order of sections in ``forsec`` when using a string pattern is based on their creation order, not alphabetical order. To ensure a specific order, explicitly create a new ``SectionList`` and append sections in the desired sequence. This approach enhances robustness and portability of the code.",
+    "flag": null,
+    "excel_row": 97
+  },
+  {
+    "header": "USEION",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   Currents declared in the ``WRITE`` clause of ``USEION`` statements must be in units of mA/cm2. If other units are needed, declare a surrogate variable in the ``NEURON`` block and assign it the desired units in the ``ASSIGNED`` block. Use a scale factor in the ``BREAKPOINT`` block to ensure consistency. For example:\n\n   .. code-block::\n\n       NEURON {\n           USEION ca WRITE ica\n           RANGE i\n       }\n\n       ASSIGNED {\n           ica (mA/cm2)\n           i (nA/cm2)\n       }\n\n       BREAKPOINT {\n           ica = expression_that_returns_mA_cm2\n           i = ica * (1e6)\n       }\n\n   Always check with ``modlunit`` to ensure no units inconsistencies.",
+    "excel_row": 98
+  },
+  {
+    "header": "Vector",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n    The ``Vector`` class is preferred over arrays declared with ``double`` for flexibility in NEURON. Vectors can dynamically change size using methods like ``append``, ``insert``, and ``resize``. This makes them more suitable for handling data that may grow or shrink during simulations. Avoid using ``double`` arrays when possible, as they are less flexible.",
+    "excel_row": 99
+  },
+  {
+    "header": "objref",
+    "rst_file": "nrn/docs/progref/programming/hoc-from-python.rst",
+    "new_doc": ".. note::\n\n    ``objref`` is used to declare references to objects, not scalar values or arrays of scalars. Attempting to assign a scalar or array element directly to an ``objref`` will result in an error. Ensure that ``objref`` is used only for object references.",
+    "excel_row": 99
+  },
+  {
+    "header": "double",
+    "rst_file": "nrn/docs/progref/programming/hoc-from-python.rst",
+    "new_doc": ".. note::\n\n    Variables declared with ``double`` are arrays of double precision values. They are not interchangeable with ``objref``. Use ``double`` for scalar or array of scalar values, but prefer ``Vector`` for dynamic array operations.",
+    "excel_row": 99
+  },
+  {
+    "header": "ion_style",
+    "rst_file": "nrn/docs/nmodl/language/nmodl_neuron_extension.rst",
+    "new_doc": ".. note::\n\n   ``ion_style`` is a function that NEURON uses to automatically manage the relationship between ionic currents and concentrations. It determines whether ionic variables are treated as PARAMETERS, ASSIGNED variables, or STATES based on the presence of mechanisms that READ or WRITE these variables. For example, if a section contains a mechanism that READs an equilibrium potential but no mechanism that WRITEs the corresponding ionic concentrations, the equilibrium potential will be treated as a PARAMETER. Conversely, if a mechanism WRITEs an ionic concentration, NEURON will treat it as a STATE and compute it by integrating the ionic currents.",
+    "excel_row": 100
+  },
+  {
+    "header": "USEION",
+    "rst_file": "nrn/docs/nmodl/transpiler/contents/ions.rst",
+    "new_doc": ".. note::\n\n   The ``USEION`` statement in NMODL is crucial for defining the ionic species involved in a model. It specifies which ionic variables are READ or WRITTEN by a mechanism. If a model does not specify an ion using ``USEION``, it may rely on constant values or numerical constants for ionic concentrations and equilibrium potentials. NEURON automatically creates mechanisms for ions like sodium and potassium when they are specified, managing their concentrations and currents according to predefined rules.",
+    "excel_row": 100
+  },
+  {
+    "header": "NetCon.event",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``event()`` can be used to call a procedure that sets a parameter to zero and uses ``cvode_event()`` to call another procedure that restores the parameter to its nonzero value. This approach can be useful for implementing state machines in networks.",
+    "excel_row": 101
+  },
+  {
+    "header": "NET_RECEIVE",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``NET_RECEIVE`` blocks can utilize ``WATCH`` statements to detect spikes and manage state transitions using self-events. The ``flag`` variable is an implicit argument that represents the second argument passed by a ``net_send`` function, allowing for the implementation of state machines with fixed delays.",
+    "excel_row": 101
+  },
+  {
+    "header": "WATCH",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``WATCH`` statements are used within ``NET_RECEIVE`` blocks to detect threshold crossings and trigger self-events. They are essential for implementing state machines that involve fixed delays, as they simplify the logic required to manage state transitions.",
+    "excel_row": 101
+  },
+  {
+    "header": "IClampNoise",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. class:: IClampNoise\n\n    .. tab:: Python\n\n        Syntax:\n            ``stimobj = n.IClampNoise(section(x))``\n\n            ``del -- ms``\n\n            ``dur -- ms``\n\n            ``f0 -- nA``\n\n            ``f1 -- nA``\n\n            ``r -- unitless``\n\n            ``torn -- ms``\n\n            ``std -- nA``\n\n            ``bias -- nA``\n\n        Description:\n            A point process that injects current with white Gaussian noise. The current is defined as\n            ``i = f(t) + D*n(t)``, where ``f(t)`` is a deterministic function and ``n(t)`` is white Gaussian noise.\n            The noise is generated using ``normrand(0, std)``. The current is active between ``del`` and ``del + dur``.\n\n            .. code-block:: none\n\n                PROCEDURE seed(x) {\n                    set_seed(x)\n                }\n\n            Use the ``seed`` procedure to set the random number generator seed for reproducibility.\n\n            .. note::\n\n                The ``BEFORE BREAKPOINT`` block is used to calculate the noise and current value, ensuring\n                stable simulation by avoiding multiple calls to ``normrand`` in the ``BREAKPOINT`` block.\n\n            Example:\n\n            .. code-block:: python\n\n                stim = n.IClampNoise(section(0.5))\n                stim.del = 50\n                stim.dur = 200\n                stim.std = 0.2\n                stim.f0 = 0.2\n                stim.f1 = 0.8\n                stim.r = 60\n                stim.torn = 500\n                stim.bias = 0\n\n    .. tab:: HOC\n\n        Syntax:\n            ``stimobj = new IClampNoise(x)``\n\n            ``del -- ms``\n\n            ``dur -- ms``\n\n            ``f0 -- nA``\n\n            ``f1 -- nA``\n\n            ``r -- unitless``\n\n            ``torn -- ms``\n\n            ``std -- nA``\n\n            ``bias -- nA``\n\n        Description:\n            A point process that injects current with white Gaussian noise. The current is defined as\n            ``i = f(t) + D*n(t)``, where ``f(t)`` is a deterministic function and ``n(t)`` is white Gaussian noise.\n            The noise is generated using ``normrand(0, std)``. The current is active between ``del`` and ``del + dur``.\n\n            Use the ``seed`` procedure to set the random number generator seed for reproducibility.\n\n            .. note::\n\n                The ``BEFORE BREAKPOINT`` block is used to calculate the noise and current value, ensuring\n                stable simulation by avoiding multiple calls to ``normrand`` in the ``BREAKPOINT`` block.\n",
+    "excel_row": 102
+  },
+  {
+    "header": "Alpha2SynNoise",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. class:: Alpha2SynNoise\n\n    .. tab:: Python\n\n        Syntax:\n            ``syn = n.Alpha2SynNoise(section(x))``\n\n            ``tau1 -- ms``\n\n            ``tau2 -- ms``\n\n            ``e -- mV``\n\n            ``mean -- unitless``\n\n            ``stddev -- unitless``\n\n            ``del -- ms``\n\n            ``dur -- ms``\n\n        Description:\n            A synaptic point process with alpha function conductance and Gaussian noise. The conductance is defined\n            by two time constants ``tau1`` and ``tau2``. The noise is generated using ``normrand(mean, stddev)``.\n            The synapse is active between ``del`` and ``del + dur``.\n\n            .. code-block:: none\n\n                PROCEDURE seed(x) {\n                    set_seed(x)\n                }\n\n            Use the ``seed`` procedure to set the random number generator seed for reproducibility.\n\n            .. note::\n\n                The ``BEFORE BREAKPOINT`` block is used to calculate the noise, ensuring stable simulation by avoiding\n                multiple calls to ``normrand`` in the ``BREAKPOINT`` block.\n\n            Example:\n\n            .. code-block:: python\n\n                syn = n.Alpha2SynNoise(section(0.5))\n                syn.tau1 = 0.1\n                syn.tau2 = 10\n                syn.e = 0\n                syn.mean = 1\n                syn.stddev = 0.2\n                syn.del = 0\n                syn.dur = 0\n\n    .. tab:: HOC\n\n        Syntax:\n            ``syn = new Alpha2SynNoise(x)``\n\n            ``tau1 -- ms``\n\n            ``tau2 -- ms``\n\n            ``e -- mV``\n\n            ``mean -- unitless``\n\n            ``stddev -- unitless``\n\n            ``del -- ms``\n\n            ``dur -- ms``\n\n        Description:\n            A synaptic point process with alpha function conductance and Gaussian noise. The conductance is defined\n            by two time constants ``tau1`` and ``tau2``. The noise is generated using ``normrand(mean, stddev)``.\n            The synapse is active between ``del`` and ``del + dur``.\n\n            Use the ``seed`` procedure to set the random number generator seed for reproducibility.\n\n            .. note::\n\n                The ``BEFORE BREAKPOINT`` block is used to calculate the noise, ensuring stable simulation by avoiding\n                multiple calls to ``normrand`` in the ``BREAKPOINT`` block.\n",
+    "excel_row": 102
+  },
+  {
+    "header": "neuron.h.Section",
+    "rst_file": "nrn/docs/progref/programming/hoc-from-python.rst",
+    "new_doc": ".. note::\n\n   ``h.Section`` is a callable that returns a new instance of a Section object when invoked with parentheses, i.e., ``sec = h.Section()``. This is similar to creating an instance of a class in Python, where ``h.Section`` acts as a constructor method.",
+    "excel_row": 103
+  },
+  {
+    "header": "area",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   The ``area`` function calculates the surface area of a segment as the lateral surface area of a cylinder, excluding the ends. Specifically, it is computed as ``2 * pi * r * l``, where ``r`` is the radius and ``l`` is the segment length. For sections specified with the stylized method (using ``L`` and ``diam``), segments are treated as cylinders. For sections specified with the pt3d method, segments are treated as truncated cones (frusta) with circular ends at the specified xyz coordinates and associated diameters. The default boundary condition in NEURON is \"sealed end,\" meaning that end areas are not included in the surface area calculation.",
+    "flag": null,
+    "excel_row": 104
+  },
+  {
+    "header": "totalarea",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. function:: totalarea()\n\n   Calculates the total surface area of a neuron model. This function initializes the model geometry and sums the area of all segments.\n\n   **Example usage in HOC:**\n\n   .. code-block:: none\n\n       proc totalarea() { local sum\n         finitialize()\n         sum = 0\n         forall for (x,0) sum += area(x)\n         print \"total surface area = \", sum, \" um2\"\n       }\n       totalarea()\n\n   For network models, modify the function to calculate the area for a specific cell class:\n\n   .. code-block:: none\n\n       proc totalarea() { local sum\n         finitialize()\n         sum = 0\n         forsec $o1.all for (x,0) sum += area(x)\n         print \"total surface area = \", sum, \" um2\"\n       }\n\n   Call this with an argument that is an objref pointing to an instance of the cell class of interest.",
+    "flag": null,
+    "excel_row": 104
+  },
+  {
+    "header": "Exp2Syn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   The conductance `g` of an `Exp2Syn` object cannot be set directly. Instead, adjust the `NetCon.weight` to achieve the desired peak conductance change. The `NetCon.weight` specifies the peak conductance change that an event will produce.",
+    "excel_row": 105
+  },
+  {
+    "header": "GClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n    ``GClamp`` is a dynamic clamp mechanism used to model synaptic conductance driven by a waveform. To use it, play a stimulus conductance vector into the ``g`` range variable. Set the reversal potential of the conductance with the ``e`` range variable and record the injected current with the ``i`` range variable. Ensure that the conductance values remain positive to avoid instability in the simulation. If using a file to provide the conductance waveform, ensure the data is formatted with time and conductance pairs, and use the ``Vector.play()`` method to drive the conductance values into the ``g`` variable.\n\n    Example usage:\n\n    .. code-block:: none\n\n        objref syn\n        soma syn = new GClamp(0)\n        syn.e = -80 // mV\n\n        // Load conductance data from file\n        objref gvec, tvec\n        gvec = new Vector()\n        tvec = new Vector()\n        gvec.from_file(\"conductance.dat\")\n        tvec.from_file(\"time.dat\")\n\n        // Play conductance into GClamp\n        gvec.play(&syn.g, tvec, 1)",
+    "flag": null,
+    "excel_row": 106
+  },
+  {
+    "header": "Vector.play",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n    When using ``Vector.play()`` to drive a synaptic conductance, ensure that the conductance values remain positive to maintain simulation stability. Negative conductance values can lead to instability and violate physical laws. If using a file to provide the conductance waveform, ensure the data is formatted with time and conductance pairs, and use the ``Vector.play()`` method with the continuous argument set to 1 for linear interpolation between time points.\n\n    Example usage:\n\n    .. code-block:: none\n\n        objref gvec, tvec\n        gvec = new Vector()\n        tvec = new Vector()\n        gvec.from_file(\"conductance.dat\")\n        tvec.from_file(\"time.dat\")\n\n        // Play conductance into a variable\n        gvec.play(&pp.g, tvec, 1)",
+    "flag": null,
+    "excel_row": 106
+  },
+  {
+    "header": "totalcm",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. function:: totalcm()\n\n   Calculate the total membrane capacitance of all sections in the model.\n\n   :returns: The total capacitance, computed as the sum of the product of the area and specific membrane capacitance (cm) for each segment.\n\n   **Example in HOC:**\n\n   .. code-block:: none\n\n       func totalcm() { local tmp\n         tmp = 0\n         forall for (x,0) tmp += area(x)*cm(x)\n         return tmp\n       }\n\n   This function iterates over all sections and their segments, accumulating the total capacitance.",
+    "flag": null,
+    "excel_row": 107
+  },
+  {
+    "header": "pt3dadd",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n    ``pt3dadd`` is used for defining the geometry of an individual section by adding 3D points with x, y, z coordinates and diameter. It does not handle connectivity or branching of sections. For branching, multiple sections must be created and connected using the ``connect`` statement. Refer to the Programmer's Reference on Geometry for more details.",
+    "excel_row": 108
+  },
+  {
+    "header": "psection",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   ``psection(sec=Section)`` provides information about the first segment of a section. To access information about all segments when ``nseg > 1``, iterate over the segments using a loop. For example, if a section contains a density mechanism with a RANGE variable, you can print its values along the section:\n\n   .. code-block:: python\n\n       for seg in soma:\n           print(seg.x, seg.gbar_na)\n\n   This loop will output the position and the value of the RANGE variable for each segment.",
+    "excel_row": 109
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/simctrl/stdrun.rst",
+    "new_doc": ".. note::\n\n   The ``record()`` method of the Vector class can be used to capture data of interest during a simulation run. After the run, this data can be written to text files. This allows for later analysis and graph examination without the need to rerun the simulation. The data can be read back into NEURON or any other tool for further analysis and visualization.",
+    "excel_row": 110
+  },
+  {
+    "header": "Exp2Syn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using multiple instances of ``Exp2Syn`` with the same parameters and location, consider using a single instance driven by multiple ``NetCon`` objects for efficiency. The conductance time course of a single synapse receiving multiple inputs is equivalent to multiple synapses each receiving a single input, assuming the underlying ODE is linear.",
+    "excel_row": 111
+  },
+  {
+    "header": "NetStim",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   In Python, collections of ``NetStim`` objects can be managed using lists instead of arrays for better flexibility and ease of use. Example:\n\n   .. code-block:: python\n\n      netstims = [n.NetStim() for _ in range(N_in)]\n      for ns in netstims:\n          ns.start = 5.0\n          ns.interval = 10.0\n          ns.number = 3\n          ns.noise = 0.1",
+    "excel_row": 111
+  },
+  {
+    "header": "NetCon",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When connecting multiple ``NetCon`` objects to a single synapse, the conductance change is equivalent to having multiple synapses each receiving a single input, provided the synaptic mechanism is linear. This can improve simulation speed.",
+    "excel_row": 111
+  },
+  {
+    "header": "area",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n    In NMODL, the surface area of a segment can be accessed directly using the ``area`` variable.\n    Declare ``area (micron2)`` in the ASSIGNED block and use it in any equation block.\n    This provides the segment area without needing to calculate it manually using ``L`` and ``diam``.\n\n    Example:\n\n    .. code-block:: none\n\n        ASSIGNED {\n            area (micron2)\n        }\n\n        BREAKPOINT {\n            surface_area = area\n        }\n\n    Remember to test your mod files with modlunit and use conversion factors as necessary to reconcile unit inconsistencies.",
+    "excel_row": 112
+  },
+  {
+    "header": "fadvance",
+    "rst_file": "nrn/docs/progref/simctrl/programmatic.rst",
+    "new_doc": ".. note::\n\n   When using a custom initialization procedure that includes calls to ``fadvance()``, it is important to call ``frecord_init()`` after the ``fadvance()`` calls are completed. This ensures that the internal index used by ``Vector.record`` is reset, preventing any discrepancies in recorded data due to the initialization process.",
+    "flag": null,
+    "excel_row": 113
+  },
+  {
+    "header": "frecord_init",
+    "rst_file": "nrn/docs/progref/simctrl/programmatic.rst",
+    "new_doc": ".. function:: frecord_init\n\n    .. tab:: Python\n    \n    \n        Syntax:\n            ``n.frecord_init()``\n\n        Description:\n            Resets the internal index used by ``Vector.record``. This is particularly important after calling ``fadvance()`` during a custom initialization procedure to ensure that recorded data is not shifted or misaligned.\n\n    .. tab:: HOC\n\n        Syntax:\n            ``frecord_init()``\n\n        Description:\n            Resets the internal index used by ``Vector.record``. This is particularly important after calling ``fadvance()`` during a custom initialization procedure to ensure that recorded data is not shifted or misaligned.",
+    "flag": null,
+    "excel_row": 113
+  },
+  {
+    "header": "IClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using adaptive integration, an ``IClamp`` object will cause the integrator to re-initialize at the start and end of the clamp duration, even if the amplitude is set to 0. This can result in small perturbations in the computed solution due to changes in the times at which the solution is evaluated. To minimize this effect, consider using fixed time step integration or adjusting the absolute error tolerance with ``cvode.atol()`` or ``cvode.atolscale()``.",
+    "flag": null,
+    "excel_row": 114
+  },
+  {
+    "header": "cvode.active",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   Activating adaptive integration with ``cvode.active(1)`` can lead to re-initialization of the integrator when using objects like ``IClamp`` that introduce parameter discontinuities, even if the parameter change is zero. This behavior can affect the trajectory of the solution, especially in simulations sensitive to timing.",
+    "flag": null,
+    "excel_row": 114
+  },
+  {
+    "header": "cvode.atol",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   To reduce perturbations caused by parameter discontinuities in adaptive integration, consider setting a smaller absolute error tolerance with ``cvode.atol()``. The default value is 1e-3, but it can be adjusted to improve the accuracy of the solution.",
+    "flag": null,
+    "excel_row": 114
+  },
+  {
+    "header": "cvode.atolscale",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   Use ``cvode.atolscale()`` to apply specific multipliers to the states' absolute error tolerances, which can help mitigate the effects of integrator re-initialization due to parameter discontinuities in adaptive integration.",
+    "flag": null,
+    "excel_row": 114
+  },
+  {
+    "header": "IClamp",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When creating an ``IClamp`` instance in Python, it is important to specify the target section using the ``sec=`` parameter. For example, use ``stim = h.IClamp(0, sec=axon)`` to attach the clamp to a specific section. Omitting ``sec=`` may lead to unexpected behavior, as the clamp may default to the currently accessed section.",
+    "flag": null,
+    "excel_row": 115
+  },
+  {
+    "header": "currently accessed section",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/secspec.rst",
+    "new_doc": ".. note::\n\n   The concept of the \"currently accessed section\" is crucial when working with point processes in NEURON. When a point process is instantiated without specifying a section, it defaults to the currently accessed section. To avoid unintended behavior, always specify the target section explicitly using the ``sec=`` parameter in function calls.",
+    "flag": null,
+    "excel_row": 115
+  },
+  {
+    "header": "NetCon.preloc",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``preloc()`` returns a value of 0.5 unless the source is a membrane potential located at 0 or 1, in which case it returns 0 or 1, respectively. This does not necessarily correspond to the actual x value location. For more precise location, use :meth:`NetCon.preseg`.",
+    "excel_row": 116
+  },
+  {
+    "header": "NetCon.preseg",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/netcon.rst",
+    "new_doc": ".. note::\n\n   ``preseg()`` returns a ``nrn.Segment`` object from which you can access the actual x value location using ``preseg().x`` and the section using ``preseg().sec``. It returns ``None`` if the NetCon has no source, the source is on a different process, or the source is not a voltage.",
+    "excel_row": 116
+  },
+  {
+    "header": "ParallelNetManager.want_all_spikes",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/network/parnet.rst",
+    "new_doc": ".. note::\n\n   ``want_all_spikes()`` records spikes based on the gids assigned to each presynaptic cell's spike trigger zone. To record spikes from additional locations within a cell, such as the distal axon, attach NetCons to those locations and assign gids to them.",
+    "excel_row": 117
+  },
+  {
+    "header": "area",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n    When using the 3d-method, the ``area()`` function calculates the surface area of a segment as the sum of all frusta between adjacent 3-d points that intersect the segment. This calculation takes into account the effects of ``sqrt(dradius^2 + darc^2)``. In contrast, the stylized method assumes a cylindrical shape, where the area is calculated as ``sec.L * sec.diam * h.PI``. NEURON uses the correct surface area returned by ``area()`` to compute transmembrane currents.",
+    "excel_row": 118
+  },
+  {
+    "header": "ExpSyn",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When placing an ``ExpSyn`` at a specific location along a section, the actual position may be influenced by the number of segments (``nseg``) in the section. The synapse will be placed as close as possible to the specified location, but increasing ``nseg`` can improve the accuracy of the placement. If precise placement is essential, consider dividing the neurite into multiple sections and placing the synapse at a junction point.",
+    "excel_row": 119
+  },
+  {
+    "header": "d_lambda rule",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/topology/geometry.rst",
+    "new_doc": ".. note::\n\n   The ``d_lambda`` rule provides a rational basis for specifying the spatial discretization of a model by setting ``nseg`` to a small fraction of the AC length constant at a high frequency. This ensures adequate spatial accuracy while minimizing computational load. For more details, refer to the article by Hines and Carnevale (2001) and the code implementation available at https://neuron.yale.edu/neuron/static/docs/d_lambda/d_lambda.html.",
+    "excel_row": 119
+  },
+  {
+    "header": "h.nrn_load_dll",
+    "rst_file": "nrn/docs/nmodl/language/nmodl.rst",
+    "new_doc": ".. note::\n\n   ``h.nrn_load_dll(dll_file_name)`` loads a DLL containing membrane mechanisms. The ``dll_file_name`` should include both the path to the directory and the name of the DLL file itself. This ensures that NEURON can locate and load the specified DLL correctly. It is often more convenient to place the mod files and the resulting DLL in the same directory as the main NEURON or Python script, eliminating the need for ``nrn_load_dll`` entirely. NEURON will automatically find and load the DLL from the current working directory.",
+    "excel_row": 120
+  },
+  {
+    "header": "default parameters",
+    "rst_file": "nrn/docs/nmodl/transpiler/contents/globals.rst",
+    "new_doc": ".. note::\n\n   The default values for parameters such as diameter, specific membrane capacitance, and cytoplasmic resistivity of a freshly created section are based on the squid giant axon. The parameters of the built-in hh mechanism are derived from the original Hodgkin and Huxley papers.",
+    "excel_row": 121
+  },
+  {
+    "header": "Vector.record",
+    "rst_file": "nrn/docs/progref/programming/math/vector.rst",
+    "new_doc": ".. note::\n\n   When using Python multiprocessing, be aware that the ``aspy`` method creates a new data structure that refers to the same memory locations as the Vector. If ``h.frecord_init()`` is called before worker processes have started, it will resize the recording vectors, affecting the data in the numpy arrays. To avoid this, consider making deep copies of the numpy arrays before passing them to worker processes.",
+    "flag": null,
+    "excel_row": 122
+  },
+  {
+    "header": "CVode.event",
+    "rst_file": "nrn/docs/progref/simctrl/cvode.rst",
+    "new_doc": ".. note::\n\n   When using ``CVode.event()`` to ensure simulation chunks end at specific times, ensure that the difference between ``h.t`` and the chunk start time is greater than the desired ``Dt``. If not, manually set ``h.t`` to the chunk start time and re-initialize with ``h.CVode().re_init()``. This can prevent segmentation faults and ensure that recording vectors have consistent lengths.",
+    "flag": null,
+    "excel_row": 122
+  },
+  {
+    "header": "pas",
+    "rst_file": "nrn/docs/progref/modelspec/programmatic/mechanisms/mech.rst",
+    "new_doc": ".. note::\n\n   When using the ``pas`` mechanism, it is common to set ``g_pas`` to the reciprocal of the membrane resistance (``Rm``) obtained from literature, i.e., ``g_pas = 1/Rm``. The ``e_pas`` parameter represents the equilibrium potential of the passive current. If the goal is to start a simulation at the resting potential of a section that only contains the ``pas`` mechanism, ``v_init`` should be set to the value of ``e_pas``. However, in more complex models with additional ion channels, exchangers, and pumps, ``e_pas`` should reflect the resting potential of the specific section or the clamped voltage if applicable.",
+    "flag": null,
+    "excel_row": 123
+  }
+]

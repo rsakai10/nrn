@@ -1,0 +1,42 @@
+.. _ion_concentration_in_neuron:
+
+Ion Concentrations and Ionic Currents in NEURON
+================================================
+
+NEURON models ionic currents and concentrations through mechanisms that explicitly declare their ionic dependencies using the ``USEION`` statement in NMODL or ion specification in the Channel Builder.
+
+.. note::
+   If an NMODL file does not specify an ion with ``USEION``, it often assumes constant ionic concentrations and equilibrium potentials, which are represented as numerical constants rather than dynamically updated variables.
+
+To observe ionic variables and equilibrium potentials, insert mechanisms that use ions. For example, the built-in Hodgkin-Huxley model includes sodium and potassium ions:
+
+.. code-block:: hoc
+
+   create soma
+   access soma
+   insert hh
+   psection()
+
+Output will show automatically created ion mechanisms and default reversal potentials:
+
+.. code-block:: text
+
+   soma {
+       insert na_ion { ena=50 }
+       insert k_ion  { ek=-77 }
+   }
+
+Common ionic variables provided when ions are declared include intra- and extracellular concentrations (e.g., ``nai``, ``nao``, ``ki``, ``ko``), reversal potentials (e.g., ``ena``, ``ek``), and ionic currents (e.g., ``ina``, ``ik``).
+
+.. note::
+   Ionic concentrations and potentials only exist if there is a mechanism that reads or writes them. Without an ion accumulation mechanism (one that writes concentrations), NEURON treats extracellular and intracellular concentrations as fixed parameters.
+
+To simulate time-varying external substances or reagents influencing neural activity, you can:
+
+- Use :class:`Vector`'s :meth:`Vector.play` to impose smoothly varying conductances.
+- Use the :class:`CVode` event system to trigger abrupt changes.
+- Implement detailed diffusion and reaction mechanisms via custom NMODL files specifying ion diffusion and interactions.
+
+See chapters 8 and 9 of *The NEURON Book* for in-depth explanations and examples of ion handling and concentration dynamics.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1466 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1466>`_

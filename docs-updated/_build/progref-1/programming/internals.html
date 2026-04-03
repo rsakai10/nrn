@@ -1,0 +1,708 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debugging and Internals Access &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Debugging and Internals Access</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/progref-1/programming/internals.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><a href="#allobjects" title="Link to this definition">allobjects</a> &middot; <a href="#allobjectvars" title="Link to this definition">allobjectvars</a> &middot; <a href="#hoc_pointer_" title="Link to this definition">hoc_pointer_</a> &middot; <a href="#name_declared" title="Link to this definition">name_declared</a> &middot; <a href="#nrn_digest" title="Link to this definition">nrn_digest</a> &middot; <a href="#object_id" title="Link to this definition">object_id</a> &middot; <a href="#object_pop" title="Link to this definition">object_pop</a> &middot; <a href="#object_push" title="Link to this definition">object_push</a> &middot; <a href="#symbols" title="Link to this definition">symbols</a> &middot; <a href="#use_exp_pow_precision" title="Link to this definition">use_exp_pow_precision</a></p><section id="debugging-and-internals-access">
+<h1>Debugging and Internals Access<a class="headerlink" href="#debugging-and-internals-access" title="Link to this heading"></a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">neuron.nrn_dll()</span></code></p>
+</div>
+<section id="namespace-related">
+<h2>Namespace Related<a class="headerlink" href="#namespace-related" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="name_declared">
+<span class="sig-name descname"><span class="pre">name_declared</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#name_declared" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--0-input--1" name="tab-set--0" type="radio"><label class="tab-label" for="tab-set--0-input--1">Python</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">n.name_declared(&quot;name&quot;)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">n.name_declared(&quot;name&quot;,</span> <span class="pre">1)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">n.name_declared(&quot;name&quot;,</span> <span class="pre">2)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Return 0 if the name is not in the NEURON/HOC symbol table. The first form looks
+for names in the top level symbol table. The second form looks in the
+current object context. The last form also looks in the top level
+symbol table but is useful in Python to distinguish subtypes of
+variables which appear as doubles in HOC but internally are really
+not doubles and so cannot be pointed to by <code class="docutils literal notranslate"><span class="pre">double*</span></code>, e.g., <code class="docutils literal notranslate"><span class="pre">n.secondorder</span></code>
+which is <code class="docutils literal notranslate"><span class="pre">&lt;type</span> <span class="pre">'int'&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">n._ref_nseg</span></code> which raises either
+<code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">Section</span> <span class="pre">access</span> <span class="pre">unspecified</span></code> or
+<code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">Cannot</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">reference</span></code></p>
+<p>If the name exists return:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Return Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>If an objref</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>If a Section</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>If a <span class="xref std std-ref">strdef</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>If a scalar or <span class="xref std std-ref">double</span> variable (if second arg is not 2)</p></td>
+</tr>
+</tbody>
+</table>
+<p>If the second argument is 2:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Return Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>If a scalar double</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>If a double array</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>If an integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>If a Section property</p></td>
+</tr>
+</tbody>
+</table>
+<p>If none of the above apply, return 1.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function checks the NEURON/HOC symbol table; Python objects are handled separately.</p>
+<p>To test if a simple name is a local variable in Python, use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;soma&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+    <span class="c1"># do something</span>
+</pre></div>
+</div>
+<p>Checking against <code class="docutils literal notranslate"><span class="pre">globals()</span></code> and <code class="docutils literal notranslate"><span class="pre">dir()</span></code> are also often useful.</p>
+<p>If the name is known in advance, use a <code class="docutils literal notranslate"><span class="pre">try</span></code>/<code class="docutils literal notranslate"><span class="pre">except</span></code> block and catch <code class="docutils literal notranslate"><span class="pre">NameError</span></code> and <code class="docutils literal notranslate"><span class="pre">AttributeError</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">squiggle</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">NameError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Name does not exist&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Combining this with an <code class="docutils literal notranslate"><span class="pre">eval</span></code> can allow testing arbitrary names, but is potentially unsafe as it allows
+execution of arbitrary code.</p>
+</div>
+</div>
+<input class="tab-input" id="tab-set--0-input--2" name="tab-set--0" type="radio"><label class="tab-label" for="tab-set--0-input--2">HOC</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">name_declared(&quot;name&quot;)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">name_declared(&quot;name&quot;,</span> <span class="pre">1)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">name_declared(&quot;name&quot;,</span> <span class="pre">2)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Return 0 if the name is not in the symbol table. The first form looks
+for names in the top level symbol table. The second form looks in the
+current object context. The last form also looks in the top level
+symbol table but is useful in Python to distinguish subtypes of
+variables which appear as doubles in HOC but internally are really
+not doubles and so cannot be pointed to by double*, eg. n.secondorder
+which is &lt;type ‘int’&gt; or n.nseg which returns either
+<code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">Section</span> <span class="pre">access</span> <span class="pre">unspecified</span></code> or
+<code class="docutils literal notranslate"><span class="pre">nseg</span>&#160; <span class="pre">not</span> <span class="pre">a</span> <span class="pre">USERPROPERTY</span> <span class="pre">that</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">pointed</span> <span class="pre">to</span></code></p>
+<p>If the name exists return</p>
+<p>2 if an objref</p>
+<p>3 if a Section</p>
+<p>4 if a <a class="reference internal" href="../../hoc/programming/ockeywor.html#hoc-keyword-strdef"><span class="std std-ref">strdef</span></a></p>
+<p>5 if a scalar or <a class="reference internal" href="../../hoc/programming/ockeywor.html#hoc-keyword-double"><span class="std std-ref">double</span></a> variable. (if second arg is not 2)</p>
+<blockquote>
+<div><p>if second arg is 2</p>
+<p>5 if a scalar double</p>
+<p>6 if a double array</p>
+<p>7 if an integer</p>
+<p>8 if a section property</p>
+</div></blockquote>
+<p>1 otherwise</p>
+<p>Note that names can be (re)declared only if they do not already
+exist or are already of the same type.
+This is too useful to require the user to waste an objref in creating a
+<a class="reference internal" href="strfun.html#StringFunctions" title="StringFunctions"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringFunctions</span></code></a> class to use <a class="reference internal" href="strfun.html#StringFunctions.is_name" title="StringFunctions.is_name"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_name()</span></code></a>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>name_declared(&quot;nrnmainmenu_&quot;)
+{object_push(nrnmainmenu_) print name_declared(&quot;ldfile&quot;, 0) object_pop()}
+{object_push(nrnmainmenu_) print name_declared(&quot;ldfile&quot;, 1) object_pop()}
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="symbols">
+<span class="sig-name descname"><span class="pre">symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#symbols" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--1-input--1" name="tab-set--1" type="radio"><label class="tab-label" for="tab-set--1-input--1">Python</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Name:</dt><dd><p>symbols — type the names of HOC functions and variables</p>
+</dd>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.symbols()</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Types a list of functions and variable names defined in HOC.  Dimensions
+of arrays are also indicated.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>No longer works. The nearest replacement is <a class="reference internal" href="gui/symchooser.html#SymChooser" title="SymChooser"><code class="xref py py-func docutils literal notranslate"><span class="pre">SymChooser()</span></code></a> .</p>
+</div>
+</div>
+<input class="tab-input" id="tab-set--1-input--2" name="tab-set--1" type="radio"><label class="tab-label" for="tab-set--1-input--2">HOC</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Name:</dt><dd><p>symbols — type the names of HOC functions and variables</p>
+</dd>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">symbols()</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Types a list of functions and variable names defined in HOC.  Dimensions
+of arrays are also indicated.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>No longer works. The nearest replacement is <a class="reference internal" href="gui/symchooser.html#SymChooser" title="SymChooser"><code class="xref py py-func docutils literal notranslate"><span class="pre">SymChooser()</span></code></a> .</p>
+</div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="object-related">
+<h2>Object Related<a class="headerlink" href="#object-related" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="object_id">
+<span class="sig-name descname"><span class="pre">object_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#object_id" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--2-input--1" name="tab-set--2" type="radio"><label class="tab-label" for="tab-set--2-input--1">Python</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.object_id(objref)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">n.object_id(objref,</span> <span class="pre">1)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Returns 0 if the object reference does not point to an object instance.
+(Otherwise returns the pointer cast to a double, not a very useful number,
+except that this is equal to the value returned by Python’s <code class="docutils literal notranslate"><span class="pre">hash</span></code> function.)</p>
+<p>If the second argument is 1, it returns the index of the object name. Returns
+-1 if the object is the <code class="docutils literal notranslate"><span class="pre">NULLObject</span></code>.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">n</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">List</span><span class="p">(),</span> <span class="n">n</span><span class="o">.</span><span class="n">List</span><span class="p">(),</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">object_id</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>       <span class="c1"># displays a double; equal to hash(a)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">object_id</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>    <span class="c1"># 0 since a == n.List[0]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">object_id</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>    <span class="c1"># 1 since b == n.List[1]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">object_id</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>    <span class="c1"># 0 since c == n.Vector[0]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<input class="tab-input" id="tab-set--2-input--2" name="tab-set--2" type="radio"><label class="tab-label" for="tab-set--2-input--2">HOC</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">object_id(objref)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">object_id(objref,</span> <span class="pre">1)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Returns 0 if the object reference does not point to an object instance.
+(Otherwise returns the pointer cast to a double, not a very useful number)</p>
+<p>If the second argument is 1, it returns the index of the object name. Returns
+-1 if the object is the NULLObject.</p>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="allobjectvars">
+<span class="sig-name descname"><span class="pre">allobjectvars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#allobjectvars" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--3-input--1" name="tab-set--3" type="radio"><label class="tab-label" for="tab-set--3-input--1">Python</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.allobjectvars()</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Prints all the HOC object references (objref variables) that have been
+declared along with the class type of the object they reference and the
+number of references. Objects created via Python and not assigned to a
+HOC objref will not appear.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">(</span><span class="s1">&#39;objref foo&#39;</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">allobjectvars</span><span class="p">()</span>
+<span class="go">obp hoc_obj_[0] -&gt; NULL</span>
+<span class="go">obp hoc_obj_[1] -&gt; NULL</span>
+<span class="go">obp foo[0] -&gt; Vector[0] with 1 refs.</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">banana</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">foo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">allobjectvars</span><span class="p">()</span>
+<span class="go">obp hoc_obj_[0] -&gt; NULL</span>
+<span class="go">obp hoc_obj_[1] -&gt; NULL</span>
+<span class="go">obp foo[0] -&gt; Vector[0] with 2 refs.</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<input class="tab-input" id="tab-set--3-input--2" name="tab-set--3" type="radio"><label class="tab-label" for="tab-set--3-input--2">HOC</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">allobjectvars()</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Prints all the object references (objref variables) that have been
+declared along with the class type of the object they reference and the
+number of references.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Instead of printing the address of the object in hex format, it ought
+also to print the object_id and/or the internal instance name.</p>
+</div>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="allobjects">
+<span class="sig-name descname"><span class="pre">allobjects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#allobjects" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--4-input--1" name="tab-set--4" type="radio"><label class="tab-label" for="tab-set--4-input--1">Python</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.allobjects()</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">n.allobjects(&quot;templatename&quot;)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">nref</span> <span class="pre">=</span> <span class="pre">n.allobjects(objectref)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Prints the internal names of all class instances (objects) available
+from the interpreter along with the number of references to them.</p>
+<p>With a templatename the list is restricted to objects of that class.</p>
+<p>With an object variable, nothing is printed but the reference count
+is returned. The count is too large by one if the argument was of the
+form templatename[index] since a temporary reference is created while
+the object is on the stack during the call.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">allobjects</span><span class="p">()</span>
+<span class="go">List[0] with 1 refs</span>
+<span class="go">Vector[0] with 1 refs</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">allobjects</span><span class="p">(</span><span class="s1">&#39;Vector&#39;</span><span class="p">)</span>
+<span class="go">Vector[0] with 1 refs</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">allobjects</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Use a <a class="reference internal" href="gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> to programmatically loop over all instances of a
+template.</p>
+</div>
+</div>
+<input class="tab-input" id="tab-set--4-input--2" name="tab-set--4" type="radio"><label class="tab-label" for="tab-set--4-input--2">HOC</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">allobjects()</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">allobjects(&quot;templatename&quot;)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">nref</span> <span class="pre">=</span> <span class="pre">allobjects(objectref)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Prints the internal names of all class instances (objects) available
+from the interpreter along with the number of references to them.</p>
+<p>With a templatename the list is restricted to objects of that class.</p>
+<p>With an object variable, nothing is printed but the reference count
+is returned. The count is too large by one if the argument was of the
+form templatename[index] since a temporary reference is created while
+the object is on the stack during the call.</p>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="object_push">
+<span class="sig-name descname"><span class="pre">object_push</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#object_push" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--5-input--1" name="tab-set--5" type="radio"><label class="tab-label" for="tab-set--5-input--1">Python</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.object_push(objref)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Enter the context of the object referenced by objref. In this context you
+can directly access any variables or call any functions, even those not
+declared as <span class="xref std std-ref">public</span>. Do not attempt to create any new symbol names!
+This function is generally used by the object itself to save its state
+in a session.</p>
+</dd>
+</dl>
+</div>
+<input class="tab-input" id="tab-set--5-input--2" name="tab-set--5" type="radio"><label class="tab-label" for="tab-set--5-input--2">HOC</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">object_push(objref)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Enter the context of the object referenced by objref. In this context you
+can directly access any variables or call any functions, even those not
+declared as <a class="reference internal" href="../../hoc/programming/oop.html#hoc-keyword-public"><span class="std std-ref">public</span></a>. Do not attempt to create any new symbol names!
+This function is generally used by the object itself to save its state
+in a session.</p>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="object_pop">
+<span class="sig-name descname"><span class="pre">object_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#object_pop" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--6-input--1" name="tab-set--6" type="radio"><label class="tab-label" for="tab-set--6-input--1">Python</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.object_pop()</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Pop the last object from an <a class="reference internal" href="#object_push" title="object_push"><code class="xref py py-func docutils literal notranslate"><span class="pre">object_push()</span></code></a> .</p>
+</dd>
+</dl>
+</div>
+<input class="tab-input" id="tab-set--6-input--2" name="tab-set--6" type="radio"><label class="tab-label" for="tab-set--6-input--2">HOC</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">object_pop()</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Pop the last object from an <a class="reference internal" href="#object_push" title="object_push"><code class="xref py py-func docutils literal notranslate"><span class="pre">object_push()</span></code></a> .</p>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<hr class="docutils" />
+<section id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hoc_pointer_">
+<span class="sig-name descname"><span class="pre">hoc_pointer_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hoc_pointer_" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--7-input--1" name="tab-set--7" type="radio"><label class="tab-label" for="tab-set--7-input--1">Python</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.hoc_pointer_(&amp;variable)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>A function used by C and C++ implementations to request a pointer to
+the variable from its interpreter name. Not needed by or useful for the user; returns 1.0 on
+success.</p>
+</dd>
+</dl>
+</div>
+<input class="tab-input" id="tab-set--7-input--2" name="tab-set--7" type="radio"><label class="tab-label" for="tab-set--7-input--2">HOC</label><div class="tab-content docutils">
+<dl class="simple">
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">hoc_pointer_(&amp;variable)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>A function used by c and c++ implementations to request a pointer to
+the variable from its interpreter name. Not needed by the user.</p>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<hr class="docutils" />
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="nrn_digest">
+<span class="sig-name descname"><span class="pre">nrn_digest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nrn_digest" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--8-input--1" name="tab-set--8" type="radio"><label class="tab-label" for="tab-set--8-input--1">Python</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.nrn_digest()</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">n.nrn_digest(tid,</span> <span class="pre">i)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">n.nrn_digest(tid,</span> <span class="pre">i,</span> <span class="pre">&quot;abort&quot;)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">n.nrn_digest(filename)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Available when configured with the cmake option <code class="docutils literal notranslate"><span class="pre">-DNRN_ENABLE_DIGEST=ON</span></code></p>
+<p>If the same simulation gives different results on different machines,
+this function can help isolate the statement that generates the
+first difference during the simulation.
+I think <a class="reference internal" href="../modelspec/programmatic/network/parcon.html#ParallelContext.prcellstate" title="ParallelContext.prcellstate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ParallelContext.prcellstate()</span></code></a> is generally better, but in rare
+situations, nrn_digest can be very helpful.</p>
+<p>The first three forms begin digest gathering. The last form
+prints the gathered digest information to the filename.
+With just the two <code class="docutils literal notranslate"><span class="pre">tid,</span> <span class="pre">i</span></code> arguments, the i gathered item of the
+tid thread is printed (for single thread simulations, use <code class="docutils literal notranslate"><span class="pre">tid</span> <span class="pre">=</span> <span class="pre">0</span></code>),
+to the terminal as well as the individual values of the array
+for that digest item. With the third <code class="docutils literal notranslate"><span class="pre">&quot;abort&quot;</span></code> argument, the
+ith gathered item is printed and <code class="docutils literal notranslate"><span class="pre">abort()</span></code> is called (dropping
+into gdb if that is being used so that one can observe the backtrace).</p>
+<p>Lines are inserted into the digest by calling the C function declared
+in <code class="docutils literal notranslate"><span class="pre">src/oc/nrndigest.h</span></code>.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">nrn_digest_dbl_array(const</span> <span class="pre">char*</span> <span class="pre">msg,</span> <span class="pre">int</span> <span class="pre">tid,</span> <span class="pre">double</span> <span class="pre">t,</span> <span class="pre">double*</span> <span class="pre">array,</span> <span class="pre">size_t</span> <span class="pre">sz);</span></code></p>
+</div></blockquote>
+<p>at the moment, such lines are present in <code class="docutils literal notranslate"><span class="pre">src/nrncvode/occvode.cpp</span></code>
+to instrument the cvode callbacks that compute <code class="docutils literal notranslate"><span class="pre">y'</span> <span class="pre">=</span> <span class="pre">f(y,</span> <span class="pre">t)</span></code> and the
+approximate jacobian matrix solver <code class="docutils literal notranslate"><span class="pre">M*x</span> <span class="pre">=</span> <span class="pre">b</span></code>. I.e in part</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;nrndigest.h&quot;</span>
+<span class="o">...</span>
+<span class="n">void</span> <span class="n">Cvode</span><span class="p">::</span><span class="n">fun_thread</span><span class="p">(</span><span class="n">neuron</span><span class="p">::</span><span class="n">model_sorted_token</span> <span class="n">const</span><span class="o">&amp;</span> <span class="n">sorted_token</span><span class="p">,</span>
+           <span class="n">double</span> <span class="n">tt</span><span class="p">,</span>
+           <span class="n">double</span><span class="o">*</span> <span class="n">y</span><span class="p">,</span>
+           <span class="n">double</span><span class="o">*</span> <span class="n">ydot</span><span class="p">,</span>
+           <span class="n">NrnThread</span><span class="o">*</span> <span class="n">nt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">CvodeThreadData</span><span class="o">&amp;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">CTD</span><span class="p">(</span><span class="n">nt</span><span class="o">-&gt;</span><span class="nb">id</span><span class="p">);</span>
+<span class="c1">#if NRN_DIGEST</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nrn_digest_</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nrn_digest_dbl_array</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nt</span><span class="o">-&gt;</span><span class="nb">id</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">.</span><span class="n">nvsize_</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="c1">#endif</span>
+<span class="o">...</span>
+<span class="c1">#if NRN_DIGEST</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nrn_digest_</span> <span class="o">&amp;&amp;</span> <span class="n">ydot</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nrn_digest_dbl_array</span><span class="p">(</span><span class="s2">&quot;ydot&quot;</span><span class="p">,</span> <span class="n">nt</span><span class="o">-&gt;</span><span class="nb">id</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">ydot</span><span class="p">,</span> <span class="n">z</span><span class="o">.</span><span class="n">nvsize_</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="c1">#endif</span>
+</pre></div>
+</div>
+<p>Note: when manually adding such lines, the conditional compilation and
+nrn_digest_ test are not needed. The arguments to
+<code class="docutils literal notranslate"><span class="pre">nrn_digest_dbl_array</span></code> determine the line added to the digest.
+The 5th arg is the size of the 4th arg double array. The double array
+is processed by SHA1 and the first 16 hex digits are appended to the line.
+An example of the first few lines of output in a digest file is
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tid</span><span class="o">=</span><span class="mi">0</span> <span class="n">size</span><span class="o">=</span><span class="mi">1344</span>
+<span class="n">y</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="n">e1f6a372856b45e6</span>
+<span class="n">y</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span> <span class="n">e1f6a372856b45e6</span>
+<span class="n">ydot</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">523</span><span class="n">c9694c335e458</span>
+<span class="n">y</span> <span class="mi">0</span> <span class="mi">3</span> <span class="mf">4.7121609153871379e-09</span> <span class="n">fabb4bc469447404</span>
+<span class="n">ydot</span> <span class="mi">0</span> <span class="mi">4</span> <span class="mf">4.7121609153871379e-09</span> <span class="mi">60</span><span class="n">bcff174645fc29</span>
+</pre></div>
+</div>
+<p>The first line is thread id and number of lines for that thread.
+Other thread groups, if any, follow the end of each thread group.
+The digest lines consist of thread id, line identifier (start from 0
+for each group), double value of the 3rd arg, hash of the array.</p>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="use_exp_pow_precision">
+<span class="sig-name descname"><span class="pre">use_exp_pow_precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#use_exp_pow_precision" title="Link to this definition"></a></dt>
+<dd><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--9-input--1" name="tab-set--9" type="radio"><label class="tab-label" for="tab-set--9-input--1">Python</label><div class="tab-content docutils">
+<dl>
+<dt>Syntax:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.use_exp_pow_precision(istyle)</span></code></p>
+</dd>
+<dt>Description:</dt><dd><p>Works when configured with the cmake option
+<code class="docutils literal notranslate"><span class="pre">-DNRN_ENABLE_ARCH_INDEP_EXP_POW=ON</span></code> and otherwise does nothing.</p>
+<ul>
+<li><dl class="simple">
+<dt>istyle = 1</dt><dd><p>All calls to <a class="reference internal" href="math/functions.html#exp" title="exp"><code class="xref py py-func docutils literal notranslate"><span class="pre">exp()</span></code></a> and <code class="xref py py-func docutils literal notranslate"><span class="pre">pow()</span></code> as well as their use
+internally, in mod files, and by cvode, are computed on mac, linux,
+windows so that double precision floating point results are
+cross platform consistent. (Makes use of a
+multiple precision floating-point computation library.)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>istyle = 2</dt><dd><p>exp and pow are rounded to 32 bits of mantissa</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>istyle = 0</dt><dd><p>Default.
+exp and pow calcualted natively (cross platform values can have
+round off error differences.)</p>
+<p>When using clang (eg. on a mac) cross platform floating point
+identity is often attainable with  C and C++ flag option
+<code class="docutils literal notranslate"><span class="pre">&quot;-ffp-contract=off&quot;</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

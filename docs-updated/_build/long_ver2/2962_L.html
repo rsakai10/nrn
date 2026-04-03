@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using For Loops to Run Multiple Simulations with Parameter Variation &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using For Loops to Run Multiple Simulations with Parameter Variation</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2962_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-for-loops-to-run-multiple-simulations-with-parameter-variation">
+<h1>Using For Loops to Run Multiple Simulations with Parameter Variation<a class="headerlink" href="#using-for-loops-to-run-multiple-simulations-with-parameter-variation" title="Link to this heading"></a></h1>
+<p>This section explains how to run multiple simulation trials in a hoc file using loops to vary input parameters, such as event times, across runs. It also clarifies common errors and recommends best practices for simulation control using NEURON’s standard run system.</p>
+<section id="event-time-vector-setup">
+<h2>Event Time Vector Setup<a class="headerlink" href="#event-time-vector-setup" title="Link to this heading"></a></h2>
+<p>To generate a vector of event times (e.g., stimulus spike times) that changes on each run, use the <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> methods efficiently instead of appending values in loops. Define a procedure that resizes and populates the vector before each run:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// svec is a global or previously declared Vector
+svec = new Vector()
+
+// $1 = start time, $2 = interval dt, $3 = number of intervals
+proc before_run() {
+    svec.resize($3+1)
+    svec.indgen($2)  // fills vector with 0, dt, 2*dt, ...
+    svec.add($1)     // adds start time to each element
+}
+</pre></div>
+</div>
+</section>
+<section id="creating-and-starting-vecstim-for-each-run">
+<h2>Creating and Starting VecStim for Each Run<a class="headerlink" href="#creating-and-starting-vecstim-for-each-run" title="Link to this heading"></a></h2>
+<p>Create a new <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code> object each run and play the updated event vector:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref vecstim
+vecstim = new VecStim()
+vecstim.play(svec)
+</pre></div>
+</div>
+</section>
+<section id="simulation-control-using-standard-run-system">
+<h2>Simulation Control Using Standard Run System<a class="headerlink" href="#simulation-control-using-standard-run-system" title="Link to this heading"></a></h2>
+<p>Instead of writing custom procedures for initialization and advancing time, use NEURON’s built-in <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> procedure. This is achieved by loading either <code class="file docutils literal notranslate"><span class="pre">nrngui.hoc</span></code> or <code class="file docutils literal notranslate"><span class="pre">stdgui.hoc</span></code>. The latter suppresses GUI windows if not needed.</p>
+<p>Example batch run loop varying intervals:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc batrun() {
+    local i
+    for i=1, $1 {
+        before_run(3000, i, 100)  // example parameters
+        run()                     // standard NEURON run
+        counter()                 // user-defined procedure to analyze results
+    }
+}
+</pre></div>
+</div>
+</section>
+<section id="analysis-and-recording">
+<h2>Analysis and Recording<a class="headerlink" href="#analysis-and-recording" title="Link to this heading"></a></h2>
+<p>Example procedures for recording spike times and calculating spike frequency:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref grcspk, nc, spkcnts
+spkcnts = new Vector()  // to store frequency results
+
+proc newvec() {
+    grcspk = new Vector()
+    nc = new NetCon(&amp;v(0.5), nil)
+    nc.threshold = 0
+    nc.record(grcspk)
+}
+
+proc counter() {
+    local firstspk, lastspk, totspk, spkfreq
+    totspk = grcspk.size()
+    if (totspk &lt;= 1) {
+        spkfreq = 0
+    } else {
+        firstspk = grcspk.x[0]
+        lastspk = grcspk.x[totspk-1]
+        spkfreq = (totspk - 1) / (lastspk - firstspk)
+    }
+    spkcnts.append(spkfreq)
+}
+</pre></div>
+</div>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always declare object references like <a href="#id1"><span class="problematic" id="id2">:objref:`Vector`</span></a> or <a href="#id3"><span class="problematic" id="id4">:objref:`File`</span></a> before assigning to them to avoid syntax errors.</p></li>
+<li><p>Avoid continuously appending new event times to the same vector without clearing or resizing it, as this may cause scheduling errors such as negative event times in <code class="xref py py-class docutils literal notranslate"><span class="pre">VecStim</span></code>.</p></li>
+<li><p>There is no need (and no mechanism) to “close” hoc files after loading. The <a class="reference internal" href="../progref-1/programming/io/file.html#File" title="File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> class and related functions (<a class="reference internal" href="../progref-1/programming/io/ropen.html#wopen" title="wopen"><code class="xref py py-func docutils literal notranslate"><span class="pre">wopen()</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">File.wclose()</span></code>) control text file I/O, not hoc file management.</p></li>
+<li><p>Setting simulation parameters such as time step (<a href="#id5"><span class="problematic" id="id6">:var:`dt`</span></a>) and integration method should be done before calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code>.</p></li>
+</ul>
+</section>
+<section id="integration-mode-and-time-step-control">
+<h2>Integration Mode and Time Step Control<a class="headerlink" href="#integration-mode-and-time-step-control" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Set the fixed time step by assigning to the global variable <a href="#id7"><span class="problematic" id="id8">:var:`dt`</span></a> before running the simulation:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>dt = 0.001  // set fixed time step
+</pre></div>
+</div>
+</li>
+<li><p>Control integration mode for fixed-step integration via the <a href="#id9"><span class="problematic" id="id10">:var:`secondorder`</span></a> variable (selects backward Euler or Crank-Nicholson variants).</p></li>
+<li><p>For variable time step integration, use the VariableTimeStep tool through the GUI or load a saved session (.ses) file. This requires empirically tuning absolute tolerances for each state variable.</p></li>
+</ul>
+<p>Example of controlling <a href="#id11"><span class="problematic" id="id12">:var:`dt`</span></a> in batch runs:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc batrun() {
+    local i, dtold
+    dtold = dt
+    dt = 0.001
+    for i=1, $1 {
+        before_run(3000, i, 100)
+        run()
+        counter()
+    }
+    print &quot;Executed &quot;, $1, &quot; runs with dt &quot;, dt
+    dt = dtold
+}
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use Vector methods like <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.indgen" title="Vector.indgen"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.indgen()</span></code></a> and <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.add" title="Vector.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.add()</span></code></a> to prepare event time vectors efficiently.</p></li>
+<li><p>Use the standard <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> procedure for advancing the simulation rather than custom looping with <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fadvance()</span></code></a>.</p></li>
+<li><p>Create new recording objects (e.g., <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>) fresh for each simulation run.</p></li>
+<li><p>Ensure object references are declared before assigning.</p></li>
+<li><p>There is no hoc file closing command; loading hoc files is one-time at runtime.</p></li>
+<li><p>Control <a href="#id13"><span class="problematic" id="id14">:var:`dt`</span></a> and integration settings prior to running simulations.</p></li>
+</ul>
+<p>By following these guidelines, you can efficiently run multiple simulation trials varying timing or other parameters, avoiding common mistakes and harnessing built-in NEURON tools for simulation control.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2962">https://neuron.yale.edu/phpBB/viewtopic.php?t=2962</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

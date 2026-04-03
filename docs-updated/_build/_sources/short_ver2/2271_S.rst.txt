@@ -1,0 +1,74 @@
+Optimal Spatial Discretization (d_lambda) for Propagation Speed Measurement
+=============================================================================
+
+When measuring propagation speed in myelinated axon models such as McIntyre et al. (2002), careful consideration of spatial discretization is essential. The standard **d_lambda** rule for segment length may not apply straightforwardly due to complex cable properties involving extracellular resistances.
+
+Key Points
+----------
+
+- Propagation speed measurements should be based on latency differences at two distinct points using :class:`NetCon` with second-order interpolation (:meth:`CVode.condition_order(2)`), rather than threshold crossing in membrane voltage vectors.
+
+- For models including the :class:`extracellular` mechanism (e.g. McIntyre et al.), the standard :func:`lambda_f` and associated **d_lambda** rule do not account for axial extracellular resistance (xraxial). Thus, a smaller compartment size (larger nseg) is often required, sometimes exceeding typical values (e.g. nseg ≥ 27), for conduction velocity to converge.
+
+- Use adaptive integration with appropriate tolerances (e.g., `cvode.atol = 1e-4`) and initialization via :meth:`CVode.dae_init_dteps()` to avoid variable step integrator errors when using large nseg.
+
+- Stimulation should be localized (e.g., at node[0]) and near-threshold to avoid spike initiation zone artifacts. Avoid measuring conduction in initial or terminal nodes to minimize boundary effects.
+
+- Implementing spatial discretization in internodes with extracellular resistances can be approached by scaling the cytoplasmic resistivity factor in :func:`lambda_f`, e.g.:
+
+  .. code-block:: hoc
+
+     proc chop_internodes() { local tmp, w
+         forsec sralist {
+             tmp = Ra
+             w = wgap/diam(0.5)    // wgap = gap width between axon and myelin
+             Ra = Ra + Rag/(4*w)
+             nseg = int((L/(0.1*lambda_f(100))+.999)/2)*2 + 1
+             Ra = tmp
+         }
+     }
+     chop_internodes(sralist)
+
+Example Python Outline for Spike Time Detection and Speed Measurement
+---------------------------------------------------------------------
+
+.. code-block:: python
+
+    from neuron import h
+    h.load_file("MRGaxon.hoc")
+    h.cvode.active(1)
+    h.cvode.condition_order(2)
+
+    stim_node = 0
+    stim = h.IClamp(h.node[stim_node](0.5))
+    stim.amp = 0.5  # Adjusted stimulus amplitude
+
+    nodes = h.axonnodes
+    spikes = [h.Vector() for _ in range(nodes)]
+    netcons = []
+    for i in range(nodes):
+        nc = h.NetCon(h.node[i](0.5)._ref_v, None, sec=h.node[i])
+        nc.threshold = -40
+        nc.record(spikes[i])
+        netcons.append(nc)
+
+    def measure_propspeed():
+        h.run()
+        t0, t1 = spikes[5][0], spikes[15][0]
+        dist = (15 - 5) * h.deltax  # in microns
+        velocity = dist / (t1 - t0) / 1000  # put in m/s
+        return velocity
+
+Notes
+-----
+
+.. note::
+   Using :meth:`CVode.condition_order(2)` may cause crashes in some NEURON versions; verify stability.
+
+.. note::
+   Setting the number of segments in nodes of Ranvier (`nseg`) significantly impacts computed conduction velocity. Increasing `nseg` improves convergence but demands longer simulation time.
+
+.. seealso::
+   :func:`lambda_f`, :meth:`CVode.condition_order`, :class:`NetCon`, :meth:`NetCon.record`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2271 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2271>`_

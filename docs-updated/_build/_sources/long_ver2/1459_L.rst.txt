@@ -1,0 +1,126 @@
+Action Potential Amplitude Variability in Single Compartment Models
+====================================================================
+
+When simulating action potentials (APs) in single compartment models with Hodgkin-Huxley type channels (:class:`hh`), the amplitude of APs can vary significantly depending on model parameters such as geometry and channel densities. It is a common misconception that the AP amplitude must remain constant both during a spike train and across different parameter sets. However, the model’s ionic current balances fundamentally determine the AP peak voltage.
+
+Explanation of AP Peak Voltage
+------------------------------
+
+For a single electrically compact compartment, membrane voltage dynamics satisfy the equation:
+
+.. math::
+
+   C \frac{dV}{dt} = \sum_x I_x
+
+where :math:`C` is the membrane capacitance and :math:`I_x` are ionic currents for species :math:`x`. At the peak of an AP, :math:`dV/dt = 0`, so the sum of ionic currents is zero:
+
+.. math::
+
+   0 = \sum_x g_x (V - E_x)
+
+where :math:`g_x` and :math:`E_x` are the conductance and reversal potential of ionic species :math:`x`, respectively. Rearranging:
+
+.. math::
+
+   V = \frac{\sum_x g_x E_x}{\sum_x g_x}
+
+This means the AP peak voltage is a conductance-weighted average of ionic reversal potentials at the spike peak. The relative magnitudes of sodium, potassium, and leak conductances at the peak determine the AP amplitude.
+
+Consequently:
+
+- An increase in potassium conductance (:math:`g_K`) or a decrease in sodium conductance (:math:`g_{Na}`) at the spike peak reduces AP amplitude.
+- Channel gating dynamics during repetitive spiking, such as sodium inactivation and potassium activation, can reduce the maximum AP amplitude across spikes.
+
+Parameter Effects on Single Compartment Models
+-----------------------------------------------
+
+Given a single compartment model created as:
+
+.. code-block:: hoc
+
+   create A
+   A {
+     L = 10
+     diam = 10
+     insert hh
+   }
+
+and injecting current clamp (:class:`IClamp`) with parameters such as `del=200`, `dur=100`, and `amp=0.02`, different spike counts and amplitudes are observed.
+
+If the compartment diameter is decreased (e.g., `A.diam=1`), the input resistance increases, causing more spikes to fire. However, the first spike amplitude can remain large (~42 mV peak), but subsequent spikes may have drastically smaller amplitudes (near 0 mV).
+
+Adjusting maximal conductances (e.g., :math:`\bar{g}_{Na}`, :math:`\bar{g}_{K}`) changes excitability and amplitude. For example:
+
+- Increasing sodium conductance (:meth:`gnabar_hh`) increases excitability and can cause spontaneous firing.
+- The leak conductance generally has little impact on AP amplitude.
+- Changes in membrane capacitance affect the speed but less so the amplitude of spikes.
+
+Strategies to Attain Consistent AP Amplitudes
+----------------------------------------------
+
+To generate APs with similar amplitudes across cells or compartments of different sizes:
+
+1. Adjust maximal ionic conductance densities (:math:`\bar{g}_{Na}`, :math:`\bar{g}_{K}`) rather than absolute conductances.
+2. Small compartments typically require higher channel densities to achieve the same ionic currents and thus similar AP amplitudes.
+3. Use tools such as the Multiple Run Fitter to automatically tune parameters to achieve desired electrophysiological behavior.
+4. Consider the presence of additional compartments or branches which may act as electrical loads reducing apparent amplitude.
+
+Code Example: Python and HOC
+----------------------------
+
+Here is a simple example creating a single compartment model with Hodgkin-Huxley channels, applying current clamp, and observing APs:
+
+.. code-block:: hoc
+
+   create soma
+   soma {
+     L = 10
+     diam = 10
+     insert hh
+   }
+   objref stim
+   stim = new IClamp(0.5)
+   stim.del = 200
+   stim.dur = 100
+   stim.amp = 0.02
+
+   proc run_sim() {
+       tstop = 400
+       run()
+   }
+
+.. code-block:: python
+
+   from neuron import h, gui
+
+   soma = h.Section(name='soma')
+   soma.L = 10
+   soma.diam = 10
+   soma.insert('hh')
+
+   stim = h.IClamp(soma(0.5))
+   stim.delay = 200
+   stim.dur = 100
+   stim.amp = 0.02
+
+   h.tstop = 400
+   h.run()
+
+Notes
+-----
+
+- The maximum voltage during a spike depends on the balance of ionic conductances and their gating variables at spike peak.
+- During repetitive firing, sodium channel inactivation and potassium channel activation lead to reduced AP amplitude.
+- Cell size scaling requires adjusting ion channel densities for consistent electrophysiological properties.
+- Leak channels contribute less to spike amplitude, but important for resting membrane potential.
+- For complex morphologies with dendritic branches, passive or active loads may modify soma spike amplitude.
+
+.. note::
+
+   Monitoring gating variables during simulation can provide insight into changes in conductances underlying AP amplitude variations.
+
+.. seealso::
+
+   :class:`hh`, :class:`IClamp`, :meth:`h.run`, :class:`h.Section`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1459 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1459>`_

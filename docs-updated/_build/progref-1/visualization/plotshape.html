@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/progref-1/visualization/plotshape.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <blockquote id="pltshape">
+<div><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--0-input--1" name="tab-set--0" type="radio"><label class="tab-label" for="tab-set--0-input--1">Python</label><div class="tab-content docutils">
+<p>A picture of all the sections in a scene. This is designed for use
+with 3-d reconstructions in which the 3-d shape is not usually tampered with.
+However it can also be used with stylized neurons with the following caveat:
+If you do invoke a shape scene with a stylized neuron, the system will impose
+its own 3-d information on those sections consistent with the current
+connections, diam, and L values of the sections.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <a class="reference internal" href="../modelspec/programmatic/topology/geometry.html#define_shape" title="define_shape"><code class="xref py py-func docutils literal notranslate"><span class="pre">define_shape()</span></code></a> is called, 3d info for sections that were not
+cleared is translated in order to appear connected to its parent.</p>
+</div>
+<p>It is a vestigial menu item for PlotShape’s and does nothing.
+In <a class="reference internal" href="../../python/visualization/shape.html#Shape" title="Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> it selects the tool for calling various
+actions when clicking on a part of the shape.</p>
+<p>Dragging rotates about an axis in the view plane that is
+perpendicular to the direction of mouse movement. During rotation
+the schematic style is used to give decent performance. During
+a rotation a 3-d axis appears indicating the direction of view.
+At this time rotations are about the origin at (0,0,0).
+Because rotations are non commutative, returning to the original
+position will not return you to the original orientation. However,
+WHILE THE MOUSE IS PRESSED, you can use various keys to impose
+fixed rotations.</p>
+<dl class="simple">
+<dt><kbd class="kbd docutils literal notranslate">z</kbd> or <kbd class="kbd docutils literal notranslate">space</kbd>:</dt><dd><p>returns to the original xy-plane view with model z-axis
+out of the screen.</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">x</kbd>:</dt><dd><p>model x-axis into screen.</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">y</kbd> or <kbd class="kbd docutils literal notranslate">a</kbd>:</dt><dd><p>model y-axis into screen (the a is near the shift and control
+keys and its a difficult reach to use y sometimes).</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">X</kbd>, <kbd class="kbd docutils literal notranslate">Y</kbd>, <kbd class="kbd docutils literal notranslate">Z</kbd>, <kbd class="kbd docutils literal notranslate">A</kbd>:</dt><dd><p>rotate about the indicated (view) axis by 10 degrees.</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">^X</kbd>, <kbd class="kbd docutils literal notranslate">^Y</kbd>, <kbd class="kbd docutils literal notranslate">^Z</kbd>, <kbd class="kbd docutils literal notranslate">^A</kbd>:</dt><dd><p>rotate in the opposite direction by 10 degrees.
+The repeat key property during a key press causes the
+appearance of a rotational velocity.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Show Diam:</dt><dd><p>Shape is drawn using trapezoids between 3-d points. If the
+view is large and the diameters small not all of them may
+appear. (slowest)</p>
+</dd>
+<dt>Centroid:</dt><dd><p>Shape is drawn as lines between 3-d points.</p>
+</dd>
+<dt>Schematic:</dt><dd><p>Shape is drawn as line between first and last 3-d point
+of each section. (fastest)</p>
+</dd>
+</dl>
+<p>The default plot variable is v.
+A browser pops up with all the range variables that can be plotted
+as a function of position on the shape. At this time only range
+variables can be plotted, not arbitrary functions. The PlotShape
+scene has a label indicating the chosen variable. A small bug prevents
+label from being updated since it is occluded by the dialog box.
+Refreshing (or any other drawing action) will update the label.</p>
+<p>A field editor dialog pops up. Enter the scale as two space separated
+numbers (first less than the second).
+This range scale is used for the color scale. Purple is the
+first number, yellow is the second number, and 20 colors in between are
+intermediate values. This scale is also used to construct the default
+y axis for time and space plots of the variable.</p>
+<p>Press a location on the shape and a graph will be created in which
+the range variable at that location will be plotted. You can select
+several locations to add more plots to the graph. The sections
+selected are highlighted in different colors. A new graph will be
+created if you select another tool and then come back to this one.</p>
+<p>Press the left mouse button at one location and drag the mouse to
+another location on the cell. A graph will be created which contains
+a range variable plot between the two selected locations. (Actually
+the nearest ends (arc position 0 or 1) of the sections of the
+selected locations. The path is highlighted). A range variable plot
+is like a movie.
+The variable plotted does not have to exist at each section in the path.
+It is plotted as 0 where it does not exist. (Range variables,
+except v, do not exist at arc positions 0 and 1. At these points the
+value plotted is that just interior to the section.)</p>
+<p>A color scale is used to show the value of the variable on the
+shape. Purple is low, yellow is high. The colorbar appears in the top
+left part of the view when you are in this mode. To change its location,
+back to the top left, manipulate the view then toggle to another
+plot style and back to shape or else change the scale.
+Performance could be better.</p>
+<p>Drag the variable label to another location.</p>
+</div>
+<input class="tab-input" id="tab-set--0-input--2" name="tab-set--0" type="radio"><label class="tab-label" for="tab-set--0-input--2">HOC</label><div class="tab-content docutils">
+<p>A picture of all the sections in a scene. This is designed for use
+with 3-d reconstructions in which the 3-d shape is not usually tampered with.
+However it can also be used with stylized neurons with the following caveat:
+If you do invoke a shape scene with a stylized neuron, the system will impose
+its own 3-d information on those sections consistent with the current
+connections, diam, and L values of the sections.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <a class="reference internal" href="../../hoc/modelspec/programmatic/topology/geometry.html#define_shape" title="define_shape"><code class="xref hoc hoc-func docutils literal notranslate"><span class="pre">define_shape()</span></code></a> is called, 3d info for sections that were not
+cleared is translated in order to appear connected to its parent.</p>
+</div>
+<p>It is a vestigial menu item for PlotShape’s and does nothing.
+In <a class="reference internal" href="../../hoc/visualization/shape.html#Shape" title="Shape"><code class="xref hoc hoc-class docutils literal notranslate"><span class="pre">Shape</span></code></a> it selects the tool for calling various
+actions when clicking on a part of the shape.</p>
+<p>Dragging rotates about an axis in the view plane that is
+perpendicular to the direction of mouse movement. During rotation
+the schematic style is used to give decent performance. During
+a rotation a 3-d axis appears indicating the direction of view.
+At this time rotations are about the origin at (0,0,0).
+Because rotations are non commutative, returning to the original
+position will not return you to the original orientation. However,
+WHILE THE MOUSE IS PRESSED, you can use various keys to impose
+fixed rotations.</p>
+<dl class="simple">
+<dt><kbd class="kbd docutils literal notranslate">z</kbd> or <kbd class="kbd docutils literal notranslate">space</kbd>:</dt><dd><p>returns to the original xy-plane view with model z-axis
+out of the screen.</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">x</kbd>:</dt><dd><p>model x-axis into screen.</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">y</kbd> or <kbd class="kbd docutils literal notranslate">a</kbd>:</dt><dd><p>model y-axis into screen (the a is near the shift and control
+keys and its a difficult reach to use y sometimes).</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">X</kbd>, <kbd class="kbd docutils literal notranslate">Y</kbd>, <kbd class="kbd docutils literal notranslate">Z</kbd>, <kbd class="kbd docutils literal notranslate">A</kbd>:</dt><dd><p>rotate about the indicated (view) axis by 10 degrees.</p>
+</dd>
+<dt><kbd class="kbd docutils literal notranslate">^X</kbd>, <kbd class="kbd docutils literal notranslate">^Y</kbd>, <kbd class="kbd docutils literal notranslate">^Z</kbd>, <kbd class="kbd docutils literal notranslate">^A</kbd>:</dt><dd><p>rotate in the opposite direction by 10 degrees.
+The repeat key property during a key press causes the
+appearance of a rotational velocity.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Show Diam:</dt><dd><p>Shape is drawn using trapezoids between 3-d points. If the
+view is large and the diameters small not all of them may
+appear. (slowest)</p>
+</dd>
+<dt>Centroid:</dt><dd><p>Shape is drawn as lines between 3-d points.</p>
+</dd>
+<dt>Schematic:</dt><dd><p>Shape is drawn as line between first and last 3-d point
+of each section. (fastest)</p>
+</dd>
+</dl>
+<p>The default plot variable is v.
+A browser pops up with all the range variables that can be plotted
+as a function of position on the shape. At this time only range
+variables can be plotted, not arbitrary functions. The PlotShape
+scene has a label indicating the chosen variable. A small bug prevents
+label from being updated since it is occluded by the dialog box.
+Refreshing (or any other drawing action) will update the label.</p>
+<p>A field editor dialog pops up. Enter the scale as two space separated
+numbers (first less than the second).
+This range scale is used for the color scale. Purple is the
+first number, yellow is the second number, and 20 colors in between are
+intermediate values. This scale is also used to construct the default
+y axis for time and space plots of the variable.</p>
+<p>Press a location on the shape and a graph will be created in which
+the range variable at that location will be plotted. You can select
+several locations to add more plots to the graph. The sections
+selected are highlighted in different colors. A new graph will be
+created if you select another tool and then come back to this one.</p>
+<p>Press the left mouse button at one location and drag the mouse to
+another location on the cell. A graph will be created which contains
+a range variable plot between the two selected locations. (Actually
+the nearest ends (arc position 0 or 1) of the sections of the
+selected locations. The path is highlighted). A range variable plot
+is like a movie.
+The variable plotted does not have to exist at each section in the path.
+It is plotted as 0 where it does not exist. (Range variables,
+except v, do not exist at arc positions 0 and 1. At these points the
+value plotted is that just interior to the section.)</p>
+<p>A color scale is used to show the value of the variable on the
+shape. Purple is low, yellow is high. The colorbar appears in the top
+left part of the view when you are in this mode. To change its location,
+back to the top left, manipulate the view then toggle to another
+plot style and back to shape or else change the scale.
+Performance could be better.</p>
+<p>Drag the variable label to another location.</p>
+</div>
+</div>
+</div></blockquote>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

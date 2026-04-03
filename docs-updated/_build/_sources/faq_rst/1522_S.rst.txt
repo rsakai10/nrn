@@ -1,0 +1,88 @@
+.. rubric:: Addressing slow instance creation and efficient stimulation in NEURON
+
+Creating large numbers of cell instances with complex instrumentation in templates can severely degrade simulation setup speed. For example, using thousands of PointProcessManager and VectorPlay objects (intended for interactive use) slows instance creation exponentially.
+
+.. note::
+   To improve performance and modularity:
+
+   - Define cell morphology and biophysics in templates without instrumentation code.
+   - Create and attach IClamp (or other point processes) separately after instantiation.
+   - Use :meth:`Vector.play` to drive point process amplitudes directly instead of VectorPlay.
+   - Avoid multiple PointProcessManagers; prefer lightweight IClamp instances.
+
+Example HOC code to create multiple cell instances without instrumentation:
+
+.. code-block:: hoc
+
+   template tpTCN {
+     public soma
+     create soma
+     proc init() {
+       soma {
+         nseg = 1
+         diam = 76.58
+         L = 100
+         insert hh2
+         // other biophysics...
+       }
+     }
+   }
+   objref TCN[30][30][2]
+   for col=0,29 for row=0,29 for slab=0,1 {
+     TCN[col][row][slab] = new tpTCN()
+   }
+
+To efficiently deliver sinusoidal stimulation with phase, delay, and duration parameters, use this NMODL point process:
+
+.. code-block:: nmodl
+
+   NEURON {
+     POINT_PROCESS Isin
+     RANGE del, dur, f, phi, amp, i
+     ELECTRODE_CURRENT i
+   }
+
+   PARAMETER {
+     del (ms)
+     dur (ms) <0,1e9>
+     f (radian/s) <0,1e9>
+     phi (radian)
+     amp (nA)
+   }
+
+   ASSIGNED {
+     i (nA)
+     on (1)
+   }
+
+   INITIAL {
+     i = 0
+     on = 0
+     net_send(del, 1)
+   }
+
+   FUNCTION fsin(t(ms)) {
+     fsin = sin(f*(t - del)/1000 + phi)
+   }
+
+   BREAKPOINT {
+     i = on*amp*fsin(t)
+   }
+
+   NET_RECEIVE (w) {
+     if (flag == 1) {
+       if (on == 0) {
+         on = 1
+         net_send(dur, 1)
+       } else {
+         on = 0
+       }
+     }
+   }
+
+This implementation reduces memory use by avoiding multiple stimulus vectors and speeds up simulations by eliminating costly GUI-oriented objects.
+
+.. seealso::
+   :class:`PointProcessManager`, :class:`IClamp`, :class:`Vector`, :meth:`Vector.play`
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=1522

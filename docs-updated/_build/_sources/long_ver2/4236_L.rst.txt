@@ -1,0 +1,127 @@
+Finding the Middle Coordinates of a Section in NEURON
+=======================================================
+
+When working with spatial models in NEURON, such as determining the minimal extracellular current to elicit an action potential, it is often important to find the accurate 3D coordinates corresponding to the middle of a section or segments within that section. The commonly used approaches relying on raw `pt3d` points or averages of these points can lead to inconsistent or incorrect results. This guide explains the correct methodology to obtain these coordinates and clarifies common pitfalls.
+
+Overview
+--------
+
+- The indices and coordinates of `pt3d` points (retrieved with `sec.x3d(i)`, `sec.y3d(i)`, `sec.z3d(i)`) define the 3D shape of a section but are not guaranteed to correspond directly to the segment centers or to be evenly spaced along the cable.
+- Simply averaging the `pt3d` points will not produce a coordinate on the section's cable and can be incorrect, especially for curved or branched morphologies.
+- Using `sec(0.5)` returns the midpoint of the section in normalized cable coordinates, but the 3D coordinates of that point require interpolation along the section's path length.
+- The function `h.define_shape()` updates the section's 3D morphology but does **not** generate new 3D points at segment centers when the morphology is defined via `pt3dadd`.
+- To find segment centers accurately, one must interpolate linearly along the path length defined by the `pt3d` points.
+
+
+Correct Method to Find 3D Coordinates for Section or Segment Positions
+----------------------------------------------------------------------
+
+Below is an example Python function that computes the 3D coordinate (x, y, z) of any position along a NEURON section by interpolation of the 3D points as a piecewise linear function of arc length:
+
+.. code-block:: python
+
+    from collections import namedtuple
+    import numpy as np
+    from neuron import h
+
+    Point = namedtuple('Point', ['x', 'y', 'z'])
+
+    def coordinate(seg):
+        """Return 3D coordinates of a segment or location seg within a section.
+
+        Parameters
+        ----------
+        seg : Segment or Section(0 <= x <= 1)
+            NEURON segment or section location to query (e.g., sec(0.5)).
+
+        Returns
+        -------
+        Point
+            Named tuple with fields .x, .y, .z giving the interpolated coordinates.
+        """
+        sec = seg.sec if hasattr(seg, 'sec') else seg
+        x = seg.x if hasattr(seg, 'x') else 0.5  # default to midsection if needed
+
+        n3d = sec.n3d()
+        if n3d == 0:
+            raise RuntimeError("Section has no 3D points (pt3d).")
+
+        # Path lengths corresponding to each pt3d point
+        arcs = [sec.arc3d(i) for i in range(n3d)]
+        xs = [sec.x3d(i) for i in range(n3d)]
+        ys = [sec.y3d(i) for i in range(n3d)]
+        zs = [sec.z3d(i) for i in range(n3d)]
+
+        # Position along section in microns
+        d = x * sec.L
+
+        # Linear interpolation of coordinates based on arc length
+        xi = np.interp(d, arcs, xs)
+        yi = np.interp(d, arcs, ys)
+        zi = np.interp(d, arcs, zs)
+
+        return Point(xi, yi, zi)
+
+
+Usage example: plotting the coordinates at intervals along a non-linear soma section
+
+.. code-block:: python
+
+    from matplotlib import pyplot as plt
+
+    soma = h.Section(name='soma')
+    soma.pt3dadd(0, 0, 0, 1)
+    soma.pt3dadd(5, 5, 0, 2)
+    soma.pt3dadd(10, 5, 0, 2)
+
+    positions = [soma(x*0.1) for x in range(11)]
+    points = [coordinate(seg) for seg in positions]
+
+    xs = [p.x for p in points]
+    ys = [p.y for p in points]
+
+    plt.scatter(xs, ys)
+    plt.axis('equal')
+    plt.title("Coordinates interpolated along a soma section")
+    plt.xlabel("X (um)")
+    plt.ylabel("Y (um)")
+    plt.show()
+
+
+Important Notes
+---------------
+
+- Calling `coordinate(sec(0.5))` returns the 3D coordinate of the midpoint of the section, consistent with NEURON's cable geometry.
+- The `pt3d` points provide the morphological skeleton of the section but do **not** correspond to segment centers unless the section is discretized into very few segments or special care is taken.
+- If the morphology is defined with explicit `pt3dadd` statements, invoking `h.define_shape()` will correct section positions for visualization but will **not** create new 3D points at segment centers.
+- To find segment center coordinates for sections with multiple segments (`nseg > 1`), interpolate at positions:
+
+  .. math::
+
+     x_i = \frac{0.5 + i}{nseg}, \quad i = 0, \ldots, nseg - 1
+
+- Every segment in the section is exposed to the extracellular field during stimulation; do not limit assignments of extracellular potentials (`e_extracellular`) or analyses (such as attaching :class:`h.APCount`) to only segments nearest the midpoint.
+- Attaching :class:`h.APCount` to segment midpoints distant from the stimulation site can reduce detection of stimulus artifacts mistaken for action potentials.
+- Evaluate spatial discretization adequacy by increasing `nseg` (preferably odd numbers) and observing stability of simulation results.
+
+Common Mistakes and Their Consequences
+--------------------------------------
+
+- **Averaging all `pt3d` points**: Computes the centroid of the 3D skeleton, which need not lie on the cable and often underestimates or overestimates distances.
+- **Using only midpoint between two center indices for even `n3d`**: May select a position that does not correspond to any physical cable location or segment midpoint.
+- **Assuming `pt3d` points relate directly to numerical discretization**: The geometry points only describe shape; segment positions are governed by `nseg` and normalized cable coordinates.
+
+Summary
+-------
+
+To reliably find the middle of a section or exact segment locations in 3D space:
+
+1. Ensure morphology is fully defined with `pt3dadd` or geometry parameters.
+2. Call `h.define_shape()` after setting all morphologies and discretizations.
+3. Use linear interpolation of `pt3d` points along `arc3d()` path lengths to find coordinates.
+4. For segment centers, calculate positions at `x = (0.5 + i) / nseg`.
+5. Apply stimulation and analysis (e.g., assign extracellular potentials and attach `h.APCount`) at all relevant segments, not just the midpoint.
+
+This approach provides consistent and morphologically accurate positions for spatially-dependent simulations in NEURON.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4236 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4236>`_

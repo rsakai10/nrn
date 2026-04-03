@@ -1,0 +1,78 @@
+tstop Variable Scope in Templates
+================================
+
+When using the :keyword:`template` construct in NEURON's HOC language, variable scope rules affect the visibility of variables such as `tstop`.
+
+By default, variables defined at the top level (outside any :keyword:`template`) are not accessible inside a template unless explicitly declared with the :keyword:`external` keyword.
+
+Consider the following example that results in an error due to `tstop` being undefined inside the template:
+
+.. code-block:: hoc
+
+    tstop = 100
+
+    begintemplate SE_NetStim
+    public pp
+    objref pp
+    proc init() {
+      pp = new NetStim()
+      pp.interval = $1
+      pp.number = $1*tstop*2     // ERROR: tstop undefined here
+      pp.start = $2
+      pp.noise = 1
+    }
+    endtemplate SE_NetStim
+
+To allow the template to access the top-level variable `tstop`, declare it as :keyword:`external` inside the template:
+
+.. code-block:: hoc
+
+    tstop = 100
+
+    begintemplate SE_NetStim
+    public pp
+    objref pp
+    external tstop           // Declare tstop as external
+    proc init() {
+      pp = new NetStim()
+      pp.interval = $1
+      pp.number = $1*tstop*2   // Now tstop is visible here
+      pp.start = $2
+      pp.noise = 1
+    }
+    endtemplate SE_NetStim
+
+.. note::
+
+   - Variables declared :keyword:`external` inside a :keyword:`template` refer to variables defined at the top-level scope.
+   - Similarly, variables declared inside a template are by default invisible to code outside the template unless declared as :keyword:`public`.
+
+Python Usage
+------------
+
+When working with Python code employing NEURON's hoc interpreter, you can similarly set or access top-level hoc variables using the hoc interface:
+
+.. code-block:: python
+
+    from neuron import h
+
+    h.tstop = 100  # Set global tstop
+
+    h("begintemplate SE_NetStim")
+    h("public pp")
+    h("objref pp")
+    h("external tstop")  # Declare tstop external to access top-level variable
+    h("proc init() {")
+    h("  pp = new NetStim()")
+    h("  pp.interval = $1")
+    h("  pp.number = $1*tstop*2")
+    h("  pp.start = $2")
+    h("  pp.noise = 1")
+    h("}")
+    h("endtemplate SE_NetStim")
+
+.. seealso::
+
+   :keyword:`external`, :keyword:`public` - for controlling variable visibility between top-level and templates in HOC.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1724 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1724>`_

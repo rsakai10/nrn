@@ -1,0 +1,54 @@
+Printf Statements for Debugging in NMODL
+=========================================
+
+It is possible and often useful to include `printf` statements inside `BREAKPOINT` and `FUNCTION` blocks within NMODL (`.mod`) files to aid debugging. The syntax of `printf` follows the standard C language format.
+
+Usage
+-----
+
+- Use variable names exactly as declared inside the NMODL code (no suffixes or dot notation).
+- `printf` can be invoked in `BREAKPOINT`, `AFTER BREAKPOINT`, `FUNCTION`, or other procedural blocks.
+- Format specifiers such as `%d` (integer) and `%g` (floating point) can be used as usual.
+
+Example
+-------
+
+Below is an example demonstrating the insertion of `printf` statements inside a `BREAKPOINT` and `AFTER BREAKPOINT` block:
+
+.. code-block:: mod
+
+    NEURON {
+      POINT_PROCESS PRtest
+      RANGE index
+    }
+
+    PARAMETER {
+      index = 0
+    }
+
+    ASSIGNED {
+      v (mV)
+    }
+
+    BREAKPOINT {
+      printf("BREAKPOINT\t index %d\t, t %g,\t v %g\n", index, t, v)
+    }
+
+    AFTER BREAKPOINT {
+      printf("AFTER BREAKPOINT\t index %d\t, t %g,\t v %g\n", index, t, v)
+    }
+
+Notes
+-----
+
+.. note::
+
+   - The `printf` statements print to the standard output of the simulation, typically the console or terminal.
+   - Ensure the format specifiers match the variable types.
+   - Excessive printing inside performance-critical sections can slow down simulations.
+
+.. seealso::
+
+   :ref:`NMODL Programming Guide <nmodl>`, :ref:`BREAKPOINT block <breakpoint-block>`, :ref:`FUNCTION block <function-block>`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2508 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2508>`_

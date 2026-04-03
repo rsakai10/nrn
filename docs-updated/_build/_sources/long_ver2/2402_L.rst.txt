@@ -1,0 +1,85 @@
+Plotting Variables from Many Sections in the NEURON Graphical Interface
+========================================================================
+
+When working with cell models that consist of many sections (e.g., a soma and numerous dendrites), you may notice that in the NEURON GUI Graph → Plot What menu, not all sections are listed explicitly. This is expected behavior when the number of section instances with the same name pattern is large.
+
+How the Graph Plot What Menu Handles Many Sections
+--------------------------------------------------
+The variable name browser in the Graph → Plot What dialog shows only a limited number of example sections by default, such as:
+
+```
+dend[0]
+dend[1]
+dend[2]
+...
+dend[66]
+soma
+```
+
+This list is not exhaustive and is meant to give a sampling of the section list, not all of them.
+
+Selecting Sections Not Shown in the Menu
+----------------------------------------
+If you want to plot voltage or any other variable from a section not visible in the list, you can:
+
+1. Click on the entry field where the tool shows the currently selected variable (e.g., `dend[1].v`).
+
+2. Manually edit the section index to the desired one, for example changing it to `dend[31].v`.
+
+This works because the entry field is a string input where you specify variable names in standard hoc or Python section syntax.
+
+Confirming Section Names and Indices
+------------------------------------
+If you want to verify the exact section names and indices your model contains, use the hoc interpreter prompt or Python scripting:
+
+- In hoc prompt, type:
+
+  .. code-block:: hoc
+
+      forall printsecname()
+
+  This will print all section names, showing their list indices.
+
+- To print sections containing a substring (e.g., "dend"):
+
+  .. code-block:: hoc
+
+      forsec "dend" printsecname()
+
+- In Python with NEURON's h module:
+
+  .. code-block:: python
+
+      from neuron import h
+      for sec in h.allsec():
+          print(sec.name())
+
+Example Usage in hoc and Python
+-------------------------------
+To plot a voltage trace from a particular section index (e.g., dend[31]):
+
+.. code-block:: hoc
+
+    graph0.size(0, 100, -80, 40)
+    graph0.addvar("dend[31].v(0.5)", sec=dend[31])
+
+Or in Python:
+
+.. code-block:: python
+
+    from neuron import h, gui
+    graph = h.Graph()
+    graph.size(0, 100, -80, 40)
+    graph.addvar(sec=dend[31](0.5), var='v')  # assuming dend is a Python Vector or SectionList
+
+Summary
+-------
+- The Graph → Plot What dialog shows only a sample of section names when many exist.
+- You can manually edit the variable name string to access any section by index.
+- Use `forall printsecname()` or `forsec` commands at the hoc prompt to list all sections.
+- This behavior does **not** indicate an error in your code or model.
+
+.. note::
+   Always ensure section names are defined consistently to facilitate selection and plotting.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2402 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2402>`_

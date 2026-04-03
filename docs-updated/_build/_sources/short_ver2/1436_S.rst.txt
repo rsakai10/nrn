@@ -1,0 +1,48 @@
+Arrays as RANGE Variables
+==========================
+
+When a :keyword:`STATE` variable is declared as an array in NMODL, each element of this array is automatically accessible as a RANGE variable from hoc or Python without any explicit RANGE declaration.
+
+For example, consider the following fragment from a mechanism with Nannuli shells:
+
+.. code-block:: mod
+
+    NEURON {
+        SUFFIX cadifus
+        DEFINE Nannuli 4
+        ...
+        STATE {
+            ca[Nannuli]       (mM) <1e-10>
+            CaBuffer[Nannuli] (mM)
+            Buffer[Nannuli]   (mM)
+        }
+    }
+
+At runtime, the individual state variables can be accessed as:
+
+.. code-block:: hoc
+
+    ca_cadifus[0](x)
+    ca_cadifus[1](x)
+    ...
+    CaBuffer_cadifus[2](x)
+
+where ``_cadifus`` is the mechanism suffix.
+
+.. note::
+
+    The array elements of STATE variables become RANGE variables indexed with this syntax:
+
+    ``statename_suffix[index](section)``
+
+    This allows direct inspection and manipulation of individual state elements from hoc or Python.
+
+.. seealso::
+
+    :class:`Section`, :meth:`Section.ena`, and the use of :keyword:`STATE` variables in NMODL.
+
+.. warning::
+
+    Recording (via :meth:`Vector.record`) from an individual element of a STATE array is supported per element, but recording the entire array is not multiplexed automatically. Each element must be recorded separately.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1436 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1436>`_

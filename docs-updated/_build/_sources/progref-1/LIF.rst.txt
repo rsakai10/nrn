@@ -1,0 +1,50 @@
+.. _lif_compartment_simplification:
+
+Using a Leaky Integrate-and-Fire Compartment for Fast Conductances
+==================================================================
+
+In some modeling scenarios, it is desirable to simplify neuron models by separating **fast** and **slow** conductances into different compartments. This technique can help reduce computational complexity while maintaining biophysical realism where it matters most.
+
+A common approach is to model:
+
+- **Slow conductances** (e.g., calcium-dependent or modulatory channels) using detailed Hodgkin-Huxley-style mechanisms.
+- **Fast conductances** (e.g., sodium spikes) using a simplified **Leaky Integrate-and-Fire (LIF)** model in a separate compartment.
+
+This hybrid modeling strategy allows for efficient simulation of spiking behavior while preserving detailed dynamics where needed.
+
+Recommended Tool: ``spikeout.mod``
+----------------------------------
+
+To implement a LIF-like spiking compartment in NEURON, we recommend using the ``spikeout.mod`` mechanism. This mechanism:
+
+- Detects spike threshold crossings.
+- Emits clean spike events for network or compartmental interaction.
+- Is suitable for use in hybrid models that separate spike generation from slower subthreshold dynamics.
+
+``spikeout.mod`` is part of the "conductance-based" model cell included in the NEURON implementation of the network from the following paper:
+
+    Brette R, Rudolph M, Carnevale T, Hines M, Beeman D, Bower JM, Diesmann M, Morrison A, et al. (2007).  
+    *Simulation of networks of spiking neurons: A review of tools and strategies*.  
+    Journal of Computational Neuroscience, 23(3):349–398.
+
+Model source code is available from ModelDB under accession number **83319**:
+https://senselab.med.yale.edu/ModelDB/ShowModel?model=83319
+
+You can find ``spikeout.mod`` and related files in the ``NEURON/coba`` subdirectory of the downloadable archive.
+
+Example Use Case
+----------------
+
+This setup is particularly useful for:
+
+- Simplifying large-scale network models.
+- Reducing runtime in simulations involving many spiking cells.
+- Bridging detailed compartmental modeling with event-driven network dynamics.
+
+To integrate ``spikeout.mod`` into your own model:
+
+1. Download and compile the `.mod` files using ``nrnivmodl`` (UNIX/macOS) or ``mknrndll`` (Windows).
+2. Connect the LIF compartment (using ``spikeout.mod``) to another compartment that contains slower, more detailed mechanisms.
+3. Use standard NEURON `NetCon` objects to handle spike communication across compartments or neurons.
+
+For further guidance, see the NEURON documentation on :ref:`mechanism compilation <compiling_mod_files>` and :ref:`event delivery with NetCon <netcon_event_delivery>`.

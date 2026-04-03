@@ -1,0 +1,63 @@
+.. _calcium_diffusion_shells:
+
+Calcium Concentration in Radial Shell Models
+---------------------------------------------
+
+In radial shell models of intracellular calcium diffusion (e.g., the ``cdp`` model in NEURON Book Example 9.8), the calcium concentration variable ``cai`` corresponds to the calcium concentration in the outermost shell just inside the membrane, *not* the volume-averaged intracellular calcium concentration.
+
+.. note::
+   The ``cai`` and ``cao`` concentrations labeled in ion channel or pump mechanisms (via ``USEION``) represent the local calcium sensed immediately adjacent to the membrane, crucial for calculating reversal potentials or gating of calcium-dependent channels.
+
+If comparison to experimental calcium imaging data (which typically reflects a volume-averaged calcium-bound dye signal) is desired, the modeler should calculate a weighted average over all radial shells, not use the outermost shell concentration alone.
+
+The relative volume weights for each shell with inner radius \\(r_i\\) and outer radius \\(r_o\\) can be computed as:
+
+.. math::
+   w_i = r_o^2 - r_i^2
+
+Recording shell concentrations and calculating the weighted average in HOC:
+
+.. code-block:: hoc
+
+    obfunc mkcaveclist() { local i localobj tmpvec, shell_list
+      shell_list = new List()
+      for i=0, numshells-1 {
+        tmpvec = new Vector()
+        tmpvec.record(&ca[i]_cadifus(0.5))  // record at segment midpoint
+        shell_list.append(tmpvec)
+      }
+      return shell_list
+    }
+
+    objref cavecs, tvec
+    tvec = new Vector()
+    tvec.record(&t)
+    cavecs = mkcaveclist(numshells)
+
+.. code-block:: hoc
+
+    obfunc wtsum() { local i localobj sum_vec, tmpvec
+      sum_vec = new Vector(cavecs.o(0).size(), 0)
+      for i=0, weights.size()-1 {
+        tmpvec = cavecs.o(i).c
+        tmpvec.mul(weights.x[i])
+        sum_vec.add(tmpvec)
+      }
+      return sum_vec
+    }
+
+    objref meanca
+    meanca = wtsum()  // weighted average free calcium concentration over shells
+
+When calcium indicator dyes are included, buffering reactions and dye affinity must be explicitly modeled to obtain the fluorescence signal proxy. The relationship between free calcium and dye-bound calcium may be nonlinear and kinetics-dependent, so simple averaging of free calcium is generally insufficient.
+
+.. note::
+   Comparisons to experimentally calibrated calcium concentrations should consider spatial dye distribution, buffering kinetics, and the region of interest volume to correctly interpret imaging signals.
+
+See also:
+
+- :class:`Vector`
+- :meth:`Vector.record`
+- :meth:`Vector.apply` (for transforming free calcium to dye-bound calcium)
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3422 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3422>`_

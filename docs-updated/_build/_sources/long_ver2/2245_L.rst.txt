@@ -1,0 +1,145 @@
+Setting a Conductance to Zero Does Not Always Eliminate Its Effect Due to SectionList Membership
+===============================================================================================
+
+When inserting ion channel mechanisms in NEURON models, you may expect that setting a channel's maximal conductance parameter (`gbar`) to zero will effectively remove its influence (i.e., produce zero current). However, unexpected simulation results can arise if one is not careful with the sections to which mechanisms are inserted or how SectionLists are used.
+
+This document explains common pitfalls illustrated by the Mainen and Sejnowski 1996 model example, where adding a potassium channel (`kv`) to the dendritic compartments with `gbar_kv = 0` still alters the spiking output.
+
+Understanding Section and SectionList Behavior
+-----------------------------------------------
+
+- In NEURON, a *Section* refers to a single cable compartment.
+- A *SectionList* is a collection of Sections, which may include unexpected members if not carefully constructed.
+
+Important points and common mistakes:
+
+1. **Using a SectionList as a Section**  
+   Writing code like this:
+
+   .. code-block:: hoc
+
+      dendritic { insert kv; gbar_kv = 0 }
+
+   is *not* equivalent to applying the insertion and setting to each section in the `dendritic` SectionList. Instead, the block executes in the context of the currently accessed section, which by default may be the `soma`. Hence, the code modifies the `soma` properties rather than the intended dendritic sections.
+
+2. **forsec Iteration and Unexpected Section Membership**  
+   When looping over a SectionList, e.g.:
+
+   .. code-block:: hoc
+
+      forsec dendritic {
+          insert kv
+          gbar_kv = 0
+      }
+
+   if the SectionList `dendritic` includes the `soma` section (due to how it was built), this will affect the somatic conductance as well.
+
+How to Verify and Avoid These Issues
+------------------------------------
+
+- **Print section names within a SectionList:**  
+  To check which sections are in a SectionList, use:
+
+  .. code-block:: hoc
+
+     forsec dendritic { print secname() }
+
+  - If unexpected sections such as `soma` are printed, further action is needed.
+
+- **Exclude unwanted sections from a SectionList:**  
+  For example, to remove `soma` from `dendritic`:
+
+  .. code-block:: hoc
+
+     dendritic_only = new SectionList()
+     forsec dendritic dendritic_only.append()
+     soma dendritic_only.remove()
+
+- **Use `ifsec` filter to print or operate only on matching section names:**  
+
+  .. code-block:: hoc
+
+     forsec dendritic ifsec "som*" { print secname() }
+
+- **Carefully insert mechanisms and set parameters in loops over appropriate SectionLists:**
+
+  To insert `kv` channels with zero conductance strictly in dendrites excluding soma:
+
+  .. code-block:: hoc
+
+     forsec dendritic_only {
+         insert kv
+         gbar_kv = 0
+     }
+
+Understanding `kv.mod` Current Calculation
+------------------------------------------
+
+In the `kv.mod` mechanism:
+
+.. code-block:: text
+
+   BREAKPOINT {
+       SOLVE states METHOD cnexp
+       gk = tadj * gbar * n
+       ik = (1e-4) * gk * (v - ek)
+   }
+
+If `gbar = 0`, then `gk = 0` and consequently `ik = 0`. No channel current should be generated in that segment.
+
+However, if the mechanism is inserted in unintended sections (e.g., soma) where `gbar` may be nonzero or inadvertently changed, the overall simulation response changes.
+
+Summary and Recommendations
+---------------------------
+
+- When modifying conductances or inserting channels in sets of sections, always verify the exact membership of your SectionLists.
+- Avoid treating SectionLists as single Sections; use looping (`forsec`) with care.
+- Use `print secname()`, `ifsec`, and other inspection tools at the interpreter prompt to diagnose unexpected behavior.
+- Ensure that separate SectionLists exist for different compartmental domains when you want distinct channel distributions (e.g., `dendritic_only` excluding soma).
+- Remember that a zero maximal conductance parameter (`gbar`) truly disables current only if the mechanism is present *solely* in those sections.
+
+Example: Correct Insertion of kv with Zero Conductance in Dendrites Only (Python and HOC)
+----------------------------------------------------------------------------------------
+
+**HOC:**
+
+.. code-block:: hoc
+
+   // Create dendritic-only SectionList excluding soma
+   dendritic_only = new SectionList()
+   forsec dendritic dendritic_only.append()
+   soma dendritic_only.remove()
+
+   // Insert kv channels with zero gbar in dendrites only
+   forsec dendritic_only {
+       insert kv
+       gbar_kv = 0
+   }
+
+**Python:**
+
+.. code-block:: python
+
+   from neuron import h
+
+   # Assuming 'dendritic' is a SectionList that includes soma
+   dendritic_only = h.SectionList()
+   for sec in h.SectionList.get(section_list=h.dendritic):
+       dendritic_only.append(sec)
+   dendritic_only.remove(h.soma)
+
+   # Insert kv with zero gbar in dendritic sections only
+   for sec in dendritic_only:
+       sec.insert('kv')
+       for seg in sec:
+           seg.kv.gbar_kv = 0
+
+.. note::
+
+   Always check your model's SectionLists carefully and verify the state of inserted mechanisms to ensure the model behaves as intended.
+
+.. seealso::
+
+   :func:`forsec`, :func:`ifsec`, :class:`SectionList`, :meth:`Section.insert`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2245 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2245>`_

@@ -1,0 +1,74 @@
+Programmatic Changes of Temperature and Parameters in NEURON
+=============================================================
+
+It is not possible to assign the special variable :obj:`celsius` directly in NMODL code, as it is reserved by NEURON. Instead, change temperature dynamically from hoc or Python using interpolation or events.
+
+Example: Linear ramp of temperature using :class:`Vector.play` in hoc
+
+.. code-block:: hoc
+
+    objref tempvec, tvec
+    tempvec = new Vector(3)
+    tvec = new Vector(3)
+    tempvec.x[0] = 6.3  // degC
+    tvec.x[0] = 0
+    tempvec.x[1] = 20   // degC
+    tvec.x[1] = 100
+    tempvec.x[2] = 20   // degC
+    tvec.x[2] = 1e9
+    // third argument == 1 means interpolate linearly
+    tempvec.play(&celsius, tvec, 1)
+
+.. note::
+
+   1. Mod files with temperature-dependent kinetics must declare ``DEPEND celsius`` in :meth:`Table` statements to ensure rates update when :obj:`celsius` changes.
+   
+   2. Continuously varying :obj:`celsius` slows simulation because tables are recomputed every time step until temperature stabilizes.
+   
+   3. Abrupt parameter changes, including temperature, can be implemented using NEURON's event delivery system with :class:`FInitializeHandler` and :meth:`CVode.event`.
+
+Example: Using events to change a parameter (e.g., current clamp amplitude)
+
+.. code-block:: hoc
+
+    objref stim
+    stim = new IClamp(0.5)
+    objref fih
+    double DUR = 0.1, AMP = 0.1, START = 5, INTERVAL = 25
+    int STIMON = 0
+    
+    fih = new FInitializeHandler("initi()")
+    
+    proc initi() {
+        STIMON = 0
+        stim.del = 0
+        stim.dur = 1e9
+        cvode.event(START, "seti()")
+    }
+    
+    proc seti() {
+        if (STIMON == 0) {
+            STIMON = 1
+            stim.amp = AMP
+            cvode.event(t + DUR, "seti()")
+            cvode.event(t + INTERVAL, "seti()")
+        } else {
+            STIMON = 0
+            stim.amp = 0
+        }
+        if (cvode.active()) {
+            cvode.re_init()
+        } else {
+            fcurrent()
+        }
+    }
+
+.. note::
+
+   When using :meth:`CVode.event` to update parameters, calling :meth:`CVode.re_init` (if CVode is active) or :func:`fcurrent` ensures consistent integration. For some parameters (e.g., NetCon weights), this may be unnecessary but does no harm.
+
+.. seealso::
+
+   :obj:`celsius` variable, :meth:`Vector.play`, :class:`FInitializeHandler`, :meth:`CVode.event`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=162 <https://neuron.yale.edu/phpBB/viewtopic.php?t=162>`_

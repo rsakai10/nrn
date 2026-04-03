@@ -1,0 +1,37 @@
+Propagation speed of action potentials (AP) in NEURON simulations can be affected by several factors:
+
+.. note::
+    Ensure that the temperature is correctly set, as it significantly influences channel kinetics and propagation speed. The default temperature in NEURON is 6.3°C; physiological temperatures (e.g., 20-37°C) require explicit setting:
+    
+    .. code-block:: python
+    
+        from neuron import h
+        h.celsius = 20
+
+Key factors affecting AP conduction velocity include:
+
+- Morphology details, especially diameter, strongly affect propagation speed.
+- Stimulus parameters: use brief stimuli (~0.1 ms) near 2x threshold to avoid anomalous effects.
+- Model accuracy: check channel densities and membrane properties.
+- Spatial discretization: increase :attr:`nseg` (number of segments) to reduce numerical artifacts slowing propagation.
+- Measurement method: measure conduction velocity by timing rise times (e.g., maximum dv/dt crossing) over known path lengths, avoiding near-boundary or branching effects.
+
+Example of setting biophysical properties in Python using the Hodgkin-Huxley model:
+
+.. code-block:: python
+
+    for i, sec in enumerate(cell.allseclist):
+        sec.Ra = 75  # Ohm*cm
+        sec.cm = 1.5 if i == 0 else 3  # uF/cm²
+        sec.insert('hh')
+        sec.gnabar_hh = 0.083  # S/cm²
+        sec.gkbar_hh = 0.03
+        sec.gl_hh = 0.0003
+        sec.ena = 55
+        sec.ek = -72
+        sec.el_hh = -49.3
+
+.. seealso::
+    :class:`neuron.h.Section`, :meth:`neuron.h.Section.insert`, :attr:`neuron.h.celsius`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3482 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3482>`_

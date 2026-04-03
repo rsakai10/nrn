@@ -1,0 +1,67 @@
+Constructing Neuronal Morphologies with `pt3dadd`
+===================================================
+
+When creating neuron models with complex, branched geometries in NEURON, it is important to understand how the `pt3dadd` method operates in relation to connectivity and morphology.
+
+Geometry vs Connectivity
+------------------------
+A single :class:`Section` in NEURON represents an unbranched cylindrical cable (an unbranched neurite segment). The geometry of that section—its 3D shape and diameter at points along its length—is specified through calls to :meth:`Section.pt3dadd`.
+
+Each call to :meth:`Section.pt3dadd` adds a 3D coordinate (x, y, z) and a diameter to the current section, defining the successive points sampled along that section's cable. These points are connected in the order they are added, effectively creating a polyline in 3D space describing the morphology of that single, unbranched section.
+
+.. note::
+   The `pt3dadd` method does **not** determine branching or connectivity between different sections. It only specifies the shape of one continuous, unbranched cable.
+
+Branching and Connectivity Between Sections
+------------------------------------------
+To represent bifurcations or branching neurites, you must create multiple :class:`Section` objects and explicitly connect them to each other using the :meth:`Section.connect` method.
+
+For example, the typical workflow is:
+
+1. Create separate sections for each branch segment.
+2. Use :meth:`Section.pt3dadd` multiple times on each section to define its 3D shape.
+3. Connect daughter sections to parent sections at specified endpoints with :meth:`Section.connect`.
+
+.. code-block:: python
+
+   from neuron import h
+
+   # Create parent section (e.g., soma)
+   soma = h.Section(name='soma')
+   soma.pt3dadd(0, 0, 0, 10)   # start point (x, y, z, diameter)
+   soma.pt3dadd(10, 0, 0, 10)  # end point
+
+   # Create child section (e.g., dendrite branch)
+   dend = h.Section(name='dend')
+   dend.pt3dadd(10, 0, 0, 2)   # start where soma ends to ensure smooth geometry
+   dend.pt3dadd(20, 5, 0, 2)   # distal end of dendrite
+
+   # Connect dendrite to soma at soma's 1 end (0 is start, 1 is end)
+   dend.connect(soma(1))
+
+.. code-block:: hoc
+
+   create soma, dend
+   soma pt3dadd 0 0 0 10
+   soma pt3dadd 10 0 0 10
+   dend pt3dadd 10 0 0 2
+   dend pt3dadd 20 5 0 2
+   connect dend(0), soma(1)
+
+Summary
+-------
+- Use :meth:`Section.pt3dadd` to specify the geometry of **individual, unbranched** sections.
+- To represent bifurcations, create multiple :class:`Section` objects and connect them explicitly using :meth:`Section.connect`.
+- The geometry (3D points and diameters) is always connected sequentially within each section, from the first :meth:`pt3dadd` point to the last.
+- There is no automatic nearest-point connection or branching detection based on `pt3dadd` points.
+
+.. note::
+   For detailed examples of 3-D geometry specification and branching, see Chapters 5 and 6 of The NEURON Book and the Programmer’s Reference on Geometry, focusing on the "3-D specification of geometry" section.
+
+See Also
+--------
+:meth:`Section.pt3dadd`  
+:meth:`Section.connect`  
+:class:`Section`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2483 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2483>`_

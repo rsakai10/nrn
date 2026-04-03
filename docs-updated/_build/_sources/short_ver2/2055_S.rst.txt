@@ -1,0 +1,87 @@
+Generating White Gaussian Noise in NMODL
+=========================================
+
+When injecting white Gaussian noise as an external current in NEURON, avoid calling random number generators such as :func:`normrand` directly inside the :meth:`BREAKPOINT` block because :meth:`BREAKPOINT` may be executed multiple times per time step (e.g., for conductance calculations), causing unstable membrane potentials.
+
+Instead, generate the noise once per time step in a :meth:`BEFORE BREAKPOINT` block and store it in an intermediate variable which is then assigned to the current in the :meth:`BREAKPOINT` block. Use NEURON's event delivery system via :meth:`NET_RECEIVE` to control the timing of current injection.
+
+Example NMODL implementation of noisy current injection (:class:`POINT_PROCESS`):
+
+.. code-block:: mod
+
+   NEURON {
+     POINT_PROCESS IClampNoise
+     RANGE i, del, dur, f0, f1, r, torn, std, bias
+     ELECTRODE_CURRENT i
+   }
+
+   PARAMETER {
+     del=50 (ms)
+     dur=200 (ms)
+     torn=500 (ms)
+     std=0.2 (nA)
+     f0=0.2 (nA)
+     f1=0.8 (nA)
+     r=60
+     bias=0 (nA)
+   }
+
+   ASSIGNED {
+     i (nA)
+     ival (nA)
+     amp (nA)
+     noise (nA)
+     on (1)
+   }
+
+   INITIAL {
+     i = 0
+     on = 0
+     net_send(del, 1)  // schedule start of injection
+   }
+
+   PROCEDURE seed(x) {
+     set_seed(x)
+   }
+
+   BEFORE BREAKPOINT {
+     if (on) {
+       noise = normrand(0, std * 1(/nA)) * 1(nA)
+       amp = f0 + 0.5*(f1-f0)*(tanh((t - torn) / (r/3) / (1(ms)) - 3) + 1)
+       ival = amp + noise + bias
+     } else {
+       ival = 0
+     }
+   }
+
+   BREAKPOINT {
+     i = ival
+   }
+
+   NET_RECEIVE(flag) {
+     if (flag == 1) {
+       if (on == 0) {
+         on = 1
+         net_send(dur, 1)  // schedule stop of injection
+       } else {
+         on = 0
+       }
+     }
+   }
+
+.. note::
+   The :meth:`INITIAL` block uses :meth:`net_send` to switch the noisy current on and off after specified delays.
+   The noise is generated only once per time step in :meth:`BEFORE BREAKPOINT` to maintain simulation stability.
+   Call the :meth:`seed` procedure from hoc or Python to initialize the random number generator for reproducible results.
+
+Simple example of Python usage with seeding:
+
+.. code-block:: python
+
+   stim = h.IClampNoise(0.5)
+   stim.seed(42)  # Initialize random seed
+
+.. seealso::
+   :func:`normrand`, :meth:`BEFORE BREAKPOINT`, :meth:`BREAKPOINT`, :meth:`net_send`, :meth:`NET_RECEIVE`, :class:`POINT_PROCESS`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2055 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2055>`_

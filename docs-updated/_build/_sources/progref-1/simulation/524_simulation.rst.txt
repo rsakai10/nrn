@@ -1,0 +1,15 @@
+Initialization in NEURON
+========================
+
+When you click the **Init** button in the :class:`RunControl` panel, NEURON performs a *steady state initialization under voltage clamp*. This means the membrane potential is set to the specified value, and all voltage-dependent gating variables are set to their steady-state values at that potential.
+
+.. note::
+   This differs from a current clamp procedure where current is adjusted to hold the cell at a target voltage.
+
+After initialization, when the simulation starts (e.g., via **Init & Run**), the model is "released" from this clamp and evolves freely according to ionic currents and mechanisms inserted, such as :obj:`hh`.
+
+For example, with the :obj:`hh` mechanism inserted at resting potential (-65 mV), the voltage remains stable after initialization. However, initializing at more hyperpolarized (-90 mV) or depolarized (-40 mV) potentials may cause transient phenomena such as anode break excitation or slow voltage changes due to gating kinetics recovering from inactivation.
+
+.. seealso::
+   Chapter 9 of *The NEURON Book* for detailed explanations and methods for custom initialization and steady-state solutions.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=524

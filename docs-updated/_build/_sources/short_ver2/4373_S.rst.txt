@@ -1,0 +1,36 @@
+.. _loading_nrnmech_dll:
+
+Loading Compiled Mechanisms with :meth:`h.nrn_load_dll`
+------------------------------------------------------
+
+When using compiled mechanisms in NEURON with Python, ensure that the argument to :meth:`h.nrn_load_dll` specifies the full path including the DLL filename, not just the containing directory. For example:
+
+.. code-block:: python
+
+    from neuron import h
+    h.nrn_load_dll("C:/path/to/your/modfiles/nrnmech.dll")
+
+If the DLL is in the current working directory, NEURON will load it automatically without needing :meth:`h.nrn_load_dll`. It is best practice to place the compiled :file:`nrnmech.dll` in the same directory as your main Python or HOC scripts, and run :command:`mknrndll` there before executing your model.
+
+Example minimal test in a fresh directory with compiled mechanisms:
+
+.. code-block:: python
+
+    from neuron import h
+    soma = h.Section(name='soma')
+    soma.insert('klt')          # Insert compiled mechanism "klt"
+    print(soma.psection())      # Inspect inserted mechanisms and parameters
+
+.. note::
+
+   Calling :meth:`h.nrn_load_dll` with only the directory path (without the DLL filename) will cause a ValueError when inserting mechanisms, e.g.:
+
+   .. code-block::
+
+       ValueError: argument not a density mechanism name.
+
+.. seealso::
+
+   :func:`mknrndll` for compiling mod files, :meth:`h.Section.insert` for inserting mechanisms
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4373 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4373>`_

@@ -1,0 +1,143 @@
+Iterating Over Sections Within a NEURON Cell Object
+====================================================
+
+When working with NEURON and Python, it is common to define a cell as a Python class containing multiple sections. To iterate over just the sections belonging to a particular cell instance (and not all sections in the entire simulation), use a `SectionList` that collects those sections.
+
+Basic Approach Using SectionList
+-------------------------------
+
+Define your cell class with a `SectionList` attribute (commonly named `all`) that contains all sections of the cell. You can manually append sections to this list:
+
+.. code-block:: python
+
+    class Cell(object):
+        def __init__(self):
+            self.createSections()
+            self.defineBiophysics()
+
+        def createSections(self):
+            self.all = h.SectionList()
+            self.soma = h.Section(name='soma', cell=self)
+            self.all.append(self.soma)
+            self.Bdend = h.Section(name='Bdend', cell=self)
+            self.all.append(self.Bdend)
+            self.Adend = h.Section(name='Adend', cell=self)
+            self.all.append(self.Adend)
+
+            # Define connectivity
+            self.Bdend.connect(self.soma, 0, 0)
+            self.Adend.connect(self.soma, 1, 0)
+
+        def defineBiophysics(self):
+            for sec in self.all:
+                sec.insert('pas')
+                sec.e_pas = -70  # mV
+                sec.g_pas = 1.0 / 28000.0  # S/cm2
+
+Using wholetree() to Automatically Collect Sections
+---------------------------------------------------
+
+A cleaner approach is to use the `wholetree()` method of `SectionList` to collect all sections connected to a root section (e.g., the soma):
+
+.. code-block:: python
+
+    class Cell(object):
+        def __init__(self):
+            self.createSections()
+            self.defineBiophysics()
+
+        def createSections(self):
+            self.soma = h.Section(name='soma', cell=self)
+            self.Bdend = h.Section(name='Bdend', cell=self)
+            self.Adend = h.Section(name='Adend', cell=self)
+
+            self.Bdend.connect(self.soma, 0, 0)
+            self.Adend.connect(self.soma, 1, 0)
+
+            self.all = h.SectionList()
+            self.all.wholetree(sec=self.soma)  # Collect all connected sections
+
+        def defineBiophysics(self):
+            for sec in self.all:
+                sec.insert('pas')
+                sec.e_pas = -70  # mV
+                sec.g_pas = 1.0 / 28000.0  # S/cm2
+
+.. note::
+
+   Naming the `SectionList` attribute `all` is a common convention consistent with many NEURON examples.
+
+Using SectionList.printnames()
+------------------------------
+
+The `printnames()` method of `SectionList` prints the names of the sections it contains. However, it returns a float (usually 1.0), which can be ignored.
+
+Example usage:
+
+.. code-block:: python
+
+    cell = Cell()
+    cell.all.printnames()
+
+This will output section names such as:
+
+::
+
+    <__main__.Cell object at 0x...>.soma
+    <__main__.Cell object at 0x...>.Bdend
+    <__main__.Cell object at 0x...>.Adend
+
+.. note::
+
+   The section names include the Python object address, which may look verbose. To have cleaner section names in both hoc and Python, consider defining your cell as a hoc template or using NEURON's CellBuilder tool.
+
+Creating Cells with Clean Section Names
+---------------------------------------
+
+To have nicely formatted section names in hoc and Python, define your cell as a hoc template, for example:
+
+.. code-block:: hoc
+
+    create soma, Adend, Bdend
+
+Then load the hoc file in Python:
+
+.. code-block:: python
+
+    from neuron import h, gui
+    h('load_file("cell.hoc")')
+    cell = h.Cell()
+
+You can then inspect the sections:
+
+.. code-block:: hoc
+
+    forall print secname()
+
+which outputs:
+
+::
+
+    Cell[0].soma
+    Cell[0].adend
+    Cell[0].bdend
+
+.. seealso::
+
+   - NEURON documentation: http://www.neuron.yale.edu/neuron/docs
+   - NEURON tutorial on scripting with Python: http://neuron.yale.edu/neuron/static/docs/python/python_tutorial.html
+   - CellBuilder tool for creating hoc templates
+
+Summary
+-------
+
+- Use a `SectionList` attribute (commonly named `all`) to hold all sections of a cell.
+- Use `wholetree(sec=root_section)` to automatically collect all connected sections.
+- Iterate over `cell.all` to access only the sections of that cell.
+- Use `printnames()` to print section names, ignoring its return value.
+- For cleaner section names, consider defining cells as hoc templates or using CellBuilder.
+
+Reference
+---------
+
+Original discussion thread: https://www.neuron.yale.edu/phpBB/viewtopic.php?f=16&t=3619

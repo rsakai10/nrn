@@ -1,0 +1,102 @@
+Remove All Point Processes from Sections
+=========================================
+
+When working with point processes (e.g., `IClamp`, `ExpSyn`, `Synapse`) inserted at various locations in a model, it may be convenient to remove them all programmatically rather than tracking each instance individually.
+
+The recommended approach to manage point processes is to keep explicit references to them (e.g., in a Python list). Clearing that list will dereference and eventually remove the objects. Alternatively, if you want to *discover* and remove all point processes currently inserted in sections, you can do so by inspecting the `point_processes` dictionary returned by the `psection()` method of each section.
+
+Below are explanations and example code snippets demonstrating these approaches.
+
+Using Explicit Reference Management
+------------------------------------
+
+To facilitate later removal of point processes, append them to a list at creation time:
+
+.. code-block:: python
+
+    from neuron import h
+
+    doomed = []
+    soma = h.Section(name='soma')
+    dend = h.Section(name='dend')
+
+    # Create IClamp point processes and track references
+    doomed.append(h.IClamp(soma(0.5)))
+    doomed.append(h.IClamp(dend(0.1)))
+
+    # When removal is desired:
+    doomed = []  # Discarding the list dereferences the objects
+
+This approach is bulletproof because once the reference count of NEURON objects drops to zero, the objects are automatically deleted. It is therefore best practice to manage references explicitly.
+
+Discovering and Removing Point Processes Without Prior References
+-----------------------------------------------------------------
+
+If explicit references were not saved, you can locate all existing point processes in every section by iterating over all sections and checking their point processes via :meth:`Section.psection`.
+
+1. Use :attr:`h.allsec()` to get all sections.
+2. For each section, query the `point_processes` dictionary returned by :meth:`Section.psection`.
+3. For each point process type, obtain the NEURON object(s).
+4. Remove the point processes by dereferencing them or by calling any cleanup methods if applicable.
+
+Note that NEURON does not provide a way to access the Python variable names of these objects, only their references.
+
+Example function to find and remove all point processes from all sections:
+
+.. code-block:: python
+
+    from neuron import h
+
+    def remove_all_point_processes():
+        for sec in h.allsec():
+            pps = sec.psection().get('point_processes', {})
+            for pptype, ppdict in pps.items():
+                for pptr in ppdict.values():
+                    # pptr is a NEURON object, dereference by removing references or
+                    # call any cleanup if needed
+                    
+                    # If the point process is directly accessible in Python code,
+                    # you can delete it by:
+                    del pptr  # Only deletes the local name, no effect here if no other refs exist
+
+    # Usage
+    remove_all_point_processes()
+
+.. note::
+
+    Since the objects returned by :meth:`Section.psection()` are references, simply deleting the local variable `pptr` in the loop does not remove the object if other references exist elsewhere in your code. It is best to keep explicit references and manage object lifetimes accordingly.
+
+Inspecting Live Point Processes
+-------------------------------
+
+You can use :func:`h.allobjects` to list all live instances of a particular point process class and see their current reference counts:
+
+.. code-block:: python
+
+    from neuron import h
+
+    # List all live IClamp instances
+    print(h.allobjects("IClamp"))
+
+This prints instances such as:
+
+.. code-block::
+
+    IClamp[0] with 1 refs
+    0.0
+
+This feature can help verify which objects are still live and whether your cleanup efforts were successful.
+
+Summary
+-------
+
+- It is good practice to explicitly keep references to all point processes you create for easier management and removal.
+- To remove all point processes without prior references, iterate over all sections and inspect their inserted point processes using :meth:`Section.psection`.
+- Use :func:`h.allobjects` to inspect live point process instances and their reference counts.
+- Setting all references to `None` or deleting them ensures objects are dereferenced and eligible for garbage collection.
+
+.. seealso::
+
+   :meth:`Section.psection`, :func:`h.allsec`, :func:`h.allobjects`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4389 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4389>`_

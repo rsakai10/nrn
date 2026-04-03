@@ -1,0 +1,24 @@
+Stimulating Multiple Axons with IClamp
+=======================================
+
+When using :class:`h.IClamp` to stimulate multiple axons (sections), each axon requires its own independent :class:`IClamp` instance attached explicitly to that axon's section. Simply creating multiple :class:`IClamp` objects without specifying the section by keyword argument may result in all clamps targeting the same (usually the first created) section, due to the "currently accessed section" ambiguity.
+
+.. code-block:: python
+
+    stim0 = h.IClamp(0, sec=axon0)
+    stim0.delay = 0
+    stim0.dur = 1
+    stim0.amp = 1
+
+    stim1 = h.IClamp(0, sec=axon1)
+    stim1.delay = 5
+    stim1.dur = 1
+    stim1.amp = 1
+
+.. note::
+   The positional argument for :class:`h.IClamp` is the segment location (0–1) along the section, but to specify which section to attach the clamp to, always use the `sec=` keyword argument, e.g. ``h.IClamp(0.5, sec=axon)``.
+
+.. seealso::
+   To avoid confusion, maintain consistent naming (e.g., `axon0`, `stim0` for the first axon and its stimulus) and use odd values for :attr:`Section.nseg` to improve spatial discretization accuracy. Refer to NEURON documentation on the d_lambda rule for selecting :attr:`nseg`.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3446 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3446>`_

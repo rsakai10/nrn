@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ion Concentrations and Currents in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Ion Concentrations and Currents in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1466_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ion-concentrations-and-currents-in-neuron">
+<h1>Ion Concentrations and Currents in NEURON<a class="headerlink" href="#ion-concentrations-and-currents-in-neuron" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>In NEURON, the relationship between ionic species, membrane voltage, and ionic currents is managed through mechanisms that explicitly specify ions. Many NMODL mechanisms calculate currents without explicitly specifying ion species; these models usually assume fixed ionic concentrations and equilibrium potentials.</p>
+</section>
+<section id="ion-specification-in-nmodl-mechanisms">
+<h2>Ion Specification in NMODL Mechanisms<a class="headerlink" href="#ion-specification-in-nmodl-mechanisms" title="Link to this heading"></a></h2>
+<p>To manage ionic concentrations dynamically, an NMODL mechanism must include the <code class="docutils literal notranslate"><span class="pre">USEION</span></code> statement for each relevant ion. This statement declares which ion variables the mechanism reads or writes, such as reversal potentials or internal/external concentrations.</p>
+<p>Example from the Hodgkin-Huxley (HH) Model:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">create</span> <span class="pre">soma</span>
+<span class="pre">access</span> <span class="pre">soma</span>
+<span class="pre">insert</span> <span class="pre">hh</span>
+<span class="pre">psection()</span>
+<span class="pre">`</span></code></p>
+<p>Output snippet:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+soma {</p>
+<blockquote>
+<div><p>na_ion { ena=50 }
+k_ion { ek=-77 }
+…</p>
+</div></blockquote>
+<section id="id3">
+<h3>}<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>Here, NEURON automatically creates <code class="docutils literal notranslate"><span class="pre">na_ion</span></code> and <code class="docutils literal notranslate"><span class="pre">k_ion</span></code> mechanisms that manage sodium and potassium ions respectively. The HH mechanism uses <code class="docutils literal notranslate"><span class="pre">USEION</span> <span class="pre">na</span></code> and <code class="docutils literal notranslate"><span class="pre">USEION</span> <span class="pre">k</span></code> internally to read or write relevant ion variables.</p>
+</section>
+</section>
+<section id="automatic-creation-of-ion-variables">
+<h2>Automatic Creation of Ion Variables<a class="headerlink" href="#automatic-creation-of-ion-variables" title="Link to this heading"></a></h2>
+<p>Ionic variables such as <code class="docutils literal notranslate"><span class="pre">ena</span></code>, <code class="docutils literal notranslate"><span class="pre">eki</span></code>, <code class="docutils literal notranslate"><span class="pre">cai</span></code>, etc., do not exist by default. They come into existence only if a mechanism with appropriate <code class="docutils literal notranslate"><span class="pre">USEION</span></code> statements is inserted in a section. For example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ena</span></code>, <code class="docutils literal notranslate"><span class="pre">ek</span></code>: Equilibrium potentials for sodium and potassium ions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nai</span></code>, <code class="docutils literal notranslate"><span class="pre">nao</span></code>, <code class="docutils literal notranslate"><span class="pre">ki</span></code>, <code class="docutils literal notranslate"><span class="pre">ko</span></code>: Internal and external concentrations for sodium and potassium.</p></li>
+<li><p>Similar variables exist for calcium (e.g., <code class="docutils literal notranslate"><span class="pre">cai</span></code>, <code class="docutils literal notranslate"><span class="pre">cao</span></code>), chloride, and other ions, but only if corresponding mechanisms with <code class="docutils literal notranslate"><span class="pre">USEION</span></code> appear.</p></li>
+</ul>
+<p>If no mechanism writes internal or external concentrations (i.e., no mechanism updates concentrations dynamically), the corresponding concentration variables are treated as constant parameters.</p>
+</section>
+<section id="predefined-default-concentrations-for-special-ions">
+<h2>Predefined Default Concentrations for Special Ions<a class="headerlink" href="#predefined-default-concentrations-for-special-ions" title="Link to this heading"></a></h2>
+<p>NEURON defines default ion concentration values for some common ions:</p>
+<ul class="simple">
+<li><p>Sodium: internal concentration <code class="docutils literal notranslate"><span class="pre">nai</span></code> ≈ 10 mM, external <code class="docutils literal notranslate"><span class="pre">nao</span></code> ≈ 140 mM</p></li>
+<li><p>Potassium: internal <code class="docutils literal notranslate"><span class="pre">ki</span></code> ≈ 54.4 mM, external <code class="docutils literal notranslate"><span class="pre">ko</span></code> ≈ 2.5 mM</p></li>
+</ul>
+<p>These values can be printed in HOC after inserting a mechanism that uses the ion:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">print</span> <span class="pre">nai,</span> <span class="pre">nao,</span> <span class="pre">ki,</span> <span class="pre">ko</span>
+<span class="pre">`</span></code></p>
+<p>If you try to print calcium concentrations without a calcium ion mechanism inserted, an error occurs:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">print</span> <span class="pre">cai,</span> <span class="pre">cao</span>
+<span class="pre">`</span></code></p>
+<p>Error:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">nrniv:</span> <span class="pre">undefined</span> <span class="pre">variable</span> <span class="pre">cai</span>
+<span class="pre">near</span> <span class="pre">line</span> <span class="pre">...</span>
+<span class="pre">`</span></code></p>
+</section>
+<section id="useion-and-ion-styles">
+<h2>Useion and Ion Styles<a class="headerlink" href="#useion-and-ion-styles" title="Link to this heading"></a></h2>
+<p>The way NEURON manages ion concentrations, currents, and equilibrium potentials can be customized using the <code class="docutils literal notranslate"><span class="pre">ion_style</span></code> HOC command. By default, NEURON selects appropriate methods automatically.</p>
+</section>
+<section id="simulation-of-extracellular-reagents-or-diffusible-substances">
+<h2>Simulation of Extracellular Reagents or Diffusible Substances<a class="headerlink" href="#simulation-of-extracellular-reagents-or-diffusible-substances" title="Link to this heading"></a></h2>
+<p>To simulate an extracellular reagent (e.g., neurotransmitter, drug) that diffuses and affects neuronal activity, different approaches can be considered:</p>
+<ol class="arabic simple">
+<li><p><strong>Simplified Temporal Variation of Conductance</strong></p>
+<ul class="simple">
+<li><p>If you only need the conductance to change over time (not spatially or mechanistically), precalculate the time course and apply it using the <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a> method.</p></li>
+<li><p>Alternatively, implement the time course directly in a NMODL mechanism’s <code class="docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block.</p></li>
+<li><p>For abrupt changes, use the <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a> class’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">event()</span></code> method to trigger discrete parameter changes.</p></li>
+</ul>
+</li>
+<li><p><strong>Detailed Diffusion and Reaction Modeling</strong></p>
+<ul class="simple">
+<li><p>Write a custom NMODL mechanism modeling diffusion, buffering, enzymatic degradation, or pumps with spatial detail.</p></li>
+<li><p>Use examples from NEURON’s model files (e.g., calcium or sodium accumulation models) for guidance.</p></li>
+<li><p>Model interactions with receptors using either NMODL or the Channel Builder.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="summary-of-neuron-ion-handling">
+<h2>Summary of NEURON Ion Handling<a class="headerlink" href="#summary-of-neuron-ion-handling" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Ionic concentrations and reversal potentials are created only if a mechanism with <code class="docutils literal notranslate"><span class="pre">USEION</span></code> is inserted.</p></li>
+<li><p>Variables such as <code class="docutils literal notranslate"><span class="pre">ena</span></code>, <code class="docutils literal notranslate"><span class="pre">ek</span></code> come from the automatically created ion mechanisms (e.g., <code class="docutils literal notranslate"><span class="pre">na_ion</span></code>, <code class="docutils literal notranslate"><span class="pre">k_ion</span></code>).</p></li>
+<li><p>If no mechanism declares ion concentration states, those values remain constant parameters.</p></li>
+<li><p>Default values exist for common ions but only become accessible when relevant ion mechanisms are present.</p></li>
+<li><p>Flexible simulation of extracellular reagents can range from simple conductance changes to complex diffusion-reaction models.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For details on ion handling, see chapters 8 and 9 in <em>The NEURON Book</em>, which cover ionic concentration dynamics, accumulation mechanisms, and initialization strategies.</p>
+</div>
+</section>
+<section id="code-examples">
+<h2>Code Examples<a class="headerlink" href="#code-examples" title="Link to this heading"></a></h2>
+<p><strong>Inserting HH mechanism and printing ion concentrations:</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">create</span> <span class="pre">soma</span>
+<span class="pre">access</span> <span class="pre">soma</span>
+<span class="pre">insert</span> <span class="pre">hh</span>
+<span class="pre">print</span> <span class="pre">nai,</span> <span class="pre">nao,</span> <span class="pre">ki,</span> <span class="pre">ko</span>&#160; <span class="pre">//</span> <span class="pre">prints</span> <span class="pre">default</span> <span class="pre">internal</span> <span class="pre">and</span> <span class="pre">external</span> <span class="pre">Na</span> <span class="pre">and</span> <span class="pre">K</span> <span class="pre">concentrations</span>
+<span class="pre">`</span></code></p>
+<p><strong>Using :meth:`Vector.play` to apply time-varying conductance in Python:</strong></p>
+<p><a href="#id4"><span class="problematic" id="id5">``</span></a><a href="#id6"><span class="problematic" id="id7">`</span></a>python
+from neuron import h</p>
+<p>soma = h.Section(name=’soma’)
+soma.insert(‘pas’)
+g_pas_vec = h.Vector([0, 0.001, 0.002, 0.001, 0])  # example conductance values in S/cm2
+t_vec = h.Vector([0, 10, 20, 30, 40])              # corresponding times in ms</p>
+<p>g_pas_vec.play(soma(0.5).pas._ref_g, t_vec)
+<a href="#id8"><span class="problematic" id="id9">``</span></a><a href="#id10"><span class="problematic" id="id11">`</span></a></p>
+<p><strong>Using :meth:`CVode.event` for abrupt parameter change:</strong></p>
+<p><a href="#id12"><span class="problematic" id="id13">``</span></a><a href="#id14"><span class="problematic" id="id15">`</span></a>python
+cvode = h.CVode()
+def change_conductance():</p>
+<blockquote>
+<div><p>soma(0.5).pas.g = 0.005</p>
+</div></blockquote>
+<p>cvode.event(50, change_conductance)  # change conductance at 50 ms
+cvode.event(100, lambda: setattr(soma(0.5).pas, ‘g’, 0.001))  # revert at 100 ms
+<a href="#id16"><span class="problematic" id="id17">``</span></a><a href="#id18"><span class="problematic" id="id19">`</span></a></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section" title="Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ion</span></code>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.play" title="Vector.play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.play()</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode.event" title="CVode.event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CVode.event()</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1466">https://neuron.yale.edu/phpBB/viewtopic.php?t=1466</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

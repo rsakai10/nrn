@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obsolete Plotting &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Obsolete Plotting</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/matlab/visualization/oldgrph.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><a href="#axis" title="Link to this definition">axis</a> &middot; <a href="#graphmode" title="Link to this definition">graphmode</a> &middot; <a href="#plt" title="Link to this definition">plt</a> &middot; <a href="#setcolor" title="Link to this definition">setcolor</a> &middot; <a href="#settext" title="Link to this definition">settext</a></p><section id="obsolete-plotting">
+<span id="oldgrph"></span><h1>Obsolete Plotting<a class="headerlink" href="#obsolete-plotting" title="Link to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The functions on this page should be considered obsolete and avoided in new code; use
+<a class="reference internal" href="../../progref-1/visualization/graph.html#Graph" title="Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a> or regular Python graphics (<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">plotnine</span></code>, <code class="docutils literal notranslate"><span class="pre">plotly</span></code>, …)
+instead.</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="graphmode">
+<span class="sig-name descname"><span class="pre">graphmode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graphmode" title="Link to this definition"></a></dt>
+<dd><p>obsolete. Use <a class="reference internal" href="../../progref-1/visualization/graph.html#Graph" title="Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a> instead.</p>
+<p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">();</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">(</span><span class="s">&#39;expression&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;setup&#39;</span><span class="p">);</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">);</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">graphmode</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>Description:</dt><dd><p>The <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#graph" title="graph"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph()</span></code></a> function solves the problem of obtaining multiple line plots during
+a single run. During calls to <code class="docutils literal notranslate"><span class="pre">n.graph(t)</span></code>, specified variables are stored
+and plotted using scales determined by calls to <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#axis" title="axis"><code class="xref py py-func docutils literal notranslate"><span class="pre">axis()</span></code></a>.</p>
+</dd>
+</dl>
+<p>Options:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">n.graph()</span></code></dt><dd><p>erases the old list and starts a new (empty)
+list of plot expressions and setup statements.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.graph(s1,</span> <span class="pre">s2)</span></code></dt><dd><p>Adds a new plot specification
+to the graph list. s1 must be a
+string which contains a HOC expression, usually a variable. e.g <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code>. s2 is a
+string which contains any number of HOC statements used to initialize axes. etc.
+E.G <code class="docutils literal notranslate"><span class="pre">&quot;axis(0,5,1,-1,1,2)</span> <span class="pre">axis()&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.graph(t)</span></code></dt><dd><p>The current value of each
+expression in the graph list is saved along with the abscissa value, t.
+The line plots are flushed every 50 points.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">import</span><span class="w"> </span><span class="s">numpy</span><span class="p">;</span>
+
+<span class="n">n</span><span class="p">(</span><span class="s">&#39;x = 0&#39;</span><span class="p">);</span>
+
+<span class="k">function</span><span class="w"> </span><span class="nf">p</span><span class="p">()</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">450</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">();</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">15</span>
+<span class="w">        </span><span class="n">n</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span>
+<span class="w">        </span><span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">end</span>
+
+<span class="n">p</span><span class="p">();</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">();</span>
+<span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">(</span><span class="s">&quot;sin(x)&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;axis(100, 300, 100, 300) axis()&quot;</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">graph</span><span class="p">(</span><span class="s">&quot;cos(x)&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="n">p</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="matlab/images/oldgrph.png" class="align-center" src="matlab/images/oldgrph.png" />
+</div></blockquote>
+<dl>
+<dt>Diagnostics:</dt><dd><p>The strings are parsed when <code class="docutils literal notranslate"><span class="pre">n.graph(s1,</span> <span class="pre">s2)</span></code> is executed.  The strings are
+executed on calls to <code class="docutils literal notranslate"><span class="pre">n.graph(t)</span></code>.</p>
+<p>The best method for complicated plots is to make the setup string a
+simple call to a user defined procedure.  This procedure can setup the
+axes, write the labels, etc.  Newlines and strings within strings are
+possible by quoting with the <code class="docutils literal notranslate"><span class="pre">\</span></code> character but generally are
+too confusing to be practical.</p>
+<p>Local variables in graph strings make no sense.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All expressions for initialization and for plotting must be specified as HOC
+expressions not as Python callables. These functions are maintained solely to
+maintain backward compatability, so this limitation is likely to never be lifted.
+New code should use <a class="reference internal" href="../../progref-1/visualization/graph.html#Graph" title="Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a> instead,
+which does not have this limitation.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On some modern systems, the graph window may have to be interacted with (e.g. resized)
+before the first graph will appear.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../progref-1/visualization/oldgrph.html#plot" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="../../progref-1/visualization/graph.html#Graph" title="Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#axis" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">();</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;clip&#39;</span><span class="p">);</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="n">xorg</span><span class="p">,</span><span class="w"> </span><span class="n">xsize</span><span class="p">,</span><span class="w"> </span><span class="n">yorg</span><span class="p">,</span><span class="w"> </span><span class="n">ysize</span><span class="p">);</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;xstart&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;xstop&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;nticx&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;ystart&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;ystop&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;nticy&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>Description:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">n.plot()</span></code> plots relative to the origin and scale defined by
+calls to <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#axis" title="axis"><code class="xref py py-func docutils literal notranslate"><span class="pre">axis()</span></code></a>.  The default x and y axes have relative units of 0 to 1 with the plot
+located in a 5x3.5 inch area.</p>
+</dd>
+</dl>
+<p>Options:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">n.plot()</span></code></dt><dd><p>print parameter usage help lines.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plot(0)</span></code></dt><dd><p>subsequent calls will plot points.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plot(1)</span></code></dt><dd><p>next call will be a move, subsequent call will draw lines.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plot(x,</span> <span class="pre">y)</span></code></dt><dd><p>plots a point (or vector) relative to the axis scale.
+Return value is 0 if the point is clipped (out of range).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plot(mode,</span> <span class="pre">x,</span> <span class="pre">y)</span></code></dt><dd><p>Like <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#plt" title="plt"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt()</span></code></a> but with scale and origin given by <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#axis" title="axis"><code class="xref py py-func docutils literal notranslate"><span class="pre">axis()</span></code></a>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">import</span><span class="w"> </span><span class="s">numpy</span><span class="p">;</span>
+<span class="c">% plot the sin function from 0 to 10 radians</span>
+<span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c">% setup scale</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">sin</span><span class="p">(</span><span class="n">x</span><span class="p">));</span><span class="w"> </span><span class="c">% plot the function</span>
+<span class="k">end</span>
+<span class="n">n</span><span class="p">.</span><span class="n">axis</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="matlab/images/plotsin.png" class="align-center" src="matlab/images/plotsin.png" />
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../progref-1/visualization/oldgrph.html#plt" title="plt"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt()</span></code></a>, <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#setcolor" title="setcolor"><code class="xref py py-func docutils literal notranslate"><span class="pre">setcolor()</span></code></a>, <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#axis" title="axis"><code class="xref py py-func docutils literal notranslate"><span class="pre">axis()</span></code></a></p>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="setcolor">
+<span class="sig-name descname"><span class="pre">setcolor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#setcolor" title="Link to this definition"></a></dt>
+<dd><p>obsolete.</p>
+<p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">.</span><span class="n">setcolor</span><span class="p">(</span><span class="s">&#39;colorval&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">n.setcolor()</span></code> sets the color (or pen number for HP plotter) used for <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#plt" title="plt"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt()</span></code></a>.</p>
+<p>Argument to <code class="docutils literal notranslate"><span class="pre">n.setcolor()</span></code> produces the following screen
+colors with an EGA adapter (left), X11 graphics (right):</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Color Mapping Table</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>HP Plotter Color</p></th>
+<th class="head"><p>Alternate Color</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>black (pen 1)</p></td>
+<td><p>black</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>blue</p></td>
+<td><p>white</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>green</p></td>
+<td><p>yellow</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>cyan</p></td>
+<td><p>red</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>red</p></td>
+<td><p>green</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>magenta</p></td>
+<td><p>blue</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>brown</p></td>
+<td><p>violet</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>light gray (pen 1)</p></td>
+<td><p>cyan</p></td>
+</tr>
+<tr class="row-even"><td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>white</p></td>
+<td><p>green</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="settext">
+<span class="sig-name descname"><span class="pre">settext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#settext" title="Link to this definition"></a></dt>
+<dd><p>obsolete. See <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#plt" title="plt"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt()</span></code></a>.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="plt">
+<span class="sig-name descname"><span class="pre">plt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plt" title="Link to this definition"></a></dt>
+<dd><p>Syntax:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">);</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">n.plt()</span></code> plots points, lines, and text using
+the Tektronix 4010 standard. Absolute
+coordinates of the lower left corner and upper right corner of the plot
+region are (0,0) and (1000, 780) respectively.</p>
+<p>TURBO-C graphics drivers for VGA, EGA, CGA, and Hercules are automatically
+selected when the first plotting command is executed. An HP7475 compatible
+plotter may be connected to COM1:.</p>
+</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-1)</span></code></dt><dd><p>Place cursor in home position.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-2)</span></code></dt><dd><p>Subsequent text printed starting at current coordinate position.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-3)</span></code></dt><dd><p>Erase screen, cursor in home position.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-5)</span></code></dt><dd><p>Open HP plotter on PC; the plotter will stay open until another <code class="docutils literal notranslate"><span class="pre">n.plt(-5)</span></code> is executed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(0,</span> <span class="pre">x,</span> <span class="pre">y)</span></code></dt><dd><p>Plot point.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(1,</span> <span class="pre">x,</span> <span class="pre">y)</span></code></dt><dd><p>Move to point without plotting.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(2,</span> <span class="pre">x,</span> <span class="pre">y)</span></code></dt><dd><p>Draw vector from former position to new position given by (x, y).
+(<em>mode</em> can be any number &gt;= 2)</p>
+</dd>
+</dl>
+<p>Several extra options are available for X11 graphics.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-4,</span> <span class="pre">x,</span> <span class="pre">y)</span></code></dt><dd><p>Erases area defined by previous plot position and
+the point, (x, y).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-5)</span></code></dt><dd><p>Fast mode. By default, the X11 server is flushed on every
+plot command so one can see the plot as it develops. Fast mode caches plot
+commands and only flushes on <code class="docutils literal notranslate"><span class="pre">plt(-1)</span></code> and <code class="docutils literal notranslate"><span class="pre">setcolor()</span></code>.  Fast mode is
+three times faster than the default mode.  It is most useful when
+plotting is the rate limiting step of the simulation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n.plt(-6)</span></code></dt><dd><p>X11 server flushed on every plot call.</p>
+</dd>
+</dl>
+<p>When the graphic window is resized, NEURON is notified after
+the next erase command.</p>
+</div></blockquote>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">neuron</span><span class="p">.</span><span class="n">launch</span><span class="p">();</span>
+<span class="n">import</span><span class="w"> </span><span class="s">math</span><span class="p">;</span>
+
+<span class="n">n</span><span class="p">.</span><span class="n">setcolor</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">550</span><span class="p">);</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="nb">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">sin</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">pi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="p">));</span>
+<span class="k">end</span>
+<span class="n">n</span><span class="p">.</span><span class="n">plt</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="matlab/images/plotsin2.png" class="align-center" src="matlab/images/plotsin2.png" />
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../progref-1/visualization/oldgrph.html#plot" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#axis" title="axis"><code class="xref py py-func docutils literal notranslate"><span class="pre">axis()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">lw()</span></code>, <a class="reference internal" href="../../progref-1/visualization/oldgrph.html#setcolor" title="setcolor"><code class="xref py py-func docutils literal notranslate"><span class="pre">setcolor()</span></code></a>, <a class="reference internal" href="../../progref-1/visualization/graph.html#Graph" title="Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>EGA adaptor used extensively but CGA and Hercules used hardly at all.</p>
+<p>When the X11 graphic window is killed, NEURON exits without asking about
+unsaved edit buffers.</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

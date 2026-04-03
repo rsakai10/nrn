@@ -1,0 +1,42 @@
+.. _why_setting_gbar_zero:
+
+Why does setting ``gbar=0`` still produce current?
+===============================================
+
+When inserting a mechanism (e.g. ``kv``) into multiple sections using a :class:`SectionList` like ``dendritic``, setting ``gbar_kv = 0`` may not behave as expected because section lists can include unexpected sections:
+
+.. code-block:: hoc
+
+    dendritic { insert kv  gbar_kv = 0 }
+
+may only act on the currently accessed section in the list rather than all dendrites, often defaulting to the soma, if it is included in ``dendritic``.
+
+To correctly set conductances only in dendrites, iterate explicitly:
+
+.. code-block:: hoc
+
+    forsec dendritic {
+        insert kv
+        gbar_kv = 0
+    }
+
+If ``soma`` is included in ``dendritic``, it can be checked and removed using:
+
+.. code-block:: hoc
+
+    dendritic_only = new SectionList()
+    forsec dendritic dendritic_only.append()
+    soma dendritic_only.remove()
+
+Key points:
+
+.. note::
+
+   - A ``gbar`` value of zero means the channel produces no current in that section.
+   - Inserting a mechanism into unintended sections may alter their conductances unexpectedly.
+   - Use :meth:`forsec` loops and verify section lists with commands like ``forsec dendritic ifsec "som*" print secname()`` to diagnose inclusion of soma.
+   - Always confirm which sections are affected to match your modeling intentions.
+
+This attention prevents misleading simulation results when modifying conductances in complex morphologies.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2245 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2245>`_

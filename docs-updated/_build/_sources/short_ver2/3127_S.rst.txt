@@ -1,0 +1,33 @@
+.. warning::
+   
+   When using a custom initialization procedure that calls :meth:`fadvance()` multiple times to advance the model before starting a simulation, it is essential to call :func:`frecord_init()` afterward (or call :meth:`finitialize()`, which calls :func:`frecord_init()` internally).  
+   
+   This is necessary because :func:`Vector.record` objects maintain an internal index incremented on each :meth:`fadvance()`. Without resetting this index via :func:`frecord_init()`, recorded vectors will be shifted, causing delays or misalignment in recorded synaptic or voltage signals.
+   
+.. code-block:: hoc
+
+   proc init() {
+       ; ... setup code ...
+       for i=0,19 {
+         fadvance()
+       }
+       frecord_init()  // must reset recording vector indices
+       ; ... continue initialization ...
+   }
+
+.. code-block:: python
+
+   def init():
+       for _ in range(20):
+           h.fadvance()
+       h.frecord_init()  # reset recorded vectors indices
+
+.. note::
+
+   Calling :meth:`finitialize()` after advancing time implicitly calls :func:`frecord_init()`. Models that include calls to :meth:`finitialize()` after :meth:`fadvance()` calls do not experience this problem.
+
+.. seealso::
+
+   :func:`frecord_init`, :meth:`fadvance`, :meth:`finitialize`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3127 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3127>`_

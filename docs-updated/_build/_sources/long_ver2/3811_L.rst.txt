@@ -1,0 +1,160 @@
+Obtaining the Actual Location Along a Section for a NetCon Source
+==================================================================
+
+When creating a :class:`h.NetCon` instance with a source on a membrane potential of a section, you may want to retrieve the exact fractional position along the section where the source is located. Historically, the method :meth:`NetCon.preloc` returns `0`, `0.5`, or `1.0` for location fractions, and may not correspond to the actual position if a segment center differs from the requested fraction.
+
+Limitations of :meth:`NetCon.preloc`
+------------------------------------
+
+The legacy behavior of :meth:`NetCon.preloc` is as follows:
+
+- Returns `0` or `1` if the source is at the end of a section (`0` or `1`).
+- Returns `0.5` for any intermediate location because the voltage variable is associated with a segment (which may be centered away from the specified fraction).
+- Will return `-1` if there is no source.
+- Will return `-2` if the source variable is not a membrane potential.
+- Requires a matching :func:`h.pop_section` call if the return value is non-negative (≥ 0).
+
+Example illustrating this behavior:
+
+.. code-block:: python
+
+    from neuron import h, gui
+
+    soma = h.Section()
+    soma.nseg = 10
+
+    print(h.NetCon(soma(0)._ref_v, None).preloc())  # prints 0.0
+    print(h.NetCon(soma(1)._ref_v, None).preloc())  # prints 1.0
+    print(h.NetCon(soma(0.5)._ref_v, None).preloc())  # prints 0.5
+    print(h.NetCon(soma(0.25)._ref_v, None).preloc())  # prints 0.5 (does not match 0.25)
+    print(h.NetCon(soma(0.75)._ref_v, None).preloc())  # prints 0.5 (does not match 0.75)
+
+New Method :meth:`NetCon.preseg`
+-------------------------------
+
+Starting from NEURON version 7.5 (commit "af83c99" onwards), a new Python-specific method :meth:`NetCon.preseg` provides access to the exact pre-section :class:`~nrn.Segment` of the spike detector source. This method returns a :class:`~nrn.Segment` object when the source is a membrane voltage variable, which allows retrieving:
+
+- The exact fractional location along the section: ``nc.preseg().x``
+- The source section object: ``nc.preseg().sec``
+
+If there is no source, or the source is on a remote MPI process, or the source variable is not a voltage, :meth:`NetCon.preseg` returns `None`.
+
+Usage example:
+
+.. code-block:: python
+
+    from neuron import h, gui
+
+    soma = h.Section()
+    soma.nseg = 10
+
+    nc1 = h.NetCon(soma(0)._ref_v, None)
+    print(nc1.preseg().x)  # 0.0
+
+    nc2 = h.NetCon(soma(1)._ref_v, None)
+    print(nc2.preseg().x)  # 1.0
+
+    nc3 = h.NetCon(soma(0.5)._ref_v, None)
+    print(nc3.preseg().x)  # ~0.55 (segment center near 0.5)
+
+    nc4 = h.NetCon(soma(0.25)._ref_v, None)
+    print(nc4.preseg().x)  # 0.25
+
+    nc5 = h.NetCon(soma(0.75)._ref_v, None)
+    print(nc5.preseg().x)  # 0.75
+
+    nc6 = h.NetCon(soma(0.75)._ref_cm, None)  # non-voltage variable
+    print(nc6.preseg())  # None
+
+Notes on Coordinate References
+------------------------------
+
+- The fractional positions returned by :meth:`NetCon.preseg` and :meth:`NetCon.preloc` are with respect to the end of the section that has a parent section (i.e., the 0 position is always assigned to the end connected to the parent), **not** with respect to the orientation of the section as specified by :meth:`Section.orientation`. As of the latest fixes, this behavior is corrected to be consistent and reliable.
+
+- :meth:`NetCon.preseg` does **not** push the section onto the stack, so no corresponding :func:`h.pop_section` call is necessary after its use.
+
+- :meth:`NetCon.preloc` may require a :func:`h.pop_section` call if it returns a value ≥ 0.
+
+Extended Test Example
+---------------------
+
+The following test script demonstrates working with connected sections and validating :meth:`NetCon.preseg` and :meth:`NetCon.preloc` values:
+
+.. code-block:: python
+
+    from neuron import h, gui
+
+    d1 = h.Section()
+    d2 = h.Section()
+    d2.connect(d1(1), 1)
+
+    d1.nseg = 5
+    d2.nseg = 5
+
+    h.topology()
+
+    def eq(x, y):
+        return abs(x - y) < 1e-11
+
+    def test(sec, x):
+        nc = h.NetCon(sec(x)._ref_v, None, sec=sec)
+        print((eq(nc.preseg().x, x), x, nc.preseg().x))
+        ncx = nc.preloc()
+        print((eq(ncx, x), x, ncx))
+        h.pop_section()
+
+    for sec in [d1, d2]:
+        test(sec, 0.)
+        test(sec, 1.)
+        test(sec, 0.1)
+
+    pc = h.ParallelContext()
+    e = h.ExpSyn(d1(0.5))
+    nc = pc.gid_connect(0, e)
+    print(nc.preseg() is None)
+    print(nc.preloc() == -1.)
+    h.pop_section()
+
+    nc = h.NetCon(d2(0.1)._ref_cm, None, sec=d2)
+    print(nc.preseg() is None)
+    print(nc.preloc() == -2.)
+    h.pop_section()
+
+Expected output:
+
+.. code-block:: none
+
+    |-----|       __nrnsec_0x1bd7740(0-1)
+           `----|       __nrnsec_0x1bd77a0(1-0)
+
+    (True, 0.0, 0.0)
+    (True, 0.0, 0.0)
+    (True, 1.0, 1.0)
+    (True, 1.0, 1.0)
+    (True, 0.1, 0.1)
+    (True, 0.1, 0.1)
+    (True, 0.0, 0.0)
+    (True, 0.0, 0.0)
+    (True, 1.0, 1.0)
+    (True, 1.0, 1.0)
+    (True, 0.1, 0.09999999999999998)
+    (True, 0.1, 0.09999999999999998)
+    True
+    True
+    True
+    True
+
+Summary
+-------
+
+- Use :meth:`NetCon.preseg` to obtain the actual segment location (:attr:`~nrn.Segment.x`) and section (:attr:`~nrn.Segment.sec`) for a NetCon's spike detector on a membrane potential.
+
+- :meth:`NetCon.preloc` provides an arc position that may differ from the requested fraction but has legacy requirements such as needing a matching :func:`h.pop_section`.
+
+- :meth:`NetCon.preseg` returns `None` if no valid source exists or source is non-voltage, without requiring :func:`h.pop_section`.
+
+- The fractional coordinate system is parent-end-based, not dependent on section orientation.
+
+This enhancement facilitates precise introspection of NetCon source locations without modifying original models or tracking source positions externally.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3811 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3811>`_

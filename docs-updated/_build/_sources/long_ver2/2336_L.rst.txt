@@ -1,0 +1,42 @@
+Setting the Conductance of an Exp2Syn Synapse
+===============================================
+
+When using an :class:`Exp2Syn` point process to model synaptic input in NEURON, the peak synaptic conductance change in response to a presynaptic event is controlled by the weight of the :class:`NetCon` object that delivers events to the synapse. 
+
+The :attr:`Exp2Syn.g` variable itself should not be set directly to control the amplitude of synaptic input. Instead, it represents the instantaneous synaptic conductance at any point in time as it evolves dynamically due to synaptic kinetics.
+
+.. note::
+   The :class:`NetCon` weight determines the peak increment in :attr:`Exp2Syn.g` produced by a presynaptic spike. Setting :attr:`Exp2Syn.g` manually will not affect the amplitude of synaptic inputs triggered by :class:`NetCon` events.
+
+To obtain a desired peak synaptic conductance:
+
+1. Create the :class:`Exp2Syn` synapse on the target section.
+2. Create a :class:`NetCon` object to connect a presynaptic source (e.g., spike detection or artificial spike generator) to the :class:`Exp2Syn` synapse.
+3. Set the :attr:`NetCon.weight` attribute to the desired peak conductance value (in microsiemens, µS).
+
+Example in Python:
+
+.. code-block:: python
+
+    from neuron import h
+
+    soma = h.Section(name='soma')
+    syn = h.Exp2Syn(soma(0.5))
+    nc = h.NetCon(h.Vector(), syn)  # placeholder source, normally a spike detector
+    nc.weight[0] = 0.001  # peak conductance in µS (e.g., 1 nS)
+
+Example in HOC:
+
+.. code-block:: hoc
+
+    objref soma, syn, nc
+    soma = new Section()
+    syn = new Exp2Syn(soma(0.5))
+    nc = new NetCon(nil, syn)  // nil or spike source
+    nc.weight[0] = 0.001   // peak conductance (µS)
+
+.. seealso::
+
+   :class:`NetCon`, :class:`Exp2Syn`, :attr:`Exp2Syn.g`, :attr:`NetCon.weight`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2336 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2336>`_

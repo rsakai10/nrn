@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fano Factor Calculation for NetStim Events in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fitting Data Sampled at Irregular Intervals Using MRF in NEURON" href="Fitting_Data_Sampled_at_Irregular_Intervals_Using_MRF_in_NEURON.html" />
+    <link rel="prev" title="Times of spikes vector" href="Times_of_spikes_vector.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../can_i_edit_it.html">What is a ses (session) file? Can I edit it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nrn_defaults.html">How to change the background color used in shape plots and other graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nrn_defaults.html#how-create-a-custom-colormap">How create a custom colormap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../neuron-units.html">What units does NEURON use for current, concentration, etc.?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../units_tutorial.html">UNITS Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../units_tutorial.html#definition-of-new-units">Definition of new units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../units_tutorial.html#function-and-argument-units">Function and Argument units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../units_tutorial.html#units-for-kinetic-blocks">Units for KINETIC blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../units_tutorial.html#units-in-neuron-models">Units in NEURON models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../using_the_d_lambda_rule.html">Using the d_lambda Rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../finitialize_handler.html">FIinitializeHandler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../exit-neuron-no-gui.html">How do I exit NEURON? I’m not using the GUI, and when I enter ^D at the oc&gt; prompt it doesn’t do anything?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Interfacing_NEURON_with_other_software_at_runtime.html">Interfacing NEURON with other software at runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Times_of_spikes_vector.html">Times of spikes vector</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Fano Factor Calculation for NetStim Events in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Fitting_Data_Sampled_at_Irregular_Intervals_Using_MRF_in_NEURON.html">Fitting Data Sampled at Irregular Intervals Using MRF in NEURON</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">Fano Factor Calculation for NetStim Events in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Fano_Factor_Calculation_for_NetStim_Events_in_NEURON.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fano-factor-calculation-for-netstim-events-in-neuron">
+<h1>Fano Factor Calculation for NetStim Events in NEURON<a class="headerlink" href="#fano-factor-calculation-for-netstim-events-in-neuron" title="Link to this heading"></a></h1>
+<p><strong>Q: How can I correctly calculate the Fano factor for synaptic events generated by a `NetStim` with noise=1 in NEURON?</strong></p>
+<p>The Fano factor is defined as the variance-to-mean ratio of the number of events counted within fixed time intervals. It applies to discrete counts of events (e.g., spike counts in time bins), not to continuous variables like inter-event intervals.</p>
+<p>A <cite>NetStim</cite> with <cite>noise=1</cite> generates synaptic events with intervals drawn from a negative exponential distribution, making the spike times irregular but the count of spikes in fixed intervals Poisson distributed. Hence, the Fano factor of counts over fixed-length time windows should be close to 1.</p>
+<p>To obtain the Fano factor:</p>
+<ol class="arabic simple">
+<li><p>Record spike times from the <cite>NetStim</cite>.</p></li>
+<li><p>Bin the spike times into fixed-duration windows.</p></li>
+<li><p>Calculate the variance and mean of spike counts per bin.</p></li>
+<li><p>Compute the Fano factor as variance/mean.</p></li>
+</ol>
+<p>The interspike intervals (ISIs) follow an exponential distribution and their variance-to-mean ratio is not the Fano factor.</p>
+<p>Example implementations:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Fano factor calculation for NetStim events
+
+load_file(&quot;stdgui.hoc&quot;)  // ensure standard run library is loaded
+
+objref sti, con, vec, hist, isivec
+sti = new NetStim()
+sti.interval = 100    // mean interval in ms
+sti.start = 10
+sti.number = 1e9      // large number to avoid early stop
+sti.noise = 1         // fully random intervals
+
+con = new NetCon(sti, nil)
+vec = new Vector()
+con.record(vec)       // record spike times
+
+tstop = 35000
+cvode_active(1)       // enable adaptive integration for speed
+
+run()
+
+proc analyze() {
+  // Compute interspike intervals using Vector.deriv
+  isivec = new Vector()
+  isivec.deriv(vec, 1, 1)
+  print &quot;Mean ISI: &quot;, isivec.mean(), &quot; ms&quot;
+  print &quot;ISI stdev: &quot;, isivec.stdev()
+  print &quot;Coefficient of variation (ISI stdev/mean): &quot;, isivec.stdev() / isivec.mean()
+  print &quot;&quot;
+
+  // Compute histogram of spike counts in 20 ms bins
+  hist = vec.histogram(0, tstop, 20)
+  print &quot;Fano factor (variance/mean of counts in 20 ms bins): &quot;, hist.var() / hist.mean()
+}
+
+analyze()
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;stdgui.hoc&quot;</span><span class="p">)</span>  <span class="c1"># ensure standard run environment is loaded</span>
+
+<span class="n">sti</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetStim</span><span class="p">()</span>
+<span class="n">sti</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># mean interval (ms)</span>
+<span class="n">sti</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">sti</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="mf">1e9</span>      <span class="c1"># large number to avoid stop</span>
+<span class="n">sti</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="mi">1</span>         <span class="c1"># random intervals</span>
+
+<span class="n">vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">con</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">sti</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">con</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+
+<span class="n">tstop</span> <span class="o">=</span> <span class="mi">35000</span>
+<span class="n">h</span><span class="o">.</span><span class="n">cvode_active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">tstop</span> <span class="o">=</span> <span class="n">tstop</span>
+<span class="n">h</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1"># Convert recorded spike times to Python list</span>
+<span class="n">spike_times</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+
+<span class="c1"># Calculate interspike intervals (ISIs)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="n">isis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">spike_times</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean ISI:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">isis</span><span class="p">),</span> <span class="s2">&quot;ms&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ISI stdev:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">isis</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coefficient of variation (ISI stdev/mean):&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">isis</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">isis</span><span class="p">))</span>
+
+<span class="c1"># Bin spikes into fixed windows (e.g., 20 ms)</span>
+<span class="n">bin_size</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tstop</span> <span class="o">+</span> <span class="n">bin_size</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">)</span>
+<span class="n">counts</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+<span class="n">fano_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fano factor (variance/mean of counts in 20 ms bins):&quot;</span><span class="p">,</span> <span class="n">fano_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>The Fano factor should be close to 1 for a Poisson spike count distribution.</p></li>
+<li><p>Using large <cite>number</cite> in <cite>NetStim</cite> ensures the simulation does not terminate prematurely.</p></li>
+<li><p>Avoid computing Fano factor on interspike intervals; it applies to spike counts in time bins.</p></li>
+<li><p>For faster simulation, omit biophysical cells and simulate only with <cite>NetStim</cite> and <cite>NetCon</cite>.</p></li>
+<li><p>Enabling <cite>cvode_active(1)</cite> activates efficient event-driven simulation.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2992">https://neuron.yale.edu/phpBB/viewtopic.php?t=2992</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Times_of_spikes_vector.html" class="btn btn-neutral float-left" title="Times of spikes vector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Fitting_Data_Sampled_at_Irregular_Intervals_Using_MRF_in_NEURON.html" class="btn btn-neutral float-right" title="Fitting Data Sampled at Irregular Intervals Using MRF in NEURON" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

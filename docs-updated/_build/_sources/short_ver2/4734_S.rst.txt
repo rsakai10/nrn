@@ -1,0 +1,27 @@
+Factors Influencing NEURON Simulation Run Time Beyond Total Compartment Count
+=================================================================================
+
+Simulation run time depends not only on the total number of compartments (:attr:`nseg`) but also on the total number of ODEs being solved. Each segment contributes:
+
+- One ODE for the cable equation
+- Additional ODEs for each state variable of every mechanism requiring numerical integration (e.g., density mechanisms, certain point processes like :class:`ExpSyn` or :class:`Exp2Syn`)
+- Potentially two ODEs per segment for extracellular mechanisms (if compiled with `nlayer == 2`)
+- Additional ODEs for each reaction-diffusion state if using the :mod:`rxd` module
+
+Furthermore, simulation speed is affected by memory layout and cache efficiency. More complex morphologies with many branches may cause increased cache swapping, slowing execution. Enabling the CVode variable-step solver’s cache optimizations via the :attr:`cvode.cache_efficient` flag can improve run time:
+
+.. code-block:: python
+
+    from neuron import h
+    h.cvode.cache_efficient(1)
+
+In HOC:
+
+.. code-block:: hoc
+
+    cvode.cache_efficient(1)
+
+.. note::
+   Optimizing model structure and enabling cache efficiency can have a greater impact on run time than simply reducing compartment count.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4734 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4734>`_

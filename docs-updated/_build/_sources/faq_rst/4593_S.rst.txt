@@ -1,0 +1,46 @@
+Cutting a simulation into multiple runs with parameter changes in between
+-------------------------------------------------------------------------
+
+You can run a simulation in segments by calling :meth:`h.continuerun()` with increasing stop times. After the first segment finishes, modify parameters, then prepare to continue with:
+
+.. code-block:: python
+
+    if h.cvode.active():
+        h.cvode.re_init()
+    else:
+        h.fcurrent()
+
+    h.continuerun(new_tstop)  # new_tstop > previous stop time
+
+To record variables across segments, define recording vectors **before** initialization and the first run:
+
+.. code-block:: python
+
+    soma_v = h.Vector().record(cell.soma(0.5)._ref_v)
+    t = h.Vector().record(h._ref_t)
+
+    h.finitialize(-65)
+    h.continuerun(300)
+
+    # modify parameters here
+
+    if h.cvode.active():
+        h.cvode.re_init()
+    else:
+        h.fcurrent()
+
+    h.continuerun(1000)  # continues from 300 to 1000 ms
+
+Do **not** create new :class:`Vector` recordings for the second segment; the original vectors accumulate the full trace.
+
+If you want to discard values before continuing the second segment, call :meth:`h.frecord_init()` just before the second :meth:`h.continuerun()`.
+
+.. note::
+
+    :meth:`Vector.record` must be called prior to simulation initialization.
+
+.. seealso::
+
+    :meth:`h.frecord_init`, :meth:`h.continuerun`, :meth:`CVode.re_init`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4593 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4593>`_

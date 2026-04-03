@@ -1,0 +1,156 @@
+Dynamic Creation and Management of Spike Time Vectors
+=======================================================
+
+When recording action potential (AP) times from multiple sections such as soma and nodes in a neuronal model, it is common to use the :class:`APCount` class paired with :class:`Vector` objects to store spike times. This section explains how to dynamically create and manage multiple vectors for AP times without manually generating distinct variable names for each vector.
+
+Basic Setup for Single Section Recording
+----------------------------------------
+For a single section, e.g., a soma, setup can be done as follows in HOC:
+
+.. code-block:: hoc
+
+    create soma
+    objref apc_soma
+    access soma
+    apc_soma = new APCount(0.5)
+    objref soma_timevector
+    soma_timevector = new Vector()
+    apc_soma.record(soma_timevector)
+
+This records the AP times detected at the midpoint (0.5) of the soma.
+
+Recording from Multiple Sections Using Objref Arrays
+----------------------------------------------------
+
+When multiple sections exist (e.g., 20 node sections), instead of dynamically creating variable names like `timevector1`, `timevector2`, etc., use an array (indexed list) of objrefs. Example in HOC:
+
+.. code-block:: hoc
+
+    create node[20]
+    objref apc_nodes[20], timevec[20]
+
+    for j=0, 19 node[j] {
+        apc_nodes[j] = new APCount(0.5)
+        timevec[j] = new Vector()
+        apc_nodes[j].record(timevec[j])
+    }
+
+This method efficiently associates each APCount instance with its own Vector for recording spike times.
+
+Advantages:
+- No "access" misuse by repeatedly calling `access` inside loops.
+- No need to generate variable names at runtime or parse strings.
+- Easy iteration over all vectors to save or analyze data.
+
+Using Symbolic Constants
+------------------------
+
+Avoid hard-coding magic numbers by defining symbolic constants, for example:
+
+.. code-block:: hoc
+
+    NNODES = 20
+    create node[NNODES]
+    objref apc_nodes[NNODES], timevec[NNODES]
+
+    for j=0, NNODES-1 node[j] {
+        apc_nodes[j] = new APCount(0.5)
+        timevec[j] = new Vector()
+        apc_nodes[j].record(timevec[j])
+    }
+
+This approach improves code maintainability and clarity.
+
+Object-Oriented Approach with Lists
+-----------------------------------
+
+NEURON provides the :class:`List` class to manage collections of objrefs dynamically. This approach allows automatic resizing and flexible management of APCount and Vector objects without predefining array sizes.
+
+HOC example of creating APCount instances on all segments and storing them in a List:
+
+.. code-block:: hoc
+
+    objref apclist, tobj
+    apclist = new List()
+
+    forall for (x, 0) {
+        tobj = new APCount(x)
+        apclist.append(tobj)
+    }
+    // tobj is no longer referenced after this if not needed
+
+In this code:
+- `forall` iterates over all sections.
+- `for (x, 0)` iterates over all segments in the current section.
+- Each APCount created at location `x` is appended to `apclist`.
+
+You can query the number of APCount objects by :meth:`List.count()`. Access individual elements by :meth:`List.o()`.
+
+This method avoids "magic numbers" completely and adapts to different model sizes without modification.
+
+Python Example
+--------------
+
+The same logic can be expressed in Python with NEURON's Python interface:
+
+.. code-block:: python
+
+    from neuron import h
+
+    NNODES = 20
+    nodes = [h.Section(name=f"node[{i}]") for i in range(NNODES)]
+
+    apc_nodes = []
+    timevec = []
+
+    for sec in nodes:
+        apc = h.APCount(0.5, sec=sec)
+        vec = h.Vector()
+        apc.record(vec)
+        apc_nodes.append(apc)
+        timevec.append(vec)
+
+Writing Spike Times to File
+---------------------------
+
+Once you have a list or array of :class:`Vector` instances holding spike times, it is straightforward to write their contents to a text file. For example, in HOC:
+
+.. code-block:: hoc
+
+    objref file
+    file = new File()
+    file.wopen("spike_times.txt")
+    for i=0, NNODES-1 {
+        file.printf("Node %d spikes:\n", i)
+        timevec[i].printf(file)
+        file.printf("\n")
+    }
+    file.close()
+
+In Python:
+
+.. code-block:: python
+
+    with open("spike_times.txt", "w") as f:
+        for i, vec in enumerate(timevec):
+            f.write(f"Node {i} spikes:\n")
+            f.write(" ".join(f"{t:.3f}" for t in vec) + "\n")
+
+Summary
+-------
+
+- Avoid dynamically creating variable names at runtime; instead, use arrays or lists of objrefs.
+- Use symbolic constants to define model sizes and avoid magic numbers.
+- Use :class:`List` in HOC for flexible, dynamic collections of objrefs.
+- Record AP spike times with :class:`APCount` paired with :class:`Vector.record()`.
+- Write vector contents to files by iterating over arrays/lists of vectors.
+
+.. note::
+
+   Calling :meth:`access` inside loops is discouraged because it affects performance and clarity. Prefer methods that do not require repeated access changes.
+
+.. seealso::
+
+   :class:`APCount`, :class:`Vector`, :class:`List`, :meth:`Vector.record()`, :meth:`List.append()`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1947 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1947>`_

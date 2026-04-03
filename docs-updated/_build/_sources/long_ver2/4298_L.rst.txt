@@ -1,0 +1,86 @@
+Synaptic Activation Without a Presynaptic Cell Using :class:`NetCon`
+======================================================================
+
+When modeling synaptic activation in NEURON, it is possible to activate a synapse directly without requiring the presynaptic cell to fire an action potential. This can be done by creating a :class:`NetCon` object with no source cell and then triggering events programmatically.
+
+Creating a :class:`NetCon` Without a Presynaptic Source
+------------------------------------------------------
+
+You can create a :class:`NetCon` with a `None` source (in Python) or `nil` (in HOC) to connect directly to the target synapse. This allows you to generate artificial synaptic events by calling the :meth:`NetCon.event()` method.
+
+**HOC example:**
+
+.. code-block:: hoc
+
+    objref nil, nc
+    nc = new NetCon(nil, target)  // 'target' is the synaptic point process
+
+**Python example:**
+
+.. code-block:: python
+
+    from neuron import h
+    nc = h.NetCon(None, target)  # 'target' is the synaptic point process
+
+
+Triggering Synaptic Activation
+------------------------------
+
+To activate the synapse at a specific time, use the :meth:`NetCon.event()` method, providing the event delivery time in milliseconds.
+
+**Example in Python:**
+
+.. code-block:: python
+
+    nc.event(10.0)  # Activate synapse at 10 ms
+
+
+Driving Multiple Events Using :class:`VecStim`
+----------------------------------------------
+
+If multiple spike events at specific times are required, use the :class:`VecStim` class, which plays out spike times stored in a :class:`Vector`.
+
+**Steps:**
+
+1. Create a :class:`Vector` containing the spike times.
+2. Create a :class:`VecStim` and assign the vector to its :attr:`play` attribute.
+3. Create a :class:`NetCon` from the :class:`VecStim` to the synapse target.
+
+**Example in Python:**
+
+.. code-block:: python
+
+    spike_times = h.Vector([10, 20, 30])  # spike event times in ms
+    stim = h.VecStim()
+    stim.play(spike_times)
+    nc = h.NetCon(stim, target)  # connect VecStim to synapse
+
+
+**Example in HOC:**
+
+.. code-block:: hoc
+
+    objref spike_times, stim, nc
+    spike_times = new Vector(3)
+    spike_times.x[0] = 10
+    spike_times.x[1] = 20
+    spike_times.x[2] = 30
+    stim = new VecStim()
+    stim.play(spike_times)
+    nc = new NetCon(stim, target)
+
+
+.. note::
+
+   The :class:`VecStim` mechanism (defined in *vecevent.mod*) is included with the NEURON distribution. If it is not available on your system, you can obtain it from the standard NEURON sources or examples.
+
+
+See Also
+--------
+
+- :class:`NetCon.event`
+- :class:`VecStim`
+- :class:`Vector.play`
+
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4298 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4298>`_

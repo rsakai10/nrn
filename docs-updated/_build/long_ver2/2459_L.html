@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reproducing and Validating Ion Channel Models from QUB in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Reproducing and Validating Ion Channel Models from QUB in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2459_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reproducing-and-validating-ion-channel-models-from-qub-in-neuron">
+<h1>Reproducing and Validating Ion Channel Models from QUB in NEURON<a class="headerlink" href="#reproducing-and-validating-ion-channel-models-from-qub-in-neuron" title="Link to this heading"></a></h1>
+<p>This section explains how to reproduce ion channel models originally developed in QUB using NEURON’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">NMODL</span></code> language and verify their behavior via comparison with MATLAB implementations. It addresses common issues such as initialization of state probabilities and interpretation of kinetic schemes, with practical examples and code snippets.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Ion channel models imported from QUB are often defined with kinetic schemes involving multiple states and voltage-dependent transition rates. When translating these models into NEURON’s NMODL, differences in initialization and interpretation of rate parameters can cause discrepancies versus original QUB simulations or MATLAB reproductions.</p>
+<p>Key points include:</p>
+<ul class="simple">
+<li><p>Initial steady state probabilities for channel states depend on the initial membrane voltage (<code class="xref py py-attr docutils literal notranslate"><span class="pre">v_init</span></code>).</p></li>
+<li><p>The order and assignment of forward and reverse rates in the kinetic block must correctly reflect the intended state transitions.</p></li>
+<li><p>Careful synchronization of voltage clamp protocols and NEURON model initialization is required to reproduce QUB results.</p></li>
+<li><p>Debugging NMODL code can use C-style <code class="docutils literal notranslate"><span class="pre">printf()</span></code> statements.</p></li>
+</ul>
+</section>
+<section id="example-of-a-three-state-potassium-channel-in-nmodl">
+<h2>Example of a Three-State Potassium Channel in NMODL<a class="headerlink" href="#example-of-a-three-state-potassium-channel-in-nmodl" title="Link to this heading"></a></h2>
+<p>The following is an example NMODL file implementing a three-state voltage-dependent potassium channel imported from QUB:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>TITLE channel model imported from QUB
+
+NEURON {
+  SUFFIX QUB_K_CHANNEL
+  USEION k READ ek WRITE ik
+  RANGE gbar, gk, ik
+  RANGE k0_C1_O1, k1_C1_O1, k0_O1_C1, k1_O1_C1
+  RANGE k0_C2_C1, k1_C2_C1, k0_C1_C2, k1_C1_C2
+}
+
+UNITS {
+  (mA) = (milliamp)
+  (mV) = (millivolt)
+  (pS) = (picosiemens)
+  (um) = (micron)
+}
+
+PARAMETER {
+  gbar = 0.001  (pS/um2)
+  k0_C1_O1 = 0.0005 (/ms)
+  k1_C1_O1 = 0.08 (/mV)
+  k0_O1_C1 = 0.0006 (/ms)
+  k1_O1_C1 = 0.04 (/mV)
+  k0_C2_C1 = 0.0008 (/ms)
+  k1_C2_C1 = 0.07 (/mV)
+  k0_C1_C2 = 0.002 (/ms)
+  k1_C1_C2 = 0.03 (/mV)
+}
+
+STATE {
+  O1 C2 C1
+}
+
+ASSIGNED {
+  v (mV)
+  ek (mV)
+  ik (mA/cm2)
+  gk (pS/um2)
+  C2C1 (/ms)
+  C1C2 (/ms)
+  C1O1 (/ms)
+  O1C1 (/ms)
+}
+
+INITIAL {
+  SOLVE states STEADYSTATE sparse
+}
+
+BREAKPOINT {
+  SOLVE states METHOD sparse
+  gk = gbar*O1
+  ik = (1e-4)*gk*(v - ek)
+}
+
+KINETIC states {
+  rates(v)
+
+  CONSERVE O1 + C2 + C1 = 1
+
+  ~ C1 &lt;-&gt; C2 (C2C1, C1C2)
+  ~ O1 &lt;-&gt; C1 (C1O1, O1C1)
+}
+
+PROCEDURE rates(v(millivolt)) {
+  C2C1 = k0_C2_C1 * exp(k1_C2_C1*v)
+  C1C2 = k0_C1_C2 * exp(k1_C1_C2*v)
+  C1O1 = k0_C1_O1 * exp(k1_C1_O1*v)
+  O1C1 = k0_O1_C1 * exp(k1_O1_C1*v)
+}
+</pre></div>
+</div>
+<section id="defining-state-transitions">
+<h3>Defining State Transitions<a class="headerlink" href="#defining-state-transitions" title="Link to this heading"></a></h3>
+<p>In the :kinetic: block, the transition rates between states must be assigned with the correct directionality. The syntax:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>~ StateA &lt;-&gt; StateB (rateAB, rateBA)
+</pre></div>
+</div>
+<p>means the forward rate from StateA to StateB is <em>rateAB</em>, and the backward rate from StateB to StateA is <em>rateBA</em>. It is critical to verify that parameters named <cite>k0_x_y</cite> and <cite>k1_x_y</cite> match this convention to avoid inverted kinetics.</p>
+</section>
+</section>
+<section id="initialization-and-steady-state">
+<h2>Initialization and Steady State<a class="headerlink" href="#initialization-and-steady-state" title="Link to this heading"></a></h2>
+<p>The initial state probabilities are set during the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">INITIAL</span></code> block by solving for steady state:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>INITIAL {
+  SOLVE states STEADYSTATE sparse
+}
+</pre></div>
+</div>
+<p>The steady state depends on the initial membrane potential <em>v</em>, which defaults in NEURON to the value of the <code class="xref py py-data docutils literal notranslate"><span class="pre">v_init</span></code> parameter, not the voltage clamp’s command potential. For consistent results:</p>
+<ul class="simple">
+<li><p>Set <code class="xref py py-data docutils literal notranslate"><span class="pre">v_init</span></code> to the initial voltage step of your clamp or stimulus.</p></li>
+<li><p>Ensure the first clamp command potential matches <code class="xref py py-data docutils literal notranslate"><span class="pre">v_init</span></code>.</p></li>
+</ul>
+<p>Otherwise, you will observe discrepancies such as unexpectedly high open probabilities at simulation start.</p>
+</section>
+<section id="matlab-code-to-compute-steady-state">
+<h2>MATLAB Code to Compute Steady State<a class="headerlink" href="#matlab-code-to-compute-steady-state" title="Link to this heading"></a></h2>
+<p>To compute steady-state probabilities independently (e.g., in MATLAB), set up the transition rate matrix <em>Q</em> from the forward and reverse rates and solve:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Example for 2-state system at voltage V0</span>
+<span class="n">koc</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">k0_O1_C1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="n">k1_O1_C1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">V0</span><span class="p">);</span>
+<span class="n">kco</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">k0_C1_O1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="n">k1_C1_O1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">V0</span><span class="p">);</span>
+
+<span class="n">Q</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="o">-</span><span class="n">koc</span><span class="p">,</span><span class="w"> </span><span class="n">koc</span><span class="p">;</span>
+<span class="w">      </span><span class="n">kco</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">kco</span><span class="p">];</span>
+
+<span class="c">% Append conservation condition and solve</span>
+<span class="n">A</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="n">Q</span><span class="p">;</span><span class="w"> </span><span class="nb">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">size</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="mi">2</span><span class="p">))];</span>
+<span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="nb">zeros</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="n">p</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w">  </span><span class="c">% steady state probabilities</span>
+</pre></div>
+</div>
+</section>
+<section id="debugging-output-in-nmodl">
+<h2>Debugging Output in NMODL<a class="headerlink" href="#debugging-output-in-nmodl" title="Link to this heading"></a></h2>
+<p>Add C-style <code class="docutils literal notranslate"><span class="pre">printf()</span></code> statements inside NMODL procedures for debugging:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>PROCEDURE rates(v(millivolt)) {
+  C2C1 = k0_C2_C1 * exp(k1_C2_C1*v)
+  C1C2 = k0_C1_C2 * exp(k1_C1_C2*v)
+  C1O1 = k0_C1_O1 * exp(k1_C1_O1*v)
+  O1C1 = k0_O1_C1 * exp(k1_O1_C1*v)
+
+  printf(&quot;Rates at v=%.2f mV: C2C1=%.6f, C1C2=%.6f, C1O1=%.6f, O1C1=%.6f\n&quot;,
+         v, C2C1, C1C2, C1O1, O1C1)
+}
+</pre></div>
+</div>
+</section>
+<section id="examples-of-correct-initialization">
+<h2>Examples of Correct Initialization<a class="headerlink" href="#examples-of-correct-initialization" title="Link to this heading"></a></h2>
+<p>To set <code class="xref py py-data docutils literal notranslate"><span class="pre">v_init</span></code> when running in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>v_init = -20  // Set initial membrane voltage to -20 mV
+stdinit()      // Initialize model states to steady state at v_init
+run()          // Run simulation
+</pre></div>
+</div>
+<p>Correspondingly, in MATLAB simulations, initialize state probabilities to steady state values at the same voltage.</p>
+</section>
+<section id="summary-and-best-practices">
+<h2>Summary and Best Practices<a class="headerlink" href="#summary-and-best-practices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always verify that <code class="xref py py-data docutils literal notranslate"><span class="pre">v_init</span></code> matches your voltage clamp command potential (e.g., <cite>amp1</cite> parameter of <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a> or <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#VClamp" title="VClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">VClamp</span></code></a>), or explicitly initialize channel states accordingly.</p></li>
+<li><p>Double-check the directionality of rates in the kinetic scheme to ensure forward and backward rates are assigned properly.</p></li>
+<li><p>Use MATLAB or other numerical tools to independently verify steady state solutions for multi-state kinetic models.</p></li>
+<li><p>Use printf debugging in NMODL to track computed rate constants and variables.</p></li>
+<li><p>Naming conventions in mod files should be clear and concise to reduce human error.</p></li>
+</ul>
+<p>This guidance should help with reliable reproduction of QUB ion channel models in NEURON and facilitate debugging when differences arise.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2459">https://neuron.yale.edu/phpBB/viewtopic.php?t=2459</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

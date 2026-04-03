@@ -1,0 +1,38 @@
+Connecting Multiple Child Sections to a Parent Section
+--------------------------------------------------------
+
+In NEURON, the classic way to connect two sections is with the :meth:`connect` statement:
+
+.. code-block:: hoc
+
+   connect dendrite[1](0), soma(1)
+
+A convenient shorthand to connect multiple child sections to the same parent section uses curly braces to set the currently accessed section. For example:
+
+.. code-block:: hoc
+
+   soma[0] {
+       connect soma[1](0), 1
+       connect basal[0](0), 0
+       connect basal[20](0), 0
+       connect basal[23](0), 0
+       connect basal[41](0), 0
+   }
+
+Inside the braces, ``soma[0]`` is the currently accessed section, so the :meth:`connect` statements attach the specified child sections at the given locations on ``soma[0]``.
+
+The number after the comma in :meth:`connect` specifies the location on the parent section where the child connects: 0 for the beginning, 1 for the end, or any value between 0 and 1.
+
+.. note::
+
+   Setting the currently accessed section with sectionname { ... } executes the enclosed statements as if within that section, simplifying multiple connections to the same parent.
+
+.. seealso::
+
+   :meth:`Section.connect`
+
+   :attr:`Section.name`
+
+   Explanation of the currently accessed section in the Programmer's Reference.
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=70

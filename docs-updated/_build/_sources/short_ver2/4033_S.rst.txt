@@ -1,0 +1,43 @@
+.. _modifying_parameters_in_nmodl:
+
+Modifying Parameters Used in NMODL Channel Kinetics from hoc or Python
+--------------------------------------------------------------------
+
+When modifying parameters declared as :keyword:`PARAMETER` and used in voltage-dependent gating kinetics with :keyword:`TABLE` statements, changes made from hoc or Python code may not take effect as expected. This is often due to the use of lookup tables for gating variables that are generated at compile time and not automatically updated when parameters change.
+
+**Key points:**
+
+- The :keyword:`TABLE` statement creates precomputed lookup tables for functions like activation/inactivation variables (e.g., `ninf`, `hinf`) to speed simulation.
+
+- If parameters influencing these functions change at runtime, the lookup tables must be recalculated to reflect those changes.
+
+- The `DEPEND` clause can be added to a :keyword:`TABLE` statement to specify which parameters should trigger table recalculation, e.g.:
+
+  .. code-block:: mod
+
+     TABLE hinf
+       DEPEND vhhinf
+       FROM -100 TO 100 WITH 200
+
+- **Limitation:** NMODL allows only one :keyword:`TABLE` statement per procedure, so separating tables with different dependencies into multiple PROCEDUREs is required.
+
+- Alternatively, disabling tables altogether via `usetable = 0` for the mechanism forces recalculation of gating variables at each timestep, ensuring parameter changes take immediate effect at the cost of some runtime performance.
+
+- To avoid confusion, name parameters and variables in NMODL without redundant mechanism prefix to simplify hoc or Python access; e.g., use `gbar` instead of `gkv1bar` when the SUFFIX is `kv1`. This produces `gbar_kv1` in hoc rather than `gkv1bar_kv1`.
+
+**Example usage in hoc:**
+
+.. code-block:: hoc
+
+    // Disabling tables for kv1 mechanism to allow parameter changes to take effect immediately
+    usetable_kv1 = 0
+
+    // Changing a parameter
+    kv1.vhkv1ninf = -65
+
+**Summary:**  
+To modify NMODL parameters affecting voltage-dependent kinetics dynamically, either disable use of lookup tables with `usetable=0` or structure your :keyword:`TABLE` statements with appropriate :keyword:`DEPEND` clauses and separate them into distinct PROCEDUREs to ensure tables update correctly after parameter changes.
+
+.. seealso:: :mod:`NMODL` mechanism syntax, :class:`Section`, :meth:`insert`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4033 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4033>`_

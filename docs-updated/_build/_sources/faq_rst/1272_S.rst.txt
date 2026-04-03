@@ -1,0 +1,105 @@
+.. _internal_ca_concentration_example:
+
+Simple Internal Calcium Concentration Implementation
+====================================================
+
+This example demonstrates correct modeling of intracellular calcium concentration (:math:`\mathrm{[Ca^{2+}]_i}`) dynamics driven by calcium current density (:math:`i_{Ca}`) using the :mod:`NEURON` modeling language. 
+
+Key points:
+- Calcium concentration changes according to a first-order decay plus influx:  
+  .. math:: 
+     \tau \frac{d [Ca^{2+}]}{dt} = - F \cdot I_{Ca} - [Ca^{2+}] + C_0
+- The factor :math:`F` and geometry-dependent terms are carefully combined to convert membrane current density (mA/cm²) to concentration changes (mM/ms).
+- Initialization uses a separate parameter :attr:`cai0` for initial concentration control.
+
+.. code-block:: mod
+
+    NEURON {
+        SUFFIX cacumst
+        USEION ca READ ica WRITE cai
+        RANGE tau, C0, cai0, diam
+    }
+
+    UNITS {
+        (mA) = (milliamp)
+        (mM) = (millimolar)
+        (uM) = (micromolar)
+        (um) = (micrometer)
+        FARADAY = (faraday) (coulombs)
+    }
+
+    PARAMETER {
+        tau = 303 (ms)           : decay time constant
+        C0 = 0.5 (uM)            : baseline Ca concentration
+        cai0 = 0.5e-3 (mM)       : initial intracellular Ca concentration
+        diam = 16.7 (um)         : compartment diameter
+    }
+
+    ASSIGNED {
+        ica (mA/cm2)
+    }
+
+    STATE {
+        cai (mM)
+    }
+
+    INITIAL {
+        cai = cai0
+    }
+
+    BREAKPOINT {
+        SOLVE states METHOD cnexp
+    }
+
+    DERIVATIVE states {
+        : Convert units and geometry:
+        cai' = -(1e4)*2*ica/(FARADAY * diam) + (1e-3)*(C0*1e3 - cai)/tau
+        : Explanation:
+        : - 'ica' in mA/cm²; factor 1e4 converts cm² to um²
+        : - 'diam' in um, conversion of surface-to-volume calcium flux
+        : - (1e-3)*(C0*1e3 - cai) converts baseline from uM to mM
+    }
+
+.. code-block:: hoc
+
+    // Test script for calcium mechanism in the soma
+    load_file("nrngui.hoc")
+
+    create soma
+    access soma
+
+    soma {
+      diam = 16.7
+      L = 17159
+      insert cacumst
+      tau_cacumst = 303
+      C0_cacumst = 0.5
+      cai0_cacumst = 0.0005
+    }
+
+    objref capp
+    capp = new CaPP(0.5) // point process delivering Ca current
+    capp.del = 1   // delay in ms
+    capp.dur = 1   // duration in ms
+    capp.amp = -303 // amplitude in nA (negative is inward)
+
+    finitialize(-65)
+    run()
+
+    print "Initial cai:", soma.cai_cacumst, "mM"
+    print "Final cai:", soma.cai_cacumst, "mM"
+    print "Delta cai (uM):", 1e3*(soma.cai_cacumst - 0.0005)
+
+.. note::
+
+   - The parameter :attr:`tau` controls buffering and removal time constants.
+   - The parameter :attr:`diam` is required to convert membrane currents to volume changes of calcium.
+   - Initialization variables like :attr:`cai0` should be declared :keyword:`RANGE` to be modifiable from hoc or Python.
+   - Avoid multiplying :math:`i_{Ca}` by arbitrary compartment volumes (:attr:`L`) as it conflicts with NEURON's spatial discretization handling.
+
+.. seealso::
+
+    :class:`h.Section`, :func:`h.finitialize`, :func:`h.run` for simulation control  
+    :class:`PointProcess` for modeling calcium current stimuli
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1272 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1272>`_

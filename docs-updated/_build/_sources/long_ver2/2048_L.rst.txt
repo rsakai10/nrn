@@ -1,0 +1,188 @@
+Simulation of Consecutive Runs with Time-Varying Stimulation Using SaveState
+===============================================================================
+
+When performing multiple consecutive current clamp simulations in NEURON where the stimulus waveform changes for each run (e.g., reading different input files `stim1.dat`, `stim2.dat`, etc.), one common requirement is to have each simulation start from the final state of the previous one. This can be achieved using the :class:`SaveState` object, but care must be taken with the order of operations and event queue management.
+
+This section explains how to organize such simulations correctly in HOC, including managing stimulus vectors and SaveState usage.
+
+Key Points
+----------
+
+- Use a single :meth:`Vector.play` invocation before the first run and update the underlying :class:`Vector` data for each subsequent run without calling `play()` again.
+- Save the state *after* the first run completes.
+- Restore the saved state *without* clearing the event queue. This is crucial to keep :class:`Vector.play` active.
+- Reset simulation time (`t=0`) after restoring state, before rerunning.
+- Create separate initialization routines that allow controlling when SaveState restoration occurs.
+- Do not reload or replay stimulus vectors between save and restore calls; keep the same :meth:`Vector.play` reference intact.
+
+Example Implementation in HOC
+-----------------------------
+
+```hoc
+// Define stimulus parameters and objects
+objref stim
+stim = IClamp[0]      // Assuming IClamp electrode at some location
+stim.del = 0
+stim.dur = 1e9        // Long duration to allow continuous play
+stim.amp = 0          // Initial amplitude
+
+DT = 0.025            // Stimulus sampling interval (ms)
+
+objref r, f, svstate
+strdef filename
+
+// Create file and vector objects
+f = new File()
+r = new Vector()
+svstate = new SaveState()
+
+// Set up Vector to play into stim.amp once only
+r.play(&stim.amp, DT)
+
+// Initialization procedure supporting SaveState restoration
+proc myinit() {
+    finitialize(v_init)  // initialize voltages
+    if (!$1) {          // $1 is a flag indicating first run
+        // Restore saved state WITHOUT clearing event queue (argument 1)
+        svstate.restore(1)
+        t = 0           // Reset simulation time explicitly
+        if (cvode.active()) { cvode.re_init() } else { fcurrent() }
+        frecord_init()
+    }
+}
+
+// Standard initialization and plotting setup
+proc mystdinit() {
+    realtime = 0
+    startsw()
+    setdt()
+    myinit($1)
+    initPlot()
+}
+
+// Run a single simulation pass
+proc myrun() {
+    mystdinit($1)
+    continuerun(tstop)
+}
+
+// Batch run multiple simulations reading stimulus files
+proc batchrun() { local firstrun, i
+    firstrun = 1
+    for (i = 1; i <= $1; i = i + 1) {
+        sprint(filename, "stim%d.dat", i)
+        f.ropen(filename)
+
+        // Read new stimulus waveform data into matrix
+        objref mtrx
+        mtrx = new Matrix(1, 2)
+        mtrx.scanf(f)
+        f.close()
+
+        // Update vector r content preserving play object
+        mtrx.getcol(1, r)
+
+        myrun(firstrun)  // Run simulation
+        svstate.save()   // Save current state after run
+
+        firstrun = 0     // Flag for subsequent runs
+    }
+}
+```
+
+Stimulus Input File Format Requirements
+--------------------------------------
+
+- Files contain two columns (time and amplitude).
+- The first line must specify the number of rows and columns (e.g. `201 2`).
+- The remaining lines contain time-value pairs.
+- Header lines (such as labels) should be removed before reading by :meth:`Matrix.scanf`.
+
+**Example stimulus file content:**
+
+```
+201 2
+0       0
+0.025   0
+0.05    0
+...
+```
+
+Notes
+-----
+
+- The :meth:`SaveState.restore` method must be called with the argument `1` to prevent clearing of the event queue, which otherwise prevents :meth:`Vector.play` from continuing to function.
+- Call :meth:`Vector.play` once at the start to attach the vector to the current/voltage attribute; do not re-call it inside the loop.
+- Update the vector data between runs to change the stimulus waveform dynamically without reattaching.
+- Resetting time `t=0` after :meth:`SaveState.restore` allows the integrator to run correctly from the saved state but with simulation time restarted.
+- This method preserves all biophysical states and running time-dependent processes.
+
+Using Python
+------------
+
+The same logic can be implemented using Python with NEURON's Python interface, adapting the file reading and matrix operations accordingly.
+
+.. code-block:: python
+
+    from neuron import h
+
+    stim = h.IClamp(0.5)
+    stim.del = 0
+    stim.dur = 1e9
+    stim.amp = 0
+
+    dt = 0.025
+    tstop = 10  # example stop time
+
+    r = h.Vector()
+    svstate = h.SaveState()
+    r.play(stim._ref_amp, dt)
+
+    def myinit(firstrun):
+        h.finitialize(h.v_init)
+        if not firstrun:
+            svstate.restore(1)
+            h.t = 0
+            if h.cvode.active():
+                h.cvode.re_init()
+            else:
+                h.fcurrent()
+            h.frecord_init()
+
+    def myrun(firstrun):
+        myinit(firstrun)
+        h.continuerun(tstop)
+
+    def batchrun(num_runs):
+        firstrun = True
+        for i in range(1, num_runs + 1):
+            filename = f"stim{i}.dat"
+            # Read stimulus data from file into vector `r`
+            with open(filename) as f:
+                lines = f.readlines()
+            # Parse and convert according to the specified format
+            # (Skip first header line, read second line for dims, etc.)
+            data = []
+            for line in lines[2:]:
+                parts = line.strip().split()
+                if len(parts) == 2:
+                    time_pt, amp_pt = map(float, parts)
+                    data.append(amp_pt)
+            r.from_python(data)
+
+            myrun(firstrun)
+            svstate.save()
+            firstrun = False
+
+.. note::
+
+   Ensure stimulus files are correctly formatted as described above to avoid reading errors.
+
+Summary
+-------
+
+This approach enables running multiple short-neuron simulations sequentially, each starting from the endpoint of the previous one and receiving unique time-varying stimuli from files. The key is to maintain the :meth:`Vector.play` connection across runs and to restore saved states without clearing scheduled events.
+
+This method is helpful for current clamp simulations with complex waveform stimuli divided into segments while preserving biophysical continuity across runs.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2048 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2048>`_

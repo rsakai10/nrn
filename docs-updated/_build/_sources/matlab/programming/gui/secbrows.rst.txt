@@ -1,0 +1,164 @@
+.. _secbrows:
+
+SectionBrowser
+--------------
+
+
+
+.. class:: SectionBrowser
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            sb = n.SectionBrowser();
+
+            sb = n.SectionBrowser('SectionList');
+
+
+    Description:
+        Class that makes a visible list of all section names. 
+        If the optional SectionList arg is present then only those 
+        section names are shown in the browser. 
+
+    Example:
+
+        .. code-block:: matlab
+
+            n = neuron.launch();
+            soma = n.Section('soma');
+            dend = n.Section('dend');
+            sl = n.SectionList([soma]);
+            sb = n.SectionBrowser(sl);
+
+    .. image:: ../../images/secbrows-sectionList.png
+        :align: center
+
+    .. seealso::
+        :class:`SectionList`, :ref:`stdrun_shape`
+
+         
+
+----
+
+
+
+.. method:: SectionBrowser.select
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            .select('section');
+
+
+    Description:
+        specified section is highlighted. 
+
+    Example:
+
+        .. code-block:: matlab
+
+            n = neuron.launch();
+            soma = n.Section('soma');
+            axon = n.Section('axon');
+
+            sb = n.SectionBrowser();
+            sb.select('axon');
+
+    .. image:: ../../images/secbrows-select.png
+        :align: center
+----
+
+
+
+.. method:: SectionBrowser.select_action
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            sb.select_action('python_func');
+
+
+    Description:
+        A Python function is executed when an item is selected (single click or 
+        dragging) by the mouse. Before execution, the selected section 
+        is pushed. (and	popped after the function completes.)
+        A Python function is executed in the object context in which \ ``select_action`` 
+        registered it. 
+
+
+    Example:
+
+        .. code-block:: matlab
+
+            n = neuron.launch();
+            soma = n.Section('soma');
+            axon = n.Section('axon');
+
+            function select(sec)
+                fprintf('select: %s %s\n', sec, class(sec));
+            end
+
+            function accept(sec)
+                fprintf('accept: %s\n', sec);
+            end
+
+            sb = n.SectionBrowser();
+            sb.select_action(@select);
+            sb.accept_action(@accept);
+
+    .. note::
+
+        Python support for :meth:`select_action` was added in NEURON 7.5.
+         
+
+----
+
+
+
+.. method:: SectionBrowser.accept_action
+
+
+    Syntax:
+
+        .. code-block:: matlab
+
+            sb.accept_action('python_func');
+
+
+    Description:
+        A Python function is executed when an item is accepted (double click) by 
+        the mouse. Before execution, the selected section 
+        is pushed. (and	popped after the function completes.) 
+        A Python function is executed in the object context in which the  ``accept_action`` 
+        registered it. 
+
+             
+    Example:
+
+        .. code-block:: matlab
+
+            n = neuron.launch();
+            soma = n.Section('soma');
+            axon = n.Section('axon');
+
+            function select(sec)
+                fprintf('select: %s %s\n', sec, class(sec));
+            end
+
+            function accept(sec)
+                fprintf('accept: %s\n', sec);
+            end
+            
+            sb = n.SectionBrowser();
+            sb.select_action(@select);
+            sb.accept_action(@accept);
+
+    .. note::
+
+        Python support for :meth:`accept_action` was added in NEURON 7.5.

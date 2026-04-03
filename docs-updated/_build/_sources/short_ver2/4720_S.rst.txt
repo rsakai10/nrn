@@ -1,0 +1,56 @@
+.. rubric:: Accessing ionic currents from NMODL mechanisms in HOC or Python
+
+To read ionic current variables implemented in NMODL mechanisms from HOC or Python, consider these key points:
+
+- If the mechanism uses a standard ion, declare in the NMODL with a :stmt:`USEION` statement referencing a valid ion name (e.g., ``na``, ``k``) and a WRITE variable such as ``ina`` or ``ik``. The ionic current variable will then be accessible in HOC or Python as ``ina(seg)`` or ``ik(seg)`` where ``seg`` is a segment index.
+
+- For synaptic point processes with ion-specific currents, declare new ions (e.g., ``nas``, ``ks``) with :stmt:`USEION`, including the ``VALENCE`` keyword:
+
+  .. code-block:: nmodl
+
+     NEURON {
+       POINT_PROCESS ghkampa
+       USEION nas WRITE inas VALENCE 1
+       USEION ks WRITE iks VALENCE 1
+       ...
+     }
+
+- Ionic currents declared with :stmt:`USEION` for new ions become segment variables with units in mA/cm². To obtain total current in nA from a segment, multiply by the segment surface area in µm² and divide by 100:
+
+  .. code-block:: hoc
+
+      func total_inas() { local total_curr, i
+         total_curr = 0
+         forall for (i=0; i < sectcount(); i += 1) total_curr += inas(i) * area(i) / 100
+         return total_curr
+      }
+
+- Avoid iterating point process arrays in HOC to extract currents via their internal variables, as enumerated point processes are not native array variables. Instead, aggregate via ionic currents exposed by :stmt:`USEION`.
+
+- When modifying existing mechanisms:
+
+  - Replace nonspecific currents with appropriate :stmt:`USEION` declarations to track ionic flux automatically.
+
+  - Watch out for units consistency, especially distinguishing point processes (currents in absolute nA units) and density mechanisms (current densities in mA/cm²).
+
+- In the NMODL BREAKPOINT block, assign currents to the WRITE variables as absolute currents (point processes) or densities (density mechanisms), e.g.:
+
+  .. code-block:: nmodl
+
+     BREAKPOINT {
+       SOLVE state METHOD cnexp
+       inas = P * ghk(v, nai, nao, 1) * Area  : point process units: nA
+       iks = P * ghk(v, ki, ko, 1) * Area
+     }
+
+- In HOC or Python, you can then access the ionic current at segment ``x`` as ``inas(x)`` and multiply by ``area(x)/100`` to convert to nA.
+
+.. note::
+
+   Always set up recordings *after* synapses and mechanisms are instantiated and attached to sections, to ensure ionic currents are correctly tracked.
+
+.. seealso::
+
+   :class:`Section`, :meth:`Section.connect`, :func:`area`, :meth:`Vector.record`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4720 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4720>`_

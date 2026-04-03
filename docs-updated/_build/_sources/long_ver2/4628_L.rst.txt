@@ -1,0 +1,84 @@
+New Installation of NEURON with Python on Windows 10
+====================================================
+
+This section provides a step-by-step procedure to install NEURON with Python support on a Windows 10 Pro 64-bit system using Anaconda Python 3.11 and NEURON version 8.2 or later.
+
+Installation Steps
+------------------
+
+1. **Install Python via Anaconda**
+
+   - Download and install Anaconda3 distribution with Python 3.11 from the official Anaconda website.
+   - Ensure that the available Python environment is activated or accessible via the Anaconda Prompt or your preferred terminal.
+
+2. **Install NEURON**
+
+   - Download the latest NEURON Windows installer (version 8.2.3 or later) from the official NEURON documentation site.
+   - Run the installer and follow the on-screen instructions.
+   - *Note:* The installer includes the necessary components for NEURON Python interoperability. You do **not** need a separate installation of InterViews when installing NEURON for Python usage.
+
+Verification and Testing
+------------------------
+
+### Running NEURON GUI Demonstrations
+
+After installation, verify that NEURON runs correctly as follows:
+
+1. Open the installed NEURON program group from your Start Menu.
+2. Launch the `bash` terminal provided by NEURON.
+3. In the terminal, run the command:
+
+   .. code-block:: bash
+
+      neurondemo
+
+4. This should open several NEURON demonstration panels stacked vertically:
+
+   - **NEURON Demonstrations**
+   - **Temperature**
+   - **RunControl**
+   - **VariableTimeStep**
+
+5. On the left side of the "NEURON Demonstrations" panel, you should see the **NEURON Main Menu** toolbar.
+6. In the "NEURON Demonstrations" panel, select the radio button labeled **Release** to load additional demonstration windows.
+7. In the "RunControl" panel, click **Init & Run** to start simulations and display time course plots.
+8. To exit NEURON, use the menu in the **NEURON Main Menu** panel: select **File → Quit**.
+
+### Verifying NEURON Python Module in Anaconda
+
+To ensure NEURON Python interface is correctly installed and accessible from your Anaconda environment:
+
+1. Open the Anaconda Prompt (or any terminal where your Anaconda Python environment is activated).
+2. Enter the Python interpreter by typing:
+
+   .. code-block:: bash
+
+      python
+
+3. In the Python prompt `>>>`, import NEURON’s hoc interface and GUI:
+
+   .. code-block:: python
+
+      from neuron import h, gui
+
+4. If the NEURON Main Menu window appears, NEURON is correctly integrated with Python and ready for use.
+
+Troubleshooting Notes
+---------------------
+
+- If you encounter the error `ModuleNotFoundError: No module named 'hoc'` during import, verify that you have installed the latest NEURON installer (version 8.2.3 or later). Earlier versions (e.g., 8.2.0) have been reported to cause such issues.
+
+- Always download NEURON from the official site or its documentation page to ensure you have the newest stable release with full Python support.
+
+Summary
+-------
+
+.. note::
+
+   Installing NEURON with Python involves only two main steps: installing Python (e.g., via Anaconda) and then installing NEURON itself. No separate installation of InterViews is required.
+
+.. seealso::
+
+   :class:`neuron.h`, :mod:`neuron.gui` for starting NEURON simulations and graphical interface from Python.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4628 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4628>`_

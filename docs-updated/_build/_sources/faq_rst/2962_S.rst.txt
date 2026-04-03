@@ -1,0 +1,54 @@
+Using For Loops for Multiple Simulation Runs in HOC
+===================================================
+
+You can perform multiple simulation runs in a hoc file by using looping constructs along with the standard NEURON run system. A recommended approach uses :meth:`Vector.resize` and :meth:`Vector.indgen` to prepare event times efficiently, avoiding errors caused by appending events repeatedly.
+
+Example HOC code snippet:
+
+.. code-block:: hoc
+
+    objref svec, vecstim
+    svec = new Vector()
+    vecstim = new VecStim()
+
+    // $1=start time, $2=interval, $3=number of events
+    proc before_run() {
+        svec.resize($3+1)
+        svec.indgen($2)   // 0, DT, 2*DT...
+        svec.add($1)      // shift times by start time
+        vecstim.play(svec)
+    }
+
+    proc counter() {
+        local totspk, firstspk, lastspk, spkfreq
+        totspk = grcspk.size
+        if (totspk > 1) {
+            firstspk = grcspk.x[0]
+            lastspk = grcspk.x[totspk-1]
+            spkfreq = (totspk - 1)/(lastspk - firstspk)
+        } else {
+            spkfreq = 0
+        }
+        spkcnts.append(spkfreq)
+    }
+
+    proc batrun() {
+        local i
+        for i=1,$1 {
+            before_run(3000, i, 100)
+            run()
+            counter()
+        }
+    }
+
+Important notes:
+
+- Use :func:`run` (part of NEURON's standard run system) instead of manually calling :meth:`finitialize` and advancing :meth:`fadvance`.
+- Set simulation parameters such as ``dt``, ``tstop``, and ``v_init`` before calling :func:`run`.
+- There is no need to close loaded hoc files; loading a hoc file multiple times is handled by NEURON internally.
+- To select integration method or variable time step, set options like :var:`secondorder` and configure the VariableTimeStep tool in the GUI or via hoc code before making :func:`run` calls.
+- Avoid appending to vectors repeatedly across runs; instead resize and generate vectors anew each iteration to prevent negative event time errors.
+
+This approach simplifies batch simulations with varying parameters and avoids common pitfalls with event vectors and simulation control in hoc.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2962 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2962>`_

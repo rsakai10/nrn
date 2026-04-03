@@ -1,0 +1,53 @@
+Isolating a Section from a Neuron
+=================================
+
+When you want to isolate a section (e.g. section `Y`) from a neuron model and replicate its voltage response as if it were still connected, follow these steps:
+
+1. **Record voltage trace of `Y` when connected:**
+
+   .. code-block:: hoc
+
+      objref vy0_vec, t_vec
+      vy0_vec = new Vector()
+      t_vec = new Vector()
+      Y { vy0_vec.record(&v(0)) }
+      Y { t_vec.record(&t) }
+
+2. **Copy the recorded voltage vector before disconnecting:**
+
+   .. code-block:: hoc
+
+      objref vy0_copy
+      vy0_copy = vy0_vec.c()
+
+3. **Disconnect section `Y` from its parent:**
+
+   .. code-block:: hoc
+
+      Y { disconnect() }
+
+4. **Apply a voltage clamp at `Y(0)`, playing back the recorded trace:**
+
+   .. code-block:: hoc
+
+      objref clamp
+      Y { clamp = new SEClamp(0) }
+      clamp.dur1 = 1e9
+      clamp.amp1 = -65    # initial holding voltage (mV)
+      clamp.rs = 1e-3     # very low series resistance
+      Y { vy0_copy.play(&clamp.amp1) }
+
+5. **Alternatively, use the recorded clamp current waveform to drive an IClamp at `Y(0)` to reproduce the voltage in the isolated section.**
+
+.. note::
+
+   - Use :class:`SEClamp` rather than :class:`VClamp` for better control and less artifacts.
+   - Keep time step `dt` fixed between simulations to ensure playback accuracy.
+   - To save or retrieve recorded traces, consult the :class:`File` class methods.
+   - This approach assumes matching stimulus location and requires separate simulation stages for recording, playing voltage clamp, and injecting current clamp.
+
+.. seealso::
+
+   :class:`SEClamp`, :class:`IClamp`, :class:`Vector` methods :meth:`record` and :meth:`play`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2926 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2926>`_

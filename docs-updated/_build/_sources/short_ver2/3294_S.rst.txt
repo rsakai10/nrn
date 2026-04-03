@@ -1,0 +1,34 @@
+.. note::
+   
+   When using an :class:`IClamp` stimulus in combination with variable time step integration (adaptive integration via :meth:`cvode.active(1)`), setting the stimulus amplitude (:attr:`IClamp.amp`) to zero does not guarantee no effect on the membrane potential.
+   
+   This occurs because the presence of an :class:`IClamp` forces the integrator to reinitialize at the start (:attr:`IClamp.del`) and end (:attr:`IClamp.del + IClamp.dur`) of the stimulus interval, even if amplitude is zero. This changes integration time points and can cause small perturbations in the solution, affecting results such as phase-response curves.
+   
+   To avoid this effect:
+   
+   - Use fixed time step integration (e.g., advance time with :func:`fadvance()` in a loop),
+   - or reduce perturbations by lowering the absolute error tolerance with :meth:`cvode.atol()` or adjusting state scaling via :meth:`cvode.atolscale()`.
+   
+   Additionally, consider using the :class:`SaveState` facility to initialize simulations on a stable trajectory, minimizing the required simulation time with fixed steps.
+   
+.. code-block:: hoc
+
+    cvode.active(0)  // disable variable time step integration
+    tstop = 100
+    while (t < tstop) {
+      fadvance()
+    }
+   
+.. code-block:: python
+
+    from neuron import h
+    h.cvode.active(0)  # disable variable time step integration
+    h.tstop = 100
+    while h.t < h.tstop:
+        h.fadvance()
+   
+.. seealso::
+   
+   :class:`IClamp`, :meth:`cvode.active`, :meth:`cvode.atol`, :meth:`cvode.atolscale`, :class:`SaveState`, :func:`fadvance`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3294 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3294>`_

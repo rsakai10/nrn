@@ -1,0 +1,84 @@
+Injection Duration and Time Step Resolution in Current Clamp Simulations
+========================================================================
+
+When performing current injection with :meth:`h.IClamp` in NEURON simulations, the relationship between the duration of the current pulse and the simulation time step (:attr:`h.dt`) critically affects whether the stimulus effectively influences the membrane potential.
+
+Phenomenon
+----------
+
+- A short-duration current pulse (e.g., 0.1 ms) with moderate amplitude (e.g., 1 nA) produces an observable voltage response.
+- However, an extremely brief pulse (e.g., 0.01 ms) with high amplitude (e.g., 1000 nA) may produce no detectable voltage change.
+  
+This can confuse users into thinking that extremely brief stimuli do not affect the neuron, or that this is a biophysical limitation.
+
+Cause
+-----
+
+If a fixed time step integration method is used, the simulation progresses in increments of size :attr:`h.dt`. For example, the default fixed time step is 0.025 ms. The simulator evaluates membrane states and applies current injections only at these discrete time points.
+
+- If the duration of the current injection is shorter than the fixed time step, the stimulus may not coincide with any integration time point.
+- Consequently, no current is applied during simulation steps, and the voltage remains unchanged.
+
+In contrast, adaptive (variable) time step integration methods adjust the simulation time steps to capture fast events, such as very brief current injections, ensuring they affect the outcome.
+
+Recommendations
+---------------
+
+- When using fixed time step integration (:attr:`h.dt` > 0), ensure the current pulse duration is at least as long as the time step to guarantee stimulus detection.
+- Alternatively, use variable time step integration by calling :meth:`h.cvode_active(True)`. This enables NEURON to dynamically adjust the time step and accurately resolve short stimuli.
+
+Example in Python
+-----------------
+
+.. code-block:: python
+
+    from neuron import h, gui
+
+    # Create a spherical soma
+    soma = h.Section(name='soma')
+    soma.L = soma.diam = 20  # microns
+    soma.nseg = 99
+    soma.insert('pas')  # passive membrane
+
+    # Insert an IClamp stimulus
+    stim = h.IClamp(soma(0.5))
+    stim.delay = 0  # ms
+    stim.dur = 0.01  # ms, shorter than typical dt
+    stim.amp = 1000  # nA
+
+    # Fixed timestep configuration
+    h.dt = 0.025  # ms
+    h.tstop = 1  # ms
+
+    # Record time and voltage
+    t_vec = h.Vector().record(h._ref_t)
+    v_vec = h.Vector().record(soma(0.5)._ref_v)
+
+    # Run simulation
+    h.finitialize(-65)
+    h.continuerun(h.tstop)
+
+    # Observe that voltage response may be negligible due to stimulus briefer than dt
+
+Enabling variable time step to capture short stimuli:
+
+.. code-block:: python
+
+    h.cvode_active(True)  # Enable variable timestep
+
+    h.finitialize(-65)
+    h.continuerun(h.tstop)
+
+    # Now the brief current injection will be correctly represented
+
+Summary
+-------
+
+- Short current injections shorter than the fixed integration time step will generally have no effect in fixed time step simulations.
+- Use variable time step integration or increase stimulus duration to resolve this issue.
+
+.. note::
+
+   This behavior is a property of the numerical integration method and not a biophysical limitation of the model.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3930 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3930>`_

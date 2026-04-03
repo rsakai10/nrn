@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Na and Persistent NaP Channels with Separate NMODL Mechanisms &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Na and Persistent NaP Channels with Separate NMODL Mechanisms</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/346_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="na-and-persistent-nap-channels-with-separate-nmodl-mechanisms">
+<h1>Na and Persistent NaP Channels with Separate NMODL Mechanisms<a class="headerlink" href="#na-and-persistent-nap-channels-with-separate-nmodl-mechanisms" title="Link to this heading"></a></h1>
+<p>When modeling multiple sodium currents such as a fast-activating Na channel and a persistent NaP channel in the same neuron, it is recommended to implement each current as a separate NMODL mechanism in distinct <cite>.mod</cite> files. This approach facilitates software maintenance, modularity, and allows for individual access and plotting of each channel’s conductance and current.</p>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading"></a></h2>
+<p>### Separate Mechanism Files</p>
+<ul>
+<li><p><strong>Fast Na channel (`nat.mod`)</strong>
+Define a mechanism with SUFFIX <cite>nat</cite> that reads the sodium reversal potential (<cite>ena</cite>) and writes to the sodium ionic current (<cite>ina</cite>). The activation and inactivation gates (e.g., <cite>m</cite> and <cite>h</cite>) are updated through typical Hodgkin-Huxley type kinetics. For example:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX nat
+  USEION na READ ena WRITE ina
+  RANGE gbar, i, g
+}
+STATE { m h }
+ASSIGNED { v ena i g minf hinf }
+PARAMETER { gbar = 0.12 }
+
+BREAKPOINT {
+  SOLVE states METHOD cnexp
+  g = gbar * m*m * h
+  i = g * (v - ena)
+  ina = i
+}
+
+INITIAL {
+  rates(v)
+  m = minf
+  h = hinf
+}
+
+PROCEDURE rates(v(mV)) {
+  ...  // define malpha, mbeta, halpha, hbeta; calculate minf, hinf
+}
+</pre></div>
+</div>
+<p>You should define or import appropriate rate functions for activation and inactivation gating variables.</p>
+</li>
+<li><p><strong>Persistent NaP channel (`nap.mod`)</strong>
+Similarly, define a mechanism with SUFFIX <cite>nap</cite> to represent the persistent sodium current characterized by a non-inactivating gating variable (typically only activation gate <cite>m</cite>):</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX nap
+  USEION na READ ena WRITE ina
+  RANGE gbar, i, g
+}
+STATE { m }
+ASSIGNED { v ena i g minf }
+PARAMETER { gbar = 0.01 }
+
+BREAKPOINT {
+  SOLVE states METHOD cnexp
+  g = gbar * m*m*m  // e.g. m^3 activation
+  i = g * (v - ena)
+  ina = i
+}
+
+INITIAL {
+  rates(v)
+  m = minf
+}
+
+PROCEDURE rates(v(mV)) {
+  ... // define malpha, mbeta; compute minf
+}
+</pre></div>
+</div>
+</li>
+</ul>
+<p>### Ionic Current Summation</p>
+<p>Both mechanisms write independently to the sodium current variable <cite>ina</cite>. NEURON automatically sums these contributions, so the total sodium current in a neuron segment is the sum of <cite>ina</cite> from all inserted sodium mechanisms.</p>
+</section>
+<section id="accessing-and-plotting-individual-channel-currents">
+<h2>Accessing and Plotting Individual Channel Currents<a class="headerlink" href="#accessing-and-plotting-individual-channel-currents" title="Link to this heading"></a></h2>
+<p>Each mechanism has its own current variable (e.g., <cite>i</cite>), and these can be exposed for plotting or further analysis by declaring them with the <cite>RANGE</cite> keyword in the NEURON block and properly assigning values in the BREAKPOINT block.</p>
+<p>However, by default, when multiple mechanisms write to the same ionic current variable (e.g., <cite>ina</cite>), the individual component currents are not directly accessible from hoc or Python objects using suffix-specific attributes like <cite>ina_nat</cite>.</p>
+<p>To enable access to per-mechanism currents, follow these steps in each <cite>.mod</cite> file:</p>
+<ol class="arabic">
+<li><p>Add the current variable to the <cite>RANGE</cite> variables in the NEURON block, e.g.:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX nat
+  USEION na READ ena WRITE ina
+  RANGE gbar, i, g, ina_component
+}
+</pre></div>
+</div>
+</li>
+<li><p>In the <cite>ASSIGNED</cite> block, declare the variable type and units:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>ASSIGNED {
+  v (mV)
+  ena (mV)
+  i (mA/cm2)
+  ina_component (mA/cm2)
+  g (mho/cm2)
+}
+</pre></div>
+</div>
+</li>
+<li><p>In the <cite>BREAKPOINT</cite> block, assign the computed current to both the ionic variable and the component variable:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+  SOLVE states METHOD cnexp
+  g = gbar * m*m * h
+  i = g * (v - ena)
+  ina = i
+  ina_component = i
+}
+</pre></div>
+</div>
+</li>
+<li><p>After recompiling the mechanisms with <cite>nrnivmodl</cite> or <cite>mknrndll</cite>, you can access the individual current <cite>ina_component</cite> in hoc or Python by suffix, for example:</p>
+<p><strong>Python example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming `sec` is a Section where nat mechanism is inserted</span>
+<span class="n">ivalue</span> <span class="o">=</span> <span class="n">sec</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ina_component_nat</span>  <span class="c1"># individual current of nat mechanism</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Note that the exact variable name in hoc or Python corresponds to the variable name with suffix appended as <cite>variable_suffix</cite>. For example, if the variable is <cite>ina_component</cite> and suffix is <cite>nat</cite>, then it is accessed as <cite>ina_component_nat</cite>.</p>
+</section>
+<section id="plotting-example-for-multiple-k-currents">
+<h2>Plotting Example for Multiple K Currents<a class="headerlink" href="#plotting-example-for-multiple-k-currents" title="Link to this heading"></a></h2>
+<p>If you have multiple potassium current mechanisms, such as standard Hodgkin-Huxley K channel and an M-type K channel with suffix <cite>im</cite>, each writing to <cite>ik</cite> ionic current, then by default their contributions sum into <cite>ik</cite>. To access individual currents from these mechanisms, the same approach applies: expose individual ionic currents as <cite>RANGE</cite> variables with distinct names per mechanism.</p>
+<p>Example modification for M-current:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  SUFFIX im
+  USEION k READ ek WRITE ik
+  RANGE gbar, i_m, g
+}
+
+ASSIGNED {
+  v (mV)
+  ek (mV)
+  i_m (mA/cm2)
+  g (mho/cm2)
+}
+
+BREAKPOINT {
+  SOLVE states METHOD cnexp
+  g = gbar * m*m*m
+  i_m = g * (v - ek)
+  ik = i_m
+}
+</pre></div>
+</div>
+<p>Then from hoc/Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># To access M-current component of potassium current</span>
+<span class="n">ik_M_current</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">i_m</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="temperature-dependence-using-q10">
+<h2>Temperature Dependence Using Q10<a class="headerlink" href="#temperature-dependence-using-q10" title="Link to this heading"></a></h2>
+<p>To incorporate temperature dependence in channel kinetics, you can scale rate constants by a temperature factor derived from Q10 values according to the formula:</p>
+<div class="math notranslate nohighlight">
+\[\text{temperature\_factor} = Q_{10}^{\frac{T - T_{\text{ref}}}{10}}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T\)</span> is the experimental temperature in °C,</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_{\text{ref}}\)</span> is the reference temperature at which original rate constants are defined,</p></li>
+<li><p><span class="math notranslate nohighlight">\(Q_{10}\)</span> is the temperature coefficient.</p></li>
+</ul>
+<p>Practical implementation in NMODL:</p>
+<ol class="arabic">
+<li><p>Define <cite>celsius</cite>, <cite>q10</cite>, and <cite>q10_factor</cite> variables:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+  ...
+  RANGE q10, q10_factor
+}
+ASSIGNED {
+  celsius (degC)
+  q10
+  q10_factor
+}
+</pre></div>
+</div>
+</li>
+<li><p>Calculate <cite>q10_factor</cite> in the <cite>INITIAL</cite> or <cite>BREAKPOINT</cite> block:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>INITIAL {
+  q10_factor = pow(q10, (celsius - Tref)/10)
+  ...
+}
+</pre></div>
+</div>
+</li>
+<li><p>Modify rate calculations by multiplying rate constants with <cite>q10_factor</cite>.</p></li>
+</ol>
+<p>Example:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>PROCEDURE rates(v(mV)) {
+  alpha_m = malpha(v) * q10_factor
+  beta_m = mbeta(v) * q10_factor
+  ...
+}
+</pre></div>
+</div>
+<p>This approach aligns channel kinetics to the simulation temperature with respect to a baseline temperature.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Implement each sodium current mechanism (fast Na and persistent NaP) in separate <cite>.mod</cite> files with distinct SUFFIXes.</p></li>
+<li><p>Use independent ionic current variables with <cite>RANGE</cite> declared to access and plot individual currents.</p></li>
+<li><p>Remember to assign these variables properly inside the BREAKPOINT block.</p></li>
+<li><p>For temperature adjustment, use a <cite>q10</cite> factor to scale channel rate functions according to simulation temperature.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">NMODL</span></code> programming documentation, the <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section" title="Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a> class for model construction and current access, and the temperature scaling concepts in channel kinetics.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=346">https://neuron.yale.edu/phpBB/viewtopic.php?t=346</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

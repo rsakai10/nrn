@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Creation and Management of Spike Time Vectors &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Dynamic Creation and Management of Spike Time Vectors</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1947_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dynamic-creation-and-management-of-spike-time-vectors">
+<h1>Dynamic Creation and Management of Spike Time Vectors<a class="headerlink" href="#dynamic-creation-and-management-of-spike-time-vectors" title="Link to this heading"></a></h1>
+<p>When recording action potential (AP) times from multiple sections such as soma and nodes in a neuronal model, it is common to use the <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#APCount" title="APCount"><code class="xref py py-class docutils literal notranslate"><span class="pre">APCount</span></code></a> class paired with <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> objects to store spike times. This section explains how to dynamically create and manage multiple vectors for AP times without manually generating distinct variable names for each vector.</p>
+<section id="basic-setup-for-single-section-recording">
+<h2>Basic Setup for Single Section Recording<a class="headerlink" href="#basic-setup-for-single-section-recording" title="Link to this heading"></a></h2>
+<p>For a single section, e.g., a soma, setup can be done as follows in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma
+objref apc_soma
+access soma
+apc_soma = new APCount(0.5)
+objref soma_timevector
+soma_timevector = new Vector()
+apc_soma.record(soma_timevector)
+</pre></div>
+</div>
+<p>This records the AP times detected at the midpoint (0.5) of the soma.</p>
+</section>
+<section id="recording-from-multiple-sections-using-objref-arrays">
+<h2>Recording from Multiple Sections Using Objref Arrays<a class="headerlink" href="#recording-from-multiple-sections-using-objref-arrays" title="Link to this heading"></a></h2>
+<p>When multiple sections exist (e.g., 20 node sections), instead of dynamically creating variable names like <cite>timevector1</cite>, <cite>timevector2</cite>, etc., use an array (indexed list) of objrefs. Example in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create node[20]
+objref apc_nodes[20], timevec[20]
+
+for j=0, 19 node[j] {
+    apc_nodes[j] = new APCount(0.5)
+    timevec[j] = new Vector()
+    apc_nodes[j].record(timevec[j])
+}
+</pre></div>
+</div>
+<p>This method efficiently associates each APCount instance with its own Vector for recording spike times.</p>
+<p>Advantages:
+- No “access” misuse by repeatedly calling <cite>access</cite> inside loops.
+- No need to generate variable names at runtime or parse strings.
+- Easy iteration over all vectors to save or analyze data.</p>
+</section>
+<section id="using-symbolic-constants">
+<h2>Using Symbolic Constants<a class="headerlink" href="#using-symbolic-constants" title="Link to this heading"></a></h2>
+<p>Avoid hard-coding magic numbers by defining symbolic constants, for example:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>NNODES = 20
+create node[NNODES]
+objref apc_nodes[NNODES], timevec[NNODES]
+
+for j=0, NNODES-1 node[j] {
+    apc_nodes[j] = new APCount(0.5)
+    timevec[j] = new Vector()
+    apc_nodes[j].record(timevec[j])
+}
+</pre></div>
+</div>
+<p>This approach improves code maintainability and clarity.</p>
+</section>
+<section id="object-oriented-approach-with-lists">
+<h2>Object-Oriented Approach with Lists<a class="headerlink" href="#object-oriented-approach-with-lists" title="Link to this heading"></a></h2>
+<p>NEURON provides the <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> class to manage collections of objrefs dynamically. This approach allows automatic resizing and flexible management of APCount and Vector objects without predefining array sizes.</p>
+<p>HOC example of creating APCount instances on all segments and storing them in a List:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref apclist, tobj
+apclist = new List()
+
+forall for (x, 0) {
+    tobj = new APCount(x)
+    apclist.append(tobj)
+}
+// tobj is no longer referenced after this if not needed
+</pre></div>
+</div>
+<p>In this code:
+- <cite>forall</cite> iterates over all sections.
+- <cite>for (x, 0)</cite> iterates over all segments in the current section.
+- Each APCount created at location <cite>x</cite> is appended to <cite>apclist</cite>.</p>
+<p>You can query the number of APCount objects by <a class="reference internal" href="../progref-1/programming/gui/list.html#List.count" title="List.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">List.count()</span></code></a>. Access individual elements by <a class="reference internal" href="../progref-1/programming/gui/list.html#List.o" title="List.o"><code class="xref py py-meth docutils literal notranslate"><span class="pre">List.o()</span></code></a>.</p>
+<p>This method avoids “magic numbers” completely and adapts to different model sizes without modification.</p>
+</section>
+<section id="python-example">
+<h2>Python Example<a class="headerlink" href="#python-example" title="Link to this heading"></a></h2>
+<p>The same logic can be expressed in Python with NEURON’s Python interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">NNODES</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;node[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NNODES</span><span class="p">)]</span>
+
+<span class="n">apc_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">timevec</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+    <span class="n">apc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">APCount</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+    <span class="n">apc</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">apc_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">apc</span><span class="p">)</span>
+    <span class="n">timevec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-spike-times-to-file">
+<h2>Writing Spike Times to File<a class="headerlink" href="#writing-spike-times-to-file" title="Link to this heading"></a></h2>
+<p>Once you have a list or array of <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> instances holding spike times, it is straightforward to write their contents to a text file. For example, in HOC:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref file
+file = new File()
+file.wopen(&quot;spike_times.txt&quot;)
+for i=0, NNODES-1 {
+    file.printf(&quot;Node %d spikes:\n&quot;, i)
+    timevec[i].printf(file)
+    file.printf(&quot;\n&quot;)
+}
+file.close()
+</pre></div>
+</div>
+<p>In Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;spike_times.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">timevec</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> spikes:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">t</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">vec</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Avoid dynamically creating variable names at runtime; instead, use arrays or lists of objrefs.</p></li>
+<li><p>Use symbolic constants to define model sizes and avoid magic numbers.</p></li>
+<li><p>Use <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a> in HOC for flexible, dynamic collections of objrefs.</p></li>
+<li><p>Record AP spike times with <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#APCount" title="APCount"><code class="xref py py-class docutils literal notranslate"><span class="pre">APCount</span></code></a> paired with <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector.record()</span></code></a>.</p></li>
+<li><p>Write vector contents to files by iterating over arrays/lists of vectors.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">access()</span></code> inside loops is discouraged because it affects performance and clarity. Prefer methods that do not require repeated access changes.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#APCount" title="APCount"><code class="xref py py-class docutils literal notranslate"><span class="pre">APCount</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../progref-1/programming/gui/list.html#List" title="List"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a>, <a class="reference internal" href="../progref-1/programming/gui/list.html#List.append" title="List.append"><code class="xref py py-meth docutils literal notranslate"><span class="pre">List.append()</span></code></a></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1947">https://neuron.yale.edu/phpBB/viewtopic.php?t=1947</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

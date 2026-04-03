@@ -1,0 +1,62 @@
+.. _vector_play_memory_efficiency:
+
+Memory-Efficient Scaling of Vectors with :meth:`Vector.play`
+-----------------------------------------------------------
+
+When multiple synaptic conductances follow scaled versions of the same time course, storing separate vectors for each leads to high memory use. Instead, implement a custom NMODL point process where a shared :class:`Vector` plays into a common variable (e.g., `gnorm`), and an instance-specific scale factor `k` modulates the conductance.
+
+Example NMODL mechanism (VecSyn):
+
+.. code-block:: none
+
+    NEURON {
+       POINT_PROCESS VecSyn
+       GLOBAL gnorm
+       RANGE k, erev, gs
+       NONSPECIFIC_CURRENT i
+    }
+
+    PARAMETER {
+       gnorm = 0 (microsiemens)
+       k = 1 (1)
+       erev = 0 (millivolt)
+    }
+
+    ASSIGNED {
+       gs (microsiemens)
+       i (nanoamp)
+       v (millivolt)
+    }
+
+    BREAKPOINT {
+       gs = k * gnorm
+       if (gs < 0) {
+         i = 0
+       } else {
+         i = gs * (v - erev)
+       }
+    }
+
+In Python or HOC, load one shared :class:`Vector` with the conductance time course and call :meth:`Vector.play` to drive the `gnorm` variable of all synapses. Each synapse’s gain is set by its `k` parameter, avoiding multiple vector copies.
+
+.. code-block:: python
+
+    signal = np.loadtxt('signal.txt')  # common conductance trace
+    gnorm_vec = h.Vector(signal)
+
+    synapses = []
+    for cell in cellList:
+        syn = h.VecSyn(cell.soma(0.5))  # instantiate synapse
+        syn.k = 1.0 / cell.inDeg         # scale factor per cell
+        gnorm_vec.play(syn._ref_gnorm, h.dt)
+        synapses.append(syn)
+
+.. note::
+
+   This approach assumes the conductivity time course is pre-sampled. For event-driven synapses, other solutions may be needed.
+
+.. seealso::
+
+   :class:`Vector`, :meth:`Vector.play`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4303 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4303>`_

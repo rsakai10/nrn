@@ -1,0 +1,180 @@
+.. _coba_neuron_model:
+
+COBA Neuron Model and the SpikeOut Mechanism
+=============================================
+
+Overview
+--------
+The COBA (Conductance-Based) neuron model implements synaptic interactions through conductance changes triggered by presynaptic spikes. When a presynaptic neuron _j_ emits a spike, the synaptic conductance \(g_{ji}\) in the postsynaptic neuron _i_ is incremented instantaneously by a quantum value (e.g., 6 nS for excitatory and 67 nS for inhibitory synapses) and then exponentially decays with a specified time constant (5 ms for excitation, 10 ms for inhibition).
+
+Model Implementation Details
+----------------------------
+
+Synaptic Conductances
+~~~~~~~~~~~~~~~~~~~~~
+Synaptic conductances are implemented using built-in NEURON point processes of type :class:`ExpSyn`. This is defined in the biophysical cell templates (e.g., `CobaCell` in *cobacell.hoc*). The quantum increment upon spike arrival and the exponential decay dynamics are intrinsic to the ExpSyn model and are integrated via NEURON's event delivery and numerical integration routines.
+
+The `spikeout.mod` mechanism does **not** generate synaptic conductances; rather, it:
+
+- Provides a functional action potential mechanism,
+- Forces the membrane potential to follow a preset spike-like time course,
+- Serves as a source of spike events.
+
+Synaptic inputs increment conductances via ExpSyn, while SpikeOut handles threshold crossing and spike emission.
+
+SpikeOut Mechanism
+~~~~~~~~~~~~~~~~~
+The SpikeOut mechanism (defined in *spikeout.mod*) is a point process that implements a simplified spike waveform by instantaneously changing an effective conductance. It acts like a voltage clamp, rapidly driving the local membrane potential (v) to a refractory voltage (`vrefrac`) upon threshold crossing. The primary parameters are:
+
+- `thresh`: Membrane potential threshold for spike initiation,
+- `vrefrac`: Voltage during refractory period,
+- `grefrac`: Conductance during refractory period,
+- `refrac`: Refractory period duration (ms),
+- `g`: The conductance state variable representing the transient spike conductance.
+
+.. note::
+   In the original *spikeout.mod*, the membrane potential is set directly inside the `NET_RECEIVE` block at threshold crossing, but in updated versions (e.g., *xspikeout.mod*), this direct assignment is replaced by injecting a large conductance that drives the membrane potential towards the refractory voltage.
+
+Code excerpts (from *spikeout.mod*):
+
+.. code-block:: mod
+
+    NEURON {
+      POINT_PROCESS SpikeOut
+      RANGE thresh, vrefrac, grefrac, refrac, g
+      NONSPECIFIC_CURRENT i
+      GLOBAL thresh, vrefrac, grefrac, refrac
+    }
+
+    ASSIGNED {
+      v (mV)
+      i (nA)
+      g (uS)
+    }
+
+    INITIAL {
+      g = 0
+      net_send(0, 3)
+    }
+
+    BREAKPOINT {
+      i = g*(v - vrefrac)
+    }
+
+    NET_RECEIVE(flag) {
+      if (flag == 1) {
+        net_event(t)
+        net_send(refrac, 2)
+        v = vrefrac
+        g = grefrac
+      } else if (flag == 2) {
+        g = 0
+      } else if (flag == 3) {
+        WATCH (v > thresh) 1
+      }
+    }
+
+Operational Details
+~~~~~~~~~~~~~~~~~~~
+- The `INITIAL` block launches a self-event with `flag == 3` at time zero. This executes the `WATCH` statement, which installs a threshold-crossing monitor on `v`.
+- When membrane potential crosses `thresh`, a self-event with `flag == 1` is triggered immediately:
+  - Calls :meth:`net_event` to emit spike events via `NetCon`.
+  - Schedules a self-event (`flag == 2`) after the refractory period `refrac` to end the spike.
+  - Sets synaptic conductance `g` to `grefrac` (large value), generating an outward current that clamps the voltage at `vrefrac`.
+- Once the refractory self-event (`flag == 2`) occurs, the conductance `g` is reset to zero, removing the clamp.
+- The `WATCH` statement actively monitors voltage at every integration time step, requiring only a single execution at initialization.
+
+Modification for Realistic Spike Waveforms
+------------------------------------------
+To emulate a more realistic spike waveform with a voltage that rises above threshold and subsequently decays, the SpikeOut mechanism can be extended to incorporate multiple states and staged voltage control. An example is the *xspikeout.mod* mechanism, which:
+
+- Splits the refractory period into two phases during which the command voltage ramps or clamps at different levels (e.g., rising to +20mV,
+  then declining back to refractory voltage).
+- Uses multiple self-events (`flag` values 1, 2, 3, 4) to transition between states.
+- Continues to use the WATCH statement for threshold detection.
+
+Partial snippet of enhanced NET_RECEIVE block from *xspikeout.mod*:
+
+.. code-block:: mod
+
+    NET_RECEIVE(w) {
+      if (flag == 1) {
+        net_event(t)
+        net_send(refrac * (1 - p), 2)
+        ; v = vrefrac0  ; commented, voltage clamp via conductance now
+        vrev = vrefrac0
+        g = grefrac
+      } else if (flag == 2) {
+        net_send(refrac * p, 3)
+        vrev = vrefrac1
+      } else if (flag == 3) {
+        g = 0
+      } else if (flag == 4) {
+        WATCH (v > thresh) 1
+      }
+    }
+
+Key Parameters in *xspikeout.mod*:
+
+- `p` controls fraction of refractory interval at each phase,
+- `vrefrac0` and `vrefrac1` specify clamp voltages in two phases.
+
+Additional Implementation Notes
+--------------------------------
+- The current through SpikeOut is calculated at each time step in the `BREAKPOINT` block as:
+
+  .. code-block:: mod
+
+      i = g * (v - vrev)
+
+  where large `g` values clamp `v` to `vrev`.
+
+- Direct assignment to the membrane potential `v` inside `NET_RECEIVE` is generally discouraged and replaced by the conductance-clamp method for stability and accuracy.
+
+- WATCH statements must be executed during initialization to monitor the variable (here, membrane voltage) continuously throughout the simulation.
+
+- GLOBAL parameters of mechanisms are addressed in hoc as `parameter_mechanismname`, for example, `thresh_SpikeOut` and `refrac_SpikeOut`. Assigning these in hoc scripts sets model parameter values used during simulation.
+
+Practical Use and Tuning
+------------------------
+- To tune neuron firing rate or threshold, adjust parameters such as `thresh_SpikeOut`, `grefrac`, and synaptic conductance strengths in the hoc setup scripts.
+
+- If SpikeOut’s conductance (`grefrac`) is too large relative to other conductances, it may excessively shunt the neuron, preventing firing.
+
+- In single-cell COBA models with no synaptic input, spike generation is triggered by intrinsic conductances and/or current injection.
+
+- SpikeOut generates output events upon threshold crossing that can be connected via :class:`NetCon` to synaptic targets.
+
+Summary
+-------
+The COBA neuron model employs conductance-based synaptic inputs realized with built-in ExpSyn mechanisms, while spike generation is handled by the SpikeOut point process acting as a threshold-triggered voltage clamp. The mechanism uses efficient event-driven state transitions via `NET_RECEIVE` and continuous voltage monitoring with `WATCH`. Customization of spike waveform shape is achievable by extending SpikeOut’s state machine as demonstrated in *xspikeout.mod*.
+
+.. seealso::
+   :mod:`spikeout`, :mod:`xspikeout`, :class:`ExpSyn`, :class:`NetCon`
+
+Example hoc snippet to customize SpikeOut parameters:
+
+.. code-block:: hoc
+
+    objref spike
+    spike = new SpikeOut(0.5)  // attach at section midpoint
+    spike.thresh_SpikeOut = -50    // threshold in mV
+    spike.vrefrac_SpikeOut = -60   // refractory voltage in mV
+    spike.grefrac_SpikeOut = 100   // conductance during refractory period in µS
+    spike.refrac_SpikeOut = 5      // refractory period in ms
+
+Python equivalent example:
+
+.. code-block:: python
+
+    from neuron import h
+    soma = h.Section(name='soma')
+    spike = h.SpikeOut(0.5, sec=soma)
+    spike.thresh_SpikeOut = -50
+    spike.vrefrac_SpikeOut = -60
+    spike.grefrac_SpikeOut = 100
+    spike.refrac_SpikeOut = 5
+
+Use these parameter settings to tailor spiking behavior according to experimental data or modeling needs.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2304 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2304>`_

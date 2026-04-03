@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimal Spatial Discretization (d_lambda) for Measuring Propagation Speed in Myelinated Axon Models &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Optimal Spatial Discretization (<cite>d_lambda</cite>) for Measuring Propagation Speed in Myelinated Axon Models</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2271_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="optimal-spatial-discretization-d-lambda-for-measuring-propagation-speed-in-myelinated-axon-models">
+<h1>Optimal Spatial Discretization (<cite>d_lambda</cite>) for Measuring Propagation Speed in Myelinated Axon Models<a class="headerlink" href="#optimal-spatial-discretization-d-lambda-for-measuring-propagation-speed-in-myelinated-axon-models" title="Link to this heading"></a></h1>
+<p>This section addresses the considerations and best practices for choosing spatial discretization parameters, specifically the <cite>d_lambda</cite> rule, when measuring action potential propagation speed in detailed myelinated axon models (e.g., McIntyre et al. 2002). The discussion is based on extensive testing and analysis of the model’s sensitivities to section segmentation (<cite>nseg</cite>), time step (<cite>dt</cite>), and CVODE integration settings.</p>
+<section id="measuring-propagation-speed">
+<h2>Measuring Propagation Speed<a class="headerlink" href="#measuring-propagation-speed" title="Link to this heading"></a></h2>
+<p>A reliable method to measure conduction velocity (CV) involves recording the time at which the membrane potential crosses a threshold at two or more nodes of Ranvier and calculating velocity as the distance between nodes divided by the latency difference.</p>
+<p>Example HOC code snippet for setup and velocity measurement using NetCon with CVODE for second-order threshold detection:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>load_file(&quot;MRGaxon.hoc&quot;)
+cvode_active(1)
+cvode.condition_order(2)  // Enables second order accurate spike time interpolation
+
+istim = 0.5  // Reduced stimulation amplitude for controlled spike initiation
+
+// Create NetCon objects at node centers to detect spikes crossing -40 mV threshold
+objref null, nc[axonnodes], apt[axonnodes]
+for i=0, axonnodes-1 {
+    node[i] nc[i] = new NetCon(&amp;v(0.5), null, -40, 0, 0)
+    apt[i] = new Vector()  // To record spike times
+    nc[i].record(apt[i])
+}
+
+// Vector holding node distances along axon
+objref s, time
+s = new Vector(axonnodes)
+time = new Vector(axonnodes)
+for i=0, axonnodes-1 {
+    s.x(i) = i * deltax  // deltax is internode distance in microns
+}
+
+// Function to run simulation and compute conduction velocity between two nodes
+func measure_propspeed() {
+    run()
+
+    for i=0, axonnodes-1 {
+        time.x(i) = apt[i].x(0)  // Spike time at each node
+    }
+
+    // Choose nodes away from stimulus and ends to avoid artifacts
+    start_node = 5
+    end_node = 15
+
+    // Compute velocity (m/s), converting microns to meters
+    delta_x = (end_node - start_node) * deltax * 1e-6
+    delta_t = time.x(end_node) - time.x(start_node)
+    V = delta_x / delta_t
+    return V
+}
+</pre></div>
+</div>
+</section>
+<section id="spatial-discretization-and-d-lambda-rule">
+<h2>Spatial Discretization and <cite>d_lambda</cite> Rule<a class="headerlink" href="#spatial-discretization-and-d-lambda-rule" title="Link to this heading"></a></h2>
+<p>The <strong>d_lambda rule</strong> is a well-known heuristic defining the maximal compartment length as a fraction of the membrane AC length constant at a defined frequency (often 100 Hz):</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forsec all {
+    nseg = int((L / (0.1 * lambda_f(100)) + .999) / 2) * 2 + 1
+}
+</pre></div>
+</div>
+<p>where <cite>lambda_f(freq)</cite> returns the AC length constant at frequency <cite>freq</cite> Hz.</p>
+<p><strong>However, in complex myelinated axon models using the extracellular mechanism (e.g., McIntyre et al. 2002), the standard implementation of the d_lambda rule is not sufficient</strong> due to additional axial resistances (e.g., extracellular axial resistance <cite>xraxial</cite>). This necessitates different or more refined spatial discretization strategies:</p>
+<ul class="simple">
+<li><p>The presence of extracellular axial resistance breaks some assumptions in the classical d_lambda rule.</p></li>
+<li><p>Nodes of Ranvier require careful segmentation (<cite>nseg</cite>), often more than typical values (e.g., 9 or more segments) to achieve convergence.</p></li>
+<li><p>Excessive segmentation (e.g., <cite>nseg</cite> &gt; 9 in nodes) may cause integration errors or initialization failures with adaptive integrators like CVODE.</p></li>
+</ul>
+</section>
+<section id="impact-of-number-of-segments-nseg">
+<h2>Impact of Number of Segments (<cite>nseg</cite>)<a class="headerlink" href="#impact-of-number-of-segments-nseg" title="Link to this heading"></a></h2>
+<p>Empirical findings in the McIntyre model demonstrate:</p>
+<ul class="simple">
+<li><p>Propagation speed estimates vary substantially with the number of node segments.</p></li>
+<li><p>Typical convergence is observed by increasing node <cite>nseg</cite> up to 27 or more.</p></li>
+<li><p>Using 1 segment per node section tends to overestimate conduction velocity.</p></li>
+<li><p>Fixed time step simulations with small <cite>dt</cite> and high <cite>nseg</cite> resolve more accurate conduction velocities but require significantly more computational resources.</p></li>
+<li><p>Adaptive time stepping (CVODE) with proper initialization (<cite>cvode.dae_init_dteps()</cite> and setting appropriate <cite>atol</cite>) can yield accurate results with fewer segments but still requires higher <cite>nseg</cite> in nodes than in internodes.</p></li>
+</ul>
+</section>
+<section id="proper-initialization-and-avoiding-artifacts">
+<h2>Proper Initialization and Avoiding Artifacts<a class="headerlink" href="#proper-initialization-and-avoiding-artifacts" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Stimulus should be applied at one end (e.g., node 0), with adjusted amplitude to about twice threshold or halved amplitude compared to the model’s original stimulus to avoid large initiation artifacts.</p></li>
+<li><p>Measure latencies between nodes several internodes away (e.g., nodes 5 to 15) to avoid end effects and spike initiation zone distortions.</p></li>
+<li><p>Allow the model to reach steady state (<cite>run()</cite> with a pre-stimulation period).</p></li>
+<li><p>Use second order spike time detection via <cite>cvode.condition_order(2)</cite> and NetCon’s <cite>record()</cite> method for precise latency measurement.</p></li>
+<li><p>Avoid using <cite>APCount</cite> if possible, since threshold crossing times via sampling limited by <cite>dt</cite> can introduce larger timing errors.</p></li>
+</ul>
+<p>Example HOC code snippet to initialize stimulus location and measure velocity (including re-insertion of stimulus after changing <cite>nseg</cite>):</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc stimul() {
+    // Insert stimulus; needed after changing nseg
+    node[0] stim.loc(0.5)
+    stim.amp = istim
+}
+
+V = 0
+xpanel(&quot;Propagation speed&quot;)
+xbutton(&quot;Measure speed&quot;, &quot;V = measure_propspeed()&quot;)
+xfixedvalue(&quot;V&quot;)
+xpanel(100, 400)
+</pre></div>
+</div>
+</section>
+<section id="decoupling-node-and-internode-discretization">
+<h2>Decoupling Node and Internode Discretization<a class="headerlink" href="#decoupling-node-and-internode-discretization" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>A common practice is to use finer segmentation in the nodes (<cite>nseg</cite> = 9 to 27 or higher) to ensure accuracy.</p></li>
+<li><p>Internodes can often be discretized using standard <cite>d_lambda</cite>-based rules, but must factor in parallel extracellular axial resistances.</p></li>
+</ul>
+</section>
+<section id="accounting-for-extracellular-axial-resistance-in-internodes">
+<h2>Accounting for Extracellular Axial Resistance in Internodes<a class="headerlink" href="#accounting-for-extracellular-axial-resistance-in-internodes" title="Link to this heading"></a></h2>
+<p>For internodes modeled as nested cables with parallel axial paths (axon interior and extracellular space between axon membrane and myelin), the effective longitudinal resistance/length is:</p>
+<div class="math notranslate nohighlight">
+\[R_{\text{total}} = R_a \frac{4}{\pi d^2} + \frac{R_{\text{ag}}}{w \pi d^2} =
+\left(1 + \frac{R_{\text{ag}}}{4 w R_a}\right) R_a \frac{4}{\pi d^2}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p>(d) is axon diameter,</p></li>
+<li><p>(w = frac{w_{text{gap}}}{d}) is the relative width of the gap,</p></li>
+<li><p>(R_a) is cytoplasmic resistivity,</p></li>
+<li><p>(R_{text{ag}}) is extracellular gap resistivity.</p></li>
+</ul>
+<p>This suggests scaling cytoplasmic resistivity (R_a) by a factor (k = 1 + frac{R_{text{ag}}}{4 w R_a}) in length constant calculations used for segmentation of internodes.</p>
+<p>An example HOC procedure to adjust <cite>nseg</cite> accordingly:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc chop_internodes() { local tmp, w
+  forsec $o1 {
+    tmp = Ra
+    w = wgap / diam(0.5)
+    Ra = Ra + Rag / (4 * w)
+    nseg = int((L / (0.1 * lambda_f(100)) + .999) / 2) * 2 + 1
+    Ra = tmp  // restore original Ra
+  }
+}
+chop_internodes(sralist)
+</pre></div>
+</div>
+</section>
+<section id="common-pitfalls">
+<h2>Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Using too few segments per node can significantly overestimate conduction velocity.</p></li>
+<li><p>Excessive segmentation can cause IDA initialization failures with CVODE adaptive integrator, requiring parameter tuning (e.g., <cite>cvode.dae_init_dteps()</cite>).</p></li>
+<li><p>The <cite>d_lambda</cite> rule as implemented is insufficient for sections with extracellular current flow.</p></li>
+<li><p>Spike time artifacts arise if threshold crossing times are measured by sampling voltage at discrete times without interpolation.</p></li>
+<li><p>Discontinuities or bugs in NMODL mechanisms (e.g., <cite>vtrap2</cite> functions in axnode mod) can introduce subtle errors; ensure latest corrected versions.</p></li>
+</ul>
+</section>
+<section id="summary-recommendations">
+<h2>Summary Recommendations<a class="headerlink" href="#summary-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <strong>NetCon record()</strong> with <cite>cvode.condition_order(2)</cite> for second order accurate spike timing.</p></li>
+<li><p>Stimulate near an axon end, reduce stimulus amplitude to about twice threshold or less.</p></li>
+<li><p>Avoid recording spike latencies at nodes close to stimulus or cell ends (exclude first and last ~4 nodes).</p></li>
+<li><p>Increase <cite>nseg</cite> in nodes of Ranvier to 27 or more for convergence; internodes may follow <cite>d_lambda</cite> rule adjusted for extracellular axial resistances.</p></li>
+<li><p>Consider fixed time step simulations (e.g., <cite>dt=1e-5 ms</cite>) if adaptive integrator initialization issues arise with high <cite>nseg</cite>.</p></li>
+<li><p>Verify convergence by varying <cite>dt</cite>, <cite>nseg</cite>, and <cite>d_lambda</cite>.</p></li>
+<li><p>Account for extracellular axial resistance in internode discretization.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The classical d_lambda rule ignores longitudinal extracellular resistance (<cite>xraxial</cite>), which can be significant in myelinated axon models with extracellular mechanisms. Spatial discretization strategies must be adapted accordingly.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon" title="NetCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetCon</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/network/netcon.html#NetCon.record" title="NetCon.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.record()</span></code></a>, <a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode.condition_order" title="CVode.condition_order"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CVode.condition_order()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">lambda_f()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">cvode.dae_init_dteps()</span></code></p>
+</div>
+</section>
+<section id="example-of-conduction-velocity-variation-with-parameters">
+<h2>Example of Conduction Velocity Variation with Parameters<a class="headerlink" href="#example-of-conduction-velocity-variation-with-parameters" title="Link to this heading"></a></h2>
+<p>Experimental results:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Velocity (m/s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Node segments (<cite>nseg</cite> per node)</p></td>
+<td><p>1</p></td>
+<td><p>~50-56</p></td>
+</tr>
+<tr class="row-odd"><td><p>Node segments</p></td>
+<td><p>9 to 27</p></td>
+<td><p>~40-45</p></td>
+</tr>
+<tr class="row-even"><td><p>Fixed timestep (<cite>dt</cite>)</p></td>
+<td><p>1e-5 ms</p></td>
+<td><p>Velocity converges close to adaptive CVODE values</p></td>
+</tr>
+<tr class="row-odd"><td><p>Adaptive integration tolerances (<cite>atol</cite>)</p></td>
+<td><p>1e-4 to 1e-5</p></td>
+<td><p>Small influence on velocity, allowing accurate results</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>d_lambda</cite></p></td>
+<td><p>0.1 to 0.003</p></td>
+<td><p>Smaller values reduce velocity (improve accuracy) but increase computational cost</p></td>
+</tr>
+</tbody>
+</table>
+<p>Use of the d_lambda rule and segmentations must balance computational expense against the necessity of accuracy and convergence checking.</p>
+<p>—</p>
+<p>This guidance provides a structured approach to determine optimal compartmental discretization and simulation parameters for accurate measurement of action potential propagation speed in detailed myelinated axon NEURON models.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2271">https://neuron.yale.edu/phpBB/viewtopic.php?t=2271</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

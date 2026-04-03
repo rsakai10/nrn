@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracking Synaptic Currents from a Dendritic Bouton to the Soma &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tracking Synaptic Currents from a Dendritic Bouton to the Soma</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3835_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tracking-synaptic-currents-from-a-dendritic-bouton-to-the-soma">
+<h1>Tracking Synaptic Currents from a Dendritic Bouton to the Soma<a class="headerlink" href="#tracking-synaptic-currents-from-a-dendritic-bouton-to-the-soma" title="Link to this heading"></a></h1>
+<p>When simulating biophysically realistic neurons with distributed synaptic inputs in NEURON, a common question is how to determine the contribution of a particular synapse or synaptic population (e.g., boutons from CA3 or PV interneurons) to the synaptic current measured at the soma. This section explains the conceptual and practical considerations involved and methods to quantify such contributions.</p>
+<section id="conceptual-background">
+<h2>Conceptual Background<a class="headerlink" href="#conceptual-background" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Synaptic Currents and Membrane Potentials</strong></p>
+<p>Each synapse modeled as a conductance change (e.g., <cite>AlphaSynapse</cite>, <cite>ExpSyn</cite>) injects current locally, which alters the membrane potential of the compartment it resides on. The local change in membrane potential then spreads electrotonically along the cable structure of the neuron, affecting neighboring compartments, including the soma.</p>
+</li>
+<li><p><strong>Why You Cannot Directly “Track” Synaptic Currents</strong></p>
+<p>The synaptic current entering at a bouton compartment becomes part of the total membrane current of that compartment immediately and is no longer distinguishable as originating from that synapse. Intracellular ionic currents do not physically flow across the entire cell as discrete packets; rather, changes in local membrane potential change how charge redistributes through the cable.</p>
+<p>NEURON solves the cable equations numerically by calculating changes in transmembrane voltages and currents at each compartment over time with no inherent label linking current at the soma back to individual synapses.</p>
+</li>
+<li><p><strong>Nonlinear Interactions and Conductance Effects</strong></p>
+<ul class="simple">
+<li><p>Conductance-based synapses alter local membrane conductance, which influences the driving force (difference between membrane potential and synaptic reversal potential) for all synapses and affects the current flow pattern.</p></li>
+<li><p>Increased local conductance can shunt currents from other synapses, causing nonlinear interactions between synaptic inputs.</p></li>
+<li><p>These effects mean synaptic contributions to somatic current depend on the entire spatial and temporal pattern of synaptic activity and are not strictly additive.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="naive-approach-to-estimating-synapse-contribution">
+<h2>Naive Approach to Estimating Synapse Contribution<a class="headerlink" href="#naive-approach-to-estimating-synapse-contribution" title="Link to this heading"></a></h2>
+<p>Given these complexities, a simple method to estimate the contribution of a particular synapse or synaptic group to somatic current is as follows:</p>
+<ol class="arabic">
+<li><p>Run a simulation with all synapses active and record the somatic membrane current (<cite>i_soma_control</cite>).</p></li>
+<li><p>Run another simulation in which the synapse (or synaptic population) of interest is not activated and record the somatic membrane current (<cite>i_soma_test</cite>).</p></li>
+<li><p>Compute the difference:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">i_synapse_contribution</span> <span class="o">=</span> <span class="n">i_soma_control</span> <span class="o">-</span> <span class="n">i_soma_test</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This difference approximates the contribution of that synapse or synaptic population to the somatic current during the simulated period.</p>
+</section>
+<section id="limitations-of-the-naive-approach">
+<h2>Limitations of the Naive Approach<a class="headerlink" href="#limitations-of-the-naive-approach" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The method requires multiple simulations per synapse or synaptic group, which is computationally expensive for large numbers of inputs.</p></li>
+<li><p>The estimate is an approximation because:</p>
+<ul>
+<li><p>Synaptic currents interact nonlinearly through changes in membrane potential and local conductance.</p></li>
+<li><p>The result depends on the specific spatiotemporal pattern of synaptic activation.</p></li>
+</ul>
+</li>
+<li><p>Many repetitions with different activity patterns may be needed for meaningful statistics.</p></li>
+</ul>
+</section>
+<section id="practical-implementation-in-neuron">
+<h2>Practical Implementation in NEURON<a class="headerlink" href="#practical-implementation-in-neuron" title="Link to this heading"></a></h2>
+<p>Below is an outline of how to implement this approach using Python and NEURON:</p>
+<ol class="arabic">
+<li><p><strong>Model Setup</strong></p>
+<ul class="simple">
+<li><p>Create your neuron morphology and biophysics.</p></li>
+<li><p>Place synapses at desired locations (e.g., distribute CA3 synapses on proximal apical segments).</p></li>
+<li><p>Assign synaptic parameters (<cite>gmax</cite>, <cite>tau</cite>, etc.) per literature.</p></li>
+<li><p>Set up NetStim or other stimuli to control activation timing.</p></li>
+</ul>
+</li>
+<li><p><strong>Recording Somatic Current</strong></p>
+<p>In Python, record the somatic transmembrane current:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># example soma section</span>
+<span class="n">i_soma_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+<span class="n">t_vec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+
+<span class="c1"># Record soma transmembrane current (Im)</span>
+<span class="n">i_soma_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">_ref_i_membrane_</span><span class="p">)</span>
+<span class="n">t_vec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Control Simulation (All Synapses Active)</strong></p>
+<ul class="simple">
+<li><p>Activate all synapses.</p></li>
+<li><p>Run the simulation, save <cite>i_soma_control</cite> from <cite>i_soma_vec</cite>.</p></li>
+</ul>
+</li>
+<li><p><strong>Test Simulation (Synapse X Inactive)</strong></p>
+<ul class="simple">
+<li><p>Deactivate synapse X or synaptic population (e.g., by disabling its NetCon or setting <cite>gmax=0</cite>).</p></li>
+<li><p>Run the simulation, save <cite>i_soma_test</cite>.</p></li>
+</ul>
+</li>
+<li><p><strong>Calculate Approximate Contribution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">i_synapse_contribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">i_soma_control</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">i_soma_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Repeat for Other Synapses or Conditions</strong></p>
+<ul class="simple">
+<li><p>Run several such paired simulations for different synapses or groups.</p></li>
+<li><p>Aggregate contributions to identify population effects at the soma.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="example-hoc-code-snippet-to-record-somatic-current">
+<h2>Example HOC Code Snippet to Record Somatic Current<a class="headerlink" href="#example-hoc-code-snippet-to-record-somatic-current" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref i_soma_vec, t_vec
+i_soma_vec = new Vector()
+t_vec = new Vector()
+
+// Record soma membrane current at 0.5 location
+i_soma_vec.record(&amp;soma(0.5).i_membrane_)
+t_vec.record(&amp;t)
+
+run()
+</pre></div>
+</div>
+</section>
+<section id="key-points-to-understand-about-neuron-simulations">
+<h2>Key Points to Understand About NEURON Simulations<a class="headerlink" href="#key-points-to-understand-about-neuron-simulations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Synaptic current entering a compartment adds to the charge and changes local membrane potential; it does not propagate as a labeled current.</p></li>
+<li><p>NEURON numerically solves the compartmentalized cable equation accounting for all conductance changes and ionic currents.</p></li>
+<li><p>Interaction between synaptic inputs is nonlinear when conductance changes and voltage-dependent mechanisms are considered.</p></li>
+<li><p>Assumptions of spatial and temporal linearity (valid for low-rate activation and subthreshold membrane potential ranges) can simplify interpretations but should be validated.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Directly tracking synaptic current from a dendritic bouton to the soma as a unique, traceable quantity is not possible in NEURON.</p></li>
+<li><p>Approximate estimation of synapse-specific somatic current can be performed by comparative simulations (with and without the synapse activated).</p></li>
+<li><p>Interpret results cautiously due to nonlinear and context-dependent interactions of conductance-based synapses.</p></li>
+<li><p>For more detailed quantitative analyses of linear integration, foundational theoretical work by Jaffe and Carnevale (1999) and others can be consulted.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This explanation is based on fundamental principles of cable theory and NEURON’s numerical methods as described by Hines and Carnevale (1997). Understanding these principles is essential for realistic simulation and interpretation of synaptic integration in neurons.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#AlphaSynapse" title="AlphaSynapse"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaSynapse</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.insert()</span></code>, <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.record" title="Vector.record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.record()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">h.run()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3835">https://neuron.yale.edu/phpBB/viewtopic.php?t=3835</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

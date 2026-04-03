@@ -1,0 +1,32 @@
+Non-Uniform Distribution of Channels
+====================================
+
+In :class:`Section`, the parameter ``nseg`` determines the number of segments a section of length ``L`` is divided into, each of length approximately ``L/nseg``. The membrane potential is computed at the midpoint of each segment.
+
+.. note::
+   A uniform ion channel density does not imply that ``nseg=1`` is always appropriate. Use more segments if membrane current density varies enough to require spatial resolution.
+
+For non-uniform channel distributions (e.g., Gaussian), channel densities can be assigned using the segment attribute :attr:`x` (normalized position from 0 to 1):
+
+.. code-block:: python
+
+    for seg in soma:
+        seg.gbar_Na = gbar_max * exp(-((seg.x - center)**2)/(2*sigma**2))
+
+Here, ``gbar_Na`` is a range variable representing the maximal conductance density of Na+ channels, which can be set differently at each segment.
+
+To plot the membrane potential at each segment midpoint over time:
+
+.. code-block:: python
+
+    from neuron import h, gui
+    vec_v = [h.Vector().record(seg._ref_v) for seg in soma]
+    # After simulation, plot each vector separately
+
+.. warning::
+   Avoid even values for ``nseg`` to prevent ambiguity at midpoint positions when accessing range variables like voltage.
+
+.. seealso::
+   :attr:`Section.nseg`, :attr:`Segment.x`, :ref:`range-variables` in The NEURON Book (chapter 5)
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=287 <https://neuron.yale.edu/phpBB/viewtopic.php?t=287>`_

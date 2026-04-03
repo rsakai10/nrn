@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Load Balancing in NEURON with Heterogeneous Morphologies and Synapses &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Load Balancing in NEURON with Heterogeneous Morphologies and Synapses</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3628_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="load-balancing-in-neuron-with-heterogeneous-morphologies-and-synapses">
+<h1>Load Balancing in NEURON with Heterogeneous Morphologies and Synapses<a class="headerlink" href="#load-balancing-in-neuron-with-heterogeneous-morphologies-and-synapses" title="Link to this heading"></a></h1>
+<p>When simulating large networks with cells exhibiting variable morphologies and synaptic distributions, uneven computational load across MPI ranks can reduce parallel efficiency. This document explains concepts and practical approaches to effective load balancing, including the use of multisplit and least processing time (LPT) algorithms.</p>
+<section id="load-balancing-considerations">
+<h2>Load Balancing Considerations<a class="headerlink" href="#load-balancing-considerations" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong>Simple Distribution:</strong>
+When the number of cells is very large relative to the number of hosts and cell complexity variance is small, a simple round-robin distribution of whole cells to ranks may provide sufficient load balance.</p></li>
+<li><p><strong>When to Use Multisplit:</strong>
+The multisplit technique subdivides cells into smaller computational pieces to distribute load more evenly across hosts. It is beneficial if the largest cell’s complexity exceeds the average complexity per rank, i.e.,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TotalNumberOfStatesForAllCells / nhost &lt; NumberOfStatesOfLargestCell
+</pre></div>
+</div>
+<p>Here, complexity is approximated as the number of ODE states in the cell; number of compartments can be used as a rougher proxy.</p>
+</li>
+</ul>
+</section>
+<section id="measuring-cell-complexity">
+<h2>Measuring Cell Complexity<a class="headerlink" href="#measuring-cell-complexity" title="Link to this heading"></a></h2>
+<p>You can estimate cell complexity using <code class="xref py py-class docutils literal notranslate"><span class="pre">h.LoadBalance</span></code>. This example Python script summarizes complexity metrics across ranks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">pc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ParallelContext</span><span class="p">()</span>
+<span class="n">nhost</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">nhost</span><span class="p">())</span>
+<span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;loadbal.hoc&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">cx</span><span class="p">():</span>
+    <span class="n">lb</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">LoadBalance</span><span class="p">()</span>
+    <span class="n">cell_cx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">allsec</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">parentseg</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># root section indicates a &quot;cell&quot;</span>
+            <span class="n">cell_cx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="o">.</span><span class="n">cell_complexity</span><span class="p">(</span><span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">))</span>
+    <span class="n">max_cx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cell_cx</span><span class="p">)</span> <span class="k">if</span> <span class="n">cell_cx</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">sum_cx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cell_cx</span><span class="p">)</span>
+
+    <span class="n">max_cx</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">max_cx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># maximum across ranks</span>
+    <span class="n">sum_cx</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">sum_cx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># sum across ranks</span>
+
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_cx = </span><span class="si">{</span><span class="n">max_cx</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">  average cx per rank = </span><span class="si">{</span><span class="n">sum_cx</span><span class="o">/</span><span class="n">nhost</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">cx</span><span class="p">()</span>
+<span class="n">pc</span><span class="o">.</span><span class="n">barrier</span><span class="p">()</span>
+<span class="n">h</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="xref py py-func docutils literal notranslate"><span class="pre">h.allsec()</span></code> function returns all sections present on the calling rank; each root section corresponds to a single cell, which can vary across ranks.</p>
+</div>
+</section>
+<section id="estimating-load-balance-during-simulation">
+<h2>Estimating Load Balance during Simulation<a class="headerlink" href="#estimating-load-balance-during-simulation" title="Link to this heading"></a></h2>
+<p>A more accurate measurement includes dynamic effects from spike exchange:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">prun</span><span class="p">():</span>
+    <span class="n">pc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ParallelContext</span><span class="p">()</span>
+    <span class="n">nhost</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">nhost</span><span class="p">())</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+
+    <span class="n">h</span><span class="o">.</span><span class="n">stdinit</span><span class="p">()</span>
+    <span class="c1"># Setup the simulation model here</span>
+
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">startsw</span><span class="p">()</span>
+    <span class="n">pc</span><span class="o">.</span><span class="n">psolve</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">tstop</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">startsw</span><span class="p">()</span> <span class="o">-</span> <span class="n">runtime</span>
+
+    <span class="n">computation_time</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">step_time</span><span class="p">()</span>
+    <span class="n">cw_time</span> <span class="o">=</span> <span class="n">computation_time</span> <span class="o">+</span> <span class="n">pc</span><span class="o">.</span><span class="n">step_wait</span><span class="p">()</span>
+    <span class="n">max_cw_time</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">cw_time</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">avg_comp_time</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">computation_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">nhost</span>
+    <span class="n">load_balance</span> <span class="o">=</span> <span class="n">avg_comp_time</span> <span class="o">/</span> <span class="n">max_cw_time</span>
+    <span class="k">return</span> <span class="n">runtime</span><span class="p">,</span> <span class="n">load_balance</span><span class="p">,</span> <span class="n">avg_comp_time</span>
+</pre></div>
+</div>
+</section>
+<section id="using-least-processing-time-lpt-algorithm-for-cell-distribution">
+<h2>Using Least Processing Time (LPT) Algorithm for Cell Distribution<a class="headerlink" href="#using-least-processing-time-lpt-algorithm-for-cell-distribution" title="Link to this heading"></a></h2>
+<p>LPT is a heuristic that balances load by assigning the most computationally expensive cells first to the least loaded host. Pseudocode:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>REPEAT
+    assign the most complex cell to the host with the least total assigned complexity
+UNTIL all cells are assigned
+</pre></div>
+</div>
+<p>This approach can improve load balance especially when cell complexity varies widely.</p>
+</section>
+<section id="python-module-example-load-balance-estimation-and-lpt-balancing">
+<h2>Python Module Example: Load Balance Estimation and LPT Balancing<a class="headerlink" href="#python-module-example-load-balance-estimation-and-lpt-balancing" title="Link to this heading"></a></h2>
+<p>This Python module uses <code class="xref py py-class docutils literal notranslate"><span class="pre">h.LoadBalance</span></code> and MPI collectives to estimate the current load balance and suggest an improved LPT-based distribution. Usage assumes each rank has a <code class="xref py py-class docutils literal notranslate"><span class="pre">hoc.Vector</span></code> of gids allocated to it (<cite>gidvec</cite>), and a cell exists for each gid.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">pc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ParallelContext</span><span class="p">()</span>
+<span class="n">nhost</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">nhost</span><span class="p">())</span>
+<span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;loadbal.hoc&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">cx</span><span class="p">(</span><span class="n">gidvec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a hoc.Vector of cell complexities for gids in gidvec.&quot;&quot;&quot;</span>
+    <span class="n">lb</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">LoadBalance</span><span class="p">()</span>
+    <span class="n">cxvec</span> <span class="o">=</span> <span class="n">gidvec</span><span class="o">.</span><span class="n">c</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gidvec</span><span class="p">):</span>
+        <span class="n">cxvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lb</span><span class="o">.</span><span class="n">cell_complexity</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">gid2cell</span><span class="p">(</span><span class="n">gid</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cxvec</span>
+
+<span class="k">def</span> <span class="nf">ld_bal</span><span class="p">(</span><span class="n">cxvec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute and print the expected load balance from local complexities.&quot;&quot;&quot;</span>
+    <span class="n">sum_cx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cxvec</span><span class="p">)</span>
+    <span class="n">max_sum_cx</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">sum_cx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sum_cx</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">sum_cx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;expected load_balance </span><span class="si">{</span><span class="n">sum_cx</span><span class="o">/</span><span class="n">nhost</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_sum_cx</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">lpt_bal</span><span class="p">(</span><span class="n">gidvec</span><span class="p">,</span> <span class="n">cxvec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform LPT re-assignment of gids for load balancing.&quot;&quot;&quot;</span>
+    <span class="n">src</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nhost</span>
+    <span class="n">src</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gidvec</span><span class="p">,</span> <span class="n">cxvec</span><span class="p">)</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">py_alltoall</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">src</span>
+
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">allgidvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+        <span class="n">allcxvec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">dest</span><span class="p">:</span>
+            <span class="n">allgidvec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">allcxvec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">del</span> <span class="n">dest</span>
+
+        <span class="n">lb</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">LoadBalance</span><span class="p">()</span>
+        <span class="c1"># Suppress printing with last argument 0</span>
+        <span class="n">rankvec</span> <span class="o">=</span> <span class="n">lb</span><span class="o">.</span><span class="n">lpt</span><span class="p">(</span><span class="n">allcxvec</span><span class="p">,</span> <span class="n">nhost</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Generate balanced splits</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="p">[(</span><span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">(),</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nhost</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allcxvec</span><span class="p">)):</span>
+            <span class="n">dest_rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rankvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">src</span><span class="p">[</span><span class="n">dest_rank</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">allgidvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">src</span><span class="p">[</span><span class="n">dest_rank</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">allcxvec</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">del</span> <span class="n">allgidvec</span>
+        <span class="k">del</span> <span class="n">allcxvec</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nhost</span>
+
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">py_alltoall</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">balanced_gidvec</span> <span class="o">=</span> <span class="n">dest</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">balanced_cxvec</span> <span class="o">=</span> <span class="n">dest</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">dest</span>
+
+    <span class="k">return</span> <span class="n">balanced_gidvec</span><span class="p">,</span> <span class="n">balanced_cxvec</span>
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">gidvec</span><span class="p">):</span>
+    <span class="n">cxvec</span> <span class="o">=</span> <span class="n">cx</span><span class="p">(</span><span class="n">gidvec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">current distribution&quot;</span><span class="p">)</span>
+    <span class="n">ld_bal</span><span class="p">(</span><span class="n">cxvec</span><span class="p">)</span>
+
+    <span class="n">balanced_gidvec</span><span class="p">,</span> <span class="n">balanced_cxvec</span> <span class="o">=</span> <span class="n">lpt_bal</span><span class="p">(</span><span class="n">gidvec</span><span class="p">,</span> <span class="n">cxvec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">after LPT distribution&quot;</span><span class="p">)</span>
+    <span class="n">ld_bal</span><span class="p">(</span><span class="n">balanced_cxvec</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="note">
+<h3>Note:<a class="headerlink" href="#note" title="Link to this heading"></a></h3>
+<p>Use <code class="xref py py-meth docutils literal notranslate"><span class="pre">pc.py_alltoall()</span></code> to gather and redistribute <code class="xref py py-class docutils literal notranslate"><span class="pre">hoc.Vector</span></code> data among ranks.</p>
+</section>
+</section>
+<section id="using-enhanced-complexity-estimates">
+<h2>Using Enhanced Complexity Estimates<a class="headerlink" href="#using-enhanced-complexity-estimates" title="Link to this heading"></a></h2>
+<p>Better complexity proxies are possible using mechanism-level timing data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">pc</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ParallelContext</span><span class="p">()</span>
+
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;loadbal.hoc&quot;</span><span class="p">)</span>
+<span class="n">lb</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">LoadBalance</span><span class="p">()</span>
+
+<span class="n">lb</span><span class="o">.</span><span class="n">ExperimentalMechComplex</span><span class="p">()</span>  <span class="c1"># perform mechanism complexity experiments</span>
+<span class="n">pc</span><span class="o">.</span><span class="n">barrier</span><span class="p">()</span>                  <span class="c1"># synchronize all ranks</span>
+<span class="n">h</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The resulting <code class="docutils literal notranslate"><span class="pre">mcomplex.dat</span></code> file lists relative runtimes per mechanism. Subsequent calls to <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.read_mcomplex()</span></code> read this data and improve cell complexity estimation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lb</span><span class="o">.</span><span class="n">read_mcomplex</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="handling-distributed-output-safely">
+<h2>Handling Distributed Output Safely<a class="headerlink" href="#handling-distributed-output-safely" title="Link to this heading"></a></h2>
+<p>Since multiple ranks may produce output files (e.g., <code class="docutils literal notranslate"><span class="pre">mcomplex.dat</span></code>), implement serialized file writing to avoid conflicts. A typical pattern is:</p>
+<ul class="simple">
+<li><p>Compute complexities independently on all ranks in parallel.</p></li>
+<li><p>Use a single rank to write output sequentially (via MPI barriers or serialized function calls).</p></li>
+</ul>
+<p>For examples of serialized output file writing see <code class="file docutils literal notranslate"><span class="pre">ran3par.hoc</span></code> ModelDB entry 96444 procedure <cite>spikeout()</cite>.</p>
+</section>
+<section id="alternative-lpt-implementation-in-python">
+<h2>Alternative LPT Implementation in Python<a class="headerlink" href="#alternative-lpt-implementation-in-python" title="Link to this heading"></a></h2>
+<p>An efficient pure Python version of the LPT partitioning algorithm using <cite>heapq</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">heapq</span>
+
+<span class="k">def</span> <span class="nf">lpt</span><span class="p">(</span><span class="n">cx_gid_list</span><span class="p">,</span> <span class="n">npart</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assign complexity-gid pairs to npart partitions, balancing total complexity.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cx_gid_list : list of (complexity, gid)</span>
+<span class="sd">    npart : int</span>
+<span class="sd">        Number of partitions (e.g., number of ranks).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parts : list of (total_complexity, [(complexity, gid), ...])</span>
+<span class="sd">        Partitions with assigned cells and their total complexities.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cx_gid_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npart</span><span class="p">)]</span>
+    <span class="n">heapq</span><span class="o">.</span><span class="n">heapify</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">cx</span> <span class="ow">in</span> <span class="n">cx_gid_list</span><span class="p">:</span>
+        <span class="n">total_cx</span><span class="p">,</span> <span class="n">partition</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="n">partition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span>
+        <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="p">(</span><span class="n">total_cx</span> <span class="o">+</span> <span class="n">cx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">partition</span><span class="p">))</span>
+
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">parts</span>
+
+<span class="k">def</span> <span class="nf">statistics</span><span class="p">(</span><span class="n">parts</span><span class="p">):</span>
+    <span class="n">npart</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+    <span class="n">total_cx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">)</span>
+    <span class="n">max_part_cx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">)</span> <span class="k">if</span> <span class="n">parts</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">avg_part_cx</span> <span class="o">=</span> <span class="n">total_cx</span> <span class="o">/</span> <span class="n">npart</span> <span class="k">if</span> <span class="n">npart</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">loadbal</span> <span class="o">=</span> <span class="n">avg_part_cx</span> <span class="o">/</span> <span class="n">max_part_cx</span> <span class="k">if</span> <span class="n">max_part_cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">ncx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">)</span>
+    <span class="n">max_cx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cx</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span> <span class="k">for</span> <span class="n">cx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">parts</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;loadbal=</span><span class="si">{</span><span class="n">loadbal</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2"> total_cx=</span><span class="si">{</span><span class="n">total_cx</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2"> npart=</span><span class="si">{</span><span class="n">npart</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;ncx=</span><span class="si">{</span><span class="n">ncx</span><span class="si">}</span><span class="s2"> max_part_cx=</span><span class="si">{</span><span class="n">max_part_cx</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2"> max_cx=</span><span class="si">{</span><span class="n">max_cx</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">cx</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">lpt</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cx</span><span class="p">),</span> <span class="s1">&#39;complexity items:&#39;</span><span class="p">,</span> <span class="n">cx</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="s1">&#39;LPT partitions:&#39;</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="workflow-suggestion">
+<h2>Workflow Suggestion<a class="headerlink" href="#workflow-suggestion" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Compute cell complexity estimates using <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.cell_complexity()</span></code> or enhanced method with <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoadBalance.ExperimentalMechComplex()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoadBalance.read_mcomplex()</span></code>.</p></li>
+<li><p>Assess load balance factor with the current cell-to-rank distribution.</p></li>
+<li><p>If imbalance is significant, consider applying LPT cell distribution algorithm to assign cells to ranks before simulation start.</p></li>
+<li><p>Optionally write a file with the LPT-based gid-to-rank mapping and modify cell instantiation accordingly.</p></li>
+<li><p>Run simulations with improved load balance and measure runtime load imbalance using MPI timing methods as shown above.</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Hines, M.L., Markram, H., Schürmann, F., 2008. Fully implicit parallel simulation of single neurons. <em>J. Comput. Neurosci.</em> 25, 439–448.
+Discusses multisplit and the LPT load balancing approach.</p></li>
+<li><p>Korf, R.E., 1998. A complete anytime algorithm for number partitioning. <em>Artificial Intelligence</em> 106(2), 181–203.
+Presents least processing time heuristic relevant to load balancing.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">h.LoadBalance</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.cell_complexity()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.ExperimentalMechComplex()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.LoadBalance.read_mcomplex()</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.ParallelContext</span></code></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For models with large heterogeneity, measuring and optimizing load balance prior to production runs can materially improve parallel performance.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3628">https://neuron.yale.edu/phpBB/viewtopic.php?t=3628</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

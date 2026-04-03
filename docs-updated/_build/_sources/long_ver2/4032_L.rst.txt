@@ -1,0 +1,77 @@
+Multiple Values Assignment to Arrays in hoc and Python
+=========================================================
+
+When working with arrays or sequences of numeric values in NEURON's hoc language, it is recommended to use the :class:`Vector` class instead of plain C-style arrays (e.g., `double arr[n]`). The :class:`Vector` class provides convenient methods for initialization, manipulation, and printing.
+
+Assigning Multiple Values to a hoc Vector
+------------------------------------------
+
+To create and initialize a :class:`Vector` with multiple values at once, follow these steps:
+
+.. code-block:: hoc
+
+    // Declare an objref to hold a Vector instance
+    objref length_neuron
+    // Create a new empty Vector
+    length_neuron = new Vector()
+    // Insert values starting at index 0; insrt arguments are the values
+    length_neuron.insrt(0, 40, 56, 64, 70)
+
+You can then use
+
+.. code-block:: hoc
+
+    length_neuron.printf()
+
+to display the stored values and the vector length.
+
+This avoids element-wise assignment using loops and is more idiomatic in hoc.
+
+Working with Python instead of hoc arrays
+-----------------------------------------
+
+If you prefer the Python interface to NEURON, you can directly create and manipulate numpy arrays or Python lists to hold multiple values.
+
+For example:
+
+.. code-block:: python
+
+    from neuron import h
+    import numpy as np
+
+    # Create a Python list or numpy array of neuron lengths
+    length_neuron = [40, 56, 64, 70]
+
+    # Convert Python list to hoc Vector if needed
+    vec = h.Vector(length_neuron)
+
+Note that the hoc :class:`Vector` and Python lists or numpy arrays can be converted back and forth for convenient manipulation.
+
+Recommended Practices
+----------------------
+
+- Avoid using fixed-size C-style arrays in hoc (e.g., `double arr[n]`).
+- Use :class:`Vector` methods like :meth:`Vector.insrt` for initializing multiple values efficiently.
+- Use :meth:`Vector.printf` to output contents for debugging.
+- When possible, prefer Python with NEURON’s Python interface for more flexible array manipulation.
+
+.. note::
+
+   For detailed information about the hoc :class:`Vector` class and its methods such as :meth:`Vector.insrt` and :meth:`Vector.printf`, see the NEURON Programmer's Reference Manual on Vectors.
+
+Summary
+--------
+
+| hoc approach                     | Python approach                |
+|---------------------------------|-------------------------------|
+| Use :class:`Vector` with :meth:`insrt`   | Use Python lists or numpy arrays |
+| Example:                        | Example:                      |
+| .. code-block:: hoc             | .. code-block:: python        |
+|                               |                               |
+|    objref v                   |    length_neuron = [40, 56, 64, 70]  |
+|    v = new Vector()           |    vec = h.Vector(length_neuron) |
+|    v.insrt(0, 40, 56, 64, 70) |                               |
+
+This method efficiently sets multiple values into an array-like structure in just a couple of lines without looping.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4032 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4032>`_

@@ -1,0 +1,72 @@
+Units for Currents in NEURON
+=============================
+
+When defining ion currents in mod files, it is important to use the units expected by NEURON to avoid errors and confusion.
+
+Currents Declared in USEION Statements
+--------------------------------------
+
+Currents declared in the WRITE clause of :keyword:`USEION` statements must always be in units of milliamperes per square centimeter (mA/cm²). NEURON expects this unit for all such currents to maintain consistency.
+
+If you need to work with currents in other units (for example, nanoamperes per square centimeter, nA/cm²), you should:
+
+1. Declare the current variable with units mA/cm² in the :keyword:`NEURON` block via :attr:`.WRITE` in a :keyword:`USEION` statement.
+
+2. Declare an additional surrogate variable in the :keyword:`NEURON` block with the desired units (e.g., nA/cm²).
+
+3. Specify the units for both variables in the :keyword:`ASSIGNED` block.
+
+4. Convert between the two variables with the appropriate scale factor in the :keyword:`BREAKPOINT` block or where the current is assigned.
+
+Example
+~~~~~~~
+
+.. code-block:: hoc
+
+   NEURON {
+       SUFFIX calcium_channel
+       USEION ca READ eca WRITE ica
+       RANGE i
+   }
+
+.. code-block:: nrnlang
+
+   ASSIGNED {
+       ica (mA/cm2)  : Current passed to NEURON, must be mA/cm²
+       i   (nA/cm2)  : Surrogate current variable in desired units
+       eca (mV)
+   }
+
+.. code-block:: nrnlang
+
+   BREAKPOINT {
+       ica = expression_that_returns_current_in_mA_per_cm2
+       i = ica * 1e6  : Convert mA/cm² to nA/cm² -> 1 mA/cm² = 1,000,000 nA/cm²
+   }
+
+Alternatively, if you have an expression in nA/cm² and want to assign ica accordingly:
+
+.. code-block:: nrnlang
+
+   BREAKPOINT {
+       i = expression_that_returns_current_in_nA_per_cm2
+       ica = i * 1e-6  : Convert nA/cm² to mA/cm²
+   }
+
+Notes
+~~~~~
+
+- Always verify your units using the :cmd:`modlunit` tool to detect any inconsistencies or mistakes in unit conversions.
+
+- NEURON's default units (mA/cm² for currents) stem from standard conventions in membrane biophysics.
+
+- Although biological currents are often measured in nanoamperes (nA) and cell dimensions in micrometers (µm), using mA/cm² aligns with decades of electrophysiological literature and the internal conventions of NEURON.
+
+Summary
+-------
+
+.. note::
+
+   Declare currents written by :keyword:`USEION` in mA/cm². To work with other units, use surrogate variables with explicit conversions and unit declarations in your mod files. This practice ensures consistency and prevents unit errors in simulations.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1243 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1243>`_

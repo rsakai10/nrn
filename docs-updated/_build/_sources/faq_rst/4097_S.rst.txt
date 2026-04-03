@@ -1,0 +1,34 @@
+Extending Single-Compartment to Multi-Compartment Models
+=========================================================
+
+When extending a single-compartment Hodgkin-Huxley (HH) model to a multi-compartmental model, it is common to insert appropriate mechanisms into different neuronal sections. For example:
+
+.. code-block:: hoc
+
+    // Soma and axon
+    insert hh
+    Ra = 100
+    cm = 1
+
+    // Apical dendrites
+    insert pas
+    Ra = 150
+    cm = 1
+
+    // Basilar dendrites
+    insert pas
+    Ra = 150
+    cm = 1
+
+.. note::
+
+   - :attr:`Ra` (axial resistance) and :attr:`cm` (membrane capacitance) are *section attributes*, not mechanisms, representing passive electrical properties of the neurite.
+   - The :mod:`pas` mechanism models a passive leak current, often used in dendrites to reflect their resting conductance.
+   - Differences in resting potentials between sections with :mod:`hh` and those with :mod:`pas` can cause non-uniform resting membrane potentials; adjusting parameters such as :attr:`e_pas` helps maintain physiological consistency.
+   - Adding a :class:`IClamp` or other point process allows current injection for stimulation.
+
+.. seealso::
+
+   :class:`Section`, :mod:`hh`, :mod:`pas`, :attr:`Ra`, :attr:`cm`, :class:`IClamp`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4097 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4097>`_

@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sections Connectivity and Electrical Properties &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Sections Connectivity and Electrical Properties</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq_rst/4411_S.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sections-connectivity-and-electrical-properties">
+<h1>Sections Connectivity and Electrical Properties<a class="headerlink" href="#sections-connectivity-and-electrical-properties" title="Link to this heading"></a></h1>
+<p>Sections in NEURON models are connected end-to-end via their 0 and 1 ends, with the axial resistance (<span class="math notranslate nohighlight">\(R_a\)</span>) representing the resistor between segments. The equivalent circuit of connected sections resembles cylindrical cable segments joined by axial resistors as shown in <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section" title="Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a> diagrams (cf. The NEURON Book, Fig. 5.6D).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Total membrane capacitance is the integral of capacitance over the entire cell surface and can be calculated by summing capacitances of all segments across sections. However, this does <em>not</em> imply that membrane capacitances or resistances are simply in parallel, because finite axial resistivity separates membrane patches.</p>
+</div>
+<section id="input-resistance-and-membrane-resistance">
+<h2>Input Resistance and Membrane Resistance<a class="headerlink" href="#input-resistance-and-membrane-resistance" title="Link to this heading"></a></h2>
+<ul>
+<li><p>The input resistance (<span class="math notranslate nohighlight">\(R_{in}\)</span>) is location-dependent and cannot be computed by directly combining resistances of individual sections with parallel or series formulas due to complex morphology and axial resistance.</p></li>
+<li><p>Membrane resistance of an isolated compartment with only passive conductance (<span class="math notranslate nohighlight">\(g_{pas}\)</span>) can be approximated as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">h</span><span class="o">.</span><span class="n">g_pas</span><span class="p">[</span><span class="n">seg</span><span class="o">.</span><span class="n">x</span><span class="p">]</span>  <span class="c1"># specific membrane resistance (ohm cm²)</span>
+<span class="n">Rin_compartment</span> <span class="o">=</span> <span class="n">rm</span> <span class="o">/</span> <span class="n">seg</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>  <span class="c1"># Input resistance approximation for that compartment</span>
+</pre></div>
+</div>
+</li>
+<li><p>For the entire model or complex cells, measure <code class="xref py py-meth docutils literal notranslate"><span class="pre">Rin()</span></code> by applying current and measuring steady-state voltage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stim</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># nA</span>
+<span class="n">h</span><span class="o">.</span><span class="n">finitialize</span><span class="p">(</span><span class="o">-</span><span class="mi">65</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">continuerun</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">Rin</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_final</span> <span class="o">-</span> <span class="n">v_rest</span><span class="p">)</span> <span class="o">/</span> <span class="n">stim</span><span class="o">.</span><span class="n">amp</span>  <span class="c1"># Ohm&#39;s law</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="membrane-time-constant-tau-m">
+<h2>Membrane Time Constant (<span class="math notranslate nohighlight">\(\tau_m\)</span>)<a class="headerlink" href="#membrane-time-constant-tau-m" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Defined as <span class="math notranslate nohighlight">\(\tau_m = R_m C_m\)</span> using <em>specific</em> membrane resistance (<span class="math notranslate nohighlight">\(R_m\)</span>, ohm cm²) and <em>specific</em> membrane capacitance (<span class="math notranslate nohighlight">\(C_m\)</span>, F/cm²), giving units of time (s).</p></li>
+<li><p>Because increasing surface area proportionally increases capacitance and decreases resistance, <span class="math notranslate nohighlight">\(\tau_m\)</span> is independent of membrane area.</p></li>
+<li><p>In multi-compartment models, <span class="math notranslate nohighlight">\(\tau_m\)</span> for the whole neuron is not a single value but a combination of exponentials reflecting cable properties. Numeric simulation and exponential fitting are needed rather than direct calculation.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section" title="Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a>, <a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.connect" title="Section.connect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.connect()</span></code></a>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">h.g_pas</span></code>, NEURON book chapter on cable theory.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4411">https://neuron.yale.edu/phpBB/viewtopic.php?t=4411</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

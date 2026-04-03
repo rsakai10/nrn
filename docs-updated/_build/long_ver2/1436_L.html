@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arrays as RANGE Variables in NMODL &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Arrays as RANGE Variables in NMODL</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1436_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="arrays-as-range-variables-in-nmodl">
+<h1>Arrays as RANGE Variables in NMODL<a class="headerlink" href="#arrays-as-range-variables-in-nmodl" title="Link to this heading"></a></h1>
+<p>When defining STATE variables as arrays in a <code class="xref std std-keyword docutils literal notranslate"><span class="pre">STATE</span></code> block within an NMODL mechanism, these elements are automatically treated as RANGE variables. This means that individual elements of the array are accessible from hoc or Python without the need for explicit RANGE declarations.</p>
+<section id="accessing-array-state-variables-from-hoc-or-python">
+<h2>Accessing Array STATE Variables from hoc or Python<a class="headerlink" href="#accessing-array-state-variables-from-hoc-or-python" title="Link to this heading"></a></h2>
+<p>Given a mechanism with an array STATE variable, for example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NEURON {
+    SUFFIX cadifus
+    ...
+    DEFINE Nannuli 4
+    ...
+    STATE {
+        ca[Nannuli]       (mM) &lt;1e-10&gt;
+        CaBuffer[Nannuli] (mM)
+        Buffer[Nannuli]   (mM)
+    }
+}
+</pre></div>
+</div>
+<p>Each element of the array (e.g., <cite>ca[0]</cite> through <cite>ca[3]</cite>) can be accessed from hoc or Python via the syntax:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>ca_cadifus[index](segment)
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ca</span></code> is the STATE variable name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cadifus</span></code> is the mechanism suffix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code> is the zero-based index into the array.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">segment</span></code> is the section/location (range variable) at which the variable is accessed.</p></li>
+</ul>
+<p>For example, to access the first annulus calcium concentration at segment <code class="docutils literal notranslate"><span class="pre">seg</span></code>:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>ca_cadifus[0](seg)
+</pre></div>
+</div>
+<p>or in Python with NEURON’s nrnpython interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">seg</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># example segment</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">ca_cadifus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This applies similarly for other array STATE variables such as <code class="docutils literal notranslate"><span class="pre">CaBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">Buffer</span></code>.</p>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>There is no need to define separate RANGE variables for each array element. All elements of array STATE variables are automatically exposed as RANGE variables.</p></li>
+<li><p>The hoc or Python name for an array STATE variable is constructed by appending the mechanism suffix after an underscore (e.g., <code class="docutils literal notranslate"><span class="pre">ca_cadifus</span></code>), then indexing with square brackets.</p></li>
+<li><p>This behavior enables convenient looping and indexing within kinetic or diffusion mechanisms while preserving external accessibility.</p></li>
+<li><p>To discover accessible variables of a mechanism, insert it into a model section, then use NEURON’s GUI Plot what? feature or inspect the mechanism programmatically.</p></li>
+</ul>
+</section>
+<section id="recording-array-state-variables">
+<h2>Recording Array STATE Variables<a class="headerlink" href="#recording-array-state-variables" title="Link to this heading"></a></h2>
+<p>While array STATE variables are accessible individually, recording them with <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Vector.record()</span></code> requires specifying each indexed element separately. Recording cannot multiplex all array elements into a single vector directly; you must record each element into its own vector:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>obj = &lt;segment or point process&gt;
+vec0 = new Vector().record(&amp;obj.ca_cadifus[0](0.5))
+vec1 = new Vector().record(&amp;obj.ca_cadifus[1](0.5))
+...
+</pre></div>
+</div>
+<p>or in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">seg</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">vec0</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">seg</span><span class="o">.</span><span class="n">ca_cadifus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">vec1</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">seg</span><span class="o">.</span><span class="n">ca_cadifus</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># and so forth for each index</span>
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Array STATE variables declared in the :keyword:`STATE` block are automatically RANGE variables accessible as ``var_mechsuffix[index](segment)``.</strong></p></li>
+<li><p><strong>No explicit RANGE declaration for array elements is necessary or permitted.</strong></p></li>
+<li><p><strong>Recording array STATE variables requires creating separate record vectors for each element.</strong></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This approach greatly simplifies working with diffusion or kinetic mechanisms involving multiple shells or multiple diffusible substances, avoiding the complexity of defining many separate RANGE variables for each shell and molecule.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1436">https://neuron.yale.edu/phpBB/viewtopic.php?t=1436</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

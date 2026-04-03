@@ -1,0 +1,186 @@
+Parallel Assignment of Large Arrays to Multiple Instances of an NMODL Mechanism
+===================================================================================
+
+When working with large arrays in NMODL mechanisms that are instantiated multiple times, setting the array values individually in each instance can be very inefficient, especially if the array values are identical and constant across all instances. This section explains how to efficiently share a single large array among many mechanism instances using pointers, avoiding repeated data copying.
+
+Problem Context
+---------------
+
+- You have an NMODL mechanism that includes an array (e.g., `arr[NUM_VALS]`).
+- Multiple instances of this mechanism are created on different sections.
+- The array values are identical and fixed for all instances.
+- Setting the array values in Python with nested loops (over instances and array indices) is slow and inefficient.
+- Goal: Assign a single large array once and have all mechanism instances refer to it.
+
+
+Inefficient Method: Setting Each Instance’s Array Individually
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Example minimal mechanism (`ARRAY_TEST.mod`):
+
+.. code-block:: none
+
+    DEFINE NUM_VALS 100
+
+    NEURON {
+        POINT_PROCESS ARRAY_TEST
+        RANGE arr
+    }
+
+    ASSIGNED {
+        arr[NUM_VALS]
+    }
+
+Corresponding Python code to set one instance’s array values slowly:
+
+.. code-block:: python
+
+    import numpy as np
+    from neuron import h
+
+    # Create mechanism instances
+    mech1 = h.ARRAY_TEST(s0(0.5))
+    mech2 = h.ARRAY_TEST(s0(0.4))
+
+    # Create numpy array
+    numpy_array = np.arange(100)
+
+    # Set values for one instance (slow for large arrays and many instances)
+    for i in range(100):
+        mech1.arr[i] = numpy_array[i]
+
+This approach performs repeated Python-to-NMODL data transfers, which scale poorly with array size and number of instances.
+
+Efficient Approach: Sharing a Single Array via POINTER and VERBATIM
+-------------------------------------------------------------------
+
+### Idea
+
+- Store the array in a single numpy array in Python.
+- Obtain a pointer to the numpy array data using :func:`neuron.numpy_element_ref`.
+- Pass the pointer to each mechanism instance's POINTER variable.
+- Use a VERBATIM block in the NMODL to access array elements directly through the pointer.
+
+### Benefits
+
+- No copying of the array data per instance — all instances point to the same memory.
+- Only one array is set once in Python.
+- Fast, scalable to very large arrays and many instances.
+
+Implementation Details
+----------------------
+
+### 1. Modify the NMODL mechanism to include a POINTER and an output variable
+
+Example `ARRAY_TEST.mod`:
+
+.. code-block:: none
+
+    NEURON {
+        POINT_PROCESS ARRAY_TEST
+        POINTER foo
+        RANGE val
+    }
+
+    UNITS {
+        (mV) = (millivolt)
+    }
+
+    ASSIGNED {
+        v            (mV)
+        foo
+        val          (1)
+    }
+
+    BREAKPOINT {
+        VERBATIM
+            // Access shared array via pointer foo, indexed by voltage cast to int plus offset of 100
+            val = _p_foo[(int) _v + 100];
+        ENDVERBATIM
+    }
+
+Notes:
+
+- `foo` is declared as a POINTER.
+- Inside the VERBATIM block, the pointer `foo` is referenced as `_p_foo`.
+- All other variables use a prefixed underscore (`_`) inside VERBATIM; here voltage is `_v`.
+- Adjust indexing inside the VERBATIM block as needed.
+
+### 2. Python script to assign the pointer to multiple mechanism instances
+
+.. code-block:: python
+
+    import numpy as np
+    from neuron import h, numpy_element_ref
+
+    # Create sections
+    soma = h.Section(name='soma')
+    dend = h.Section(name='dend')
+
+    # Instantiate mechanisms on segments
+    pps = [h.ARRAY_TEST(seg) for seg in (soma(0.5), dend(0.5))]
+
+    # Create large shared data array (can be very large, e.g., millions of entries)
+    data = np.random.random(200)
+
+    # Get pointer to numpy array data (start index 0)
+    ptr = numpy_element_ref(data, 0)
+
+    # Assign the pointer to each point process's POINTER variable 'foo'
+    for pp in pps:
+        pp._ref_foo = ptr
+
+    # Set some example voltage values to test indexing
+    soma(0.5).v = 14
+    dend(0.5).v = -43
+
+    # Advance the simulation for mechanisms to update val
+    h.fadvance()
+
+    # Validate matching values from NEURON and numpy array
+    for pp in pps:
+        seg = pp.get_segment()
+        idx = int(seg.v) + 100
+        print(f"{seg} {pp.val} {data[idx]}")
+
+Output example (random data, values may differ):
+
+.. code-block:: none
+
+    soma(0.5) 0.28198634180594195 0.28198634180594195
+    dend(0.5) 0.47065239091128874 0.47065239091128874
+
+### 3. Alternative for NEURON versions prior to 7.7.2
+
+Older NEURON versions do not support setting the pointer via attribute (`pp._ref_foo`).
+
+Instead, use :meth:`h.setpointer`:
+
+.. code-block:: python
+
+    for pp in pps:
+        h.setpointer(ptr, 'foo', pp)
+
+Important Notes
+---------------
+
+- The pointer must remain valid in Python scope for the duration of the simulation; do not free or overwrite the numpy array while pointer(s) refer to it.
+- Access to the array in VERBATIM must obey C pointer syntax (`_p_<pointer_name>`).
+- This method applies when the array elements represent indexed values, not time-varying variables.
+- If the underlying array is large and constant during simulation, this approach is efficient.
+- If you require a time-varying GLOBAL variable synchronized across many mechanisms, consider using a density mechanism with a GLOBAL variable and :meth:`Vector.play`. For static arrays, POINTER+VERBATIM is preferred.
+
+Summary
+-------
+
+To efficiently share a large, constant array across many instances of the same NMODL mechanism:
+
+- Store array once in Python as a numpy array.
+- Obtain a pointer to the array data via :func:`neuron.numpy_element_ref`.
+- Pass the pointer to each mechanism instance’s POINTER variable (`pp._ref_foo = ptr`).
+- Read array values inside the mechanism using a VERBATIM block referencing `_p_foo`.
+- Avoid setting arrays instance-by-instance in Python loops.
+
+This method significantly reduces overhead and memory use when assigning large arrays to multiple mechanism instances.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4167 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4167>`_

@@ -1,0 +1,127 @@
+Section Connections and Equivalent Circuits in NEURON
+=====================================================
+
+.. note::
+   This section explains how sections are connected in NEURON models, the implications for equivalent electrical circuits, and how to interpret membrane capacitance, input resistance, and time constants in multicompartment models.
+
+Section Connections and Equivalent Circuits
+------------------------------------------
+
+Sections in NEURON are connected end-to-end via their 0 and 1 end points, with axial resistances representing the cytoplasmic resistance between segments. For example, two sections each with ``nseg = 1`` connected by joining the 0 end of one to the 1 end of the other, form a continuous cable with axial resistance linking their respective membrane segments.
+
+The equivalent circuit for a single section with ``nseg = 1`` is illustrated in Fig. 5.6D of *The NEURON Book*. This circuit shows membrane capacitance and resistance distributed along the membrane, coupled by axial resistances internally. Extending this concept, multiple sections connected in series form a chain of such circuits linked by their axial resistances.
+
+Interpretation of Membrane Capacitance
+--------------------------------------
+
+Total membrane capacitance is defined as the integral of membrane capacitance over the entire cell surface and is calculated by summation over segments of all sections:
+
+.. code-block:: python
+
+   total_cm = sum(seg.cm * seg.area() for sec in h.allsec() for seg in sec)
+
+This summation reflects adding capacitances distributed over the surface area, but it **does not imply these capacitances are electrically in parallel** in the equivalent circuit. Finite axial intracellular resistance and extracellular resistance prevent considering all membrane patches as purely parallel elements.
+
+.. note::
+   The total membrane capacitance differs from input capacitance as measured at a specific location, which depends on the cable properties and morphology.
+
+Input Resistance (Rin) Considerations
+------------------------------------
+
+Input resistance is commonly defined as
+
+.. math::
+   R_{in} = \\frac{r_m}{A}
+
+where ``r_m`` is the specific membrane resistance (in ohm·cm²) and ``A`` is the membrane area (in cm²).
+
+However, this formula applies only to electrotonically compact cells (anatomical length much smaller than the cable length constant). For multicompartment or extended morphologies, axial resistances significantly affect voltage responses, and thus Rin cannot be trivially computed by combining section resistances in simple parallel or series arrangements:
+
+.. code-block:: text
+
+   1 / R_total ≠ Σ (1 / R_section_i)
+
+To calculate input resistance at a specific site in a multicompartment model:
+
+- Block all active conductances except passive ones (e.g., by setting ``g_pas`` and turning off others).
+- Inject a small steady current at that site.
+- Record the steady-state voltage response.
+- Calculate Rin using Ohm's law (V/I).
+
+.. code-block:: python
+
+   sec = h.Section()
+   sec.insert('pas')
+   stim = h.IClamp(sec(0.5))
+   stim.amp = 0.001  # nA
+   stim.delay = 100
+   stim.dur = 500
+   rec_v = h.Vector().record(sec(0.5)._ref_v)
+   h.finitialize(-65)
+   h.continuerun(700)
+   voltage = rec_v[-1]
+   Rin = voltage / stim.amp  # in megaohms if units consistent
+
+Membrane resistance calculated as ``r_m / A`` represents the membrane resistance of the compartment assuming uniform passive properties and no connected compartments, not the input resistance seen by a recording electrode on a real neuron.
+
+Time Constant (tau) in Membrane Models
+--------------------------------------
+
+The membrane time constant ``tau`` is defined as
+
+.. math::
+   \\tau = r_m \cdot c_m
+
+where
+
+- ``r_m`` is the specific membrane resistance (ohm·cm²)
+- ``c_m`` is the specific membrane capacitance (farads/cm²)
+
+.. note::
+   Both ``r_m`` and ``c_m`` are specific properties normalized by membrane area.
+
+Key points:
+
+- **Units**: The product of ``r_m`` and ``c_m`` yields seconds (usually expressed in milliseconds).
+- **Surface area independence**: Increasing surface area increases total capacitance and decreases total resistance proportionally, thus the time constant remains approximately constant.
+- **Applicability**: This formula strictly applies to an electrotonically compact compartment or cell. In multicompartment models, the effective time constant is more complex due to cable filtering and spatial properties.
+
+For realistic neurons with non-compact morphologies, the voltage response to current injection is often best described by a sum of multiple exponentials. Single time constants reported experimentally reflect effective properties at specific locations and experimental conditions.
+
+Summary of Calculation Recommendations
+--------------------------------------
+
+- **Total membrane capacitance**: Sum over all membrane surface areas and segment-specific capacitances.
+- **Input resistance at a point**: Measure via current clamp and voltage response simulation; do **not** sum section resistances algebraically.
+- **Membrane time constant for a compartment**:
+
+  .. code-block:: text
+
+     tau = rm * cm   (using specific membrane resistance and capacitance values)
+
+- **Effective neuronal time constants**: Extract by fitting voltage responses from simulations rather than direct calculation.
+
+Example HOC Snippet to Measure Rin at a Segment
+-----------------------------------------------
+
+.. code-block:: hoc
+
+   access soma
+   forall insert pas
+   objref stim, rec_v
+   stim = new IClamp(0.5)
+   stim.amp = 0.001 // nA
+   stim.delay = 100
+   stim.dur = 500
+   rec_v = new Vector()
+   rec_v.record(&soma(0.5).v(0))
+   init(-65)
+   run(700)
+   print "Steady-state voltage is ", rec_v.x[rec_v.size() -1]
+   print "Input resistance (MOhm) = ", rec_v.x[rec_v.size() -1] / stim.amp
+
+.. seealso::
+
+   :class:`Section`, :class:`Segment`, :meth:`Section.connect`, :func:`h.IClamp`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4411 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4411>`_

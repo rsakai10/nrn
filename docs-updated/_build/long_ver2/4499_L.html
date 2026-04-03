@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Variable Time Step Integration and Boundary Constraints with POINTERs in NMODL &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Variable Time Step Integration and Boundary Constraints with POINTERs in NMODL</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4499_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="variable-time-step-integration-and-boundary-constraints-with-pointers-in-nmodl">
+<h1>Variable Time Step Integration and Boundary Constraints with POINTERs in NMODL<a class="headerlink" href="#variable-time-step-integration-and-boundary-constraints-with-pointers-in-nmodl" title="Link to this heading"></a></h1>
+<p>When using adaptive variable time step integration in NEURON with <code class="xref py py-class docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> and <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WATCH</span></code> to enforce boundary conditions on state variables, certain performance pitfalls can arise—especially when splitting mechanisms across multiple NMODL files communicating via <code class="xref std std-keyword docutils literal notranslate"><span class="pre">POINTER</span></code>.</p>
+<p>The following discussion and examples illustrate these issues, best practices, and alternatives.</p>
+<section id="performance-impact-of-pointers-and-watch-with-variable-time-step">
+<h2>Performance Impact of POINTERs and WATCH with Variable Time Step<a class="headerlink" href="#performance-impact-of-pointers-and-watch-with-variable-time-step" title="Link to this heading"></a></h2>
+<p>Consider a mechanism that evolves two state variables, <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>, where</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> is an algebraic oscillatory function of time,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> evolves according to an ODE driven by <code class="docutils literal notranslate"><span class="pre">b</span></code>, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> is constrained to a non-negative lower bound.</p></li>
+</ul>
+<p><strong>Single MOD file approach</strong>:</p>
+<p>A combined MOD file implements both <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> states, a derivative block, and uses <code class="xref py py-class docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> with <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WATCH</span></code> to reset <code class="docutils literal notranslate"><span class="pre">a</span></code> to zero when it falls below zero.</p>
+<p>Example NMODL snippet (single file):</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS equations
+}
+
+PARAMETER {
+    b0 = 1.0
+    w = 0.628
+}
+
+STATE {
+    a b
+}
+
+BREAKPOINT {
+    SOLVE states METHOD derivimplicit
+}
+
+INITIAL {
+    a = 1.0
+    b = 1
+    net_send(0, 1)
+}
+
+DERIVATIVE states {
+    b = b0 * cos(w * t)
+    a&#39; = a * (1 - a) - b
+}
+
+NET_RECEIVE(dummy_weight) {
+    if (flag == 1) {
+        WATCH(a &lt; 0.0) 2
+    } else if (flag == 2) {
+        net_event(t)
+        a = 0.0
+    }
+}
+</pre></div>
+</div>
+<p><strong>Separate MOD files using POINTERs</strong>:</p>
+<p>Splitting the system into two mechanisms, <code class="docutils literal notranslate"><span class="pre">brain</span></code> with state <code class="docutils literal notranslate"><span class="pre">a</span></code>, and <code class="docutils literal notranslate"><span class="pre">body</span></code> with state <code class="docutils literal notranslate"><span class="pre">b</span></code>, connected by a POINTER to share the state <code class="docutils literal notranslate"><span class="pre">b</span></code> value, results in dramatic slowdowns when combined with variable time step integration and WATCH.</p>
+<p>Example NMODL for <code class="docutils literal notranslate"><span class="pre">brain.mod</span></code>:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS brain
+    POINTER b
+}
+
+ASSIGNED {
+    b
+}
+
+STATE {
+    a
+}
+
+BREAKPOINT {
+    SOLVE states METHOD derivimplicit
+}
+
+INITIAL {
+    a = 1.0
+    net_send(0, 1)
+}
+
+DERIVATIVE states {
+    a&#39; = a * (1 - a) - b
+}
+
+NET_RECEIVE(dummy_weight) {
+    if (flag == 1) {
+        WATCH(a &lt; 0.0) 2
+    } else if (flag == 2) {
+        net_event(t)
+        a = 0.0
+    }
+}
+</pre></div>
+</div>
+<p>Example NMODL for <code class="docutils literal notranslate"><span class="pre">body.mod</span></code>:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS body
+}
+
+PARAMETER {
+    b0 = 1.0
+    w = 0.628
+}
+
+STATE {
+    b
+}
+
+BREAKPOINT {
+    b = b0 * cos(w * t)
+}
+
+INITIAL {
+    b = 1
+}
+</pre></div>
+</div>
+<p>The corresponding hoc code to create model instances and connect the POINTER is:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create model
+access model
+objBrain = new brain(0.5)
+objBody = new body(0.5)
+
+setpointer objBrain.b, objBody.b
+
+cvode = new CVode(1)
+cvode.active(1)
+</pre></div>
+</div>
+<p><strong>Observation</strong>: The separate POINTER-based model runs several orders of magnitude slower under variable time step integration. This is caused by frequent self-events generated by <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WATCH</span></code> triggering <code class="xref py py-class docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code>, along with the state <code class="docutils literal notranslate"><span class="pre">a</span></code> oscillating slightly below zero, producing many tiny time steps and excessive recomputations.</p>
+</section>
+<section id="diagnosing-the-performance-issue">
+<h2>Diagnosing the Performance Issue<a class="headerlink" href="#diagnosing-the-performance-issue" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Using print statements placed at the start of <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code>, <code class="xref std std-keyword docutils literal notranslate"><span class="pre">INITIAL</span></code>, <code class="xref std std-keyword docutils literal notranslate"><span class="pre">DERIVATIVE</span></code>, and <code class="xref py py-class docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> blocks can reveal the dynamics and event invocations.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">a</span></code> is reset to zero by the self-event, the adaptive integrator often takes very small steps afterwards.</p></li>
+<li><p>Because <code class="docutils literal notranslate"><span class="pre">a</span></code> overshoots slightly below zero due to finite time steps, <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WATCH</span></code> triggers new events repeatedly, causing numerous rapid self-events and performance drops.</p></li>
+<li><p>The lack of a current assignment in the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block can suppress execution of non-SOLVE statements. Declaring a dummy <code class="xref std std-keyword docutils literal notranslate"><span class="pre">NONSPECIFIC_CURRENT</span></code> and assigning it zero forces the block to execute completely.</p></li>
+</ul>
+</section>
+<section id="best-practices-for-enforcing-boundary-constraints-in-nmodl">
+<h2>Best Practices for Enforcing Boundary Constraints in NMODL<a class="headerlink" href="#best-practices-for-enforcing-boundary-constraints-in-nmodl" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Preferred approach: Use fixed time step integration</strong> with explicit resets in the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    SUFFIX fixedstep
+}
+
+PARAMETER {
+    b0 = 1.0
+    w = 0.628
+}
+
+STATE { a b }
+
+BREAKPOINT {
+    SOLVE states METHOD derivimplicit
+    if (a &lt; 0) {
+        a = 0.0
+    }
+    b = b0 * cos(w * t)
+}
+
+INITIAL {
+    a = 1.0
+}
+
+DERIVATIVE states {
+    a&#39; = a * (1 - a) - b
+}
+</pre></div>
+</div>
+<p>Use hoc commands:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create model
+access model
+insert fixedstep
+</pre></div>
+</div>
+<p>This method avoids the need for WATCH and NET_RECEIVE self-events and runs efficiently with fixed step integrators.</p>
+</li>
+<li><p><strong>Variable time step integration with boundary constraints is problematic</strong> if using WATCH to detect state crossings and reset states via NET_RECEIVE, especially if the states oscillate near the boundary.</p></li>
+<li><p><strong>Alternative: Replace hard resetting with smooth squashing functions</strong> on the forcing term:</p>
+<p>Instead of hard resets, modulate the forcing function with a sigmoid-like logistic function dependent on the state variable <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<p>For example, rewrite the ODE as:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>FUNCTION expit(x) {
+    expit = 1 / (1 + exp(-x))
+}
+
+PARAMETER {
+    b0 = 100.0
+    w = 0.628
+    k = 200    : steepness parameter
+    c = 0.03   : center parameter
+}
+
+FUNCTION b(x) {
+    b = b0 * cos(w * x)
+}
+
+STATE { a }
+
+BREAKPOINT {
+    SOLVE states METHOD derivimplicit
+}
+
+INITIAL {
+    a = 1.0
+}
+
+DERIVATIVE states {
+    a&#39; = a * (1 - a) - b(t) * expit(k*(a - c))
+}
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This smoothly attenuates the forcing term when <code class="docutils literal notranslate"><span class="pre">a</span></code> approaches zero, preventing oscillatory overshoot and enabling efficient variable time step integration without requiring WATCH or NET_RECEIVE.</p>
+<ol class="arabic simple" start="4">
+<li><p><strong>NOTE on POINTER overhead</strong>:</p>
+<ul class="simple">
+<li><p>POINTERs by themselves do not substantially degrade computational efficiency.</p></li>
+<li><p>In cases examined, the dramatic slowdown was due to interaction of WATCH-triggered self events with variable time step dynamics near discontinuities.</p></li>
+<li><p>POINTERs may amplify complexity but are not the primary cause.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="summary-and-recommendations">
+<h2>Summary and Recommendations<a class="headerlink" href="#summary-and-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>If hard boundary constraints require resetting state variables based on inequality conditions, consider fixed time step integration with conditional resets inside the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block.</p></li>
+<li><p>When variable time step integration is necessary, replacing hard resets by smooth transformations (e.g., logistic squashing functions) of the driving forces or states can mitigate numerical instabilities and excessive event generation.</p></li>
+<li><p>The use of <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WATCH</span></code> events with <code class="xref py py-class docutils literal notranslate"><span class="pre">NET_RECEIVE</span></code> to enforce boundaries causes many self-events if the state oscillates near the boundary, leading to very small time steps and computational inefficiency.</p></li>
+<li><p>POINTERs themselves have minimal effect on simulation speed; performance issues mostly stem from other model features combined with adaptive integrators.</p></li>
+<li><p>To ensure full execution of <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> blocks containing <code class="xref std std-keyword docutils literal notranslate"><span class="pre">SOLVE</span></code>, declare a dummy <code class="xref std std-keyword docutils literal notranslate"><span class="pre">NONSPECIFIC_CURRENT</span></code> variable and assign it zero within the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">BREAKPOINT</span></code> block.</p></li>
+</ul>
+<p>Example to force BREAKPOINT block execution:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>ASSIGNED { dummy }
+NEURON { NONSPECIFIC_CURRENT dummy }
+
+BREAKPOINT {
+    SOLVE states METHOD derivimplicit
+    dummy = 0
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Always carefully monitor the time step size and event frequency in simulations combining WATCH, NET_RECEIVE, POINTER, and variable time step integration as behavior near discontinuities may severely impact performance.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../progref-1/simctrl/cvode.html#CVode" title="CVode"><code class="xref py py-class docutils literal notranslate"><span class="pre">CVode</span></code></a>, <code class="xref std std-keyword docutils literal notranslate"><span class="pre">WATCH</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">NetCon.setpointer()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4499">https://neuron.yale.edu/phpBB/viewtopic.php?t=4499</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+Inhibition and Synaptic Weight Selection in NEURON
+===================================================
+
+When modeling inhibitory synaptic connections in NEURON, selecting an appropriate synaptic weight is crucial for obtaining meaningful simulations. This section clarifies the interpretation of synaptic weights and provides guidance on choosing them in biophysical neuron models.
+
+Synaptic Weight Interpretation
+------------------------------
+
+The meaning of the synaptic weight parameter depends on the synapse and cell model used:
+
+- **Artificial Spiking Cells (e.g., IntFire1, IntFire2, IntFire4)**:
+  
+  - Weight represents changes in the activation variable *m*, analogous to membrane potential.
+  
+  - For :class:`IntFire1`, a synaptic event causes an instantaneous jump:  
+    .. code-block:: python
+  
+        m += weight
+  
+  - For :class:`IntFire2` and :class:`IntFire4`, a synaptic weight produces a smooth, time-dependent conductance change with a peak magnitude equal to the absolute value of the weight (sign determining excitation or inhibition).
+
+- **Conductance-Based Synapses onto Biophysical Models (e.g., ExpSyn, Exp2Syn)**:
+  
+  - Weight specifies the *maximum conductance change* (unit: microsiemens, µS) induced by a synaptic event.
+  
+  - Conductance weights must be non-negative (≥ 0).
+  
+  - Whether the synapse is excitatory or inhibitory is determined by its reversal (equilibrium) potential, not the weight sign.
+
+Effects of Large Synaptic Weights
+---------------------------------
+
+Large synaptic weights (e.g., `weight = 10000 µS`) do not have an absolute physiological meaning in isolation because the postsynaptic effect depends on:
+
+- The synaptic reversal potential relative to the postsynaptic resting potential.
+- The time course (rise and decay) of the synaptic conductance.
+- The location of the synapse on the postsynaptic neuron (electrotonic distance from the soma or spike initiation zone).
+- The biophysical properties of the postsynaptic cell (membrane resistance, cytoplasmic resistivity).
+
+A very large conductance may saturate the postsynaptic effect or have little impact if the driving force (difference between membrane potential and synaptic reversal potential) is small.
+
+Choosing Synaptic Weights
+-------------------------
+
+There is no universal "correct" synaptic weight; selection depends on modeling goals, experimental data, and network scale. Consider the following guidelines:
+
+- Start with conductance values reported in experimental literature for synapses of the cell type you model.
+- Adjust weights to produce realistic postsynaptic responses (e.g., inhibitory postsynaptic potentials or IPSPs of physiological amplitude).
+- Verify that network firing behavior is within expected regimes (e.g., balanced excitation and inhibition).
+- Use small incremental adjustments and observe the effect on the postsynaptic firing rate and membrane potential.
+- Account for the number of synapses and neuron groups; weights often scale inversely with the number of inputs.
+
+Example: Creating and Connecting an Inhibitory Synapse in Python
+---------------------------------------------------------------
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Create two cells: presynaptic inhibitory cell and postsynaptic target cell
+    presyn = h.Section(name='presyn')
+    postsyn = h.Section(name='postsyn')
+
+    # Insert Hodgkin-Huxley channels in postsynaptic cell
+    postsyn.insert('hh')
+
+    # Create an inhibitory Exp2Syn synapse at the postsynaptic soma
+    syn = h.Exp2Syn(postsyn(0.5))
+    syn.e = -80  # reversal potential for GABAergic synapse (inhibitory)
+    syn.tau1 = 0.5  # rise time (ms)
+    syn.tau2 = 5.0  # decay time (ms)
+
+    # Create a NetStim to generate presynaptic spikes
+    stim = h.NetStim()
+    stim.number = 5
+    stim.start = 10
+    stim.interval = 20
+
+    # Create a NetCon to connect presynaptic activity to synapse
+    nc = h.NetCon(stim, syn)
+    nc.weight[0] = 0.001  # synaptic weight in microsiemens (uS)
+
+    # Set up recording of postsynaptic membrane potential
+    vec = h.Vector()
+    vec.record(postsyn(0.5)._ref_v)
+
+    # Run simulation
+    h.finitialize(-65)
+    h.continuerun(100)
+
+Example: Creating and Connecting an Inhibitory Synapse in HOC
+-------------------------------------------------------------
+
+.. code-block:: hoc
+
+    create presyn, postsyn
+
+    postsyn {
+        insert hh
+    }
+
+    objref syn, stim, nc
+
+    syn = new Exp2Syn(0.5)
+    syn.e = -80   // GABA reversal potential (mV)
+    syn.tau1 = 0.5
+    syn.tau2 = 5
+
+    stim = new NetStim()
+    stim.number = 5
+    stim.start = 10
+    stim.interval = 20
+
+    nc = new NetCon(stim, syn)
+    nc.weight[0] = 0.001  // synaptic weight (uS)
+
+Further Considerations
+----------------------
+
+.. note::
+
+   - The synaptic weight parameter is usually in microsiemens for conductance-based synapses in NEURON.
+   - Negative weights are not used for conductance synapses; inhibition is controlled via reversal potential.
+   - The impact of synaptic weight on postsynaptic activity depends on the biophysical and anatomical context.
+   - Consult the :class:`ExpSyn`, :class:`Exp2Syn`, and artificial cell classes (:class:`IntFire1`, etc.) documentation for specific synapse behavior.
+   - Consider experimental data and model hypotheses when determining values.
+
+.. seealso::
+
+   :class:`ExpSyn`, :class:`Exp2Syn`, :class:`NetCon`, :class:`IntFire1`, :class:`IntFire2`, :class:`IntFire4`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1168 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1168>`_

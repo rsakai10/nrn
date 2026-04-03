@@ -1,0 +1,127 @@
+Vector.play Memory-Efficient Implementation for Scaling Synaptic Conductances
+===============================================================================
+
+When simulating many synapses that share the same temporal conductance pattern scaled differently, using many separate scaled vectors with :class:`h.Vector.play` can consume excessive memory. This documentation describes a memory-efficient approach where a single vector is played into all synapses, and each synapse applies its own scale factor internally.
+
+Problem Description
+-------------------
+
+Suppose you have a synaptic conductance waveform (e.g., loaded from a file as a NumPy array) defined by a vector `syn_gmax_vec`:
+
+.. code-block:: python
+
+    import numpy as np
+    signal = np.loadtxt('some_trace.txt')  # recorded or precomputed conductance time course
+    syn_gmax_vec = h.Vector(signal)
+
+You want to apply scaled versions of this waveform to many synapses, where the scale differs per synapse (e.g., normalized by the number of incoming connections for that cell). A naive approach is to create many scaled vectors:
+
+.. code-block:: python
+
+    syn_veclist = []
+    for cell in cellList:
+        norm_vec = syn_gmax_vec * (1.0 / cell.inDeg)  # scale factor per cell
+        syn_veclist.append(norm_vec)
+        syn_veclist[-1].play(cell.synlist[0]._ref_gmax, h.dt)
+
+This requires storing a separate scaled vector for each synapse, which uses a lot of memory for long simulations and large networks.
+
+Solution: Single Vector with Per-Synapse Scaling in NMODL
+---------------------------------------------------------
+
+Instead of scaling in Python and storing multiple vectors, implement a synaptic mechanism that exposes two parameters:
+
+- `gnorm` — A conductance variable driven by a vector played from the single shared vector.
+- `k` — A scale factor unique to each synapse instance.
+
+The synaptic conductance (`gs`) is computed as the product:
+
+.. math::
+
+    g_s = k \cdot g_{norm}
+
+You then play the single shared vector into all synapses' `gnorm` variable, and set the scale parameter `k` individually.
+
+Example NMODL Implementation: VecSyn
+------------------------------------
+
+Below is an example NMODL synapse `VecSyn.mod` implementing this approach:
+
+.. code-block:: none
+
+    COMMENT
+    VecSyn: Synapse driven by Vector.play with per-instance scale.
+
+    * Actual synaptic conductance is gs = k * gnorm.
+    * gnorm (microsiemens) is the variable played by a single Vector.
+    * k is the dimensionless scale factor (set per instance).
+    * erev is the reversal potential.
+    * Conductance and current are zero or positive.
+    ENDCOMMENT
+
+    NEURON {
+       POINT_PROCESS VecSyn
+       GLOBAL gnorm  : (parameter but GLOBAL to remind user)
+       RANGE k, erev, gs
+       NONSPECIFIC_CURRENT i
+    }
+
+    PARAMETER {
+       gnorm = 0 (microsiemens)
+       k = 1 (1)
+       erev = 0 (millivolt)
+    }
+
+    ASSIGNED {
+       gs (microsiemens)
+       i (nanoamp)
+       v (millivolt)
+    }
+
+    BREAKPOINT {
+       gs = k * gnorm
+       if (gs < 0) {
+         i = 0
+       } else {
+         i = gs * (v - erev)
+       }
+    }
+
+Usage in Python
+---------------
+
+Load the synapse mechanism and create synapse instances, then play the shared vector into all synapses’ `gnorm` variables. Set `k` to scale conductance per synapse:
+
+.. code-block:: python
+
+    syn_gmax_vec = h.Vector(signal)  # single vector loaded once
+
+    synapse_list = []
+    for cell in cellList:
+        syn = h.VecSyn(cell.soma(0.5))  # example location
+        syn.k = 1.0 / cell.inDeg        # unique scale factor
+        syn.erev = 0                    # set reversal potential as needed
+        synapse_list.append(syn)
+        syn_gmax_vec.play(syn._ref_gnorm, h.dt)
+
+Benefits
+--------
+
+- Only one long vector is stored in memory rather than multiple scaled copies.
+- Each synapse can be scaled individually via parameter `k` without extra memory.
+- `Vector.play` remains efficient as it is only called once per time step.
+- The synapse NMODL code ensures current goes to zero if scaled conductance is negative.
+
+Notes
+-----
+
+- Make sure the vector time step (:attr:`h.dt`) matches the simulation time step.
+- Choose an appropriate synaptic location to instantiate the `VecSyn` point process.
+- This method applies best when the waveform is fixed and shared, scaled by constants.
+- If scale factors change dynamically, additional mechanisms are needed.
+
+.. seealso::
+
+   :class:`h.Vector`, :meth:`h.Vector.play`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4303 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4303>`_

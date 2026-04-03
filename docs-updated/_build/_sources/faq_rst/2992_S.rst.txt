@@ -1,0 +1,46 @@
+Fano Factor Analysis of NetStim Spike Events
+=============================================
+
+The Fano factor is defined as the variance-to-mean ratio of spike counts within fixed time windows and is equal to 1 for a Poisson process. Importantly, it applies to discrete event counts rather than continuous interspike intervals (ISIs).
+
+.. note::
+   NetStim with ``noise=1`` generates spike times with exponentially distributed ISIs (a continuous distribution), so the Fano factor should be computed from spike counts in time bins, not from ISIs directly.
+
+Example HOC code to record spike times and compute the Fano factor via binned spike counts:
+
+.. code-block:: hoc
+
+    objref sti, con, spkvec, hist
+    sti = new NetStim()
+    sti.interval = 100
+    sti.start = 10
+    sti.number = 1e9  // large number to avoid limiting spike count
+    sti.noise = 1
+
+    con = new NetCon(sti, nil)
+    spkvec = new Vector()
+    con.record(spkvec)
+
+    tstop = 35000
+    load_file("stdgui.hoc")   // load stdrun library for cvode_active
+    cvode_active(1)          // enable adaptive integration for speed
+    run()
+
+    // Compute spike counts histogram over 20 ms bins and calculate Fano factor
+    hist = spkvec.histogram(0, tstop, 20)
+    print "Fano factor (variance/mean of spike counts):", hist.var()/hist.mean()
+
+Interspike intervals statistics can also be obtained efficiently using :meth:`Vector.deriv`:
+
+.. code-block:: hoc
+
+    objref isivec
+    isivec = new Vector()
+    isivec.deriv(spkvec, 1, 1)  // first difference of spike times (ISI)
+    print "Mean ISI:", isivec.mean()
+    print "ISI coefficient of variation:", isivec.stdev()/isivec.mean()
+
+.. note::
+   The Fano factor should be calculated from counts of spikes in fixed intervals (e.g. 20 ms bins), not from ISI variability.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2992 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2992>`_

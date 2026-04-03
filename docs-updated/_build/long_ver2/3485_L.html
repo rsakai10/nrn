@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spatial Discretization for Radial Diffusion of Calcium in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Spatial Discretization for Radial Diffusion of Calcium in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3485_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spatial-discretization-for-radial-diffusion-of-calcium-in-neuron">
+<h1>Spatial Discretization for Radial Diffusion of Calcium in NEURON<a class="headerlink" href="#spatial-discretization-for-radial-diffusion-of-calcium-in-neuron" title="Link to this heading"></a></h1>
+<p>When modeling calcium dynamics with radial diffusion and calcium accumulation mechanisms in NEURON, spatial discretization of the intracellular radial shells requires careful consideration. This is particularly important when different neuronal sections (soma, dendrites, axon) have different diameters, leading to varying shell widths and hence different calcium concentrations within shells.</p>
+<section id="radial-shell-thickness-and-calcium-concentration">
+<h2>Radial Shell Thickness and Calcium Concentration<a class="headerlink" href="#radial-shell-thickness-and-calcium-concentration" title="Link to this heading"></a></h2>
+<p>Using equal shell thicknesses across sections with different diameters can introduce errors in calcium concentration estimates, especially near the membrane where calcium-activated mechanisms such as BK channels are located.</p>
+<p>Because the volume of each shell depends on its thickness, smaller shells correspond to smaller volumes and can show larger calcium changes in response to fluxes. Therefore, the calcium concentration reported in the outermost shell (nearest the membrane) must be interpreted carefully.</p>
+</section>
+<section id="using-calcium-for-channel-activation">
+<h2>Using Calcium for Channel Activation<a class="headerlink" href="#using-calcium-for-channel-activation" title="Link to this heading"></a></h2>
+<p><strong>Best practice:</strong> Use the calcium concentration in the shell closest to the membrane (typically the outermost shell) for activating calcium-dependent channels (e.g., BK channels). However, if shell thickness varies considerably, consider empirically determining which shell depth best represents the effective calcium concentration for channel activation in each segment.</p>
+<p>It is generally not advisable to interpolate calcium from a fixed radial depth if shell thickness varies without validating via computational experiments.</p>
+</section>
+<section id="empirical-approach-to-spatial-discretization">
+<h2>Empirical Approach to Spatial Discretization<a class="headerlink" href="#empirical-approach-to-spatial-discretization" title="Link to this heading"></a></h2>
+<p>The spatial discretization of radial calcium diffusion can be investigated through simplified computational models:</p>
+<ol class="arabic simple">
+<li><p><strong>Single section model (“model 0”)</strong>:
+- Length (L): ~10 µm
+- Diameter (diam): variable (e.g., 0.2, 1, 5, 25 µm)
+- Ra: arbitrary (unimportant)
+- Cm: 1 µF/cm²
+- Insert voltage-gated calcium channels and BK channels with appropriate densities
+- Attach an SEClamp stimulus to emulate a spike-like voltage transient</p></li>
+<li><p><strong>Calcium accumulation mechanisms</strong>:
+- Start with a 4-shell (compartment) radial model where shell thickness is proportional to section radius.
+- Create versions with different numbers of shells (e.g., 2, 10, 50, 250 shells), each with fixed shell thicknesses (~0.1 µm).
+- Compare calcium concentration time courses, BK conductance, and BK current across these versions.</p></li>
+<li><p><strong>Analysis</strong>:
+- Focus on the BK conductance time course and BK current integral over relevant physiological intervals (e.g., 10–100 ms) since the BK current affects membrane potential.
+- Differences in BK current integration less than typical experimental channel density variability (~20–40%) may be acceptable.
+- Use the simplest mechanism that does not significantly distort model behavior and is computationally efficient.</p></li>
+</ol>
+</section>
+<section id="radial-shell-volume-calculation">
+<h2>Radial Shell Volume Calculation<a class="headerlink" href="#radial-shell-volume-calculation" title="Link to this heading"></a></h2>
+<p>In calcium accumulation models such as <cite>cabpump.mod</cite>, the radial shells often have unequal thicknesses with the outermost shell being half as thick as the others. This configuration yields second-order accuracy for calcium concentration near the membrane.</p>
+<p>The volume of shell <em>i</em> can be approximated as the cylindrical annulus volume:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>PROCEDURE coord() {
+    LOCAL r, dr2
+    r = diam / 2              : Start at outer radius
+    dr2 = r / NANN           : Nominal full shell thickness
+    vol[0] = 0
+    frat[0] = 2 * r
+    FROM i=0 TO NANN-1 {
+        vol[i] = PI*(r*r - (r - dr2)*(r - dr2)) * 1  : Volume of shell (cylindrical length = 1 µm)
+        frat[i] = 2*PI*r / dr2                        : Area-related parameter for radial diffusion
+        r = r - dr2
+    }
+}
+</pre></div>
+</div>
+<p>However, to achieve second-order spatial accuracy at the shell interface near the membrane, <cite>cabpump.mod</cite> uses a slightly different approach, splitting each shell into two half-volumes for adjacent shells during volume calculation:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>FROM i=0 TO NANN-2 {
+    vol[i] = vol[i] + PI * (r - dr2/2) * 2 * dr2    : Interior half volume of shell i
+    r = r - dr2
+    frat[i+1] = 2 * PI * r / (2 * dr2)              : Radial diffusion parameter for shell i+1
+    r = r - dr2
+    vol[i+1] = PI * (r + dr2/2) * 2 * dr2           : Exterior half volume of shell i+1
+}
+</pre></div>
+</div>
+<p>This adjustment ensures better approximation of calcium concentration gradients near the membrane.</p>
+</section>
+<section id="implementation-of-multi-compartment-radial-calcium-dynamics-with-cytoplasm-and-er-compartments">
+<h2>Implementation of Multi-Compartment Radial Calcium Dynamics with Cytoplasm and ER Compartments<a class="headerlink" href="#implementation-of-multi-compartment-radial-calcium-dynamics-with-cytoplasm-and-er-compartments" title="Link to this heading"></a></h2>
+<p>To model calcium dynamics including intracellular stores such as the endoplasmic reticulum (ER), you can partition each radial shell volume into cytoplasmic and ER compartments.</p>
+<ol class="arabic simple">
+<li><p><strong>Defining compartments within the KINETIC block:</strong></p></li>
+</ol>
+<p>Example MOD file snippet for calcium and ER calcium compartments with volume fractions:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>KINETIC state {
+    COMPARTMENT ii, (1 + bbr) * diam * diam * vol[ii] * 0.83 { ca }    : Cytoplasm (83% volume), bbr = buffer binding ratio
+    COMPARTMENT jj, diam * diam * vol[jj] * 0.17 { caer }             : ER (17% volume)
+}
+</pre></div>
+</div>
+<p>Here, <cite>ca</cite> and <cite>caer</cite> are state variables representing free calcium concentrations in cytoplasm and ER respectively. The volume scaling factors distribute shell volume between cytoplasm and ER based on assumed volume fractions.</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Example flux expressions for SERCA pump coupling cytosol and ER:</strong></p></li>
+</ol>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>dsq = diam * diam
+
+FROM i=0 TO NANN-1 {
+    dsqvol = dsq * vol[i] * 0.83     : cytoplasmic volume for shell i
+    dsqvoler = dsq * vol[i] * 0.17   : ER volume for shell i
+
+    jserca[i] = -vmaxsr * ca[i]^2 / (ca[i]^2 + kpsr^2)  : SERCA pump flux (negative for uptake into ER)
+
+    ~ ca[i]  &lt;&lt; (dsqvol * jserca[i])     : update cytoplasmic calcium concentration
+    ~ caer[i] &lt;&lt; (-dsqvoler * jserca[i]) : update ER calcium concentration
+}
+</pre></div>
+</div>
+<p>This reactive flux transfers calcium between cytoplasm and ER, scaled by their respective volumes.</p>
+<ol class="arabic simple" start="3">
+<li><p><strong>Initialization and validation:</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Initialize ER calcium concentration (<cite>caer</cite>) to a physiological resting value in the <cite>INITIAL</cite> block.</p></li>
+<li><p>Validate your model by running test simulations:
+- Check calcium dynamics for consistency.
+- Perturb parameters (buffer ratios, pump rates) and confirm expected changes.
+- Monitor for typographical or sign errors, as these can cause incorrect results despite no MOD file compilation errors.</p></li>
+</ul>
+</section>
+<section id="notes-on-model-parameters">
+<h2>Notes on Model Parameters<a class="headerlink" href="#notes-on-model-parameters" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The number of radial shells (<cite>NANN</cite> or <cite>Nannuli</cite>) controls the spatial resolution of radial diffusion. Increasing <cite>NANN</cite> gives finer discretization but increases computational cost.</p></li>
+<li><p>The parameter <cite>nseg</cite> governs the number of segments along the longitudinal axis and is distinct from radial shell number.</p></li>
+<li><p>The <cite>frat</cite> array contains factors for calculating radial diffusion fluxes, often derived from shell surface areas divided by shell thicknesses.</p></li>
+</ul>
+</section>
+<section id="summary-recommendations">
+<h2>Summary Recommendations<a class="headerlink" href="#summary-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use the outermost shell calcium concentration for membrane-associated calcium-activated mechanisms, but validate via simulations to determine if interpolating from a fixed radial depth is preferable.</p></li>
+<li><p>Employ shell thicknesses that respect second-order spatial accuracy near the membrane by making the outermost shell half the thickness of interior shells.</p></li>
+<li><p>Use multiple radial shells (e.g., ~10 shells of 0.1 µm thickness) to verify convergence of calcium dynamics and channel currents.</p></li>
+<li><p>For multi-compartment calcium dynamics (cytoplasm and ER), scale compartment volumes within shells appropriately.</p></li>
+<li><p>Verify your implementation by parameter perturbation and comparison of calcium transient time courses and BK current integrals.</p></li>
+<li><p>Choose the simplest model that faithfully reproduces physiologically relevant calcium dynamics to balance accuracy and computational cost.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cabpump.mod</span></code>, <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#SEClamp" title="SEClamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SEClamp</span></code></a>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">rxd</span></code> for advanced reaction-diffusion modeling, <span class="xref std std-ref">The NEURON Book</span> Section on Calcium Dynamics</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3485">https://neuron.yale.edu/phpBB/viewtopic.php?t=3485</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

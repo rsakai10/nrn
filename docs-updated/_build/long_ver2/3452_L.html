@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recording and Plotting the Second Derivative of an Action Potential in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Recording and Plotting the Second Derivative of an Action Potential in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3452_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="recording-and-plotting-the-second-derivative-of-an-action-potential-in-neuron">
+<h1>Recording and Plotting the Second Derivative of an Action Potential in NEURON<a class="headerlink" href="#recording-and-plotting-the-second-derivative-of-an-action-potential-in-neuron" title="Link to this heading"></a></h1>
+<p>This section explains how to record the second time derivative of an action potential from a neuron model in NEURON, and how to generate plots such as ( y’’ = f(t) ) and phase plots ( y’’ = f(x’) = f(i_{cap}) ).</p>
+<section id="conceptual-overview">
+<h2>Conceptual Overview<a class="headerlink" href="#conceptual-overview" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The second derivative ( y’’ ) of the membrane voltage ( y = V ) is related to the derivative of the membrane capacitive current ( i_{cap} ) with respect to time.</p></li>
+<li><p>Instead of computing derivatives inside a <cite>mod</cite> file, it is recommended to record time series data of variables such as <cite>v</cite> and <cite>i_cap</cite> during the simulation.</p></li>
+<li><p>Post-simulation, use the <cite>Vector</cite> class methods (e.g., <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.deriv" title="Vector.deriv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.deriv()</span></code></a>) to calculate derivatives from the recorded data.</p></li>
+<li><p>If adaptive integration is used, recorded vectors may have uneven time steps; the <a class="reference internal" href="../progref-1/programming/math/vector.html#id0" title="Vector.interpolate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.interpolate()</span></code></a> method can be used to resample at uniform intervals.</p></li>
+</ul>
+</section>
+<section id="guidelines-for-implementing-this-analysis">
+<h2>Guidelines for Implementing This Analysis<a class="headerlink" href="#guidelines-for-implementing-this-analysis" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Model Specification Code</strong></p>
+<p>Define the neuron morphology and biophysical properties (e.g., membrane mechanisms, channels).</p>
+</li>
+<li><p><strong>Instrumentation Code</strong></p>
+<p>Set up stimulus sources and record variables of interest (e.g., <cite>v(0.5)</cite> and <cite>i_cap(0.5)</cite>) into <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> objects.</p>
+<p>Example HOC instrumentation code:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref vvec, icvec
+vvec = new Vector()
+icvec = new Vector()
+vvec.record(&amp;soma.v(0.5))
+icvec.record(&amp;soma.i_cap(0.5))
+</pre></div>
+</div>
+</li>
+<li><p><strong>Simulation Control Code</strong></p>
+<p>Set simulation parameters and control flow, for example:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>tstop = 50
+dt = 0.025
+celsius = 32
+v_init = -55
+</pre></div>
+</div>
+<p>Implement a procedure that runs the simulation and calls post-simulation analysis:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc myrun() {
+   run()
+   postprocess()
+}
+</pre></div>
+</div>
+</li>
+<li><p><strong>Post-Simulation Analysis</strong></p>
+<p>Define a procedure <cite>postprocess()</cite> that calculates the derivatives and plots the results.</p>
+<p>Example for calculating the first and second derivatives of <cite>i_cap</cite> and plotting a phase plot (<cite>d2</cite> vs <cite>i_cap</cite>):</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref d2, g2
+d2 = new Vector()
+
+proc postprocess() {
+   d2.deriv(icvec, dt)   // Compute d/dt(i_cap)
+   if (g2 == nil) {
+      g2 = new Graph(0)
+   } else {
+      g2.exec_menu(&quot;Erase&quot;)   // Clear previous plots
+   }
+   d2.plot(g2, icvec)     // Plot d2 vs i_cap
+   g2.size(-0.5, 0.5, -15, 15)
+   g2.view(-0.5, -15, 1, 30, 648, 296, 400.48, 300.32)
+   g2.label(0.05, 0.9, &quot;x: i_cap(0.5)&quot;, 2, 1, 0, 0, 2)
+   g2.label(0.05, 0.75, &quot;y: D_t(i_cap(0.5))&quot;, 2, 1, 0, 0, 3)
+   g2.exec_menu(&quot;View = plot&quot;)  // Autoscale plot axes
+}
+</pre></div>
+</div>
+</li>
+<li><p><strong>Updating Plots When Model Parameters Change</strong></p>
+<ul class="simple">
+<li><p>When parameters such as channel conductances or geometry are changed, simply call <cite>myrun()</cite> again.</p></li>
+<li><p>The graphs will update with the new data.</p></li>
+<li><p>To avoid accumulation of traces from multiple runs, clear the graph in <cite>postprocess()</cite> as shown above.</p></li>
+<li><p>To keep multiple traces for comparison, use NEURON’s “Vector display” functionality by copying traces to a VecWrap.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="additional-tips">
+<h2>Additional Tips<a class="headerlink" href="#additional-tips" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong>Recording Data Vectors Before Simulation:</strong>
+Vector recording objects (<cite>vvec</cite>, <cite>icvec</cite>) should be initialized <strong>before</strong> the simulation runs.</p></li>
+<li><p><strong>Running Derivative Calculations After Simulation:</strong>
+Derivative calculations must be performed after the simulation is complete and vectors populated.</p></li>
+<li><p><strong>Adaptive Integration &amp; Interpolation:</strong>
+If using variable time step integrators, interpolate vectors to uniform sampling before derivative calculations using <a class="reference internal" href="../progref-1/programming/math/vector.html#id0" title="Vector.interpolate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.interpolate()</span></code></a>.</p></li>
+<li><p><strong>Plotting i_cap vs. voltage during Simulation:</strong>
+To plot <cite>i_cap</cite> versus <cite>v</cite> during a run, create a graph object and add variable tracings:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref icvsv
+icvsv = new Graph(0)
+icvsv.size(-100, 20, -0.5, 0.5)
+icvsv.view(-100, -0.5, 120, 1, 648, 34, 300.48, 200.32)
+graphList[3].append(icvsv)  // update during run
+icvsv.xexpr(&quot;v(0.5)&quot;, 0)
+icvsv.label(0.05, 0.9, &quot;x-axis: v(0.5)&quot;, 2, 1, 0, 0, 1)
+icvsv.addvar(&quot;soma.i_cap(0.5)&quot;, 2, 1, 0.05, 0.85, 2)
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="complete-example-recording-and-plotting-the-second-derivative-of-an-action-potential">
+<h2>Complete Example: Recording and Plotting the Second Derivative of an Action Potential<a class="headerlink" href="#complete-example-recording-and-plotting-the-second-derivative-of-an-action-potential" title="Link to this heading"></a></h2>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>// Model specification
+create soma
+soma {
+  nseg = 1
+  L = 35
+  diam = 15
+  Ra = 150.0
+  cm = 1
+  insert pasnts
+  insert kdrDA
+  gbar_kdrDA = 100
+  insert Na12
+  Vmid_ac_Na12 = -35
+  gbar_Na12 = 250
+  insert ka
+  gbar_ka = 2
+  ena = 60
+  ek = -90
+}
+
+// Simulation parameters
+tstop = 50
+dt = 0.025
+celsius = 32
+v_init = -55
+
+// Instrumentation: Record voltage and capacitive current
+objref vvec, icvec
+vvec = new Vector()
+icvec = new Vector()
+vvec.record(&amp;soma.v(0.5))
+icvec.record(&amp;soma.i_cap(0.5))
+
+// Post-simulation analysis vectors and graph
+objref d2, g2
+d2 = new Vector()
+
+proc postprocess() {
+  d2.deriv(icvec, dt) // compute time derivative of i_cap
+  if (g2 == nil) {
+    g2 = new Graph(0)
+  } else {
+    g2.exec_menu(&quot;Erase&quot;)
+  }
+  d2.plot(g2, icvec)
+  g2.size(-0.5, 0.5, -15, 15)
+  g2.view(-0.5, -15, 1, 30, 648, 296, 400.48, 300.32)
+  g2.label(0.05, 0.9, &quot;x: i_cap(0.5)&quot;, 2, 1, 0, 0, 2)
+  g2.label(0.05, 0.75, &quot;y: D_t(i_cap(0.5))&quot;, 2, 1, 0, 0, 3)
+  g2.exec_menu(&quot;View = plot&quot;)
+}
+
+// Simulation flow control
+proc myrun() {
+  run()
+  postprocess()
+}
+</pre></div>
+</div>
+</section>
+<section id="usage-notes">
+<h2>Usage Notes<a class="headerlink" href="#usage-notes" title="Link to this heading"></a></h2>
+<ul>
+<li><p>To run the simulation and view updated derivative plots, simply call:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>myrun()
+</pre></div>
+</div>
+</li>
+<li><p>For multiple runs with parameter changes, calling <cite>myrun()</cite> repeatedly will update the graph without overlapping old data.</p></li>
+<li><p>To preserve traces for comparison, use NEURON’s Vector display and VecWrap facilities as described above.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Record variables during simulation to <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> instances.</p></li>
+<li><p>Execute derivative calculations post-simulation using <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.deriv" title="Vector.deriv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.deriv()</span></code></a>.</p></li>
+<li><p>Manage plot updating by clearing graphs in post-processing.</p></li>
+<li><p>Automate simulation and analysis in procedures for convenient reuse.</p></li>
+</ul>
+<p>This approach allows flexible, accurate analysis of temporal derivatives such as the second derivative of an action potential without modifying channel mechanism source code.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3452">https://neuron.yale.edu/phpBB/viewtopic.php?t=3452</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

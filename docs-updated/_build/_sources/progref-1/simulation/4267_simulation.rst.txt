@@ -1,0 +1,28 @@
+Importing High-Resolution Stimulus Waveforms in NEURON
+=======================================================
+
+When importing experimentally recorded extracellular stimulation waveforms (e.g., TMS pulses) into NEURON using :meth:`Vector.play` and the xtra.mod mechanism, the temporal resolution of the input data relative to the simulation time step dt can affect results.
+
+.. note::
+   A waveform recorded at a higher temporal resolution than dt (e.g., 1 µs sampling with dt=5 µs) will provide a piecewise-constant driven variable in NEURON that holds each sample value through the corresponding time step. If dt is longer than the waveform sampling interval, some samples will be skipped (e.g., using every 5th sample if dt = 5 × sampling interval), potentially altering high-frequency components of the stimulus and neuronal response.
+
+.. note::
+   NEURON does not perform any anti-aliasing filtering internally. It is good practice to apply a low-pass filter (e.g., in MATLAB or Python) to the stimulus waveform before downsampling to reduce aliasing artifacts.
+
+.. advice::
+   To minimize discrepancies:
+   
+   - Prefer starting with waveform data sampled at intervals that are an integer fraction of dt, then select samples accordingly (e.g., every Nth value if dt = N × sampling_interval).
+   - If needed, resample the waveform to exactly match dt using interpolation methods.
+   - Sampling waveform steps smaller than dt/2 is advisable to capture stimulus features accurately given NEURON’s implicit Euler integrator and piecewise-constant stimulus representation.
+
+.. seealso::
+   :meth:`Vector.play`
+
+.. code-block:: python
+
+   # Example: playing back a stimulus vector at appropriate sampling intervals
+   stim_amp.play(&stim_xtra, stim_time, continuous=1)
+
+Overall, ensuring temporal compatibility between stimulus waveforms and simulation step size helps maintain robust and accurate neuronal response simulations.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=4267

@@ -1,0 +1,93 @@
+Arrays as RANGE Variables in NMODL
+===================================
+
+When defining STATE variables as arrays in a :keyword:`STATE` block within an NMODL mechanism, these elements are automatically treated as RANGE variables. This means that individual elements of the array are accessible from hoc or Python without the need for explicit RANGE declarations.
+
+Accessing Array STATE Variables from hoc or Python
+--------------------------------------------------
+
+Given a mechanism with an array STATE variable, for example:
+
+.. code-block:: text
+
+    NEURON {
+        SUFFIX cadifus
+        ...
+        DEFINE Nannuli 4
+        ...
+        STATE {
+            ca[Nannuli]       (mM) <1e-10>
+            CaBuffer[Nannuli] (mM)
+            Buffer[Nannuli]   (mM)
+        }
+    }
+
+Each element of the array (e.g., `ca[0]` through `ca[3]`) can be accessed from hoc or Python via the syntax:
+
+.. code-block:: hoc
+
+    ca_cadifus[index](segment)
+
+where:
+
+- ``ca`` is the STATE variable name.
+- ``cadifus`` is the mechanism suffix.
+- ``index`` is the zero-based index into the array.
+- ``segment`` is the section/location (range variable) at which the variable is accessed.
+
+For example, to access the first annulus calcium concentration at segment ``seg``:
+
+.. code-block:: hoc
+
+    ca_cadifus[0](seg)
+
+or in Python with NEURON's nrnpython interface:
+
+.. code-block:: python
+
+    seg = h.Section(name='soma')(0.5)  # example segment
+    value = seg.ca_cadifus[0]
+
+This applies similarly for other array STATE variables such as ``CaBuffer`` or ``Buffer``.
+
+Important Notes
+---------------
+
+- There is no need to define separate RANGE variables for each array element. All elements of array STATE variables are automatically exposed as RANGE variables.
+- The hoc or Python name for an array STATE variable is constructed by appending the mechanism suffix after an underscore (e.g., ``ca_cadifus``), then indexing with square brackets.
+- This behavior enables convenient looping and indexing within kinetic or diffusion mechanisms while preserving external accessibility.
+- To discover accessible variables of a mechanism, insert it into a model section, then use NEURON's GUI Plot what? feature or inspect the mechanism programmatically.
+
+Recording Array STATE Variables
+-------------------------------
+
+While array STATE variables are accessible individually, recording them with :meth:`h.Vector.record` requires specifying each indexed element separately. Recording cannot multiplex all array elements into a single vector directly; you must record each element into its own vector:
+
+.. code-block:: hoc
+
+    obj = <segment or point process>
+    vec0 = new Vector().record(&obj.ca_cadifus[0](0.5))
+    vec1 = new Vector().record(&obj.ca_cadifus[1](0.5))
+    ...
+
+or in Python:
+
+.. code-block:: python
+
+    seg = h.Section(name='soma')(0.5)
+    vec0 = h.Vector().record(lambda: seg.ca_cadifus[0])
+    vec1 = h.Vector().record(lambda: seg.ca_cadifus[1])
+    # and so forth for each index
+
+Summary
+-------
+
+- **Array STATE variables declared in the :keyword:`STATE` block are automatically RANGE variables accessible as ``var_mechsuffix[index](segment)``.**
+- **No explicit RANGE declaration for array elements is necessary or permitted.**
+- **Recording array STATE variables requires creating separate record vectors for each element.**
+
+.. note::
+
+   This approach greatly simplifies working with diffusion or kinetic mechanisms involving multiple shells or multiple diffusible substances, avoiding the complexity of defining many separate RANGE variables for each shell and molecule.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1436 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1436>`_

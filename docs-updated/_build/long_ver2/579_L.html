@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stylized Model in NEURON and Building Custom Neuron Models &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Stylized Model in NEURON and Building Custom Neuron Models</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/579_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="stylized-model-in-neuron-and-building-custom-neuron-models">
+<h1>Stylized Model in NEURON and Building Custom Neuron Models<a class="headerlink" href="#stylized-model-in-neuron-and-building-custom-neuron-models" title="Link to this heading"></a></h1>
+<p>This section covers how to explore the “stylized” neuron model from the NEURON demo, understand its anatomical and biophysical properties, and guidelines for building new neuron models using hoc files.</p>
+<section id="exploring-the-stylized-model">
+<h2>Exploring the Stylized Model<a class="headerlink" href="#exploring-the-stylized-model" title="Link to this heading"></a></h2>
+<p>The “stylized” model in the NEURON demo is a simplified Hodgkin-Huxley (HH) neuron illustrating spatial summation and synaptic integration. It is organized with multiple dendrites and an axon for spike propagation.</p>
+<p>To inspect the structure and parameters of this model:</p>
+<ol class="arabic">
+<li><p><strong>Identify Section Topology</strong></p>
+<p>At the <cite>oc&gt;</cite> prompt, type:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>topology()
+</pre></div>
+</div>
+<p>This command displays how sections connect to form the cell’s branched architecture.</p>
+</li>
+<li><p><strong>Inspect Section Properties</strong></p>
+<p>To view the anatomical and electrical properties assigned to each section, type:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>forall psection()
+</pre></div>
+</div>
+<p>This outputs hoc statements that specify biophysical parameters for all sections.</p>
+</li>
+<li><p><strong>Use Model View Tool</strong></p>
+<p>For a more user-friendly interface of parameters and mechanisms, launch the Model View tool via:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NEURON Main Menu -&gt; Tools -&gt; Model View
+</pre></div>
+</div>
+<p>This tool compactly displays morphology, mechanisms, and parameter values.</p>
+</li>
+</ol>
+</section>
+<section id="understanding-the-origin-of-model-parameters">
+<h2>Understanding the Origin of Model Parameters<a class="headerlink" href="#understanding-the-origin-of-model-parameters" title="Link to this heading"></a></h2>
+<p>Model parameters—such as morphology and membrane mechanisms—are not arbitrarily chosen but are designed following these principles:</p>
+<ul class="simple">
+<li><p><strong>Define the Purpose:</strong> Decide the phenomenon of interest, e.g., spatial summation.</p></li>
+<li><p><strong>Conceptual Model:</strong> Abstract and simplify the biological system to include only relevant features necessary to study the phenomenon.</p></li>
+<li><p><strong>Computational Model:</strong> Accurately implement the conceptual model without omitting or adding features.</p></li>
+</ul>
+<p>The parameters in the stylized model typically span ranges supported by experimental data on neuronal morphology and physiology, chosen to illustrate generic principles rather than replicate a specific neuron type. For detailed parameter justification, consult experimental literature and databases such as neuroelectro.org.</p>
+</section>
+<section id="building-a-new-neuron-model-using-hoc-files">
+<h2>Building a New Neuron Model Using hoc Files<a class="headerlink" href="#building-a-new-neuron-model-using-hoc-files" title="Link to this heading"></a></h2>
+<p>A hoc file is often sufficient to define and simulate a new neuron model, provided it:</p>
+<ul class="simple">
+<li><p><strong>Includes all relevant sections and connectivity</strong></p></li>
+<li><p><strong>Sets anatomical and biophysical properties explicitly</strong></p></li>
+<li><p><strong>Includes mechanisms (e.g., ion channels) as needed</strong></p></li>
+<li><p><strong>Runs without syntax errors in NEURON</strong></p></li>
+</ul>
+<p>To build a neuron model using a hoc file:</p>
+<ol class="arabic">
+<li><p>Create a text file with hoc code defining topology, morphology, and biophysical mechanisms.</p></li>
+<li><p>Save the file with a <cite>.hoc</cite> extension.</p></li>
+<li><p>Load the file in NEURON using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;my_neuron_model.hoc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run your simulation or explore the model interactively.</p></li>
+</ol>
+<p>If a hoc file “does not work” when loaded, verify:</p>
+<ul class="simple">
+<li><p>Syntax correctness in the hoc source code.</p></li>
+<li><p>The file is accessible to NEURON (correct path).</p></li>
+<li><p>All dependencies (e.g., inserted mechanisms, ion channel files) are present and loaded.</p></li>
+</ul>
+<p>Example Minimal hoc Model Structure:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>create soma, dend[2], axon
+connect dend[0](0), soma(0)
+connect dend[1](0), soma(0)
+connect axon(0), soma(1)
+
+forall {
+  nseg = 1
+  diam = 1
+  L = 100
+  insert pas
+}
+
+soma {
+  insert hh
+  diam = 12.6157
+  L = 12.6157
+  nseg = 1
+}
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <cite>topology()</cite> and <cite>forall psection()</cite> to inspect model anatomy and parameters.</p></li>
+<li><p>Use Model View for a graphical parameter summary.</p></li>
+<li><p>Understand that model parameters are chosen based on the modeling purpose and biological data.</p></li>
+<li><p>Developing a custom neuron requires writing correct hoc code defining structure and mechanisms.</p></li>
+<li><p>Loading and troubleshooting your hoc files systematically helps ensure the model works in NEURON.</p></li>
+</ul>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=579">https://neuron.yale.edu/phpBB/viewtopic.php?t=579</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

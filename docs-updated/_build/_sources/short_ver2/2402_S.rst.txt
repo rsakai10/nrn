@@ -1,0 +1,26 @@
+.. note::
+   When using the Graph >> Plot What menu to select sections for plotting, if you have many sections with the same name prefix (e.g., ``dend[0]`` to ``dend[66]``), the browser displays only a limited subset.
+
+   To access other sections not listed, click the variable name field and edit it manually. For example, change:
+
+   .. code-block:: none
+
+      dend[1].v
+
+   to
+
+   .. code-block:: none
+
+      dend[31].v
+
+   Alternatively, at the Hoc prompt, use :func:`forall` or :func:`forsec` to inspect section names:
+
+   .. code-block:: hoc
+
+      forall print secname()
+
+      forsec "dend" print secname()
+
+   This helps verify the existence of all sections when they do not appear in the graphical selection menu.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2402 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2402>`_

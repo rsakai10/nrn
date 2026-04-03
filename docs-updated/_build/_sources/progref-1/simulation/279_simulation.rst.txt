@@ -1,0 +1,20 @@
+.. note::
+
+   To apply multiple :class:`IClamp` objects to neighboring segments in a dendrite, you can use an array (or hoc objref vector) of :class:`IClamp` and a loop to attach each stimulus at specific locations.
+
+.. code-block:: hoc
+
+   create dendrite
+   NUMBER = 11
+   dendrite.nseg = NUMBER
+   objref icl[NUMBER]
+   ii = 0
+   dendrite for (x, 0) {
+       icl[ii] = new IClamp(x)
+       ii += 1
+   }
+
+.. note::
+
+   This creates one :class:`IClamp` at each internal segment of the dendrite, allowing you to clamp multiple neighboring locations efficiently.
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=279

@@ -1,0 +1,23 @@
+.. note::
+   The :func:`h.psection` function reports properties of a single segment, typically the first segment of a section.
+
+To examine properties across multiple segments when :attr:`nseg` > 1, iterate over the section's segments directly. For example, if a mechanism with SUFFIX ``na`` has a RANGE variable ``gbar``, you can print its value along the section using:
+
+.. code-block:: python
+
+   for seg in soma:
+       print(seg.x, seg.gbar_na)
+
+The same approach applies in HOC:
+
+.. code-block:: hoc
+
+   forall if (sec == soma) {
+       for i=0, nseg-1 {
+           printf("%g %g\n", segment[i].x, segment[i].gbar_na)
+       }
+   }
+
+This allows inspecting how variables vary spatially along the section.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2619 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2619>`_

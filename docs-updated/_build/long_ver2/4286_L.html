@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Range Variable Assignment and Mechanism Parameter Gradients Along Sections in Python &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Range Variable Assignment and Mechanism Parameter Gradients Along Sections in Python</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4286_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="range-variable-assignment-and-mechanism-parameter-gradients-along-sections-in-python">
+<h1>Range Variable Assignment and Mechanism Parameter Gradients Along Sections in Python<a class="headerlink" href="#range-variable-assignment-and-mechanism-parameter-gradients-along-sections-in-python" title="Link to this heading"></a></h1>
+<p>NEURON supports specifying spatially varying properties such as morphology parameters (e.g., diameter) and mechanism parameters (e.g., conductance densities) along the length of a section. While HOC offers a compact but obscure syntax for range assignments, Python requires explicit iteration over segments.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The HOC syntax for range assignments, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">diam</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="p">:</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+<p>is not directly translatable to Python and is not recommended due to its obscurity and unintuitive behavior. This syntax performs a linear interpolation of the parameter value based on segment center positions but does not guarantee that values at exact endpoints are assigned.</p>
+</div>
+<section id="basic-concept-of-segment-based-assignments">
+<h2>Basic Concept of Segment-Based Assignments<a class="headerlink" href="#basic-concept-of-segment-based-assignments" title="Link to this heading"></a></h2>
+<p>A NEURON <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code> is divided into discrete segments (<code class="xref py py-class docutils literal notranslate"><span class="pre">h.Segment</span></code> objects). The number of segments (<a class="reference internal" href="../progref-1/modelspec/programmatic/topology.html#Section.nseg" title="Section.nseg"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Section.nseg</span></code></a>) determines the spatial resolution for assigning properties that vary along the section.</p>
+<ul class="simple">
+<li><p>Assigning a value at an arbitrary location along the section (e.g., <cite>section(x).var</cite>) actually sets the value for the segment containing <cite>x</cite>.</p></li>
+<li><p>Segment center positions, accessible as the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">Segment.x</span></code>, range from 0 (start) to 1 (end) along the normalized length of the section.</p></li>
+<li><p>Thus, the finest granularity available for changing parameter values along a section is per segment.</p></li>
+</ul>
+</section>
+<section id="assigning-a-linearly-varying-morphology-parameter-e-g-diameter">
+<h2>Assigning a Linearly Varying Morphology Parameter (e.g., Diameter)<a class="headerlink" href="#assigning-a-linearly-varying-morphology-parameter-e-g-diameter" title="Link to this heading"></a></h2>
+<p>To specify a gradient of a morphology property like <cite>diam</cite> between two values along a section, define a function that assigns values to each segment based on its position.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">range_assignment</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linearly assign values to `var` (string) between `start` and `stop`</span>
+<span class="sd">    at segments of the section `sec`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sec : h.Section</span>
+<span class="sd">        The section whose segments will have the variable set.</span>
+
+<span class="sd">    var : str</span>
+<span class="sd">        The name of the segment variable to set (e.g., &#39;diam&#39;).</span>
+
+<span class="sd">    start : float</span>
+<span class="sd">        The value at the proximal end of the section (x=0).</span>
+
+<span class="sd">    stop : float</span>
+<span class="sd">        The value at the distal end of the section (x=1).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">stop</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">sec</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">seg</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">delta</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">axon</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;axon&#39;</span><span class="p">)</span>
+<span class="n">axon</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># Assign a diameter gradient from 1.5 to 0.5 microns along the axon segments</span>
+<span class="n">range_assignment</span><span class="p">(</span><span class="n">axon</span><span class="p">,</span> <span class="s1">&#39;diam&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">axon</span><span class="o">.</span><span class="n">psection</span><span class="p">()[</span><span class="s1">&#39;morphology&#39;</span><span class="p">][</span><span class="s1">&#39;diam&#39;</span><span class="p">])</span>
+<span class="c1"># Output: [1.5, 1.125, 0.75, 0.375, 0.5]</span>
+</pre></div>
+</div>
+</section>
+<section id="assigning-spatially-varying-mechanism-parameters">
+<h2>Assigning Spatially Varying Mechanism Parameters<a class="headerlink" href="#assigning-spatially-varying-mechanism-parameters" title="Link to this heading"></a></h2>
+<p>Mechanism density parameters such as conductances (e.g., <cite>gbar_na16</cite>) are range variables that can be assigned similarly by iterating over segments.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">axon</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;na16&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">axon</span><span class="p">:</span>
+    <span class="c1"># Assign conductance linearly from 0 to 100 mS/cm2 along the section length</span>
+    <span class="n">seg</span><span class="o">.</span><span class="n">gbar_na16</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">seg</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Assigning values at arbitrary locations using <cite>section(x).gbar_na16 = value</cite> only affects the segment containing <cite>x</cite>. If multiple values are assigned at positions within the same segment, the last assignment prevails.</p>
+</div>
+</section>
+<section id="caveats-regarding-the-hoc-range-assignment-syntax">
+<h2>Caveats Regarding the HOC Range Assignment Syntax<a class="headerlink" href="#caveats-regarding-the-hoc-range-assignment-syntax" title="Link to this heading"></a></h2>
+<ul>
+<li><p>The HOC syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">axon</span> <span class="p">{</span>
+    <span class="n">gbar_na16</span><span class="p">(</span><span class="mi">0</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">100</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>specifies a piecewise linear function of parameter values. However, it can be confusing and unintuitive:</p>
+<ul class="simple">
+<li><p>The values at segment centers do not correspond exactly to values at the range endpoints.</p></li>
+<li><p>The interpolation applies over segment center positions, not segment boundaries.</p></li>
+<li><p>Values assigned to <cite>section(x)</cite> with <cite>x</cite> not at segment centers are mapped to the nearest segment.</p></li>
+</ul>
+</li>
+<li><p>Replicating HOC range assignments in Python by direct interpolation over segment centers with <cite>np.linspace</cite> may produce different results than the HOC code.</p></li>
+<li><p>It is recommended to avoid the HOC range assignment syntax for clarity and maintainability.</p></li>
+</ul>
+</section>
+<section id="morphology-specification-recommendation">
+<h2>Morphology Specification Recommendation<a class="headerlink" href="#morphology-specification-recommendation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>While diameter can be specified per segment, for realistic morphologies it is recommended to specify morphology using 3D points via methods like <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.pt3dadd()</span></code>, which are independent of discretization (<code class="xref py py-attr docutils literal notranslate"><span class="pre">nseg</span></code>).</p></li>
+</ul>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The smallest discrete unit for assigning spatially varying morphology or mechanisms is a segment (<code class="xref py py-class docutils literal notranslate"><span class="pre">h.Segment</span></code>).</p></li>
+<li><p>To assign gradients in Python, iterate over segments using their normalized positions to compute values.</p></li>
+<li><p>Avoid using the HOC range assignment syntax due to its obscurity and unintuitive behavior.</p></li>
+<li><p>Use explicit functions and clear code, e.g., the <cite>range_assignment</cite> function above, to assign spatial gradients in parameters.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Segment</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.insert()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.pt3dadd()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4286">https://neuron.yale.edu/phpBB/viewtopic.php?t=4286</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

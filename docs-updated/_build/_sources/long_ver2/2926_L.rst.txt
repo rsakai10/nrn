@@ -1,0 +1,159 @@
+Isolating a Section from a Neuron
+==================================
+
+When working with complex neuron models composed of multiple connected sections with Hodgkin-Huxley (HH) mechanisms or other voltage-dependent conductances, one may want to isolate a particular section (e.g., section Y) from the rest of the neuron to analyze its intrinsic response. However, due to the distributed and nonlinear nature of the neuronal model, simply removing other sections and applying the same stimulus may not reproduce the original voltage response.
+
+This note explains how to perform such an isolation experiment in NEURON to reproduce the voltage response at a given site by recording, voltage-clamping, and then current-clamping the isolated section.
+
+Conceptual Approach
+-------------------
+
+1. **Original Condition (Connected Neuron):**  
+   Apply a current injection (e.g., an :class:`IClamp`) at section X and record the voltage at the point of interest in section Y.
+
+2. **Voltage-Clamp the Isolated Section:**  
+   Disconnect section Y from its parent using the :meth:`Section.disconnect` method. Then, apply a voltage clamp (preferably an :class:`SEClamp` with very low series resistance) at the recording location in Y. Play back the previously recorded voltage waveform as the clamp command. Record the clamp current.
+
+3. **Current-Clamp the Isolated Section:**  
+   Use the recorded current from the voltage clamp and replay it through an :class:`IClamp` at the same location in Y to see if it reproduces the voltage waveform. Note that due to nonlinearity of active channels, the current-clamp response may differ from the original conditions.
+
+Prerequisites and Considerations
+--------------------------------
+
+- Use an :class:`SEClamp` instead of :class:`VClamp` for accurate time-dependent voltage clamping at a single location.
+- Set the voltage clamp's series resistance (``rs``) to a very low value (e.g., 1e-3 MΩ) to minimize voltage errors.
+- Record and play back waveforms using :class:`Vector` with the :meth:`Vector.record` and :meth:`Vector.play` methods.
+- Implement the experiment in three distinct stages (hoc scripts or Python modules) to record data in each step and save/load files as needed.
+- Be aware that the active conductances cause nonlinear dynamics; perfect reproduction may not be achievable.
+- Keep the simulation time step (``dt``) consistent across steps to ensure accurate vector playback.
+
+Example Workflow in HOC
+-----------------------
+
+.. code-block:: hoc
+
+    // Step 1: Record voltage waveform at Y(0) in connected neuron
+    objref vy0_vec, t_vec
+    vy0_vec = new Vector()
+    t_vec = new Vector()
+
+    // Record membrane voltage at location 0 of section Y and simulation time
+    Y { vy0_vec.record(&v(0)) }
+    cvode.record(&t) // or t_vec.record(&t)
+
+    // Run stimulation and save recorded vectors after simulation for later use
+    // e.g., vy0_vec.printf("vy0_data.dat")
+
+    // Optional: copy vector to preserve data after resetting simulation
+    objref vy0_copy
+    vy0_copy = vy0_vec.c()
+
+    // Step 2: Disconnect section Y and voltage clamp it with recorded waveform
+    Y { disconnect() }
+
+    objref clamp
+    Y { clamp = new SEClamp(0) }
+    clamp.dur1 = 1e9      // effectively infinite duration
+    clamp.rs = 1e-3       // low series resistance
+    clamp.amp1 = -65      // clamp initial voltage to resting potential
+
+    // Play recorded voltage waveform into clamp.amp1 (assumes unchanged dt)
+    Y { vy0_copy.play(&clamp.amp1) }
+
+    // Run simulation: voltage at Y replicates original recording; clamp current can be recorded.
+
+    // Step 3: Use recorded clamp current as IClamp input to isolated section (optional)
+    // Record clamp current during Step 2: clamp.i1 can be recorded with a Vector
+
+    objref i_clamp_waveform
+    i_clamp_waveform = new Vector()
+    clamp.i1 // pointer to current through clamp at location 0
+
+    Y { i_clamp_waveform.record(&clamp.i1) }
+
+    // Run Step 2 sim, save i_clamp_waveform, then in Step 3:
+
+    objref iclamp
+    Y { iclamp = new IClamp(0) }
+    iclamp.del = 0
+    iclamp.dur = 1e9
+
+    // Play recorded clamp current as IClamp amplitude waveform
+    Y { i_clamp_waveform.play(&iclamp.amp) }
+
+    // Run simulation: voltage at Y should approximate original waveform, but differences may arise due to active conductances.
+
+Example Workflow in Python
+--------------------------
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Setup section and stimulus
+    Y = h.Section(name='Y')
+    # ...insert mechanisms, connect sections as needed...
+
+    # Step 1: Record voltage at Y(0) with IClamp at X
+    vy0_vec = h.Vector()
+    time_vec = h.Vector()
+    vy0_vec.record(Y(0)._ref_v)
+    time_vec.record(h._ref_t)
+
+    # Apply IClamp at X and run simulation
+    iclamp_X = h.IClamp(...)  # define at section X
+    h.finitialize(-65)
+    h.continuerun(100)
+
+    # Save recorded voltage waveform
+    vy0_copy = h.Vector(vy0_vec)
+
+    # Step 2: Disconnect Y and voltage clamp with recorded waveform
+    Y.disconnect()
+    clamp = h.SEClamp(0, sec=Y)
+    clamp.dur1 = 1e9
+    clamp.rs = 1e-3
+
+    # Play voltage vector into clamp amplitude
+    vy0_copy.play(clamp._ref_amp1, 1)  # 1 ms dt assumed; adjust if needed
+
+    h.finitialize(-65)
+    h.continuerun(100)
+
+    # Record clamp current if desired
+    clamp_i = h.Vector()
+    clamp_i.record(clamp._ref_i1)
+
+    # Step 3: Use clamp current as IClamp input to Y
+    iclamp = h.IClamp(0, sec=Y)
+    iclamp.del = 0
+    iclamp.dur = 1e9
+
+    clamp_i.play(iclamp._ref_amp, 1)
+
+    h.finitialize(-65)
+    h.continuerun(100)
+
+Notes
+-----
+
+.. note::
+
+   - Ensure consistent simulation step size (``dt``) for correct vector playback.
+   - The :meth:`Section.disconnect` method removes the connection of a section from its parent. If the section has child sections, consider the impact on the subtree.
+   - Voltage clamp and current clamp sites must correspond to the exact location where the voltage waveform was recorded.
+   - Active ion channel dynamics may cause nonlinear effects making exact replication challenging.
+   - Saving vectors to files (using :class:`File`) between steps can facilitate multi-stage workflows.
+
+Summary
+-------
+
+To isolate a section and reproduce its voltage response from a connected neuron:
+
+1. Record the voltage trace at the target location in the intact model.
+2. Disconnect the section and apply an :class:`SEClamp` voltage clamp playing back the recorded voltage waveform.
+3. Record the clamp current and replay it with an :class:`IClamp` current clamp on the isolated section.
+
+The stepwise approach compensates for the complex electrotonic interactions in the intact neuron and is the recommended method for such isolation experiments with active conductances.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2926 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2926>`_

@@ -1,0 +1,109 @@
+Non-uniform Distribution of Ion Channels in Sections
+======================================================
+
+When modeling neuron sections in NEURON, the parameter ``nseg`` determines the number of segments a section of length ``L`` is divided into. Each segment is considered isopotential, and NEURON computes membrane variables such as voltage at the center of each segment.
+
+.. note::
+   Choosing ``nseg=1`` does not imply that ion channel densities must be uniform over the section. Instead, it means that membrane current densities are sufficiently uniform so that the entire section can be accurately represented by values at the single segment midpoint.
+
+Spatial Discretization and Channel Density
+------------------------------------------
+
+- If the membrane current density varies significantly along the section (for example, due to non-uniform channel densities), then ``nseg`` should be increased to divide the section into smaller segments to capture this variability.
+- Avoid using an **even** number for ``nseg``, because the midpoint position (0.5) would lie between two segment centers, making queries at 0.5 ambiguous. It is preferable to use an odd number to place a segment at the exact midpoint.
+
+Assigning Different Channel Densities in a Section
+----------------------------------------------------
+
+NEURON allows assigning spatially varying channel densities using *range variables* that specify properties at any location along the section (from 0 to 1).
+
+**To specify non-uniform maximum conductance values (`gbar`):**
+
+- Use a distance-dependent function to set the channel conductance at any position in the section.
+- This can be done by defining a procedure or in Python by looping over all segments and assigning values accordingly.
+  
+Example: Assign a linear gradient of sodium channel conductance along the section in Python:
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section(name='soma')
+    sec.nseg = 11  # odd number for midpoint
+
+    # Insert the sodium channel mechanism (example: 'hh')
+    sec.insert('hh')
+
+    # Assign gbar for Na channels with a linear gradient:
+    for seg in sec:
+        dist = seg.x  # normalized position [0,1]
+        seg.hh.gnabar = 0.12 * (1 + dist)  # gbar increases linearly from 0.12 to 0.24
+
+Example: In HOC syntax, assign a Gaussian distribution of Na+ conductance:
+
+.. code-block:: hoc
+
+    objref sec
+    sec = new Section()
+    sec.nseg = 11
+
+    sec insert hh
+
+    proc set_gaussian_gnabar() { local i, x, gmax, mu, sigma
+        gmax = 0.12
+        mu = 0.5    // center of Gaussian (normalized position)
+        sigma = 0.1 // width of Gaussian
+        for i=0, (sec.nseg-1) {
+            x = (i + 0.5)/sec.nseg
+            sec.hh.gnabar[i] = gmax * exp(-((x - mu)*(x - mu)) / (2 * sigma * sigma))
+        }
+    }
+    set_gaussian_gnabar()
+
+Accessing and Plotting Segment Voltages
+---------------------------------------
+
+Each segment in a section has its own time-varying membrane potential, accessible via the segment's ``v`` attribute.
+
+- To record or plot voltage at all segments, you can iterate over all segments.
+
+Python example of recording and plotting voltage at each segment center using NEURON's Vector class:
+
+.. code-block:: python
+
+    from neuron import h
+    import matplotlib.pyplot as plt
+
+    sec = h.Section(name='soma')
+    sec.nseg = 11
+    sec.insert('hh')
+
+    # Create Vectors to record time and voltages at each segment
+    t = h.Vector().record(h._ref_t)
+    v_vecs = [h.Vector().record(seg._ref_v) for seg in sec]
+
+    h.finitialize(-65)
+    h.continuerun(40)
+
+    # Plot voltage traces for each segment
+    for i, v in enumerate(v_vecs):
+        plt.plot(t, v, label=f'seg {i}')
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Voltage (mV)')
+    plt.legend()
+    plt.show()
+
+.. note::
+   Using this approach, you can visualize spatial and temporal variation in membrane potentials resulting from non-uniform ion channel distributions.
+
+Summary
+-------
+
+- Use an odd number for ``nseg`` to avoid ambiguous midpoint values.
+- Assign spatially varying channel densities by setting the channel conductance at each segment, accessible via :attr:`h.Section` segments.
+- Access membrane potential at each segment center through :attr:`Segment.v`.
+- Record and plot these variables using :class:`h.Vector`.
+
+.. seealso::
+   :class:`h.Section`, :class:`h.Segment`, :class:`h.Vector`, :meth:`h.Section.record`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=287 <https://neuron.yale.edu/phpBB/viewtopic.php?t=287>`_

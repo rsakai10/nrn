@@ -1,0 +1,99 @@
+Morphology 3D Points Reconstruction with :class:`Import3d`
+
+When working with neuron morphologies imported via the :class:`Import3d` tool (e.g., from an `.asc` file), understanding how to access and interpret the 3D points of sections and segments is essential. This guide clarifies how NEURON manages 3D geometry data and how to properly reconstruct and navigate the morphology in Python or HOC.
+
+3D Coordinates Storage in Sections
+---------------------------------
+
+- A :class:`Section` stores its 3D coordinates using "3D points" arrays. These are accessed by the methods:
+
+  - :meth:`Section.n3d()` — returns the number of 3D points describing the section's morphology.
+  - :meth:`Section.x3d(index)`, :meth:`Section.y3d(index)`, :meth:`Section.z3d(index)` — return the x, y, and z coordinates of the 3D point at `index`.
+  - :meth:`Section.diam3d(index)` — diameter at the 3D point.
+
+- The 3D points (pt3d info) represent the morphology path and diameter at discrete locations along the section, describing its shape.
+
+- The first and last 3D points correspond to the 0 end of the section's first segment and the 1 end of the last segment respectively.
+
+- Importantly, **intermediate 3D points do not necessarily coincide with segment boundaries or segment centers**, and segments themselves do not store 3D coordinates directly.
+
+Iterating Over Segments and Sections
+------------------------------------
+
+- Segments of a section are ephemeral and determined by the section's spatial discretization parameter `nseg`. This number can change during model development.
+
+- Iterate over segments in a section using:
+
+  ```python
+  for seg in section:
+      # seg.x is the normalized location (0 ≤ seg.x ≤ 1) along the section
+      # seg represents an instance of nrn.Segment
+  ```
+
+- Creating a persistent list of segments is possible, but generally unnecessary:
+
+  ```python
+  segments = [seg for seg in section]
+  ```
+
+Clarifications About 3D Coordinates and Section Connectivity
+------------------------------------------------------------
+
+- A section does **not** store 3D coordinates for its parent connection point independently; however, you can access the connection relative location using :meth:`Section.parentseg()` which returns the parent segment at which the section is connected.
+
+- The value `seg.x` for `parentseg` corresponds to the normalized path length (0 to 1) along the *parent* section where the child section connects, **not** to a particular 3D point index from the pt3d data.
+
+- The 3D point connectivity is **not guaranteed to match exactly** between parent and child sections because:
+
+  1. The points used to describe section geometry (pt3d info) depend on shape irregularities and original measurement algorithms, not the segment discretization.
+  
+  2. The child section's 0 or 1 end can be connected anywhere along the parent section, including internal nodes (not strictly endpoints).
+  
+  3. The child's pt3d coordinates will be automatically translated for visualization (e.g., in shape plots) so that its 3D geometry connects correctly to the parent section, even if the original 3D data points differ.
+
+- Use :meth:`Section.pt3dstyle()` and related functionality to control or prevent these translations as needed.
+
+Example: Inspecting 3D Points of a Section
+------------------------------------------
+
+```python
+from neuron import h
+
+axon = h.Section(name='axon')
+axon.pt3dclear()
+axon.pt3dadd(0, 0, 0, 1)
+axon.pt3dadd(100, 0, 0, 1)
+
+print("Number of 3D points:", axon.n3d())
+for i in range(axon.n3d()):
+    print(f"Point {i}: x={axon.x3d(i)}, y={axon.y3d(i)}, z={axon.z3d(i)}, diam={axon.diam3d(i)}")
+```
+
+Handling Section Connectivity and Parent Segments
+-------------------------------------------------
+
+- To find the location along a parent section where a child connects:
+
+  ```python
+  parent_segment = child_section.parentseg()
+  connection_location = parent_segment.x  # normalized (0 to 1) distance along parent section
+  ```
+
+- This location is not tied intrinsically to any specific 3D point index from the parent section's pt3d data.
+
+Key Points Summary
+------------------
+
+.. note::
+
+    - Segments do not store their own 3D points. The 3D shape is stored at the section level.
+    - 3D points describe the shape path, not segment boundaries or centers.
+    - Segment count and positions depend on `nseg` and are dynamic.
+    - Parent-child connections can occur at any normalized position (0 ≤ x ≤ 1) along a parent section.
+    - The 3D morphology displayed in shape plots may be translated for proper visual connection; original pt3d points remain unchanged.
+
+.. seealso::
+
+    :meth:`Section.n3d`, :meth:`Section.x3d`, :meth:`Section.parentseg`, :meth:`Section.pt3dstyle`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4190 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4190>`_

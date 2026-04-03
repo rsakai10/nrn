@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changing Channel Densities Along a Section Without Altering Morphology &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected?" href="Is_it_possible_to_isolate_a_section_from_a_neuron_and_reproduce_its_voltage_response_as_if_it_were_still_connected.html" />
+    <link rel="prev" title="What are single compartment neuron models useful for, and how should I approach building and interpreting them in NEURON?" href="What_are_single_compartment_neuron_models_useful_for.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../what_is_neuron.html">What is NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_get_started.html">How to get started with NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bio_faq.html">Biology Modeling FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../units.html">Units used in NEURON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saveses.html">Using Session Files for Saving and Retrieving Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cellbuilder.html">Using the Cell Builder GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../import3d.html">Using the Import3D GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../network_builder_tutorials.html">Network Builder tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimization.html">Using NEURON’s Optimization Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modelview_compact_display.html">ModelView: Compact display of parameters for NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../randomness.html">Randomness in NEURON models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_mechanisms_to_cpp.html">Adapting MOD files for C++ with NEURON &gt;= 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#getting-started-general-usage">Getting Started &amp; General Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../faq.html#creating-using-models">Creating &amp; Using Models</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../how_do_i_create_a_neuron_model.html">How do I create a NEURON model?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how_do_i_create_a_neuron_model.html#help-i-m-having-a-hard-time-implementing-models">Help! I’m having a hard time implementing models!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Current_Clamp_Electrode_Modeling_with_Electrode_Resistance_and_Capacitance_in_NEURON.html">Current Clamp Electrode Modeling with Electrode Resistance and Capacitance in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Extending_a_Single-Compartment_Model_to_a_Multi-Compartment_Model.html">Extending a Single-Compartment Model to a Multi-Compartment Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Multicompartment_Soma_Modeling_and_Inhibitory_Synapse_Distribution.html">Multicompartment Soma Modeling and Inhibitory Synapse Distribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Collapse_a_dendritic_tree_into_an_arbitrary_number_of_compartments.html">Collapse a dendritic tree into an arbitrary number of compartments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Number_of_Sections_Compartments_and_nseg_in_NEURON.html">Number of Sections, Compartments, and nseg in NEURON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Templates_with_a_variable_number_of_sections.html">Templates with a variable number of sections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="What_are_single_compartment_neuron_models_useful_for.html">What are single compartment neuron models useful for, and how should I approach building and interpreting them in NEURON?</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Changing Channel Densities Along a Section Without Altering Morphology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Is_it_possible_to_isolate_a_section_from_a_neuron_and_reproduce_its_voltage_response_as_if_it_were_still_connected.html">Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How_are_Sections_Connected_in_NEURON.html">How are Sections Connected in NEURON?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#mechanisms-nmodl">Mechanisms &amp; NMODL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#simulation-control-parameters">Simulation Control &amp; Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#visualization-output">Visualization &amp; Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#data-handling-file-operations">Data Handling &amp; File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#synaptic-network-modeling">Synaptic &amp; Network Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#electrophysiology-stimulation">Electrophysiology &amp; Stimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#calcium-diffusion-modeling">Calcium &amp; Diffusion Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#technical-programming-in-hoc-python">Technical/Programming in HOC &amp; Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#performance-scaling">Performance &amp; Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#miscellaneous-other-tools">Miscellaneous / Other Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guides</a></li>
+          <li class="breadcrumb-item"><a href="../faq.html">Frequently asked questions (FAQ)</a></li>
+      <li class="breadcrumb-item active">Changing Channel Densities Along a Section Without Altering Morphology</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/guide/faq_rst2/Changing_Channel_Densities_Along_a_Section_Without_Altering_Morphology.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changing-channel-densities-along-a-section-without-altering-morphology">
+<h1>Changing Channel Densities Along a Section Without Altering Morphology<a class="headerlink" href="#changing-channel-densities-along-a-section-without-altering-morphology" title="Link to this heading"></a></h1>
+<p><strong>Q:</strong> How can I vary the density of ion channels at different positions along a dendritic section in NEURON without changing the section lengths or geometry?</p>
+<p><strong>A:</strong> Instead of subdividing sections into smaller pieces, you can use <em>range variables</em> to assign ion channel densities as a function of the normalized position along the section. This approach preserves the neuron’s morphology while allowing fine spatial control of channel properties.</p>
+<p><strong>Key points:</strong></p>
+<ul class="simple">
+<li><p>The number of segments <cite>nseg</cite> should be set sufficiently high (preferably an odd number) to allow spatial variation.</p></li>
+<li><p>Channel density parameters (e.g., <cite>gnabar_hh</cite>) can be assigned at any location along the section using the syntax <cite>section_name param_name(x) = value</cite>, where <cite>x</cite> ranges from 0 (start) to 1 (end).</p></li>
+<li><p>This feature avoids the need to manually split sections to achieve spatially varying channel densities.</p></li>
+</ul>
+<p>Example in Python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuron</span><span class="w"> </span><span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">diam</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="mi">9</span>  <span class="c1"># Use an odd number to ensure proper spatial discretization</span>
+
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set sodium channel density at different normalized positions along soma</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># near the beginning</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># middle</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.9</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.09</span>  <span class="c1"># near the end</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.1</span><span class="p">))</span>  <span class="c1"># 0.01</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1"># 0.05</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soma</span><span class="o">.</span><span class="n">gnabar_hh</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.9</span><span class="p">))</span>  <span class="c1"># 0.09</span>
+</pre></div>
+</div>
+<p>Example in Hoc:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">create</span> <span class="n">soma</span>
+<span class="n">soma</span> <span class="p">{</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">diam</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">nseg</span> <span class="o">=</span> <span class="mi">9</span>  <span class="o">//</span> <span class="n">Set</span> <span class="n">odd</span> <span class="n">number</span> <span class="n">of</span> <span class="n">segments</span>
+    <span class="n">insert</span> <span class="n">hh</span>
+
+    <span class="n">gnabar_hh</span><span class="p">(</span><span class="mf">.1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="o">//</span> <span class="n">Set</span> <span class="n">channel</span> <span class="n">density</span> <span class="n">near</span> <span class="n">start</span>
+    <span class="n">gnabar_hh</span><span class="p">(</span><span class="mf">.5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="o">//</span> <span class="n">Set</span> <span class="n">channel</span> <span class="n">density</span> <span class="ow">in</span> <span class="n">middle</span>
+    <span class="n">gnabar_hh</span><span class="p">(</span><span class="mf">.9</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.09</span>  <span class="o">//</span> <span class="n">Set</span> <span class="n">channel</span> <span class="n">density</span> <span class="n">near</span> <span class="n">end</span>
+
+    <span class="nb">print</span> <span class="n">gnabar_hh</span><span class="p">(</span><span class="mf">.1</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">gnabar_hh</span><span class="p">(</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">gnabar_hh</span><span class="p">(</span><span class="mf">.9</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This method enables gradient or region-specific channel densities without changing the morphology. Refer to NEURON’s documentation on range variables and the CellBuilder tutorials for additional guidance.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2718">https://neuron.yale.edu/phpBB/viewtopic.php?t=2718</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="What_are_single_compartment_neuron_models_useful_for.html" class="btn btn-neutral float-left" title="What are single compartment neuron models useful for, and how should I approach building and interpreting them in NEURON?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Is_it_possible_to_isolate_a_section_from_a_neuron_and_reproduce_its_voltage_response_as_if_it_were_still_connected.html" class="btn btn-neutral float-right" title="Is it possible to isolate a section from a neuron and reproduce its voltage response as if it were still connected?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

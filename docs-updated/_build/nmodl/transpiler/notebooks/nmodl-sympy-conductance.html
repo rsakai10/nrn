@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMODL CONDUCTANCE &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Contributing to the NMODL transpiler" href="../contributing.html" />
+    <link rel="prev" title="NMODL NONLINEAR solver" href="nmodl-nonlinear-solver.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">NMODL CONDUCTANCE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-2">Ex. 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-3">Ex. 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-4">Ex. 4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-5">Ex. 5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-6">Ex. 6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-7">Ex. 7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">NMODL CONDUCTANCE</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/nmodl/transpiler/notebooks/nmodl-sympy-conductance.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="NMODL-CONDUCTANCE">
+<h1>NMODL CONDUCTANCE<a class="headerlink" href="#NMODL-CONDUCTANCE" title="Link to this heading"></a></h1>
+<p>This notebook described the <code class="docutils literal notranslate"><span class="pre">CONDUCTANCE</span></code> keyword in NEURON, how it is implemented in NMODL, and shows some examples of the output generated by NMODL in different situations.</p>
+<p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading"></a></h2>
+<p>Motivation:</p>
+<ul class="simple">
+<li><p>during a NEURON simulation, a number of currents <span class="math notranslate nohighlight">\(I\)</span> may be generated</p></li>
+<li><p>at each time step, for each current <span class="math notranslate nohighlight">\(I\)</span> the corresponding conductance <span class="math notranslate nohighlight">\(dI/dV\)</span> needs to be calculated</p></li>
+<li><p>by default in NEURON this is approximated by a forwards difference: <span class="math notranslate nohighlight">\(dI/dV \simeq (I(v+\Delta v)-I(v))/\Delta v\)</span>, with <span class="math notranslate nohighlight">\(\Delta v = 0.001\)</span></p>
+<ul>
+<li><p>this introduces an <span class="math notranslate nohighlight">\(\mathcal{O}(\Delta v)\)</span> numerical error</p></li>
+<li><p>it also requires two current calculations, which may be computationally inefficient</p></li>
+</ul>
+</li>
+</ul>
+<p>Solution:</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">CONDUCTANCE</span></code> keyword was added to the NMODL language</p></li>
+<li><p>this allows the user to manually specify the analytic expression for the conductance in the MOD file</p></li>
+<li><p>during the simulation, instead of the numerical differentiation, the user supplied expression is used</p>
+<ul>
+<li><p>this solves the problem, but requires additional effort from the user</p></li>
+<li><p>it also opens up room for user error: an incorrect expression will still run but the results will not be correct</p></li>
+</ul>
+</li>
+</ul>
+<p>SymPy improvement:</p>
+<ul class="simple">
+<li><p>the currents in the mod file are differentiated analytically using SymPy</p></li>
+<li><p>the corresponding <code class="docutils literal notranslate"><span class="pre">CONDUCTANCE</span></code> statements are generated automatically</p>
+<ul>
+<li><p>no additional input required from the user</p></li>
+<li><p>avoids the possibility of user error</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="Implementation">
+<h2>Implementation<a class="headerlink" href="#Implementation" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">SympyConductanceVisitor</span></code> is defined in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/src/nmodl/visitors/sympy_conductance_visitor.hpp">src/nmodl/visitors/sympy_conductance_visitor.hpp</a>, and it makes use of the python function <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/src/nmodl/python/nmodl/ode.py#L580">differentiate2c</a> to perform the analytic differentation using the <a class="reference external" href="https://www.sympy.org/en/index.html">SymPy</a> symbolic math Python library.</p>
+<ul class="simple">
+<li><p>For each ion write statement <span class="math notranslate nohighlight">\(i = \dots\)</span> in the BREAKPOINT block</p>
+<ul>
+<li><p>Differentiate to find the conductance <span class="math notranslate nohighlight">\(g_i=di/dv\)</span></p></li>
+<li><p>If this <span class="math notranslate nohighlight">\(g_i\)</span> coincides with an existing variable, e.g. <span class="math notranslate nohighlight">\(g\)</span>, add to BREAKPOINT the statement:</p>
+<ul>
+<li><p>CONDUCTANCE g USEION ion_name</p></li>
+</ul>
+</li>
+<li><p>If not, also need to declare and asign a variable for the calculated conductance:</p>
+<ul>
+<li><p>LOCAL g_i_0</p></li>
+<li><p>CONDUCTANCE g_i_0 USEION ion_name</p></li>
+<li><p>g_i_0 = …</p></li>
+</ul>
+</li>
+<li><p>But if there is an existing CONDUCTANCE statement, then do not modify it</p></li>
+</ul>
+</li>
+<li><p>It may be the case that a variable in the write statement <span class="math notranslate nohighlight">\(i = \dots\)</span> itself depends on <span class="math notranslate nohighlight">\(v\)</span>, so to take this into account:</p>
+<ul>
+<li><p>an inlining visitor is first ran, after which all variable assignments occur within the BREAKPOINT block</p></li>
+<li><p>each preceeding expression is analysed in reverse order for <span class="math notranslate nohighlight">\(v\)</span> dependence</p></li>
+<li><p>if it depends on <span class="math notranslate nohighlight">\(v\)</span>, the rhs of the expression is substituted for the lhs in all following statements</p></li>
+<li><p>the end result is a (complicated) expression <span class="math notranslate nohighlight">\(i = ...\)</span> where all v dependence is explicit</p></li>
+<li><p>this is then differentiated w.r.t <span class="math notranslate nohighlight">\(v\)</span> to give the conductance</p></li>
+<li><p>it then checks if this expression is equivalent to an existing variable</p></li>
+<li><p>for this step it is necessary to also substitute all non-<span class="math notranslate nohighlight">\(v\)</span>-dependent expressions on both sides &amp; simplify</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="Implementation-Tests">
+<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The unit tests may be helpful to understand what these functions are doing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SympyConductanceVisitor</span></code> tests are located in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/nmodl/transpiler/unit/visitor/sympy_conductance.cpp">test/nmodl/transpiler/visitor/sympy_conductance.cpp</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">differentiate2c</span></code> tests are located in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/nmodl/transpiler/unit/ode/test_ode.py">test/nmodl/transpiler/unit/ode/test_ode.py</a></p></li>
+</ul>
+</section>
+<section id="Examples">
+<h2>Examples<a class="headerlink" href="#Examples" title="Link to this heading"></a></h2>
+<p>Here are some examples of generated CONDUCTANCE statements for a variety of sample mod files.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">neuron</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">neuron.nmodl.dsl</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nmodl</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">mod_string</span><span class="p">):</span>
+    <span class="c1"># parse NMDOL file (supplied as a string) into AST</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+    <span class="n">AST</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+    <span class="c1"># run SymtabVisitor to generate Symbol Table</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># constant folding, inlining &amp; local variable renaming passes</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">ConstantFolderVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">InlineVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">LocalVarRenameVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+
+    <span class="c1"># run CONDUCTANCE visitor</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">SympyConductanceVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># return new BREAKPOINT block</span>
+    <span class="k">return</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span>
+        <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">AST</span><span class="p">,</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">BREAKPOINT_BLOCK</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Ex.-1">
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>simple USEION statement, conductance equal to existing variable</p>
+<ul>
+<li><p>add CONDUCTANCE statement using existing variable</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    USEION na READ ena WRITE ina</span>
+<span class="s2">    RANGE gna</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    ina = gna*(v - ena)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    CONDUCTANCE gna USEION na
+    ina = gna*(v-ena)
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-2">
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>simple USEION statement, conductance not equal to existing variable</p>
+<ul>
+<li><p>declare new local variable</p></li>
+<li><p>assign conductance to it</p></li>
+<li><p>add CONDUCTANCE statement</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    USEION na READ ena WRITE ina</span>
+<span class="s2">    RANGE gna</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    ina = 0.1*gna*(v - ena)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    LOCAL g_na_0
+    CONDUCTANCE g_na_0 USEION na
+    g_na_0 = 0.1*gna
+    ina = 0.1*gna*(v-ena)
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-3">
+<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>simple NONSPECIFIC_CURRENT statement, conductance equal to existing variable</p>
+<ul>
+<li><p>add CONDUCTANCE statement using existing variable</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex3</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    NONSPECIFIC_CURRENT i</span>
+<span class="s2">    RANGE g</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    i = g*v</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    CONDUCTANCE g
+    i = g*v
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-4">
+<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>non-linear NONSPECIFIC_CURRENT statement, conductance not equal to existing variable</p>
+<ul>
+<li><p>declare new local variable</p></li>
+<li><p>assign conductance to it</p></li>
+<li><p>add CONDUCTANCE statement</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex4</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    NONSPECIFIC_CURRENT i</span>
+<span class="s2">    RANGE g</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    i = g*v + v*v</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    LOCAL g__0
+    CONDUCTANCE g__0
+    g__0 = g+2*v
+    i = g*v+v*v
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-5">
+<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>several current statements, conductance equal to existing variables</p>
+<ul>
+<li><p>add CONDUCTANCE statements</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex5</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    USEION na READ ena WRITE ina</span>
+<span class="s2">    USEION k READ ek WRITE ik</span>
+<span class="s2">    NONSPECIFIC_CURRENT il</span>
+<span class="s2">    RANGE gnabar, gkbar, gl, el, gna, gk</span>
+<span class="s2">}</span>
+<span class="s2">STATE {</span>
+<span class="s2">    m n h</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    gna = gnabar*m*m*m*h</span>
+<span class="s2">    ina = gna*(v - ena)</span>
+<span class="s2">    gk = gkbar*n*n*n*n</span>
+<span class="s2">    ik = gk*(v - ek)</span>
+<span class="s2">    il = gl*(v - el)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    CONDUCTANCE gl
+    CONDUCTANCE gk USEION k
+    CONDUCTANCE gna USEION na
+    gna = gnabar*m*m*m*h
+    ina = gna*(v-ena)
+    gk = gkbar*n*n*n*n
+    ik = gk*(v-ek)
+    il = gl*(v-el)
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-6">
+<h3>Ex. 6<a class="headerlink" href="#Ex.-6" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>current contains variables that depend on <span class="math notranslate nohighlight">\(v\)</span>, conductance equal to existing variable <code class="docutils literal notranslate"><span class="pre">x3</span></code></p>
+<ul>
+<li><p>substitute all variables with <span class="math notranslate nohighlight">\(v\)</span>-dependence, differentiate to find conductance</p></li>
+<li><p>compare result to each existing variable (after substituting all preceeding declarations on both sides)</p></li>
+<li><p>identify that expression for conductance is equivalent to <code class="docutils literal notranslate"><span class="pre">x3</span></code></p></li>
+<li><p>add CONDUCTANCE statement using this existing variable</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex6</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    USEION na READ ena WRITE ina</span>
+<span class="s2">    RANGE gna, x1, x2, x3</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    x1 = 0.2+3*v</span>
+<span class="s2">    x2 = v*v</span>
+<span class="s2">    x3 = 3*v*v+5*v-1.3</span>
+<span class="s2">    gna = x1 + x2</span>
+<span class="s2">    ina = gna*(v-0.5)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex6</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    CONDUCTANCE x3 USEION na
+    x1 = 0.2+3*v
+    x2 = v*v
+    x3 = 3*v*v+5*v-1.3
+    gna = x1+x2
+    ina = gna*(v-0.5)
+}
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-7">
+<h3>Ex. 7<a class="headerlink" href="#Ex.-7" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>current contains variables that depend on <span class="math notranslate nohighlight">\(v\)</span>, conductance not equal to existing variable</p>
+<ul>
+<li><p>substitute all variables with <span class="math notranslate nohighlight">\(v\)</span>-dependence, differentiate to find conductance</p></li>
+<li><p>compare result to each existing variable, no equivalent expression found</p></li>
+<li><p>declare new local variable, assign conductance to it</p></li>
+<li><p>add CONDUCTANCE statement using this new variable</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex7</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">    USEION na READ ena WRITE ina</span>
+<span class="s2">    RANGE gna, x1, x2</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    x1 = 0.2+3*v</span>
+<span class="s2">    x2 = v*v</span>
+<span class="s2">    gna = x1 + x2</span>
+<span class="s2">    ina = gna*(v-0.5)</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_conductance_visitor_and_return_breakpoint</span><span class="p">(</span><span class="n">ex7</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+BREAKPOINT {
+    LOCAL g_na_0
+    CONDUCTANCE g_na_0 USEION na
+    g_na_0 = 3*pow(v, 2)+5*v-1.3
+    x1 = 0.2+3*v
+    x2 = v*v
+    gna = x1+x2
+    ina = gna*(v-0.5)
+}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nmodl-nonlinear-solver.html" class="btn btn-neutral float-left" title="NMODL NONLINEAR solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="Contributing to the NMODL transpiler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

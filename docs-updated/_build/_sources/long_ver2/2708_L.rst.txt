@@ -1,0 +1,63 @@
+Only Plot Selected Sections in a Shape Plot
+=============================================
+
+When working with neuronal models containing multiple section types (e.g., soma, dendrites, axons), you may want to visualize only a subset of these sections using the :class:`Shape` plot utility. For example, to display only dendrites and exclude soma and axons, use a :class:`SectionList` to specify the desired sections and then connect this list to the :meth:`Shape.observe` method.
+
+Steps:
+1. Create a :class:`SectionList` and append only the sections you want to plot.
+2. Instantiate a :class:`Shape` object, which by default shows all sections.
+3. Call the :meth:`Shape.observe` method with the :class:`SectionList` to restrict the display.
+4. Optionally, call :meth:`Shape.exec_menu` with `"View = plot"` to display the shape plot window.
+
+Example in HOC
+--------------
+
+```hoc
+// Create a SectionList to hold only dendrites
+objref dendrites
+dendrites = new SectionList()
+
+// Append sections by name - replace with your dendrite names
+forsec "dendrite_1" dendrites.append()
+forsec "dendrite_2" dendrites.append()
+
+// Create a Shape object that initially shows the entire cell
+objref myshape
+myshape = new Shape()
+
+// Restrict the shape plot to only the dendrites in the SectionList
+myshape.observe(dendrites)
+
+// Open the shape plot window
+myshape.exec_menu("View = plot")
+```
+
+Example in Python
+-----------------
+
+```python
+from neuron import h
+
+# Create SectionList and add dendrite sections by name
+dendrites = h.SectionList()
+for sec in h.allsec():
+    if "dendrite" in sec.name():
+        dendrites.append(sec=sec)
+
+# Create a Shape object (shows all sections initially)
+myshape = h.Shape()
+
+# Observe only the dendrites
+myshape.observe(dendrites)
+
+# Display the shape plot window
+myshape.exec_menu("View = plot")
+```
+
+.. note::
+   You can customize the sections added to the :class:`SectionList` based on any criteria, such as name pattern matching or morphology. This method allows selective visualization of compartments in the shape plot without modifying the underlying morphology.
+
+.. seealso::
+   :class:`SectionList`, :class:`Shape`, :meth:`Shape.observe`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2708 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2708>`_

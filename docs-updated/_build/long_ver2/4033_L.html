@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changing NMODL Parameters Affecting Channel Kinetics from Hoc or Python &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changing NMODL Parameters Affecting Channel Kinetics from Hoc or Python</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4033_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changing-nmodl-parameters-affecting-channel-kinetics-from-hoc-or-python">
+<h1>Changing NMODL Parameters Affecting Channel Kinetics from Hoc or Python<a class="headerlink" href="#changing-nmodl-parameters-affecting-channel-kinetics-from-hoc-or-python" title="Link to this heading"></a></h1>
+<p>When writing mod files that describe ion channel kinetics in NEURON via NMODL, you may define various parameters affecting rate constants, time constants, and steady-state values. It is common to want to change these parameters dynamically from hoc or Python to explore their effects on channel behavior.</p>
+<p>This document explains the correct approach to changing such parameters and how to ensure that these changes affect the channel kinetics as expected.</p>
+<section id="parameter-naming-and-access">
+<h2>Parameter Naming and Access<a class="headerlink" href="#parameter-naming-and-access" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Suffix and Variable Names</strong>
+The <cite>SUFFIX</cite> declared in the NEURON block defines the namespace for mechanism variables and parameters. For instance, if the suffix is <cite>kv1</cite>, and you declare <cite>RANGE gkv1bar</cite> in the mechanism, the hoc variable will be accessed as <cite>gkv1bar_kv1</cite>.</p></li>
+<li><p><strong>Avoid Redundant Naming</strong>
+It is recommended to avoid embedding the suffix string redundantly in variable or parameter names. For example, use <cite>gbar</cite> instead of <cite>gkv1bar</cite> in the NMODL file, so that hoc access is <cite>gbar_kv1</cite> instead of <cite>gkv1bar_kv1</cite>. This improves code readability and ease of use.</p></li>
+</ul>
+</section>
+<section id="accessing-and-changing-parameters-in-hoc-or-python">
+<h2>Accessing and Changing Parameters in Hoc or Python<a class="headerlink" href="#accessing-and-changing-parameters-in-hoc-or-python" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Parameters declared as <cite>PARAMETER</cite> or <cite>GLOBAL</cite> in NMODL can be accessed and modified through hoc or Python using the mechanism instance variables, e.g.:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">kv1_instance.gbar_kv1</span> <span class="pre">=</span> <span class="pre">0.002</span>
+<span class="pre">print</span> <span class="pre">kv1_instance.gbar_kv1</span>
+<span class="pre">`</span></code></p>
+</li>
+<li><p><strong>Important:</strong> If you declare such variables in hoc scripts independently (e.g., <cite>gkv1bar = 0.0015</cite>), this creates unrelated hoc variables that do not affect the NMODL mechanism.</p></li>
+</ul>
+</section>
+<section id="handling-table-statements-and-parameter-changes">
+<h2>Handling TABLE Statements and Parameter Changes<a class="headerlink" href="#handling-table-statements-and-parameter-changes" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong>Purpose of TABLE</strong>
+The NMODL <cite>TABLE</cite> statement allows precomputing voltage-dependent variables such as activation/inactivation curves (e.g., <cite>ninf</cite>, <cite>tau</cite>) to accelerate simulations by using lookup tables instead of recalculating at every time step.</p></li>
+<li><p><strong>Issue with Changing Parameters</strong>
+When rate or steady-state variables depend on parameters that can be changed at runtime from hoc/Python, the lookup tables <em>do not automatically update</em> to reflect these changes.</p></li>
+<li><p><strong>Usual Implementation:</strong></p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>mod
+TABLE ninf, ntau, hinf, htau</p>
+<blockquote>
+<div><p>FROM -100 TO 100 WITH 200</p>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>This creates tables for the gating variables, but they only update during model initialization.</p>
+</li>
+<li><p><strong>What happens if you change parameters (e.g., `vhkv1ninf`) from hoc?</strong></p>
+<p>The tables are <em>not recalculated</em>, so the kinetics remain those computed for the original parameter values.</p>
+</li>
+</ul>
+</section>
+<section id="solutions-to-ensure-parameter-changes-take-effect">
+<h2>Solutions to Ensure Parameter Changes Take Effect<a class="headerlink" href="#solutions-to-ensure-parameter-changes-take-effect" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Disable Table Usage</strong></p>
+<p>Set the <cite>usetable</cite> flag for the mechanism to 0 in hoc or Python:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`hoc</span>
+<span class="pre">kv1_instance.usetable_kv1</span> <span class="pre">=</span> <span class="pre">0</span>
+<span class="pre">`</span></code></p>
+<p>This disables use of lookup tables, causing the model to recalculate gating variables at every time step, ensuring parameter changes are reflected immediately.</p>
+<p><strong>Note:</strong> This may slow down long simulations but guarantees correctness when you vary parameters dynamically.</p>
+</li>
+<li><p><strong>Use DEPEND Clauses in TABLE Statements</strong></p>
+<p>You can specify parameter dependencies in the <cite>TABLE</cite> statement so that NEURON knows when to rebuild the tables. For example:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>mod
+TABLE hinf</p>
+<blockquote>
+<div><p>DEPEND vhkv1hinf, kkv1hinf
+FROM -100 TO 100 WITH 200</p>
+</div></blockquote>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>This instructs NEURON to recompute <cite>hinf</cite> lookup tables whenever <cite>vhkv1hinf</cite> or <cite>kkv1hinf</cite> change.</p>
+<p>However:</p>
+<ul>
+<li><p><strong>NMODL supports only one `TABLE` statement per function or variable.</strong>
+You cannot split one variable’s table into multiple declarations.</p></li>
+<li><p>You must create <strong>separate functions or procedures</strong> for each table if different parameters affect different gating variables.</p></li>
+<li><p>Example splitting function (conceptual):</p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>mod
+FUNCTION ninf(v(v)) {</p>
+<blockquote>
+<div><p>TABLE DEPEND vhkv1ninf, kkv1ninf FROM -100 TO 100 WITH 200
+ninf = 1/(1+exp(-(v-vhkv1ninf)/kkv1ninf))</p>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>Avoid Overuse of `TABLE` with Numerous Parameters</strong></p>
+<p>Because managing multiple DEPEND clauses and splitting procedures increases code complexity and maintenance cost, consider:</p>
+<ul class="simple">
+<li><p>Commenting out the <cite>TABLE</cite> statements during early stages of model development or when parameters change frequently.</p></li>
+<li><p>Accepting a small decrease in simulation speed in exchange for modeling flexibility and correctness.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="additional-advice">
+<h2>Additional Advice<a class="headerlink" href="#additional-advice" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always <strong>read The NEURON Book</strong> chapters relevant to NMODL and hoc.</p></li>
+<li><p>Verify that you’re modifying the <em>correct</em> parameter variables bound to your channel instance, not hoc variables with the same names but unrelated to the mechanism.</p></li>
+<li><p>Use consistent, concise variable names without redundant suffixes.</p></li>
+<li><p>When performance is critical and parameters are fixed, use <cite>TABLE</cite> with appropriate <cite>DEPEND</cite> clauses.</p></li>
+</ul>
+</section>
+<section id="example-python-and-hoc-usage">
+<h2>Example Python and Hoc Usage<a class="headerlink" href="#example-python-and-hoc-usage" title="Link to this heading"></a></h2>
+<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a>python
+from neuron import h, gui</p>
+<p>soma = h.Section(name=’soma’)
+soma.insert(‘kv1’)</p>
+<p># Changing a parameter:
+soma.gbar_kv1 = 0.002  # assuming ‘gbar’ is the parameter name in mod file</p>
+<p># Disable use of tables (forces recalculation at each step)
+soma.usetable_kv1 = 0
+<a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a></p>
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a>hoc
+create soma
+access soma
+insert kv1</p>
+<p>// Change a parameter that affects kinetics
+soma.gbar_kv1 = 0.002</p>
+<p>// Disable use of lookup tables for kv1
+soma.usetable_kv1 = 0
+<a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a></p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>To change channel kinetic parameters at runtime and see effects immediately, either disable lookup tables (<cite>usetable=0</cite>) or define <cite>DEPEND</cite> clauses in <cite>TABLE</cite> statements for parameters that affect rate constants or steady states.</p></li>
+<li><p>Using redundant variable names with suffixes in NMODL is discouraged to simplify hoc/Python access.</p></li>
+<li><p>Remember that simply assigning hoc variables with the same names as NMODL parameters but not linked to the channel instance will have no effect on channel behavior.</p></li>
+<li><p>Performance gains from <cite>TABLE</cite> come at a complexity cost when parameters vary; prioritize correctness before optimization.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For detailed explanation of <cite>TABLE</cite> and <cite>DEPEND</cite>, see the NMODL documentation on table lookup usage.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">h.Section</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.Section.insert()</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">Mechanism.usetable_*</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4033">https://neuron.yale.edu/phpBB/viewtopic.php?t=4033</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

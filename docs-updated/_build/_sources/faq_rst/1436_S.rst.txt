@@ -1,0 +1,28 @@
+Arrays as RANGE Variables
+==========================
+
+In NMODL, STATE variables declared as arrays (e.g., `ca[Nannuli]`) are automatically RANGE variables, accessible from hoc or Python without explicit RANGE declaration.
+
+.. code-block:: nmodl
+
+   NEURON {
+     SUFFIX cadifus
+     DEFINE Nannuli 4
+     STATE {
+       ca[Nannuli]       (mM) <1e-10>
+       CaBuffer[Nannuli] (mM)
+       Buffer[Nannuli]   (mM)
+     }
+   }
+
+These can be accessed in hoc as, for example, ``ca_cadifus[0](x)``, ``ca_cadifus[1](x)``, etc., where ``x`` is the segment location.
+
+.. note::
+   The hoc name concatenates the state variable name, an underscore, and the suffix (mechanism name), followed by the index in brackets.
+
+To inspect accessible variables of a mechanism, insert it into a section and use a Graph's "Plot what?" feature to browse available names.
+
+.. warning::
+   Attempts to record an indexed STATE variable as a single vector will not multiplex all indices into that vector; each index must be recorded separately.
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=1436

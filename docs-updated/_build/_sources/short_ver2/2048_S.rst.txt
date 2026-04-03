@@ -1,0 +1,73 @@
+.. _simulation_consecutive_runs_savestate:
+
+Consecutive Simulations with Continuous State Using :class:`SaveState`
+====================================================================
+
+When performing multiple sequential simulations where each run continues from the final state of the previous run, use :class:`SaveState` carefully to preserve the neuron state without disrupting stimulus playback from vectors.
+
+Key points:
+
+- Call :meth:`Vector.play` only once before the first run, not inside loops.
+- For the first run, allow NEURON's default :func:`finitialize` behavior.
+- For subsequent runs, restore the saved state with :meth:`SaveState.restore(1)` to avoid clearing the event queue.
+- After each run, save the state with :meth:`SaveState.save()`.
+- Load stimulus waveforms into :class:`Vector` objects after initialization but before running each simulation segment.
+
+Example HOC setup:
+
+.. code-block:: hoc
+
+    objref stim, r, f, svstate
+    stim = IClamp[0]
+    stim.del = 0
+    stim.dur = 1e9
+    stim.amp = 0
+
+    DT = 0.025  // stimulus sampling interval
+
+    f = new File()
+    r = new Vector()
+    r.play(&stim.amp, DT)   // do once before SaveState saves
+    svstate = new SaveState()
+
+    proc myinit() {
+      finitialize(v_init)
+      if (!$1) {
+        svstate.restore(1)  // restore saved state without clearing event queue
+        t = 0
+        if (cvode.active()) {
+          cvode.re_init()
+        } else {
+          fcurrent()
+        }
+        frecord_init()
+      }
+    }
+
+    proc myrun() {
+      myinit($1)
+      continuerun(tstop)
+    }
+
+    proc batchrun() { local firstrun
+      firstrun = 1
+      for (i = 1; i <= $1; i = i + 1) {
+        sprint(filename, "stim%d.dat", i)
+        f.ropen(filename)
+        r.scanf(f)
+        f.close()
+        myrun(firstrun)
+        svstate.save()
+        firstrun = 0
+      }
+    }
+
+.. note::
+
+   It is critical to use :meth:`SaveState.restore(1)` (with argument 1) to prevent clearing the event queue, ensuring that the vector-based stimulus playback functions correctly on all runs.
+
+.. seealso::
+
+   :class:`Vector`, :meth:`Vector.play`, :class:`SaveState`, :func:`finitialize`, :func:`run`, :func:`continuerun`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2048 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2048>`_

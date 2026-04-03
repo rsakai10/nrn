@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remove All Point Processes from Sections &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Remove All Point Processes from Sections</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4389_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="remove-all-point-processes-from-sections">
+<h1>Remove All Point Processes from Sections<a class="headerlink" href="#remove-all-point-processes-from-sections" title="Link to this heading"></a></h1>
+<p>When working with point processes (e.g., <cite>IClamp</cite>, <cite>ExpSyn</cite>, <cite>Synapse</cite>) inserted at various locations in a model, it may be convenient to remove them all programmatically rather than tracking each instance individually.</p>
+<p>The recommended approach to manage point processes is to keep explicit references to them (e.g., in a Python list). Clearing that list will dereference and eventually remove the objects. Alternatively, if you want to <em>discover</em> and remove all point processes currently inserted in sections, you can do so by inspecting the <cite>point_processes</cite> dictionary returned by the <cite>psection()</cite> method of each section.</p>
+<p>Below are explanations and example code snippets demonstrating these approaches.</p>
+<section id="using-explicit-reference-management">
+<h2>Using Explicit Reference Management<a class="headerlink" href="#using-explicit-reference-management" title="Link to this heading"></a></h2>
+<p>To facilitate later removal of point processes, append them to a list at creation time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="n">doomed</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">dend</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dend&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create IClamp point processes and track references</span>
+<span class="n">doomed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)))</span>
+<span class="n">doomed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">dend</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)))</span>
+
+<span class="c1"># When removal is desired:</span>
+<span class="n">doomed</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Discarding the list dereferences the objects</span>
+</pre></div>
+</div>
+<p>This approach is bulletproof because once the reference count of NEURON objects drops to zero, the objects are automatically deleted. It is therefore best practice to manage references explicitly.</p>
+</section>
+<section id="discovering-and-removing-point-processes-without-prior-references">
+<h2>Discovering and Removing Point Processes Without Prior References<a class="headerlink" href="#discovering-and-removing-point-processes-without-prior-references" title="Link to this heading"></a></h2>
+<p>If explicit references were not saved, you can locate all existing point processes in every section by iterating over all sections and checking their point processes via <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.psection()</span></code>.</p>
+<ol class="arabic simple">
+<li><p>Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">h.allsec()</span></code> to get all sections.</p></li>
+<li><p>For each section, query the <cite>point_processes</cite> dictionary returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.psection()</span></code>.</p></li>
+<li><p>For each point process type, obtain the NEURON object(s).</p></li>
+<li><p>Remove the point processes by dereferencing them or by calling any cleanup methods if applicable.</p></li>
+</ol>
+<p>Note that NEURON does not provide a way to access the Python variable names of these objects, only their references.</p>
+<p>Example function to find and remove all point processes from all sections:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="k">def</span> <span class="nf">remove_all_point_processes</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">allsec</span><span class="p">():</span>
+        <span class="n">pps</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">psection</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;point_processes&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">for</span> <span class="n">pptype</span><span class="p">,</span> <span class="n">ppdict</span> <span class="ow">in</span> <span class="n">pps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">pptr</span> <span class="ow">in</span> <span class="n">ppdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="c1"># pptr is a NEURON object, dereference by removing references or</span>
+                <span class="c1"># call any cleanup if needed</span>
+
+                <span class="c1"># If the point process is directly accessible in Python code,</span>
+                <span class="c1"># you can delete it by:</span>
+                <span class="k">del</span> <span class="n">pptr</span>  <span class="c1"># Only deletes the local name, no effect here if no other refs exist</span>
+
+<span class="c1"># Usage</span>
+<span class="n">remove_all_point_processes</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since the objects returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.psection()</span></code> are references, simply deleting the local variable <cite>pptr</cite> in the loop does not remove the object if other references exist elsewhere in your code. It is best to keep explicit references and manage object lifetimes accordingly.</p>
+</div>
+</section>
+<section id="inspecting-live-point-processes">
+<h2>Inspecting Live Point Processes<a class="headerlink" href="#inspecting-live-point-processes" title="Link to this heading"></a></h2>
+<p>You can use <code class="xref py py-func docutils literal notranslate"><span class="pre">h.allobjects()</span></code> to list all live instances of a particular point process class and see their current reference counts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+
+<span class="c1"># List all live IClamp instances</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">allobjects</span><span class="p">(</span><span class="s2">&quot;IClamp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This prints instances such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IClamp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">with</span> <span class="mi">1</span> <span class="n">refs</span>
+<span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>This feature can help verify which objects are still live and whether your cleanup efforts were successful.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>It is good practice to explicitly keep references to all point processes you create for easier management and removal.</p></li>
+<li><p>To remove all point processes without prior references, iterate over all sections and inspect their inserted point processes using <code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.psection()</span></code>.</p></li>
+<li><p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">h.allobjects()</span></code> to inspect live point process instances and their reference counts.</p></li>
+<li><p>Setting all references to <cite>None</cite> or deleting them ensures objects are dereferenced and eligible for garbage collection.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Section.psection()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">h.allsec()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">h.allobjects()</span></code></p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4389">https://neuron.yale.edu/phpBB/viewtopic.php?t=4389</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

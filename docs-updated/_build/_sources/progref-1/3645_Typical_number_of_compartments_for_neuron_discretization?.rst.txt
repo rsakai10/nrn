@@ -1,0 +1,54 @@
+Typical Number of Compartments for Neuron Discretization
+==========================================================
+
+When modeling neurons using compartmental methods (e.g., in NEURON), a common question is: *What is the typical number of compartments necessary to model a typical neuron?* This depends heavily on the model purpose and neuron complexity.
+
+Key Points
+----------
+
+- There is **no single typical number** of compartments for neuron models.
+- The number of compartments varies widely depending on:
+  - The **modeling goals** and hypotheses.
+  - The **morphological detail** of the neuron.
+  - The **discretization method** used (e.g., the d_lambda rule).
+- Examples of compartment counts:
+  - **Single compartment models** for very simplified neurons.
+  - Models with **2 to a dozen compartments** for simplified branching structures.
+  - Models with **hundreds to thousands of compartments** for detailed morphologies.
+
+.. note::
+   The d_lambda rule is a common guideline to choose segment lengths based on the electrotonic length constant, ensuring numerical accuracy.
+
+Practical Advice
+----------------
+
+- Use the **d_lambda rule** to determine the number of segments per section for accuracy.
+- Consider the **trade-off between computational cost and model detail**.
+- For exploring feasibility of new algorithms or optimizations, knowing the order of magnitude (tens, hundreds, thousands) helps estimate memory and computation requirements.
+
+Additional Resources
+--------------------
+
+- ModelDB (https://senselab.med.yale.edu/ModelDB/) contains over 1200 neuron models with varying compartment counts and implementations.
+- Reviewing existing models can provide practical examples of compartment numbers used in different contexts.
+
+.. seealso::
+   - NEURON documentation on the d_lambda rule: https://neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/sections.html#section-discretization
+   - ModelDB: https://senselab.med.yale.edu/ModelDB/
+
+.. code-block:: python
+
+   # Example: setting number of segments using d_lambda rule in NEURON
+   for sec in h.allsec():
+       sec.nseg = int((sec.L / (0.1 * h.lambda_f(100))) + 0.9)
+
+Reference
+---------
+
+.. note::
+   This summary is based on a NEURON forum discussion:
+
+   - Topic: Typical number of compartments for neuron discretization?
+   - User: mldichter, ted
+   - Date: April 2017
+   - Link: https://www.neuron.yale.edu/phpBB/viewtopic.php?f=3&t=3645

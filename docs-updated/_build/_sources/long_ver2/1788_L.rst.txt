@@ -1,0 +1,172 @@
+Making a NetCon-Triggered Conductance Modulation in NMODL
+===========================================================
+
+This section explains how to implement a sodium channel conductance that is transiently set to zero following an action potential (AP) in a NEURON model. It addresses the question of how a mechanism can identify the cell (segment/process) that triggered a NetCon event, and provides an idiomatic NMODL solution using *self-events* and the `WATCH` statement within a point process mechanism.
+
+Goal
+----
+
+Set the sodium channel maximal conductance (`gbar`) to zero for a specified duration immediately following a spike, then restore it automatically after that interval, all within a single mechanism without additional external NetCons.
+
+Background and Challenges
+-------------------------
+
+- The classical approach of using an external NetCon to detect spikes and invoking a function with an argument identifying the source cell is awkward because NetCon event arguments are not evaluated immediately.
+
+- Density mechanisms (i.e., classic HH channels) do not have `NET_RECEIVE` blocks, so they cannot receive events directly.
+
+- Point process mechanisms *can* have `NET_RECEIVE` blocks and utilize NEURON's event delivery system, including `WATCH` statements and self-events, allowing mechanisms to internally detect spikes and schedule delayed events.
+
+Key Concepts
+------------
+
+- **Self-events**: Events sent by a mechanism to itself using :meth:`net_send`. They do not require external NetCon objects.
+
+- **WATCH statement**: A special statement to detect voltage threshold crossings inside the mechanism in the `NET_RECEIVE` block.
+
+- **flag argument**: An implicit integer argument in `NET_RECEIVE` handlers representing the type of event, set when a self-event is sent via :meth:`net_send`.
+
+Implementing a Sodium Conductance with Spike-Triggered Shutoff
+---------------------------------------------------------------
+
+The approach involves defining a point process mechanism that:
+
+- Detects spikes by placing a `WATCH (v > thresh)` statement in `NET_RECEIVE`.
+
+- On detection of a threshold crossing event, sets the sodium conductance `gm` to zero and schedules a self-event after a delay `toff` to restore the conductance.
+
+- Manages re-triggering during the off period by postponing the restoration event.
+
+Example NMODL Code Snippet
+--------------------------
+
+.. code-block:: mod
+
+    NEURON {
+        POINT_PROCESS NaShutoff
+        RANGE gbar, gm, thresh, toff
+    }
+
+    PARAMETER {
+        gbar = 0.12 (S/cm2)   : maximal conductance density
+        thresh = 10 (mV)     : spike detection threshold
+        toff = 1 (ms)        : duration to shut off conductance
+    }
+
+    ASSIGNED {
+        area (um2)
+        gmax (uS)            : maximal conductance scaled by segment area
+        gm (uS)              : current effective conductance (0 or gmax)
+        v (mV)
+        t (ms)
+    }
+
+    INITIAL {
+        gmax = gbar * area * 1e-8  : convert S/cm2 * um2 to uS; adjust scale as needed
+        gm = gmax
+        net_send(0, 3)             : initialize WATCH with a self-event flag=3
+    }
+
+    NET_RECEIVE (flag) {
+        if (flag == 3) {
+            WATCH (v > thresh) 2   : detect spike, trigger event with flag=2
+        }
+        else if (flag == 2) {       : spike detected: shut conductance off
+            if (gm > 0) {
+                gm = 0
+                net_send(toff, 1)  : schedule restoration with flag=1
+            } else {
+                net_move(t + toff)  : postpone restoration if already off
+            }
+        }
+        else if (flag == 1) {       : scheduled restoration time reached
+            gm = gmax
+        }
+    }
+
+Notes on Implementation
+-----------------------
+
+- `net_send(delay, flag)` schedules a self-event at `t + delay` with the given `flag`.
+
+- `net_move(newtime)` moves the pending self-event with the specified flag to `newtime`. It only applies to *one* outstanding event per flag value (only for flag=1 in this example).
+
+- The initial call to `net_send(0, 3)` in `INITIAL` ensures the `WATCH` statement is activated before simulation starts.
+
+- The `flag` argument to `NET_RECEIVE` is implicit and represents event identity; it corresponds to the second argument of `net_send`.
+
+- Conductance units must be converted correctly between local variables:
+  
+  Typically, density conductances `gbar` in S/cm² multiplied by segment area in µm² require unit conversion to obtain `gmax` in µS (microSiemens). The factor `1e-8` converts µm² to cm²; adjust if necessary.
+
+- This mechanism can be attached directly to the compartment segments where gNa is to be modulated. No external NetCon needs to be created.
+
+- Using a delay before shutting off the conductance (e.g., via flag==4 event) can help prevent AP truncation and preserve afterhyperpolarization shape, by scheduling the shutoff slightly after threshold crossing.
+
+Example Enhanced NET_RECEIVE with Delay Before Shutoff
+------------------------------------------------------
+
+.. code-block:: mod
+
+    NET_RECEIVE (flag) {
+        if (flag == 3) {
+            WATCH (v > thresh) 2
+        }
+        else if (flag == 2) {
+            net_send(delay, 4)    : delay before shutoff
+        }
+        else if (flag == 4) {
+            if (gm > 0) {
+                gm = 0
+                net_send(toff, 1) : schedule conductance restoration
+            } else {
+                net_move(t + toff) : extend restoration delay if already off
+            }
+        }
+        else if (flag == 1) {
+            gm = gmax              : restore conductance
+        }
+    }
+
+Usage Summary
+-------------
+
+1. Define a point process mechanism with parameters for conductance, threshold, and durations.
+
+2. In `INITIAL`, scale maximal conductance by segment area, initialize conductance state, and launch the WATCH self-event.
+
+3. Use `WATCH` inside `NET_RECEIVE` to detect spikes.
+
+4. On threshold crossing, schedule events to shut off and later restore sodium conductance.
+
+5. Attach the mechanism to relevant segments; no external NetCons are necessary for this functionality.
+
+Common Pitfalls and Tips
+------------------------
+
+- Forgetting to initialize the WATCH statement by sending a self-event (e.g., `net_send(0, 3)`) in `INITIAL` will make `WATCH` statements inactive.
+
+- `net_move` only works with an outstanding self-event of a given flag. Attempting to move an event without one causes errors.
+
+- Use `else if` to ensure mutually exclusive logic when switching conductance states and scheduling events, to avoid wasted computations and future bugs.
+
+- Watch out for units mismatches when computing `gmax` (segment area scaling).
+
+- Test the mechanism with voltage clamps and current injections to verify correct timing and behavior of conductance modulation.
+
+- The `flag` identifier allows multiplexing different event types (threshold detection, conductance shutoff, restoration) within the same mechanism.
+
+Further Reading
+---------------
+
+- :meth:`net_send` and the use of event flags
+
+- `WATCH` statements usage in `NET_RECEIVE`
+
+- Self-event scheduling and management in NMODL
+
+- Point process mechanisms and how to attach them to sections
+
+This idiomatic use of `WATCH` combined with self-events provides a clean, internally consistent way to achieve spike-triggered conductance modulation without external orchestration, perfect for modeling activity-dependent channel dynamics in biophysical neuron simulations.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1788 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1788>`_

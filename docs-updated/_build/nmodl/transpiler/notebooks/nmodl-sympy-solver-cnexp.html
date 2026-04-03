@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMODL SympySolver - cnexp &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="NMODL SympySolver - sparse" href="nmodl-sympy-solver-sparse.html" />
+    <link rel="prev" title="NMODL Kinetic Scheme" href="nmodl-kinetic-schemes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/currents.html">Currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/ions.html">Ions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contents/cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">NMODL SympySolver - cnexp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Pade-approximant">Pade approximant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-2">Ex. 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-3">Ex. 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-4">Ex. 4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-5">Ex. 5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Ex.-6">Ex. 6</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">NMODL SympySolver - cnexp</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/nmodl/transpiler/notebooks/nmodl-sympy-solver-cnexp.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="NMODL-SympySolver---cnexp">
+<h1>NMODL SympySolver - cnexp<a class="headerlink" href="#NMODL-SympySolver---cnexp" title="Link to this heading"></a></h1>
+<p>This notebook describes the implementation of the <code class="docutils literal notranslate"><span class="pre">cnexp</span></code> part of the <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code>, which solves the systems of ODEs defined in <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks when these ODEs are <em>linear</em> and <em>independent</em>.</p>
+<p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
+<p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
+<hr class="docutils" />
+<section id="Implementation">
+<h2>Implementation<a class="headerlink" href="#Implementation" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> for solver method <code class="docutils literal notranslate"><span class="pre">cnexp</span></code> does the following:</p>
+<ul class="simple">
+<li><p>Get list of all global scope variables from the Symbol Table, as well as any local variables in DERIVATIVE block</p></li>
+<li><p>For each differential equation in DERIVATIVE block:</p>
+<ul>
+<li><p>Parse equation into SymPy, giving it the list of variables</p></li>
+<li><p>This gives us a differential equation of the form:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\frac{dm}{dt} = f(m, \dots)\)</span></p></li>
+<li><p>where the function <span class="math notranslate nohighlight">\(f\)</span> depends on <span class="math notranslate nohighlight">\(m\)</span>, as well as possibly other variables reprensented by <span class="math notranslate nohighlight">\(\dots\)</span> which we assume do not depend on <span class="math notranslate nohighlight">\(m\)</span> or <span class="math notranslate nohighlight">\(t\)</span></p></li>
+</ul>
+</li>
+<li><p>Solve equation analytically using <a class="reference external" href="https://docs.sympy.org/latest/modules/solvers/ode.html">sympy.dsolve</a> to give a solution of the form:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(m(t+dt) = g(m(t), dt, \dots)\)</span></p></li>
+<li><p>where <span class="math notranslate nohighlight">\(g\)</span> is some function that depends on the value of <span class="math notranslate nohighlight">\(m\)</span> at time t, the timestep <span class="math notranslate nohighlight">\(dt\)</span>, and the other variables (<span class="math notranslate nohighlight">\(\dots\)</span>).</p></li>
+</ul>
+</li>
+<li><p>Replace ODE with analytic solution as C code using <a class="reference external" href="https://docs.sympy.org/latest/_modules/sympy/printing/ccode.html">sympy.printing.ccode</a></p></li>
+<li><p>If we fail to find a solution then do nothing - so currently NMODL reverts to using the legacy CNEXP solver routine (same as mod2c or nocmodl)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="Pade-approximant">
+<h2>Pade approximant<a class="headerlink" href="#Pade-approximant" title="Link to this heading"></a></h2>
+<p>There is an option <code class="docutils literal notranslate"><span class="pre">use_pade_approx</span></code> which if enabled does the following extra step:</p>
+<ul class="simple">
+<li><p>Given the analytic solution <span class="math notranslate nohighlight">\(f(t)\)</span>:</p>
+<ul>
+<li><p>Expand the solution in a Taylor series in <code class="docutils literal notranslate"><span class="pre">dt</span></code>, extract the coefficients <span class="math notranslate nohighlight">\(a_i\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(f(t + dt) = f(t) + dt f'(t) + dt^2 f''(t) / 2 + \dots = a_0 + a_1 dt + a_2 dt^2 + \dots\)</span></p></li>
+</ul>
+</li>
+<li><p>Construct the (1,1) Pade approximant to the solution using these Taylor coefficients</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(f_{PADE}(t+dt) = (a_0 a_1 + (a_1^2 - a_0 a_2) dt)/(a_1 - a_2 dt)\)</span></p></li>
+</ul>
+</li>
+<li><p>Return this approximate solution (correct to second order in <span class="math notranslate nohighlight">\(dt\)</span>) as C code</p></li>
+</ul>
+</li>
+</ul>
+<p>(Replacing the exponential with a Pade aproximant here was suggested in sec 5.2 of (<a class="reference external" href="https://www.eccomas2016.org/proceedings/pdf/7366.pdf">https://www.eccomas2016.org/proceedings/pdf/7366.pdf</a>) - since the overall numerical integration scheme in NEURON is only correct to first or second order in <span class="math notranslate nohighlight">\(dt\)</span>, it is valid to expand the analytic solution here to the same order and so avoid evaluating the exponential function)</p>
+</section>
+<hr class="docutils" />
+<section id="Implementation-Tests">
+<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Link to this heading"></a></h2>
+<p>The unit tests may be helpful to understand what these functions are doing</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> tests are located in <a class="reference external" href="https://github.com/neuronsimulator/nrn/blob/master/test/nmodl/transpiler/unit/visitor/sympy_solver.cpp">test/nmodl/transpiler/unit/visitor/sympy_solver.cpp</a>, and tests involving <code class="docutils literal notranslate"><span class="pre">cnexp</span></code> have the tag “<code class="docutils literal notranslate"><span class="pre">[cnexp]</span></code>”</p></li>
+</ul>
+</section>
+<section id="Examples">
+<h2>Examples<a class="headerlink" href="#Examples" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">neuron</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">neuron.nmodl.dsl</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nmodl</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_sympy_solver</span><span class="p">(</span><span class="n">mod_string</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># parse NMDOL file (supplied as a string) into AST</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+    <span class="n">AST</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+    <span class="c1"># run SymtabVisitor to generate Symbol Table</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># constant folding, inlining &amp; local variable renaming passes</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">ConstantFolderVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">InlineVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">LocalVarRenameVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># run SympySolver visitor</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">SympySolverVisitor</span><span class="p">(</span><span class="n">use_pade_approx</span><span class="o">=</span><span class="n">pade</span><span class="p">)</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># return contents of new DERIVATIVE block as list of strings</span>
+    <span class="k">return</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span>
+        <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">AST</span><span class="p">,</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DERIVATIVE_BLOCK</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<section id="Ex.-1">
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Link to this heading"></a></h3>
+<p>Single constant ODE</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = 4</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex1</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex1</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:      m = 4*dt+m
+pade approx:         m = 4*dt+m
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-2">
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Link to this heading"></a></h3>
+<p>Single linear ODE</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = a*m</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex2</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex2</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:      m = m*exp(a*dt)
+pade approx:         m = -m*(a*dt+2)/(a*dt-2)
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-3">
+<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Link to this heading"></a></h3>
+<p>Single linear ODE</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex3</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = (minf-m)/mtau</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex3</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex3</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:      m = minf-(-m+minf)*exp(-dt/mtau)
+pade approx:         m = (-dt*m+2*dt*minf+2*m*mtau)/(dt+2*mtau)
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-4">
+<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Link to this heading"></a></h3>
+<p>Single linear ODE that can be simplified</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex4</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = (minf-m)/mtau - m/mtau - 2*minf/mtau + 3*m/mtau</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex4</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex4</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:      m = minf+(m-minf)*exp(dt/mtau)
+pade approx:         m = (-dt*m+2*dt*minf-2*m*mtau)/(dt-2*mtau)
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-5">
+<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Link to this heading"></a></h3>
+<p>Single nonlinear ODE with analytic solution</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex5</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = m^3</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex5</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex5</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:      m = sqrt(-pow(m, 2)/(2*dt*pow(m, 2)-1))
+pade approx:         m = pow(m, 2)*(dt*pow(m, 2)-2)*pow(pow(m, 2), -0.5)/(3*dt*pow(m, 2)-2)
+</pre></div></div>
+</div>
+</section>
+<section id="Ex.-6">
+<h3>Ex. 6<a class="headerlink" href="#Ex.-6" title="Link to this heading"></a></h3>
+<p>Single nonlinear ODE (more complicated and not handled yet): unsupported, so does not modify DERIVATIVE block, leaves it to a later visitor pass to deal with</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex6</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = exp(m)^2</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex6</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex6</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:      m&#39; = exp(m)^2
+pade approx:         m&#39; = exp(m)^2
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nmodl-kinetic-schemes.html" class="btn btn-neutral float-left" title="NMODL Kinetic Scheme" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nmodl-sympy-solver-sparse.html" class="btn btn-neutral float-right" title="NMODL SympySolver - sparse" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

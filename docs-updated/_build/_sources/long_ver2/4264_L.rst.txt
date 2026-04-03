@@ -1,0 +1,139 @@
+Action Potential Propagation and Intracellular Voltage in NEURON
+=================================================================
+
+This section addresses common questions about modeling action potential propagation, point models, and computation of intracellular voltage in NEURON.
+
+Cable Theory and Point Models
+-----------------------------
+NEURON typically models neurons using cable theory with sections representing cylindrical cable segments. However, **point models** are also supported:
+
+- To create a biophysical point model, use a single section with `nseg = 1`.
+- For simplified integrate-and-fire style models, use built-in artificial cells such as :class:`IntFire`, :class:`IntFire2`, or :class:`IntFire4`.
+- Custom artificial cell models can be created with MOD files of type `ARTIFICIAL_CELL`.
+
+Example: Creating a single-compartment biophysical neuron
+```hoc
+create soma
+access soma
+soma.nseg = 1
+soma.L = 18.8
+soma.diam = 18.8
+soma.insert("hh")
+```
+
+Action Potential Propagation and Spatial Discretization
+------------------------------------------------------
+
+If you want to observe action potential propagation along an axon, ensure the axon is subdivided into multiple segments (`nseg > 1`). Setting `nseg = 1` means the axon is a single electrical compartment, so voltage is uniform along its length, and no propagation delay will be observed when recording at different locations.
+
+**To observe propagation delay:**
+
+- Increase the number of segments, e.g., `axon.nseg = 101`.
+- Use a smaller axon diameter (e.g., 2 µm instead of 18.8 µm) to impose greater axial resistance and slow propagation.
+- Use a brief stimulus (e.g., 1 ms duration) for sharper spike initiation and clearer propagation timing.
+
+Example Python script demonstrating this setup and plotting voltage at two axon locations:
+
+```python
+import matplotlib.pyplot as plt
+from neuron import h
+from neuron.units import ms, mV
+
+h.load_file("stdrun.hoc")
+
+soma = h.Section(name="soma")
+axon = h.Section(name="axon")
+axon.connect(soma(0))
+
+# Biophysical properties
+soma.nseg = 1
+soma.diam = soma.L = 18.8  # µm
+
+axon.nseg = 101
+axon.diam = 2  # µm, smaller diameter slows conduction
+axon.L = 500  # µm
+
+for sec in [soma, axon]:
+    sec.Ra = 123  # Axial resistance in ohm-cm
+    sec.insert("hh")  # Hodgkin-Huxley channels
+
+stim = h.IClamp(soma(0.5))
+stim.delay = 100 * ms
+stim.dur = 1 * ms
+stim.amp = 0.9  # nA
+
+# Record time and membrane potentials at two locations on axon
+t = h.Vector().record(h._ref_t)
+v1 = h.Vector().record(axon(0.1)._ref_v)
+v2 = h.Vector().record(axon(0.9)._ref_v)
+
+h.finitialize(-65 * mV)
+h.continuerun(300 * ms)
+
+plt.plot(t, v1, label="axon(0.1).v")
+plt.plot(t, v2, label="axon(0.9).v")
+plt.xlim(99, 110)
+plt.xlabel("Time (ms)")
+plt.ylabel("Membrane potential (mV)")
+plt.legend()
+plt.show()
+```
+
+This will display a clear propagation delay (~1 ms) between membrane voltages recorded near the proximal and distal ends of the axon.
+
+Computing Intracellular Voltage with Extracellular Mechanism
+------------------------------------------------------------
+
+When the `extracellular` mechanism is inserted into a section to model extracellular potentials, it provides an external potential `vext` relative to ground (0 mV).
+
+- The variable `v` at any location is the transmembrane potential (inside minus outside).
+- The extracellular potential just outside the membrane is accessible via `vext[0](x)` in HOC or `sec(x).vext[0]` in Python.
+
+**Intracellular absolute potential relative to ground** at location *x* is given by:
+
+.. math::
+
+   V_i(x) = V_m(x) + V_e(x)
+
+where:
+
+- \(V_i(x)\) is intracellular potential,
+- \(V_m(x) = sec(x).v\),
+- \(V_e(x) = sec(x).vext[0]\).
+
+### Recording intracellular voltage during simulation
+
+It is more efficient to record both `v` and `vext[0]` separately during simulation and add them post hoc rather than compute their sum at each time step.
+
+Example in Python:
+```python
+sec = h.Section(name='foo')
+sec.insert('extracellular')
+
+# Record vectors for membrane and extracellular voltages
+t = h.Vector().record(h._ref_t)
+v_mem = h.Vector().record(sec(0.5)._ref_v)
+v_ext = h.Vector().record(sec(0.5).vext._ref_e0[0])
+
+h.finitialize(-65)
+h.continuerun(100)
+
+# Compute intracellular voltage by element-wise vector addition
+v_intracellular = v_mem + v_ext
+```
+
+Replace `sec(0.5).vext._ref_e0[0]` with the appropriate reference to `vext[0]` for the programming language and NEURON version you are using.
+
+.. note::
+
+   Consult the Programmer's Reference for :meth:`Vector.record` to correctly set up recording variables.
+
+Summary
+-------
+
+- NEURON supports both cable-theory-based sections and point neuron models.
+- To simulate action potential propagation, use adequately fine spatial discretization with multiple segments and realistic geometry.
+- Intracellular potential relative to ground is obtained by summing transmembrane potential and extracellular potential (`v + vext[0]`).
+- Record `v` and `vext` during simulation and compute their sum post simulation for efficiency.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4264 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4264>`_

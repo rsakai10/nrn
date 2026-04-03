@@ -1,0 +1,39 @@
+Ineffective Current Injection with Short Duration Pulse
+======================================================
+
+When using :meth:`h.IClamp` to deliver very brief current pulses in a fixed time step simulation, the voltage response may be absent or negligible if the pulse duration is shorter than the integration time step (:attr:`h.dt`). This occurs because the simulation only computes membrane potentials at discrete time points spaced by :attr:`h.dt`. If the pulse does not overlap any of these points, its effect is not captured.
+
+.. note::
+
+   For example, injecting a 1 nA current for 0.1 ms (longer than the default :attr:`h.dt` = 0.025 ms) produces a visible voltage change. However, a 1000 nA pulse lasting 0.01 ms (shorter than :attr:`h.dt`) may produce no observable response because it misses all sample points.
+
+To observe such brief stimuli, consider:
+
+- Using variable time step integration (:func:`cvode.active(1)`) which automatically adjusts :attr:`h.dt` for accuracy.
+
+- Decreasing :attr:`h.dt` in fixed time step mode to be shorter than the stimulus duration.
+
+Example (Python):
+
+.. code-block:: python
+
+   stim = h.IClamp(soma(0.5))
+   stim.delay = 0
+   stim.dur = 0.01  # ms
+   stim.amp = 1000  # nA
+   h.dt = 0.025     # Fixed dt larger than pulse duration
+
+.. code-block:: hoc
+
+   objref stim
+   stim = new IClamp(soma(0.5))
+   stim.del = 0
+   stim.dur = 0.01  // ms
+   stim.amp = 1000  // nA
+   dt = 0.025       // Fixed dt larger than pulse duration
+
+.. seealso::
+
+   :attr:`h.dt`, :meth:`h.IClamp`, :func:`cvode.active`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3930 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3930>`_

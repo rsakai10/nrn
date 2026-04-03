@@ -1,0 +1,39 @@
+Inhibition Analysis and Synaptic Weight Selection
+==================================================
+
+Choosing an appropriate synaptic weight depends on your modeling context and goals.
+
+- In conductance-based synapses such as :class:`ExpSyn` and :class:`Exp2Syn`, the weight specifies the peak conductance change (in microsiemens) and must be non-negative. The synaptic effect's polarity (excitatory or inhibitory) is determined by the synaptic reversal potential, not the weight sign.
+
+- For artificial spiking cell classes like :class:`IntFire1`, weight represents the instantaneous change in the activation variable; it can be positive (excitatory) or negative (inhibitory).
+
+- Extremely large weights (e.g., 10000 µS) may not produce the expected physiological effect due to factors like synapse location, decay time constant, or reversal potential.
+
+There is no universal “correct” weight. Weights should be chosen based on the hypothesis, experimental data, and network scale. Start with biophysically plausible values and assess postsynaptic responses.
+
+.. note::
+   The synaptic weight magnitude and its meaning depend on the synapse model used and the properties of the postsynaptic cell. Consult the NEURON Programmer’s Reference for details on classes like :class:`ExpSyn` and :class:`IntFire1`.
+
+Example in Python using :class:`ExpSyn`:
+
+.. code-block:: python
+
+    syn = ExpSyn(target_segment(0.5))
+    syn.e = -75  # inhibitory reversal potential (mV)
+    syn.tau = 2  # decay time constant (ms)
+    syn.gmax = 0.001  # weight in microsiemens
+
+Example in HOC for an inhibitory synapse:
+
+.. code-block:: hoc
+
+    objref syn
+    syn = new ExpSyn(target_segment(0.5))
+    syn.e = -75
+    syn.tau = 2
+    syn.gmax = 0.001  // synaptic weight
+
+.. seealso::
+   :class:`ExpSyn`, :class:`Exp2Syn`, :class:`IntFire1`, :class:`IntFire2`, :class:`IntFire4`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1168 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1168>`_

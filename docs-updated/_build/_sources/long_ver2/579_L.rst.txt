@@ -1,0 +1,115 @@
+Stylized Model in NEURON and Building Custom Neuron Models
+===========================================================
+
+This section covers how to explore the "stylized" neuron model from the NEURON demo, understand its anatomical and biophysical properties, and guidelines for building new neuron models using hoc files.
+
+Exploring the Stylized Model
+----------------------------
+
+The "stylized" model in the NEURON demo is a simplified Hodgkin-Huxley (HH) neuron illustrating spatial summation and synaptic integration. It is organized with multiple dendrites and an axon for spike propagation.
+
+To inspect the structure and parameters of this model:
+
+1. **Identify Section Topology**
+
+   At the `oc>` prompt, type:
+
+   .. code-block:: hoc
+
+      topology()
+
+   This command displays how sections connect to form the cell's branched architecture.
+
+2. **Inspect Section Properties**
+
+   To view the anatomical and electrical properties assigned to each section, type:
+
+   .. code-block:: hoc
+
+      forall psection()
+
+   This outputs hoc statements that specify biophysical parameters for all sections.
+
+3. **Use Model View Tool**
+
+   For a more user-friendly interface of parameters and mechanisms, launch the Model View tool via:
+
+   .. code-block:: text
+
+      NEURON Main Menu -> Tools -> Model View
+
+   This tool compactly displays morphology, mechanisms, and parameter values.
+
+Understanding the Origin of Model Parameters
+---------------------------------------------
+
+Model parameters—such as morphology and membrane mechanisms—are not arbitrarily chosen but are designed following these principles:
+
+- **Define the Purpose:** Decide the phenomenon of interest, e.g., spatial summation.
+- **Conceptual Model:** Abstract and simplify the biological system to include only relevant features necessary to study the phenomenon.
+- **Computational Model:** Accurately implement the conceptual model without omitting or adding features.
+
+The parameters in the stylized model typically span ranges supported by experimental data on neuronal morphology and physiology, chosen to illustrate generic principles rather than replicate a specific neuron type. For detailed parameter justification, consult experimental literature and databases such as neuroelectro.org.
+
+Building a New Neuron Model Using hoc Files
+-------------------------------------------
+
+A hoc file is often sufficient to define and simulate a new neuron model, provided it:
+
+- **Includes all relevant sections and connectivity**
+- **Sets anatomical and biophysical properties explicitly**
+- **Includes mechanisms (e.g., ion channels) as needed**
+- **Runs without syntax errors in NEURON**
+
+To build a neuron model using a hoc file:
+
+1. Create a text file with hoc code defining topology, morphology, and biophysical mechanisms.
+2. Save the file with a `.hoc` extension.
+3. Load the file in NEURON using:
+
+   .. code-block:: python
+
+      from neuron import h
+      h.load_file("my_neuron_model.hoc")
+
+4. Run your simulation or explore the model interactively.
+
+If a hoc file "does not work" when loaded, verify:
+
+- Syntax correctness in the hoc source code.
+- The file is accessible to NEURON (correct path).
+- All dependencies (e.g., inserted mechanisms, ion channel files) are present and loaded.
+
+Example Minimal hoc Model Structure:
+
+.. code-block:: hoc
+
+   create soma, dend[2], axon
+   connect dend[0](0), soma(0)
+   connect dend[1](0), soma(0)
+   connect axon(0), soma(1)
+
+   forall {
+     nseg = 1
+     diam = 1
+     L = 100
+     insert pas
+   }
+
+   soma {
+     insert hh
+     diam = 12.6157
+     L = 12.6157
+     nseg = 1
+   }
+
+Summary
+-------
+
+- Use `topology()` and `forall psection()` to inspect model anatomy and parameters.
+- Use Model View for a graphical parameter summary.
+- Understand that model parameters are chosen based on the modeling purpose and biological data.
+- Developing a custom neuron requires writing correct hoc code defining structure and mechanisms.
+- Loading and troubleshooting your hoc files systematically helps ensure the model works in NEURON.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=579 <https://neuron.yale.edu/phpBB/viewtopic.php?t=579>`_

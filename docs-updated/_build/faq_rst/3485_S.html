@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spatial Discretization for Radial Diffusion of Ca &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Spatial Discretization for Radial Diffusion of Ca</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq_rst/3485_S.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spatial-discretization-for-radial-diffusion-of-ca">
+<h1>Spatial Discretization for Radial Diffusion of Ca<a class="headerlink" href="#spatial-discretization-for-radial-diffusion-of-ca" title="Link to this heading"></a></h1>
+<p>When modeling calcium dynamics using radial shells with mechanisms such as calcium accumulation and BK channels, the shell thickness varies with section diameter, affecting calcium concentration signals seen by membrane channels.</p>
+<p>Key recommendations for discretization:</p>
+<ul class="simple">
+<li><p>There is no direct analog to the <em>d_lambda</em> rule for radial diffusion discretization; empirical testing is advised.</p></li>
+<li><p>Use a simplified model cell (e.g., single section, length ~10 μm) where shell thickness is a fixed fraction of the radius. Compare versions with different numbers of shells (e.g., 4, 2, 10, 50, 250 shells) to find discretization that balances accuracy and efficiency.</p></li>
+<li><p>The outermost shell should be half as thick as the others to ensure second-order spatial accuracy at the membrane surface where BK channels reside.</p></li>
+<li><p>To model BK channel activation by calcium, use the calcium concentration in the outermost shell or at a fixed radial depth; discrepancies between these approaches should be evaluated for functional significance.</p></li>
+<li><p>Assess differences in BK channel conductance and current integrals over relevant timescales to determine if discretization changes produce meaningful effects, considering biological variability in channel densities.</p></li>
+</ul>
+<p>Example snippet calculating shell volumes with varying thicknesses (from <cite>cabpump.mod</cite>):</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>PROCEDURE coord() {
+    LOCAL r, dr2
+    r = 1/2                : half diameter (start at outer radius)
+    dr2 = r/(NANN)         : full thickness of each annulus
+    vol[0] = 0
+    frat[0] = 2*r
+    FROM i=0 TO NANN-1 {
+        vol[i] = PI*(r^2 - (r - dr2)^2)*1    : shell volume for unit length
+        frat[i] = 2*PI*r / dr2                : outer edge circumference / shell thickness
+        r = r - dr2
+    }
+}
+</pre></div>
+</div>
+<p>On alternative equal-thickness shells, note that the second-order central difference scheme favors an outer shell half-thickness for spatial accuracy as explained in <em>The NEURON Book</em>, to correctly position the calcium concentration at the membrane.</p>
+<section id="modeling-calcium-and-er-compartments">
+<h2>Modeling Calcium and ER Compartments<a class="headerlink" href="#modeling-calcium-and-er-compartments" title="Link to this heading"></a></h2>
+<p>To represent cytoplasmic and ER volumes within shells, use <code class="xref std std-keyword docutils literal notranslate"><span class="pre">COMPARTMENT</span></code> in the kinetic block with volume fractions:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>KINETIC state {
+    COMPARTMENT ii, (1 + bbr) * diam * diam * vol[ii] * 0.83 { ca }   : cytoplasm volume fraction with buffer binding ratio bbr
+    COMPARTMENT jj, diam * diam * vol[jj] * 0.17 { caer }             : ER volume fraction
+
+    : Example SERCA pump flux affecting both compartments:
+    FROM i=0 TO NANN-1 {
+        dsqvol = diam * diam * vol[i] * 0.83
+        dsqvoler = diam * diam * vol[i] * 0.17
+
+        jserca[i] = (-vmaxsr * ca[i]^2 / (ca[i]^2 + kpsr^2))
+        ~ ca[i] &lt;&lt; (dsqvol * jserca[i])
+        ~ caer[i] &lt;&lt; (-dsqvoler * jserca[i])
+    }
+}
+</pre></div>
+</div>
+<p>Ensure that <a href="#id1"><span class="problematic" id="id2">:var:`caer`</span></a> is declared as a state variable and initialized appropriately in the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">INITIAL</span></code> block.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Validate implementation correctness by running simple simulations, perturbing parameters such as buffering, and verifying biologically plausible calcium dynamics.</p>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cabpump</span></code> example for calcium dynamics implementation,</p>
+<p><span class="xref std std-ref">kinetic-schemes</span>,</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">h.SEClamp</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">h.Section</span></code> for simulation setup and stimulus application.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3485">https://neuron.yale.edu/phpBB/viewtopic.php?t=3485</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

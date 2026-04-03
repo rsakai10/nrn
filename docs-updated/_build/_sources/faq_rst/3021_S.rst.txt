@@ -1,0 +1,29 @@
+Playing Values into a Point Process
+===================================
+
+To generate spike events at specified times and deliver them to a synapse or neuron in NEURON, use the :class:`VecStim` artificial cell. This avoids segmentation violations which can occur if trying to play values directly into a generic point process.
+
+.. code-block:: hoc
+
+    objref spt, vs
+    spt = new Vector()
+    // Fill spt with spike times in increasing order, e.g., 20, 50, 90 ms
+    vs = new VecStim()
+    vs.play(spt)
+    // Connect vs to synapse using a NetCon
+    objref nc
+    nc = new NetCon(vs, syn)
+
+In Python:
+
+.. code-block:: python
+
+    from neuron import h
+    spt = h.Vector([20, 50, 90])  # spike times in ms
+    vs = h.VecStim()
+    vs.play(spt)
+    nc = h.NetCon(vs, syn)
+
+Make sure to populate the spike time vector before running the simulation. The spike times must be positive and monotonically increasing. This method is preferred over manually playing vectors into generic point processes as it provides event delivery compatible with :class:`NetCon` targets having :meth:`NET_RECEIVE` blocks.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3021 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3021>`_

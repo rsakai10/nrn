@@ -1,0 +1,198 @@
+Direction of Current in a Point Process
+=======================================
+
+When implementing a point process in NEURON that produces a transmembrane current, the sign convention follows standard neurophysiological practice:
+
+- A :class:`NONSPECIFIC_CURRENT` (as used in this Ornstein-Uhlenbeck fluctuating conductance model) represents a transmembrane ionic current.
+- **Depolarizing currents are negative** (inward positive charge flow into the cell).
+- **Hyperpolarizing currents are positive** (outward positive charge flow out of the cell).
+
+Therefore, if `i` is the current contributed by the point process, the membrane equation for a single compartment can be written as:
+
+.. math::
+
+   c_m \\frac{dV}{dt} = -I_{ion} - I_{syn} 
+
+where :math:`I_{syn} = i`. Here, a **negative** value of `i` depolarizes the cell, consistent with the reversal potentials defined in the model.
+
+Note that currents injected by an electrode mechanism (`ELECTRODE_CURRENT`) obey the opposite sign convention: depolarizing electrode currents are positive.
+
+Fluctuating Conductance Model (Ornstein-Uhlenbeck Process)
+------------------------------------------------------------
+
+This model implements synaptic bombardment as stochastic fluctuations of excitatory and inhibitory conductances, *g_e(t)* and *g_i(t)*, each governed by an Ornstein-Uhlenbeck process with parameters estimated from experimental data.
+
+The synaptic current is computed as:
+
+.. math::
+
+   I_{syn} = g_e(t)(V - E_e) + g_i(t)(V - E_i)
+
+where
+
+- :math:`E_e`, :math:`E_i` are reversal potentials,
+- :math:`g_e`, :math:`g_i` are total excitatory and inhibitory conductances.
+
+The time evolution of conductances obeys stochastic differential equations:
+
+.. math::
+
+   \\frac{dg_e}{dt} = -\\frac{(g_e - g_{e0})}{\\tau_e} + \\sqrt{D_e} F_t \\
+   \\frac{dg_i}{dt} = -\\frac{(g_i - g_{i0})}{\\tau_i} + \\sqrt{D_i} F_t
+
+where
+
+- :math:`g_{e0}`, :math:`g_{i0}` are mean conductances,
+- :math:`\\tau_e`, :math:`\\tau_i` are time constants,
+- :math:`D_e`, :math:`D_i` are diffusion coefficients,
+- :math:`F_t` is Gaussian white noise.
+
+Numerical Integration Scheme
+----------------------------
+
+The mechanism uses Gillespie's exact update formula for OU processes, which is stable and independent of integration step size :math:`dt`:
+
+.. math::
+
+   x(t+dt) = x(t) e^{-dt/\\tau} + A N(0,1)
+
+with
+
+.. math::
+
+   A = \\sqrt{D\\tau/2 (1 - e^{-2dt/\\tau})}
+
+and :math:`N(0,1)` a standard normal random variable.
+
+Implementation Details
+----------------------
+
+- The mechanism is defined as a :class:`POINT_PROCESS` with a :class:`NONSPECIFIC_CURRENT i`.
+- Conductances `g_e` and `g_i` are constrained to be non-negative.
+- When :math:`\\tau_e` or :math:`\\tau_i` are zero, the conductances behave as white noise with instantaneous fluctuations.
+- Calls to the random number generator (:func:`normrand`) are placed inside a :meth:`PROCEDURE` called by :meth:`BREAKPOINT SOLVE` to ensure consistent solutions and correct calculation of the Jacobian matrix during variable time step integration.
+
+Example NEURON NMODL Code (Python syntax adaptation shown below)
+----------------------------------------------------------------
+
+.. code-block:: hoc
+
+    NEURON {
+      POINT_PROCESS Gfluct
+      RANGE g_e, g_i, E_e, E_i, g_e0, g_i0, std_e, std_i, tau_e, tau_i
+      NONSPECIFIC_CURRENT i
+    }
+
+    UNITS {
+      (nA) = (nanoamp)
+      (mV) = (millivolt)
+      (umho) = (micromho)
+    }
+
+    PARAMETER {
+      dt (ms)
+      E_e = 0 (mV)
+      E_i = -75 (mV)
+      g_e0 = 0.0121 (umho)
+      g_i0 = 0.0573 (umho)
+      std_e = 0.0030 (umho)
+      std_i = 0.0066 (umho)
+      tau_e = 2.728 (ms)
+      tau_i = 10.49 (ms)
+    }
+
+    ASSIGNED {
+      v (mV)
+      i (nA)
+      g_e (umho)
+      g_i (umho)
+      g_e1 (umho)
+      g_i1 (umho)
+      D_e (umho*umho/ms)
+      D_i (umho*umho/ms)
+      exp_e
+      exp_i
+      amp_e (umho)
+      amp_i (umho)
+    }
+
+    INITIAL {
+      g_e1 = 0
+      g_i1 = 0
+      if(tau_e != 0) {
+        D_e = 2*std_e*std_e / tau_e
+        exp_e = exp(-dt/tau_e)
+        amp_e = std_e * sqrt(1 - exp(-2*dt/tau_e))
+      }
+      if(tau_i != 0) {
+        D_i = 2*std_i*std_i / tau_i
+        exp_i = exp(-dt/tau_i)
+        amp_i = std_i * sqrt(1 - exp(-2*dt/tau_i))
+      }
+    }
+
+    BREAKPOINT {
+      SOLVE oup
+      i = g_e*(v - E_e) + g_i*(v - E_i)
+    }
+
+    PROCEDURE oup() {
+      if (tau_e == 0) {
+        g_e = g_e0 + std_e * normrand(0,1)
+      } else {
+        g_e1 = exp_e * g_e1 + amp_e * normrand(0,1)
+        g_e = g_e0 + g_e1
+      }
+      if (g_e < 0) { g_e = 0 }
+
+      if (tau_i == 0) {
+        g_i = g_i0 + std_i * normrand(0,1)
+      } else {
+        g_i1 = exp_i * g_i1 + amp_i * normrand(0,1)
+        g_i = g_i0 + g_i1
+      }
+      if (g_i < 0) { g_i = 0 }
+    }
+
+Python usage example integrating this mechanism on a section:
+
+.. code-block:: python
+
+    from neuron import h
+
+    # Create a section and insert the fluctuating conductance point process
+    soma = h.Section(name='soma')
+    gfluct = h.Gfluct(0.5, sec=soma)
+    gfluct.E_e = 0
+    gfluct.E_i = -75
+    gfluct.g_e0 = 0.0121
+    gfluct.g_i0 = 0.0573
+    gfluct.std_e = 0.0030
+    gfluct.std_i = 0.0066
+    gfluct.tau_e = 2.728
+    gfluct.tau_i = 10.49
+
+    # Set dt for the simulation
+    h.dt = 0.025
+
+    # Run simulation, current i injected by Gfluct will be applied automatically
+    h.finitialize(-65)
+    h.continuerun(100)
+
+.. note::
+
+    - Calls to random number generators are placed in the :meth:`PROCEDURE oup`, not directly in :meth:`BREAKPOINT`, to ensure consistent time stepping and correct Jacobian calculation during variable time step integration.
+    - If :attr:`tau_e` or :attr:`tau_i` equal zero, the conductances behave as white noise.
+    - Negative conductance values after fluctuation are clipped to zero.
+
+See Also
+--------
+
+- :class:`POINT_PROCESS`
+- :class:`NONSPECIFIC_CURRENT`
+- :func:`normrand`
+- :meth:`PROCEDURE`
+- :meth:`BREAKPOINT`
+- NEURON simulation environment examples with fluctuating synaptic conductances
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3820 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3820>`_

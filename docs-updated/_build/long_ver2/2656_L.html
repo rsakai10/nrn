@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plotting Individual Ionic Currents from Multiple Mechanisms &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Plotting Individual Ionic Currents from Multiple Mechanisms</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2656_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="plotting-individual-ionic-currents-from-multiple-mechanisms">
+<h1>Plotting Individual Ionic Currents from Multiple Mechanisms<a class="headerlink" href="#plotting-individual-ionic-currents-from-multiple-mechanisms" title="Link to this heading"></a></h1>
+<p>When multiple ion channel mechanisms contribute to currents of the same ion species (e.g., sodium currents from both a persistent sodium channel and the Hodgkin-Huxley sodium channel), these currents are all aggregated into the same ionic current variable (e.g., <cite>ina</cite>) in NEURON. This makes it difficult to plot or analyze the current from a specific mechanism separately.</p>
+<p>This section explains how to define and record the current generated by an individual mechanism, even when it shares ion species with other mechanisms.</p>
+<section id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
+<p>Each NMODL mechanism that uses an ion (declared with the <cite>USEION</cite> statement) impacts the ion current variable (e.g., <cite>ina</cite>) in NEURON. However, the ionic current variable in NEURON is shared across all mechanisms that read or write that ion current. Hence, there is no default separate name for the ion current contributed by a specific mechanism.</p>
+<p>For example, two sodium channels using <cite>USEION na READ ena WRITE ina</cite> both contribute to the total sodium current <cite>ina</cite> for each segment but do not expose distinct <cite>ina</cite> variables in hoc or Python.</p>
+</section>
+<section id="recommended-solution">
+<h2>Recommended Solution<a class="headerlink" href="#recommended-solution" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Define an explicit variable to represent the mechanism’s own current</strong></p>
+<p>In your <cite>.mod</cite> file, declare a separate variable (e.g., <cite>i</cite>) to hold the current for this mechanism.</p>
+</li>
+<li><p><strong>Make the variable accessible from hoc/Python by declaring it as a `RANGE` variable</strong></p>
+<p>This allows you to record or plot it directly.</p>
+</li>
+<li><p><strong>Calculate and assign the current to this variable inside the `BREAKPOINT` block</strong></p>
+<p>Also, assign the total ionic current (e.g., <cite>ina</cite>) to this variable to maintain ionic currents for charge balance.</p>
+</li>
+</ol>
+<p>Example: Persistent Sodium Current (.mod)</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>mod
+NEURON {</p>
+<blockquote>
+<div><p>SUFFIX nap
+USEION na READ ena WRITE ina
+RANGE g, gbar, i   : Conductances and channel current for this mechanism
+GLOBAL winf, tauw</p>
+</div></blockquote>
+<p>}</p>
+<dl class="simple">
+<dt>ASSIGNED {</dt><dd><p>v (mV)
+ena (mV)
+ina (mA/cm2)
+g (mho/cm2)
+gbar (mho/cm2)
+w
+winf
+tauw (ms)
+i (mA/cm2)      : Current of this mechanism, accessible for plotting</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>STATE {</dt><dd><p>w</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>BREAKPOINT {</dt><dd><p>SOLVE states METHOD cnexp
+g = gbar * w
+i = g * (v - ena)   : Store this mechanism’s current
+ina = i             : Pass current to NEURON’s total sodium current</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>INITIAL {</dt><dd><p>: Initialize w, etc.</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>DERIVATIVE states {</dt><dd><p>: Define equations for w</p>
+</dd>
+</dl>
+<section id="id5">
+<h3>}<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>Key Points:</p>
+<ul class="simple">
+<li><p>The separate variable <cite>i</cite> stores the ionic current contributed by this mechanism.</p></li>
+<li><p>Declaring it as <cite>RANGE</cite> allows access via hoc or Python with the segment variable syntax, for example, <cite>section(0.5).nap.i</cite>.</p></li>
+<li><p>The total ionic current variable <cite>ina</cite> must still be assigned for NEURON’s internal ion concentration and charge calculations.</p></li>
+</ul>
+</section>
+</section>
+<section id="usage-example-in-python">
+<h2>Usage Example in Python<a class="headerlink" href="#usage-example-in-python" title="Link to this heading"></a></h2>
+<p>Suppose you have created a section <cite>soma</cite> with two mechanisms: Hodgkin-Huxley sodium (<cite>hh</cite>) and your persistent sodium (<cite>nap</cite>). You can record and plot their individual currents as follows:</p>
+<p><a href="#id6"><span class="problematic" id="id7">``</span></a><a href="#id8"><span class="problematic" id="id9">`</span></a>python
+from neuron import h, gui
+import matplotlib.pyplot as plt</p>
+<p>soma = h.Section(name=’soma’)
+soma.insert(‘hh’)   # Contains hh Na current: hh ina
+soma.insert(‘nap’)  # Contains persistent Na current: nap i</p>
+<p>stim = h.IClamp(soma(0.5))
+stim.delay = 5
+stim.dur = 1
+stim.amp = 0.1</p>
+<p>v_vec = h.Vector()
+v_vec.record(soma(0.5)._ref_v)</p>
+<p>hh_i_vec = h.Vector()
+hh_i_vec.record(soma(0.5).hh._ref_ina)  # total hh sodium current</p>
+<p>nap_i_vec = h.Vector()
+nap_i_vec.record(soma(0.5).nap._ref_i)  # persistent Na current from nap mechanism</p>
+<p>t_vec = h.Vector()
+t_vec.record(h._ref_t)</p>
+<p>h.finitialize(-65)
+h.continuerun(40)</p>
+<p>plt.figure()
+plt.plot(t_vec, hh_i_vec, label=’hh Na current (ina)’)
+plt.plot(t_vec, nap_i_vec, label=’nap Na current (i)’)
+plt.xlabel(‘Time (ms)’)
+plt.ylabel(‘Current (mA/cm²)’)
+plt.legend()
+plt.show()
+<a href="#id10"><span class="problematic" id="id11">``</span></a><a href="#id12"><span class="problematic" id="id13">`</span></a></p>
+<p>This code records and plots the sodium current from both mechanisms separately.</p>
+</section>
+<section id="additional-recommendations">
+<h2>Additional Recommendations<a class="headerlink" href="#additional-recommendations" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Use simple and clear variable names within mechanisms. For conductances, use <cite>g</cite> and <cite>gbar</cite> rather than duplicating the suffix, e.g., avoid <cite>gnap_bar_nap</cite>.</p></li>
+<li><p>Each mechanism namespace is independent; the same variable names may be used across mechanisms without conflict.</p></li>
+<li><p>Always verify units using <cite>modlunit</cite> to ensure consistency.</p></li>
+<li><p>Include an <cite>INITIAL</cite> block when necessary to initialize state variables.</p></li>
+<li><p>Use <cite>RANGE</cite> variables when values need to be accessible or varied spatially.</p></li>
+<li><p>When defining ionic currents with <cite>USEION</cite>, always assign the total ionic current variable (e.g., <cite>ina</cite>) in the <cite>BREAKPOINT</cite> to maintain charge balance and ion concentration updates in NEURON.</p></li>
+</ul>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>To plot or retrieve the ionic current specific to a self-created mechanism that shares ion species with other mechanisms:</p>
+<ul class="simple">
+<li><p>Declare a separate <cite>RANGE</cite> variable in your <cite>.mod</cite> file (e.g., <cite>i</cite>).</p></li>
+<li><p>Calculate and assign the mechanism’s ionic current to that variable in <cite>BREAKPOINT</cite>.</p></li>
+<li><p>Assign the total ionic current variable (e.g., <cite>ina</cite>) to the same value.</p></li>
+<li><p>Access and record that variable at the segment level (e.g., <cite>section(0.5).mechanism._ref_i</cite>).</p></li>
+<li><p>Plot or analyze it separately from other ionic currents.</p></li>
+</ul>
+<p>This approach maintains correct total ionic currents for NEURON’s internal calculations while exposing individual mechanism currents for user inspection and plotting.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2656">https://neuron.yale.edu/phpBB/viewtopic.php?t=2656</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

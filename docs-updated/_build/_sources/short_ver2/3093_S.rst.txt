@@ -1,0 +1,39 @@
+Section Length and Surface Area in NMODL
+========================================
+
+When writing NMODL mechanisms that require knowledge of the section's geometry, note the following:
+
+- The **length** variable `L` is not directly accessible inside NMODL and may appear as zero.
+- Instead, use the predefined variable `area` (units: μm²) which gives the membrane surface area of the segment.
+
+Example usage:
+
+.. code-block:: mod
+
+    ASSIGNED {
+        area (micron2)
+    }
+    BREAKPOINT {
+        /* use area directly, no need to multiply diam * L */
+        SOME_STATE_OR_CURRENT = f(area)
+    }
+
+.. note::
+
+    Always declare `area` in the ASSIGNED block to use it inside your mechanism.
+
+.. seealso::
+
+    :ref:`sections` for controlling geometry in hoc or Python, where `L` and `diam` are set.
+
+Python example:
+
+.. code-block:: python
+
+    from neuron import h
+    sec = h.Section()
+    sec.L = 100  # microns
+    sec.diam = 10  # microns
+    print(f"Section area via hoc: {sec(0.5).area()}")  # returns segment area in um2
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3093 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3093>`_

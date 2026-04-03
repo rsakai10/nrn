@@ -1,0 +1,29 @@
+.. note::
+   To save only the graphs after running a model without re-running the simulation, use the :class:`Vector` class's :meth:`record` method to capture the variables of interest during simulation. After the run, write these recorded vectors to text files. Later, you can reload the data and plot them as needed to zoom and analyze without rerunning the model.
+
+.. code-block:: python
+
+   from neuron import h, gui
+   v = h.Vector().record(h.soma(0.5)._ref_v)
+   t = h.Vector().record(h._ref_t)
+   h.finitialize(-65)
+   h.continuerun(100)
+   v.write('voltage.dat')
+   t.write('time.dat')
+
+.. code-block:: hoc
+
+   objref v, t
+   v = new Vector()
+   t = new Vector()
+   v.record(&soma.v(0.5))
+   t.record(&t)
+   finitialize(-65)
+   run(100)
+   v.printf("voltage.dat")
+   t.printf("time.dat")
+
+.. note::
+   Later, load the saved data files to recreate graphs and perform detailed analysis without rerunning the simulation.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2683 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2683>`_

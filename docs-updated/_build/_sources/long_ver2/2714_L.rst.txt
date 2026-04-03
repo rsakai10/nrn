@@ -1,0 +1,149 @@
+Single Compartment Models of Neurons
+=====================================
+
+Overview
+--------
+
+Single compartment neuron models approximate the entire cell membrane as a single isopotential compartment. They are often used as simplified models to study ionic mechanisms, membrane properties, or as components of networks when morphology is not critical. Such models are analogous to experimental preparations like Xenopus oocytes expressing ion channels, and are useful testbeds for developing and evaluating membrane mechanisms coded in NMODL or implemented via :class:`ChannelBuilder`.
+
+Model Construction
+------------------
+
+When creating a single compartment model, consider the following:
+
+- **Morphology and Surface Area**:  
+  The model typically represents the soma as a simple geometrical object (e.g., a cylinder or sphere) with dimensions based on experimental data or literature.  
+  The *surface area* of the compartment is essential because it determines the total membrane capacitance and the total conductance based on conductance densities.  
+  For example, modeling a soma as a cylinder without end caps:
+
+  .. code-block:: python
+
+     from neuron import h
+     soma = h.Section(name='soma')
+     soma.L = 30    # micron
+     soma.diam = 30  # micron
+     print(f"Surface area (without end caps): {soma.area()} um^2")
+
+- **Membrane Capacitance and Resistance**:  
+  Specific membrane capacitance is generally assumed to be 1 µF/cm² (0.01 pF/µm²). Based on the measured or estimated capacitance and surface area, the total capacitance can be calculated.  
+  Membrane resistance (Rm), input resistance (Rin), and membrane time constant (τm = Rm * Cm) can be derived or measured experimentally to constrain model parameters.
+
+- **Ionic Conductances**:  
+  Insert ionic conductance mechanisms (:class:`hh` or custom NMODL mechanisms) with maximum conductance parameters (`gbar`). These can be tuned via parameter search to match voltage clamp current-voltage relationships and current clamp spiking behavior.
+
+  If your model is purely a single compartment (with `nseg=1`), all ionic mechanisms exist uniformly over the membrane, and channel densities (conductance per unit area) translate into total numbers of channels scaled by the compartment surface area.
+
+  .. note::
+     The location of conductances in a single compartment model is implicitly uniform; the kinetics and gating dynamics determine their temporal and voltage dependence, regardless of channel density spatial distribution.
+
+Single Compartment Model Limitations and Usefulness
+---------------------------------------------------
+
+- Single compartment models assume the neuron is electrically compact and equipotential; this is rarely perfectly true for real neurons with complex dendritic trees.
+
+- They cannot simulate spatially distributed phenomena such as voltage propagation, dendritic filtering, or location-dependent synaptic inputs.
+
+- Single compartment models **do not respond to extracellular stimulation** in the sense of spatially non-uniform extracellular voltage gradients. Explicit extracellular mechanisms or multi-compartment models are needed for extracellular stimulation protocols.
+
+- Voltage clamp and current clamp protocols (implemented using :class:`SEClamp` and :class:`IClamp`) are still applicable and meaningful in single compartment models as they mimic somatic electrophysiological recordings.
+
+- Starting with a single compartment model is recommended — it represents a hypothesis that can be tested and refined. Add complexity such as dendrites or multiple compartments only when needed.
+
+Current and Current Density Conversion
+-------------------------------------
+
+NEURON mechanisms typically record ionic currents as current density in mA/cm². To compute total current (in nA or mA), multiply the recorded current density by membrane surface area (in cm²):
+
+.. code-block:: python
+
+   # Assume `vec` records the current density in mA/cm² at location 0.5 on `soma`
+   surface_area_um2 = soma.area(0.5)         # microns^2
+   surface_area_cm2 = surface_area_um2 * 1e-8  # conversion µm² to cm²
+   total_current_nA = vec.mul(surface_area_cm2 * 1e3)  # mA/cm² * cm² * 1000 to nA
+
+   # Alternatively, if vec contains current density over time, use:
+   # vec.mul(surface_area_cm2 * 1e3) converts mA/cm² to nA total current
+
+Patch Area Considerations
+-------------------------
+
+- Whole-cell recordings approximate total cell current; "patch area" is not usually relevant for total current calculations in whole-cell mode.
+
+- For cell-attached or outside-out patches, estimated patch area can be approximated as π * (pipette radius)², but this is typically not used for whole-cell recordings.
+
+- When modeling whole-cell conditions, use the total compartment surface area for current calculations.
+
+Simulating Dual Electrode Protocols
+-----------------------------------
+
+- Simulating simultaneous current injection at one site and recording membrane potential at another often requires models with spatial extent (multiple segments, `nseg > 1`) because spatial voltage differences are important.
+
+- In a single compartment model (`nseg=1`), the membrane potential is uniform; recording or injecting at different fractional positions (e.g., `v(0.1)` vs. `v(0.9)`) is equivalent.
+
+- Dual voltage clamps or dual electrode experiments (e.g., stimulating one cell and recording from a coupled cell) require multiple connected cells with gap junctions represented via, e.g., resistive connections.
+
+- Gap junctions can be modeled by electrically coupling sections of different cells via conductive connections. See ModelDB examples for implementing gap junctions.
+
+Example: Defining a Single Compartment with Ionic Channels (Python)
+-------------------------------------------------------------------
+
+.. code-block:: python
+
+   from neuron import h
+   h.load_file('stdrun.hoc')
+
+   soma = h.Section(name='soma')
+   soma.L = 30  # length in microns
+   soma.diam = 30  # diameter in microns
+   soma.nseg = 1  # single compartment
+
+   # Insert Hodgkin-Huxley channels
+   soma.insert('hh')
+
+   # Set maximal conductances (S/cm^2)
+   soma.gnabar_hh = 0.12
+   soma.gkbar_hh = 0.036
+   soma.gl_hh = 0.0003
+   soma.el_hh = -54.3
+
+   # Set membrane capacitance default (uF/cm^2)
+   soma.cm = 1
+
+   # Current clamp stimulus at midpoint
+   stim = h.IClamp(soma(0.5))
+   stim.delay = 100
+   stim.dur = 500
+   stim.amp = 0.1  # nA
+
+   # Record membrane potential
+   v_vec = h.Vector().record(soma(0.5)._ref_v)
+   t_vec = h.Vector().record(h._ref_t)
+
+   h.finitialize(-65)
+   h.continuerun(700)
+
+   import matplotlib.pyplot as plt
+   plt.plot(t_vec, v_vec)
+   plt.xlabel('Time (ms)')
+   plt.ylabel('Membrane potential (mV)')
+   plt.show()
+
+Summary
+-------
+
+- Single compartment models are valuable for rapid prototyping, ionic mechanism testing, and cases where neuron morphology can be neglected.
+
+- They use uniform membrane properties and gating dynamics based on maximal conductances and kinetics.
+
+- Voltage clamp (:class:`SEClamp`) and current clamp (:class:`IClamp`) protocols apply to single compartments as in experiments.
+
+- Converting current density to total current requires multiplication by membrane surface area.
+
+- Multi-compartment models are needed for spatially distributed phenomena, dual electrode experiments, or modeling extensive morphology with dendrites, distal appendages, or gap junction networks.
+
+- Use experimental data such as time constants, input resistance, membrane capacitance, and conductances to inform and constrain the model.
+
+.. note::
+   Consult chapters 3-6 of *The NEURON Book* (Hines and Carnevale, 2006) and the article Hines & Carnevale (Neural Computation, 1997) for an in-depth understanding of membrane mechanisms and compartmental modeling in NEURON.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2714 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2714>`_

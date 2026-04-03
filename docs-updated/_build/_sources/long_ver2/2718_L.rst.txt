@@ -1,0 +1,80 @@
+Changing Channel Density Along a Section Using Range Variables
+==================================================================
+
+When working with reconstructed morphologies imported from SWC files, section lengths often vary. A common desire is to vary the density of voltage-gated channels as a function of position along a dendritic section, for example to have higher density near the soma and lower density distally.
+
+One might initially consider subdividing long sections into multiple smaller sections in order to assign different channel densities to each smaller section. However, this is usually unnecessary and can complicate the model geometry without adding biological realism.
+
+Instead, NEURON provides a much more flexible and elegant method using *range variables* that allow you to specify spatially varying parameters (e.g., channel densities) continuously within a section.
+
+.. note::
+   A *range variable* is a section variable defined over the normalized distance along the section, where ``x=0`` corresponds to the 0 end of the section, and ``x=1`` is the 1 end.
+
+Using Range Variables to Set Channel Densities
+----------------------------------------------
+
+After inserting a mechanism (e.g., hh) into a section, the channel density parameters can be assigned as functions of location along the section via the syntax:
+
+.. code-block:: hoc
+
+    // Set number of segments in soma for spatial resolution
+    soma.nseg = 3
+
+    // Set sodium channel density parameter gnabar_hh at three positions within soma
+    soma.gnabar_hh(0.1) = 0.01  // Near 0 end (start) of section
+    soma.gnabar_hh(0.5) = 0.05  // Middle of section
+    soma.gnabar_hh(0.9) = 0.09  // Near 1 end (end) of section
+
+You can verify these values by querying the same syntax:
+
+.. code-block:: hoc
+
+    print soma.gnabar_hh(0.9)
+    // Output: 0.09
+
+The mechanism parameter will vary continuously between these values along the cable based on linear interpolation.
+
+Python equivalent:
+
+.. code-block:: python
+
+    # Assuming h is hoc namespace and soma is defined
+    soma = h.soma
+    soma.nseg = 3
+
+    # Set gnabar_hh at locations along soma
+    soma.gnabar_hh(0.1) = 0.01
+    soma.gnabar_hh(0.5) = 0.05
+    soma.gnabar_hh(0.9) = 0.09
+
+    print(soma.gnabar_hh(0.9))  # prints 0.09
+
+Important Notes:
+----------------
+
+- Increasing ``nseg`` refines the spatial discretization but does *not* restrict you to uniform channel densities within a section. Parameters can be spatially non-uniform even if ``nseg=1``.
+
+- The ``(x)`` notation indexes the location along the length of the section, not the segment number.
+
+- You can assign arbitrary functions to channel density parameters over the section, e.g.:
+
+  .. code-block:: hoc
+
+      soma for (x,0) gnabar_hh(x) = 0.1 * x
+
+  which linearly increases channel density from 0 at the start to 0.1 at the end of soma.
+
+Summary
+-------
+
+To vary channel densities as a function of distance along a dendrite without altering morphology or subdividing sections:
+
+- Insert the mechanism once per section.
+
+- Set ``nseg`` to a suitable number (preferably an odd number like 3 or 5) to ensure spatial resolution.
+
+- Assign channel density parameters as functions of location along the section using range variable syntax ``sec.param(x)``.
+
+This approach avoids unnecessary splitting of sections and preserves the original morphology while giving fine control over spatially varying biophysical properties.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2718 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2718>`_

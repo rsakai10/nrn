@@ -1,0 +1,79 @@
+Difference Between Synaptic Weight and Reversal Potential in NEURON
+=======================================================================
+
+When creating synaptic connections in NEURON using classes such as :class:`ExpSyn` or :class:`Exp2Syn`, it is important to understand the distinct roles of the synaptic **weight** and the synaptic **reversal potential** (:attr:`.e`).
+
+Synaptic Weight
+--------------
+
+- The **weight** parameter in the :class:`NetCon` object determines the *magnitude* of the conductance change elicited by a presynaptic spike on the synaptic point process.
+- The weight corresponds to the *peak conductance* (in µS) introduced by a single presynaptic spike.
+- This parameter must be **non-negative** when connecting to biophysical conductance-based synaptic mechanisms like :class:`ExpSyn` or :class:`Exp2Syn`.
+- The synaptic weight does *not* carry sign information about excitation or inhibition; it only scales the size of the conductance transient.
+- Negative weights are appropriate only in artificial integrate-and-fire type models (e.g., :class:`IntFire1`) but **not** when modeling conductance changes in biophysical cells.
+
+Reversal Potential (:attr:`.e`)
+-------------------------------
+
+- The reversal potential (:attr:`.e`) of a synapse defines the *driving force* for the synaptic current.
+- It represents the equilibrium membrane potential for the ion channels opened by the synapse.
+- The sign and magnitude of synaptic current depend on the difference between the membrane potential and reversal potential:  
+  \[
+  I_{syn} = g_{syn}(t) \times (V_m - E_{rev})
+  \]
+- For inhibitory synapses (e.g., GABAergic synapses), a typical reversal potential is negative relative to the resting potential (e.g., \(-75\ mV\)).
+- For excitatory synapses (e.g., AMPA), reversal potentials are usually positive (e.g., \(0\ mV\)).
+
+Relationship Between Weight and Reversal Potential
+--------------------------------------------------
+
+- Setting **weight = 1** and **e = -75 mV** is *not* equivalent to **weight = -1** and **e = 75 mV**.
+- Negative weights are not valid for conductance-based synapses because the synaptic current direction depends on the reversal potential.
+- Instead, the sign (inhibitory vs. excitatory) is encoded in the reversal potential.
+- The weight modulates how much conductance is introduced; the reversal potential determines current direction and nature (excitatory vs. inhibitory).
+
+Example in HOC
+--------------
+
+```hoc
+objref GABA
+OLMCells[0].soma {
+    GABA = new Exp2Syn(0.5)
+    GABA.tau1 = 30
+    GABA.tau2 = 100
+    GABA.e = -75   // Inhibitory reversal potential
+}
+
+// Connecting with NetCon
+OLMCells[0].soma {
+    // NetCon targeting the GABA synapse
+    // Weight of 0.5 µS, threshold of -40 mV
+    nclist.append(new NetCon(&v(0.5), GABA, -40, 1, 0.5))
+}
+```
+
+Example in Python
+-----------------
+
+```python
+from neuron import h
+
+gaba = h.Exp2Syn(0.5)
+gaba.tau1 = 30
+gaba.tau2 = 100
+gaba.e = -75  # inhibitory reversal potential
+
+netcon = h.NetCon(h.soma(0.5)._ref_v, gaba, sec=h.soma)
+netcon.threshold = -40
+netcon.weight[0] = 0.5  # peak conductance in µS
+```
+
+.. note::
+   - The **synaptic weight** should always be non-negative for conductance-based synapses.
+   - The **sign of the synaptic effect (excitatory vs. inhibitory)** is determined by the reversal potential (:attr:`.e`) relative to the membrane potential, *not* by the weight.
+   - Negative weights for conductance-based synapses are not physically meaningful and violate thermodynamic principles.
+
+.. seealso::
+   :class:`NetCon`, :class:`ExpSyn`, :class:`Exp2Syn`, :class:`IntFire1`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=4001 <https://neuron.yale.edu/phpBB/viewtopic.php?t=4001>`_

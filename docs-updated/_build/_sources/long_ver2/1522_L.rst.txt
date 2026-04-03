@@ -1,0 +1,249 @@
+Adding Many Cell Instances with Stimulation: Improving Performance and Best Practices
+==========================================================================================
+
+When creating large networks of cells in NEURON, particularly when each cell includes instrumentation such as current clamps and stimulus waveform playback, it is important to organize code efficiently and avoid performance bottlenecks.
+
+Example Problem
+---------------
+Creating many instances of a cell template that uses numerous :class:`PointProcessManager` and :class:`VectorPlay` objects can result in exponential slowdown during model setup. For example, the following HOC template defines a cell with a soma and includes a :class:`PointProcessManager` and :class:`VectorPlay` for applying stimuli:
+
+.. code-block:: hoc
+
+    begintemplate tpTCN 
+        external newseed, grDur, stimulatortime
+        public soma,vcell,gnoise,electrode,stimulator
+        create soma
+        objref vcell,gnoise,electrode,stimulator
+        
+        proc init() { 
+            access soma
+            soma {
+                nseg = 1
+                diam = 76.58
+                L = 100
+                cm = 1
+                
+                insert hh2    
+                ena = 50
+                ek = -100
+                vtraub_hh2 = -52
+                gnabar_hh2 = 0.01    
+                gkbar_hh2 = 0.01     
+                
+                insert itGHK
+                cai = 2.4e-4 
+                cao = 2 
+                eca = 120 
+                shift_itGHK = -1    
+                gcabar_itGHK = 0.0002
+                qm_itGHK = 2.5
+                qh_itGHK = 2.5
+                pcabar_itGHK = 8e-5
+                
+                insert cad
+                depth_cad = 0.1
+                kt_cad = 0 
+                kd_cad = 1e-4
+                taur_cad = 5
+                cainf_cad = 2.4e-4    
+                
+                insert pas
+                g_pas = 3.79e-5
+                e_pas = -76.5
+                cm = 0.88
+                Ra = 173
+                
+                gnoise = new Gfluct(0.5) 
+                gnoise.g_e0 = 0.0711
+                gnoise.std_e = 0.005 
+                gnoise.g_i0 = 0.1
+                gnoise.std_i = 0.02
+                gnoise.tau_e = 3 
+                gnoise.tau_i = 10
+                gnoise.E_e = 0
+                gnoise.E_i = -75
+                gnoise.new_seed(newseed())
+                
+                electrode = new PointProcessManager(0) 
+                electrode.pp=new IClamp(0)
+                electrode.pp.del=0
+                electrode.pp.dur=grDur
+                electrode.pp.amp=0 
+            }
+            
+            vcell = new Vector()
+            vcell.record(&soma.v(0.5))
+            
+            stimulator=new VectorPlay(1)
+            stimulator.vy = new Vector(grDur+1) 
+            stimulator.vx = stimulatortime 
+            stimulator.vy.play(&electrode.pp.amp, stimulator.vx)
+        }
+    endtemplate tpTCN
+
+Using this design, creating many instances (e.g., 30x30x2) with a nested loop:
+
+.. code-block:: hoc
+
+    rowsTCN=30
+    colsTCN=rowsTCN 
+    slabsTCN=2
+    objref TCN[colsTCN][rowsTCN][slabsTCN] 
+    for col=0, colsTCN-1 for row=0, rowsTCN-1 for slab=0, slabsTCN-1 {
+        TCN[col][row][slab] = new tpTCN()
+        TCN[col][row][slab].gnoise.g_e0 = .05
+        print "created TCN[",col,"][",row,"][",slab,"]"
+    }
+
+results in rapid slowdown, requiring hours for model instantiation.
+
+Causes of Slowdown
+-----------------
+- Multiple instances of :class:`PointProcessManager` and :class:`VectorPlay` cause excessive computational and memory overhead. These GUI-oriented tools are designed for interactive use with very few instances, not large-scale networks.
+- Instrumentation (IClamp and stimulus control) is embedded inside the cell template, mixing simulation specification with biological properties.
+- Printing progress messages inside large loops can slow down execution.
+
+Best Practices and Solutions
+-----------------------------
+1. **Modularize Cell Template:**
+   Define cell templates to include only anatomical and biophysical properties (morphology, mechanisms, etc.) without instrumentation or stimulus controls.
+
+2. **Use Lightweight Stimulation Methods:**
+   Replace :class:`PointProcessManager` with direct use of :class:`IClamp`, which is much lighter:
+   
+   .. code-block:: hoc
+
+       objref stim
+       stim = new IClamp(0.5)  // create an IClamp at midpoint of soma
+       stim.del = 100
+       stim.dur = 50
+       stim.amp = 0.1
+
+3. **Use :class:`Vector` Play to Drive IClamp Amplitude:**
+   Instead of :class:`VectorPlay`, use the :meth:`Vector.play()` method directly on the :attr:`IClamp.amp` variable:
+   
+   .. code-block:: hoc
+
+       objref stim_vec, time_vec
+       stim_vec = new Vector(frequency)  // waveform values
+       time_vec = new Vector(frequency)  // corresponding times
+       stim_vec.play(&stim.amp, time_vec)
+
+4. **Avoid Instantiating Many VectorPlay or PointProcessManager Objects:**
+   Instead, create stimulus vectors once and share them across cells if possible.
+
+5. **Separate Instrumentation from Cell Definition:**
+   Attach :class:`IClamp` and set up stimulus playback after creating cell instances, outside the template code, e.g.:
+
+   .. code-block:: hoc
+
+       // Cell template only defines soma and mechanisms
+       create tcell[10]
+       for i=0,9 {
+           tcell[i] = new MyCellTemplate()
+       }
+
+       // Later attach stimulation
+       objref stim[10]
+       for i=0,9 {
+           stim[i] = new IClamp(0.5)
+           stim[i].del = delays[i]
+           stim[i].dur = stim_dur
+           stim[i].amp = 0
+           stim_vectors[i].play(&stim[i].amp, stim_times)
+       }
+
+6. **Suppress Excessive Printing:**
+   Remove or reduce print statements inside loops creating many instances to avoid slowing execution.
+
+Implementing a Sinusoidal Current Stimulus Point Process
+--------------------------------------------------------
+To provide sinusoidal current injection at varying delays with minimal memory and computation overhead, write a :file:`mod` file implementing a point process delivering:
+
+\[
+i = amp \times \sin\left(f \times (t - del) + \phi\right)
+\]
+
+starting at `t == del` and ending at `t == del + dur`. Here, `f` is frequency in radians/s, and `phi` is phase in radians.
+
+The following NMODL definition implements this sinusoidal current:
+
+.. code-block:: mod
+
+    COMMENT
+    isin.mod
+    Delivers sinusoidal current i = amp*sin(f*(t - del) + phi)
+    starting at t==del and ending at t==del+dur
+    where f is frequency in radians/s and phi is phase in radians
+    3/13/2009 NTC
+    ENDCOMMENT
+
+    NEURON {
+      POINT_PROCESS Isin
+      RANGE del, dur, f, phi, amp, i
+      ELECTRODE_CURRENT i
+    }
+
+    UNITS {
+      (nA) = (nanoamp)
+      PI = (pi) (1)
+      (Radian) = (1)
+    }
+
+    PARAMETER {
+      del (ms)           : time at which current starts
+      dur (ms) <0, 1e9>  : duration
+      f (Radian/s) <0, 1e9> : frequency in radians/s
+      phi (Radian)       : phase shift in radians
+      amp (nA)
+    }
+
+    ASSIGNED {
+      i (nA)
+      on (1)
+    }
+
+    INITIAL {
+      i = 0
+      on = 0
+      net_send(del, 1)
+    }
+
+    FUNCTION fsin(t (ms)) {
+      fsin = sin(f*(t - del)/1000 + phi)
+    }
+
+    BREAKPOINT {
+      i = on*amp*fsin(t)
+    }
+
+    NET_RECEIVE (w) {
+      : only respond to self-events with flag == 1
+      if (flag == 1) {
+        if (on == 0) {
+          on = 1      : turn current on
+          net_send(dur, 1)  : schedule turn off
+        } else {
+          on = 0      : turn current off
+        }
+      }
+    }
+
+Application Notes
+-----------------
+- Use one instance of :mod:`Isin` per cell; each instance can be individually parameterized.
+- The `del` parameter specifies stimulus delay, enabling phase-shifted stimulation without duplicating sine wave vectors.
+- This approach substantially reduces memory usage and computation time compared to using :class:`VectorPlay` individually per cell.
+- The point process executes efficiently within the NEURON event delivery system without costly lookups or interpolations.
+
+Summary
+--------
+- Avoid creating large numbers of GUI-based instrumentation objects like :class:`PointProcessManager` and :class:`VectorPlay`.
+- Define cell anatomy and biophysics separately from instrumentation and controls.
+- Use lightweight :class:`IClamp` objects driven directly by :meth:`Vector.play()` or implement custom :mod:`POINT_PROCESS` to deliver stimuli efficiently.
+- Use NEURON's event delivery system and :mod:`mod` files for performance-critical stimulation patterns.
+- Structure model building and testing incrementally to isolate bottlenecks.
+
+By following these practices, large networks with thousands of cells can be instantiated and simulated efficiently in NEURON.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1522 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1522>`_

@@ -1,0 +1,49 @@
+Obtaining the Exact Pre-Section Location of a NetCon Source
+===========================================================
+
+The method :meth:`NetCon.preloc()` returns only 0, 0.5, or 1.0 when the source is a membrane potential at a section segment, which does not reflect the precise fractional location along the section. This is a known limitation documented for :meth:`NetCon.preloc`.
+
+.. note::
+   Prior to NEURON versions after January 2018, :meth:`NetCon.preloc()` returns 0.5 for any location other than 0 or 1, regardless of the actual position.
+
+To obtain the exact fractional position along the pre-section where the NetCon's spike detector is located, use the new method :meth:`NetCon.preseg()` which returns a :class:`Segment` instance representing the source segment. The fractional location can then be obtained from that segment’s :attr:`Segment.x` attribute.
+
+Example::
+
+    from neuron import h
+    soma = h.Section()
+    soma.nseg = 10
+    nc = h.NetCon(soma(0.25)._ref_v, None)
+    print(nc.preloc())          # may return 0.5 in older versions
+    print(nc.preseg().x)        # returns 0.25, the exact location
+
+If the NetCon has no valid voltage source, :meth:`NetCon.preseg()` returns None, and :meth:`NetCon.preloc()` returns a negative value (-1.0 or -2.0).
+
+The positional values returned by :meth:`NetCon.preseg` and :meth:`NetCon.preloc` are always relative to the parent end of the section.
+
+.. code-block:: python
+
+    from neuron import h
+    sec1 = h.Section(name='sec1')
+    sec2 = h.Section(name='sec2')
+    sec2.connect(sec1(1), 1)
+    sec1.nseg = 5
+    sec2.nseg = 5
+
+    def test_netcon_location(sec, x):
+        nc = h.NetCon(sec(x)._ref_v, None, sec=sec)
+        print(f"Requested x: {x}, preseg.x: {nc.preseg().x}, preloc: {nc.preloc()}")
+        h.pop_section()
+
+    for s in [sec1, sec2]:
+        test_netcon_location(s, 0.0)
+        test_netcon_location(s, 1.0)
+        test_netcon_location(s, 0.1)
+
+.. note::
+   Since :meth:`NetCon.preseg()` does not push the section onto the section stack, it does not require a corresponding :func:`h.pop_section` call. However, :meth:`NetCon.preloc()` may require this call if it returns a non-negative value.
+
+.. seealso::
+   :meth:`NetCon.preloc`, :class:`Segment`, :func:`h.pop_section`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3811 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3811>`_

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loading Mechanisms from nrnmech.dll in Python Scripts &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Loading Mechanisms from nrnmech.dll in Python Scripts</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/4373_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="loading-mechanisms-from-nrnmech-dll-in-python-scripts">
+<span id="nrnmech-dll-loading-issue"></span><h1>Loading Mechanisms from nrnmech.dll in Python Scripts<a class="headerlink" href="#loading-mechanisms-from-nrnmech-dll-in-python-scripts" title="Link to this heading"></a></h1>
+<p>When using NEURON with Python, you may encounter an error such as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;klt&#39;</span><span class="p">)</span>
+<span class="ne">ValueError</span><span class="p">:</span> <span class="n">argument</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">density</span> <span class="n">mechanism</span> <span class="n">name</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>This usually indicates that NEURON has not successfully loaded the compiled mechanisms (e.g., from <strong>nrnmech.dll</strong>). Below is a detailed explanation of common causes and remedies based on troubleshooting experience.</p>
+<section id="mechanism-compilation-and-loading">
+<h2>Mechanism Compilation and Loading<a class="headerlink" href="#mechanism-compilation-and-loading" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Compilation of mod Files</strong></p>
+<p>Make sure you have compiled your NMODL files with the <strong class="command">mknrndll</strong> tool in the directory where the <code class="file docutils literal notranslate"><span class="pre">.mod</span></code> files reside. A successful compilation typically displays messages similar to:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>NEURON -- VERSION 7.8.2 release/7.8
+...
+Translating klt.mod into klt.c
+Thread Safe
+...
+nrnmech.dll was built successfully.
+</pre></div>
+</div>
+</li>
+<li><p><strong>Using nrniv to Test Loading</strong></p>
+<p>You can verify the mechanism DLL loads correctly by running a simple hoc file with <strong class="command">nrniv</strong> in the directory containing <code class="file docutils literal notranslate"><span class="pre">nrnmech.dll</span></code>. The loading message should list the mechanisms:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>loading membrane mechanisms from /path/to/nrnmech.dll
+Additional mechanisms from files
+ hcnobo.mod klt.mod leak.mod ...
+</pre></div>
+</div>
+</li>
+<li><p><strong>Python Use and Loading</strong></p>
+<p>When running Python scripts, if your code explicitly calls <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.nrn_load_dll()</span></code>, the argument <strong>must</strong> include the full path <strong>and filename</strong> of the DLL:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">h</span><span class="o">.</span><span class="n">nrn_load_dll</span><span class="p">(</span><span class="s2">&quot;C:/Users/username/path/to/nrnmech.dll&quot;</span><span class="p">)</span>  <span class="c1"># include filename</span>
+</pre></div>
+</div>
+<p>Omitting the filename (e.g., giving just the containing directory) will cause Python to fail to load the mechanisms, producing the above error when inserting mechanisms.</p>
+<p>Alternatively, if you run your Python script from the directory containing <code class="file docutils literal notranslate"><span class="pre">nrnmech.dll</span></code> (and your compiled mod files), you do not need to call <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.nrn_load_dll()</span></code> explicitly. NEURON will automatically load the <code class="file docutils literal notranslate"><span class="pre">nrnmech.dll</span></code> found in the current working directory.</p>
+</li>
+</ol>
+</section>
+<section id="example-minimal-verification-in-python">
+<h2>Example: Minimal Verification in Python<a class="headerlink" href="#example-minimal-verification-in-python" title="Link to this heading"></a></h2>
+<p>To ensure a mechanism such as <cite>‘klt’</cite> is available and loads correctly, perform the following:</p>
+<ol class="arabic">
+<li><p>Compile the <cite>.mod</cite> file with <cite>mknrndll</cite> in a separate, empty directory containing the <cite>.mod</cite> file.</p></li>
+<li><p>Open a terminal, change directory to where <cite>nrnmech.dll</cite> resides, and start Python.</p></li>
+<li><p>At the Python prompt, enter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuron</span> <span class="kn">import</span> <span class="n">h</span>
+<span class="n">soma</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+<span class="n">soma</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;klt&#39;</span><span class="p">)</span>        <span class="c1"># should succeed without error</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soma</span><span class="o">.</span><span class="n">psection</span><span class="p">())</span>    <span class="c1"># displays mechanism parameters</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>If this works without error, your compiled mechanism and DLL are valid.</p>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Place the <cite>.mod</cite> files alongside your main simulation script and run <strong class="command">mknrndll</strong> there. This avoids path issues and the need for explicit calls to <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.nrn_load_dll()</span></code>.</p></li>
+<li><p>When calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.nrn_load_dll()</span></code>, always specify the full path <strong>including the DLL file name</strong> (e.g., <cite>“C:/path/to/nrnmech.dll”</cite>).</p></li>
+<li><p>Running the code from the directory containing <cite>nrnmech.dll</cite> ensures that NEURON automatically loads the compiled mechanisms without extra commands.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Many users find it preferable to avoid <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.nrn_load_dll()</span></code> in their Python scripts and rely on NEURON’s automatic DLL loading from the current working directory, simplifying code portability and shareability.</p>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Compile <cite>.mod</cite> files with <strong class="command">mknrndll</strong> in the directory of your choice.</p></li>
+<li><p>Either:</p>
+<ul>
+<li><p>Run your Python script from that directory; NEURON auto-loads <cite>nrnmech.dll</cite>.</p></li>
+<li><p>Or call <code class="xref py py-meth docutils literal notranslate"><span class="pre">h.nrn_load_dll()</span></code> with the full path and filename of <cite>nrnmech.dll</cite>.</p></li>
+</ul>
+</li>
+<li><p>Insert compiled mechanisms only after the DLL has successfully loaded.</p></li>
+</ul>
+<p>This approach avoids the common <cite>ValueError: argument not a density mechanism name.</cite> and ensures your Python simulations that rely on compiled mechanisms run correctly.</p>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=4373">https://neuron.yale.edu/phpBB/viewtopic.php?t=4373</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

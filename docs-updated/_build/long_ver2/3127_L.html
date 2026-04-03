@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Initialization Procedures and Proper Use of fadvance() in NEURON &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Custom Initialization Procedures and Proper Use of <code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code> in NEURON</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/3127_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="custom-initialization-procedures-and-proper-use-of-fadvance-in-neuron">
+<h1>Custom Initialization Procedures and Proper Use of <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> in NEURON<a class="headerlink" href="#custom-initialization-procedures-and-proper-use-of-fadvance-in-neuron" title="Link to this heading"></a></h1>
+<p>When implementing a custom initialization procedure (often a <code class="xref py py-meth docutils literal notranslate"><span class="pre">hoc.backend.proc()</span></code> named <cite>init</cite>) that calls <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> to advance the simulation time prior to the start of the main simulation (e.g., to reach steady state), it is crucial to ensure the initialization is fully correct to avoid subtle errors in recorded variables.</p>
+<section id="key-point">
+<h2>Key Point<a class="headerlink" href="#key-point" title="Link to this heading"></a></h2>
+<p>If your custom init procedure includes one or more calls to <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a>, <strong>you must call</strong> <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> at the end of the initialization process. This resets the internal indices used by <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> objects that record simulation variables, preventing timing shifts and misalignment of recorded data.</p>
+<p>This is necessary because each call to <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> increments internal indices that track recorded vectors, and without resetting them via <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a>, recordings will appear delayed or shifted.</p>
+</section>
+<section id="common-practice-in-default-init">
+<h2>Common Practice in Default Init<a class="headerlink" href="#common-practice-in-default-init" title="Link to this heading"></a></h2>
+<p>The default <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> method internally calls <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a>, so if you call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> after <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> calls, you do not need to call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> explicitly. However, if your init procedure does not call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> afterward, you must call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> explicitly.</p>
+</section>
+<section id="illustration">
+<h2>Illustration<a class="headerlink" href="#illustration" title="Link to this heading"></a></h2>
+<p>A minimal custom init procedure with calls to <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> should look like this:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc init() {
+    finitialize(v_init)
+    fcurrent()
+    // save current dt and t if changing them
+    temp_dt = dt
+    dt = 10
+    for i=0,19 fadvance()  // advance to reach steady state
+
+    dt = temp_dt
+    // reset recording vectors after fadvance calls
+    frecord_init()
+}
+</pre></div>
+</div>
+<p>Alternatively, calling <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> at the end resets recordings as well:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>proc init() {
+    finitialize(v_init)
+    fcurrent()
+    temp_dt = dt
+    dt = 10
+    for i=0,19 fadvance()
+    dt = temp_dt
+
+    finitialize(v)      // also calls frecord_init internally
+    fcurrent()
+}
+</pre></div>
+</div>
+</section>
+<section id="explanation-from-neuron-forum-discussion">
+<h2>Explanation from NEURON Forum Discussion<a class="headerlink" href="#explanation-from-neuron-forum-discussion" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The recorded vectors’ internal index increments with each call to <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a>.</p></li>
+<li><p>Not calling <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> after advancing time during init causes all vector recordings to be offset by the number of <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> calls made.</p></li>
+<li><p>This offset affects recorded signals but does not alter the actual simulation results (e.g., synaptic timings or membrane potentials).</p></li>
+<li><p>The need for <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> is less obvious than calls like <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">cvode.re_init()</span></code>, so it is easy to overlook.</p></li>
+</ul>
+</section>
+<section id="summary-recommendations">
+<h2>Summary Recommendations<a class="headerlink" href="#summary-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>If your <code class="xref py py-meth docutils literal notranslate"><span class="pre">proc</span> <span class="pre">init()</span></code> advances simulation time with <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a>, always ensure that after all <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> calls you either:</p>
+<ul>
+<li><p>call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> explicitly, <strong>or</strong></p></li>
+<li><p>call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> (which calls <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> internally).</p></li>
+</ul>
+</li>
+<li><p>Without this, Vector.recorded traces will be shifted, causing confusion and erroneous interpretation of simulation data.</p></li>
+</ul>
+</section>
+<section id="additional-notes">
+<h2>Additional Notes<a class="headerlink" href="#additional-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Calling <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a> or <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> resets recording indices but does <strong>not</strong> affect the actual model state (voltages, currents, etc.).</p></li>
+<li><p>The problem manifests more seriously when multiple calls to <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> occur during init.</p></li>
+<li><p>Spike times and NetCon timings are not affected by this issue.</p></li>
+</ul>
+<p>For further practical guidance, review the custom init procedures in example NEURON models that use <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a>. Models that call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#finitialize" title="finitialize"><code class="xref py py-func docutils literal notranslate"><span class="pre">finitialize()</span></code></a> after <a class="reference internal" href="../progref-1/simctrl/programmatic.html#fadvance" title="fadvance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fadvance()</span></code></a> inherently avoid this issue, while those that do not must explicitly call <a class="reference internal" href="../progref-1/simctrl/programmatic.html#frecord_init" title="frecord_init"><code class="xref py py-func docutils literal notranslate"><span class="pre">frecord_init()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This best practice helps prevent subtle bugs in recorded traces when implementing custom initialization routines that step simulation time before starting the main simulation epoch.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=3127">https://neuron.yale.edu/phpBB/viewtopic.php?t=3127</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

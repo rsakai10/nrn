@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changing Units in NMODL &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changing Units in NMODL</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/1935_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changing-units-in-nmodl">
+<h1>Changing Units in NMODL<a class="headerlink" href="#changing-units-in-nmodl" title="Link to this heading"></a></h1>
+<p>When writing NMODL code, ensuring dimensional consistency of units is critical to obtain correct simulation results. Consider the example of a synaptic conductance mechanism with current computed from conductance and voltage difference:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS synAMPA
+    RANGE onset, taur, taud, gmax, e, i, Epsilon
+    NONSPECIFIC_CURRENT i
+}
+
+UNITS {
+    (nA) = (nanoamp)
+    (mV) = (millivolt)
+    (uS) = (microsiemens)  : or (nS) = (nanosiemens)
+}
+
+PARAMETER {
+    onset = 0 (ms)
+    taur = 1.0 (ms)
+    taud = 5.0 (ms)
+    gmax = 0.001 (uS)      : or 1 (nS)
+    e = 0 (mV)
+    Epsilon = 1e-6
+}
+
+ASSIGNED {
+    v (mV)
+    i (nA)
+    g (uS or nS)
+    Frac
+}
+
+BREAKPOINT {
+    at_time(onset)
+    g = gmax * (1/Frac) * wexpzero( -(t-onset)/taud , -(t-onset)/taur )
+    i = g * (v - e)
+}
+</pre></div>
+</div>
+<p>In this example, the synaptic current <code class="docutils literal notranslate"><span class="pre">i</span></code> is computed as the product of conductance <code class="docutils literal notranslate"><span class="pre">g</span></code> and the driving force <code class="docutils literal notranslate"><span class="pre">(v</span> <span class="pre">-</span> <span class="pre">e)</span></code>.</p>
+<section id="dimensional-consistency-issue">
+<h2>Dimensional Consistency Issue<a class="headerlink" href="#dimensional-consistency-issue" title="Link to this heading"></a></h2>
+<p>If <code class="docutils literal notranslate"><span class="pre">g</span></code> is expressed in microsiemens (uS) and voltage in millivolts (mV), then the product:</p>
+<p><code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">(uS)</span> <span class="pre">*</span> <span class="pre">(v</span> <span class="pre">-</span> <span class="pre">e)</span> <span class="pre">(mV)</span></code></p>
+<p>yields a current in nanoamperes (nA), because</p>
+<p>1 microsiemens × 1 millivolt = 1 nanoampere</p>
+<p>However, if you change units to nanosiemens (nS) for conductance without adjusting the computation correspondingly, the units become inconsistent:</p>
+<p><code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">(nS)</span> <span class="pre">*</span> <span class="pre">(v</span> <span class="pre">-</span> <span class="pre">e)</span> <span class="pre">(mV)</span></code></p>
+<p>yields picoamperes (pA), not nanoamperes (nA), which leads to incorrect current magnitudes if assigned directly to <code class="docutils literal notranslate"><span class="pre">i</span></code> declared as nA.</p>
+</section>
+<section id="checking-for-unit-errors">
+<h2>Checking for Unit Errors<a class="headerlink" href="#checking-for-unit-errors" title="Link to this heading"></a></h2>
+<p>Use the <a href="#id1"><span class="problematic" id="id2">``</span></a><code class="xref py py-func docutils literal notranslate"><span class="pre">modlunit()</span></code> `` tool to check NMODL files for unit consistency. It will report missing conversion factors. For example, for the inconsistent multiplication above, it reports:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">previous</span> <span class="n">primary</span> <span class="n">expression</span> <span class="k">with</span> <span class="n">units</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">12</span> <span class="n">coul</span><span class="o">/</span><span class="n">sec</span>
+<span class="ow">is</span> <span class="n">missing</span> <span class="n">a</span> <span class="n">conversion</span> <span class="n">factor</span> <span class="ow">and</span> <span class="n">should</span> <span class="n">read</span><span class="p">:</span>
+  <span class="p">(</span><span class="mf">0.001</span><span class="p">)</span><span class="o">*</span><span class="p">()</span>
+ <span class="n">at</span> <span class="n">line</span> <span class="n">XX</span> <span class="ow">in</span> <span class="n">file</span> <span class="n">your_mechanism</span><span class="o">.</span><span class="n">mod</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">e</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="n">ERROR</span><span class="o">&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="fixing-the-unit-mismatch">
+<h2>Fixing the Unit Mismatch<a class="headerlink" href="#fixing-the-unit-mismatch" title="Link to this heading"></a></h2>
+<p>To fix unit inconsistency, explicitly include the conversion factor between siemens units:</p>
+<ul class="simple">
+<li><p>When using conductance in nanosiemens (nS), multiply the product by <code class="docutils literal notranslate"><span class="pre">0.001</span></code> to convert picoamperes to nanoamperes.</p></li>
+</ul>
+<p>Modify the BREAKPOINT block as:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>BREAKPOINT {
+    at_time(onset)
+    g = gmax * (1/Frac) * wexpzero( -(t-onset)/taud , -(t-onset)/taur )
+    i = 0.001 * g * (v - e)   : convert nS*mV to nA
+}
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Always declare UNITS carefully and consistently.</p></li>
+<li><p>Remember that <em>1 microsiemens × 1 millivolt = 1 nanoampere</em>, while <em>1 nanosiemens × 1 millivolt = 1 picoampere</em>.</p></li>
+<li><p>When changing conductance units from microsiemens to nanosiemens without changing current units (e.g., nanoamperes), adjust the formulas with the appropriate conversion factor.</p></li>
+<li><p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">modlunit()</span></code> before running simulations to detect unit inconsistencies.</p></li>
+<li><p>Incorrect unit conversions can cause simulation results to differ by orders of magnitude.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Dimensional consistency in NMODL is crucial to ensure the physical correctness of the model and stable numerical results.</p>
+</div>
+</section>
+<section id="implementation-example">
+<h2>Implementation Example<a class="headerlink" href="#implementation-example" title="Link to this heading"></a></h2>
+<p>Full example with conductance in nanosiemens fixed for unit consistency:</p>
+<div class="highlight-mod notranslate"><div class="highlight"><pre><span></span>NEURON {
+    POINT_PROCESS synAMPA
+    RANGE onset, taur, taud, gmax, e, i, Epsilon
+    NONSPECIFIC_CURRENT i
+}
+
+UNITS {
+    (nA) = (nanoamp)
+    (mV) = (millivolt)
+    (nS) = (nanosiemens)
+}
+
+PARAMETER {
+    onset = 0 (ms)
+    taur = 1.0 (ms)
+    taud = 5.0 (ms)
+    gmax = 1 (nS)
+    e = 0 (mV)
+    Epsilon = 1e-6
+}
+
+ASSIGNED {
+    v (mV)
+    i (nA)
+    g (nS)
+    Frac
+}
+
+INITIAL {
+    Frac = wexpzero( -taur/(taur-taud) * log(taur/taud) , -taud/(taur-taud) * log(taur/taud) )
+}
+
+BREAKPOINT {
+    at_time(onset)
+    g = gmax * (1/Frac) * wexpzero( -(t-onset)/taud , -(t-onset)/taur )
+    i = 0.001 * g * (v - e)   : convert nS*mV to nA
+}
+
+FUNCTION wexpzero(x, y) {
+    if (x &gt; -Epsilon || y &gt; -Epsilon) {
+        wexpzero = 0
+    } else {
+        wexpzero = expzero(x) - expzero(y)
+    }
+}
+
+FUNCTION expzero(x) {
+    if (x &lt; -5 || x &gt;= 0) {
+        expzero = 0
+    } else {
+        expzero = exp(x)
+    }
+}
+</pre></div>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=1935">https://neuron.yale.edu/phpBB/viewtopic.php?t=1935</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

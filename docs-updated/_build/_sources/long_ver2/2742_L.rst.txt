@@ -1,0 +1,125 @@
+Getting GUI Support for New Mechanism Parameters in NEURON
+===========================================================
+
+When you write new NMODL mechanisms involving ions and parameters, understanding how parameters appear and behave in the NEURON GUI and hoc interface is important for effective model specification and manipulation.
+
+Parameter Visibility Behavior
+-----------------------------
+
+- **Global parameters** declared in the `PARAMETER` block without any scoping qualifier (e.g., RANGE) are by default *global*.  
+- Global parameters **do not** automatically create editable widgets (buttons or numeric fields) in GUI tools such as CellBuilder, the PointProcessManager, or the Distributed Mechanism Viewer.  
+- Global parameters are accessible by selecting them from menu entries such as:  
+  `Tools / Distributed Mechanisms / Viewers / Mechanisms (Globals)`.
+
+Implications When Using USEION Statements
+-----------------------------------------
+
+When a mechanism uses the `USEION` statement for an ion (e.g., `chloride`/`cl`), NEURON creates an auxiliary mechanism named `<ion>_ion` automatically:
+
+- If the mechanism writes to internal ion concentration (e.g., `xi`) and declares a parameter like `xi0`, then insertion of this mechanism into a section creates a global variable named `xi0_xi_ion`.  
+- This global parameter shares the same value across all segments and sections containing the mechanism.
+
+Example:  
+If your extracellular mechanism uses parameters such as `clbath` and `fhspace`, these parameters appear editable because of scoping or naming conventions. However, if your intracellular mechanism has a `PARAMETER cli0` corresponding to intracellular chloride, `cli0` will be global and thus will **not** appear as an editable widget.
+
+Making Parameters Editable in the GUI
+-------------------------------------
+
+To enable parameters to have local (per-segment) values and show up as editable widgets (buttons and edit fields) in GUI tools, follow these guidelines:
+
+1. **Declare parameters as RANGE variables in the `NEURON` block**.  
+
+   Example:
+
+   ```mod
+   NEURON {
+       SUFFIX foo
+       USEION cl READ cli WRITE cli
+       RANGE cli0
+   }
+   ```
+
+2. Maintain any initialization assignments in the `INITIAL` block, such as:  
+
+   ```mod
+   INITIAL {
+       cli = cli0
+   }
+   ```
+
+With `cli0` declared as a RANGE variable, it becomes segment-specific, allowing you to assign and modify distinct values at different locations in the cell morphology. It will also automatically generate GUI widgets in CellBuilder, the Distributed Mechanism Viewer, and related tools.
+
+Parameter Editing for Point Processes
+-------------------------------------
+
+The same principle applies to point process mechanisms:
+
+- To have a parameter show up as an editable field in the PointProcessManager GUI, it must be declared as a `RANGE` variable in the `NEURON` block.  
+- Common issues preventing parameters from appearing include typos in the `RANGE` statement or incorrect variable names.  
+
+No special treatment beyond declaring the parameter as `RANGE` is required for point processes.
+
+Custom GUI Parameter Panels
+---------------------------
+
+For advanced users, GUI panels customized to show selected parameters can be created using hoc functions like `xpanel()` and related GUI libraries described in the NEURON Programmer's Reference. These allow creating tailored parameter editing windows beyond the standard display.
+
+Summary
+-------
+
+- Parameters declared only in the `PARAMETER` block are global and do not by default get GUI editing widgets.  
+- Declare parameters as `RANGE` in the `NEURON` block for localized (segment-specific) values and automatic GUI widget creation.  
+- This applies to both distributed mechanisms and point processes.  
+- Use `Tools / Distributed Mechanisms / Viewers / Mechanisms (Globals)` to access global parameters.  
+- For custom GUI needs, use hoc `xpanel()` programming.
+
+Example Minimal NMODL Snippet Showing `RANGE` Parameter
+-------------------------------------------------------
+
+```mod
+NEURON {
+    SUFFIX chloride_intracellular
+    USEION cl READ cli WRITE cli
+    RANGE cli0  : make parameter editable per segment
+}
+
+PARAMETER {
+    cli0 = 12 (mM)
+    DFree = 2.0 (um2/ms)
+}
+
+ASSIGNED {
+    cli (mM)
+}
+
+INITIAL {
+    cli = cli0
+}
+
+BREAKPOINT {
+    SOLVE states METHOD cnexp
+}
+
+DERIVATIVE states {
+    : example dynamics
+}
+```
+
+Example Python Access to RANGE Parameter in GUI Context
+-------------------------------------------------------
+
+```python
+from neuron import h
+
+soma = h.Section(name='soma')
+h.psection(sec=soma)  # Show section parameters
+soma.insert('chloride_intracellular')
+
+# Set and get the RANGE parameter cli0 at the soma 0.5 location
+soma(0.5).cli0 = 15.0  
+print("cli0 at 0.5:", soma(0.5).cli0)
+```
+
+This approach enables interactive editing of mechanism parameters in the GUI and programmatically.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2742 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2742>`_

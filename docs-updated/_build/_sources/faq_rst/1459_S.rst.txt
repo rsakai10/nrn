@@ -1,0 +1,49 @@
+Action Potential Amplitude Variability in Single Compartment Models
+======================================================================
+
+When simulating a single compartment model with an inserted :class:`hh` mechanism and varying parameters such as geometry or ion channel densities, the amplitude of action potentials (APs) can change significantly during repetitive firing. This occurs because the membrane potential at the spike peak is determined by a balance of ionic currents:
+
+.. math::
+
+    C \frac{dv}{dt} = \sum_x i_x
+
+At the peak (maximum) of the AP, :math:`\frac{dv}{dt} = 0`, so 
+
+.. math::
+
+    \sum_x i_x = 0 = \sum_x g_x (v - E_x)
+
+where :math:`g_x` and :math:`E_x` are the conductance and reversal potential for ion species :math:`x`. Solving for :math:`v`,
+
+.. math::
+
+    v = \frac{\sum_x g_x E_x}{\sum_x g_x}
+
+The peak membrane potential is thus a weighted average of ionic reversal potentials, weighted by their relative conductances. Parameters that increase potassium conductance (:math:`g_K`) or decrease sodium conductance (:math:`g_{Na}`) at the spike peak will reduce AP amplitude.
+
+To illustrate, consider the following HOC code:
+
+.. code-block:: hoc
+
+    create A
+    A {
+        L = 10
+        diam = 10
+        insert hh
+    }
+    // Insert current clamp with delay=200 ms, duration=100 ms, amplitude=0.02 nA
+    // Run the simulation and observe multiple spikes.
+
+Changing :math:`A.diam` affects input resistance and spike amplitude. For example, reducing diameter to 1 increases resistance and firing frequency but can reduce AP amplitude significantly, as the balance of conductances and capacitive current changes.
+
+To achieve consistent AP amplitude across different model sizes or parameters, one must adjust channel densities (:meth:`gnabar_hh`, :meth:`gkbar_hh`), as biological cells regulate ion channel expression accordingly. Leak conductance has minimal effect on spike amplitude.
+
+.. note::
+
+   Using tools like the Multiple Run Fitter can assist in parameter tuning to match desired electrophysiological responses.
+
+.. seealso::
+
+   :class:`hh` mechanism, :class:`IClamp`, :meth:`Section.insert`, NEURON Multiple Run Fitter tool
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1459 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1459>`_

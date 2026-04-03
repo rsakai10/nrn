@@ -1,0 +1,32 @@
+Realistic Current Clamp Electrode Modeling
+===========================================
+
+When simulating intracellular current clamp experiments, include electrode artifacts such as series resistance and capacitance using the Linear Circuit Builder. Two common equivalent circuit models are:
+
+- **Equivalent L circuit**: A single series resistor (electrode resistance) with a capacitor from the "headstage" side of the resistor to ground, representing electrode capacitance.  
+- **Equivalent T circuit**: The series resistance is split into two halves; the electrode capacitance connects at their junction to ground. This more accurately mimics abrupt voltage transients at pulse edges.
+
+.. note::  
+   The capacitance in the T model is connected at a voltage approximately halfway between the cell membrane potential (:math:`V_m`) and the voltage at the headstage preamplifier input (:math:`V_i = V_m + \epsilon`, where :math:`\epsilon` is the voltage drop across the electrode resistance).
+
+Use the built-in :class:`SEClamp` for electrodes modeled as a series resistor without capacitance. To capture capacitance and frequency-dependent effects, prefer the Linear Circuit Builder models.
+
+.. code-block:: hoc
+
+    // Example: Equivalent T circuit elements
+    // R_series split into R1 and R2, capacitor C_elec connected from midpoint to ground.
+
+    objref R1, R2, Ce
+    R1 = new R() 
+    R2 = new R()
+    Ce = new C()
+    // connect as: headstage -- R1 -- node -- R2 -- cell
+    // node grounded via Ce  
+
+.. seealso:: :class:`SEClamp`, :func:`h.LinCctBuilder`
+
+Seal resistance can be represented as a linear leak resistor between electrode-cell junction and bath ground. Modeling the geometry and material properties of the electrode (e.g., glass dielectric constant, internal solution resistivity, lumen diameter) enables calculation of the equivalent circuits or using a cable section with adjusted parameters, though the T circuit is more practical.
+
+For detailed compensation circuits or limited-bandwidth amplifier effects, extend the circuit accordingly within the Linear Circuit Builder framework.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=203 <https://neuron.yale.edu/phpBB/viewtopic.php?t=203>`_

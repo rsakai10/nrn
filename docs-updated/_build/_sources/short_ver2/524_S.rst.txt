@@ -1,0 +1,36 @@
+Initialization in NEURON
+========================
+
+The :meth:`Init` button in the RunControl panel performs a steady-state initialization under **voltage clamp**. This means:
+
+- The membrane potential across the entire cell is set to the specified voltage (e.g., -65 mV).
+- All voltage-dependent states (e.g., gating variables in ion channel mechanisms) are set to their steady-state values at that voltage.
+- The cell is held at this potential "as if clamped," allowing the state variables to equilibrate.
+
+After initialization, when the simulation runs freely (e.g., after pressing Init & Run), the voltage can evolve dynamically depending on inserted mechanisms.
+
+Example HOC code to observe initialization effects:
+
+.. code-block:: hoc
+
+    create soma
+    access soma
+    insert hh
+    soma.nseg = 1
+    runinit()  // equivalent to clicking Init with chosen voltage
+
+Behavior notes:
+
+- If initialized at the HH resting potential (~ -65 mV), the voltage stays stable.
+- Initializing at hyperpolarized values (e.g., -90 mV) can produce anode-break excitation (transient spikes after release).
+- Initializing at depolarized values (e.g., -40 mV) inactivates Na channels and activates K channels, often causing voltage to drop below resting potential after release.
+
+.. note::
+
+   This initialization is different from steady-state under current clamp, where injected current is adjusted to maintain a set membrane potential actively.
+
+.. seealso::
+
+   :meth:`runinit`, :class:`hh` mechanism
+
+Original Thread: https://neuron.yale.edu/phpBB/viewtopic.php?t=524

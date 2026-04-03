@@ -1,0 +1,140 @@
+Fitting Data Sampled at Irregular Intervals Using MRF
+======================================================
+
+When using the Multiple Run Fitter (:class:`MRF`) in NEURON to fit model output to experimental or simulated data sampled at irregular time intervals, there are important considerations regarding how the fitness (error) is evaluated, integration method choice, and data handling. This document summarizes key insights and procedures based on practical experimentation and code inspection.
+
+1. How Does MRF Evaluate Error with Irregularly Sampled Data?
+------------------------------------------------------------
+
+- The data to be fitted consists of pairs of time (`t`) and voltage (`v`) values, often unevenly spaced.
+- When evaluating the fitness (error) during optimization, MRF:
+
+  - Interpolates the model's simulated trajectory (voltage vs. time) to the *exact time points* where data is available.
+  - Uses linear interpolation of the model's results at these data points if the simulation output times do not align with the data timestamps.
+  - Calculates the error only at these data points, *not* at arbitrary interpolated points along the data intervals.
+
+- The error calculation performed in MRF corresponds to a weighted mean squared error over defined time *regions*, each associated with particular data subsets. The error value reported is computed as:
+
+  .. math::
+
+     \text{Error} = \frac{\sum_{i=1}^N w_i \frac{e_i}{s_i}}{\sum_{i=1}^N \frac{w_i}{s_i}}
+
+  where:
+
+  - \( N \) is the number of regions,
+  - \( w_i \) is the weight assigned to region \( i \),
+  - \( e_i \) is the sum of squared errors between model and data in region \( i \),
+  - \( s_i \) is the size (duration) of region \( i \).
+
+- The weights enable combining multiple generators or adjusting relative influence of data subsets.
+
+- Example: For three data points across three regions,
+
+  - Region 1 weight \(w_1 = 1\), size \(s_1\), error sum \(e_1\),
+  - Region 2 weight \(w_2 = 1\), size \(s_2\), error sum \(e_2\),
+  - Region 3 weight \(w_3 = 1\), size \(s_3\), error sum \(e_3\),
+
+  the overall error is:
+
+  .. code-block:: python
+
+     error_value = ((w1*e1/s1) + (w2*e2/s2) + (w3*e3/s3)) / ((w1/s1) + (w2/s2) + (w3/s3))
+
+- In practice, error values computed match manual calculations when normalizing by region sizes and considering weights.
+
+2. Checking MRF’s Error Calculation with a Toy Model
+----------------------------------------------------
+
+To confirm MRF’s error evaluation behavior:
+
+1. Create a simple model, e.g., a single compartment with passive properties or Hodgkin-Huxley channels.
+2. Generate simulated voltage traces sampled at irregular time points (e.g., 3–5 points).
+3. Load these points as "experimental" data into MRF.
+4. Verify that the error value reported by MRF matches the sum of squared differences *only* at those time points, adjusted by region weights and durations.
+5. Inspect the plot in MRF's generator window: after an error evaluation, the simulated data points shown match the data timestamps.
+6. Note that MRF treats segments between data points as piecewise linear for plotting but error is computed discretely at data points.
+
+3. Considerations for Integration Method in Model Generation
+-------------------------------------------------------------
+
+- Differences in model voltage traces obtained using fixed step integration vs. variable step (adaptive) integration can lead to different best-fit parameters when using MRF.
+- Since adaptive integration may produce voltage values at non-uniform time points, MRF performs linear interpolation to map simulation output to data timestamps.
+- To minimize discrepancies, you can:
+
+  - Record model outputs at fixed time steps during adaptive integration using :meth:`Vector.record` with a specified fixed time vector or interval.
+  - Resample or interpolate your experimental data to regular time intervals if uniform sampling is desirable.
+  - Choose the integration method based on simulation accuracy and stability appropriate for the model and data.
+
+- When digitizing experimental data from figures (rather than using raw data), it is especially important to judge the adequacy of fit qualitatively and consider uncertainty inherent in the digitization process.
+
+4. Practical Recommendations
+----------------------------
+
+- Always confirm if raw experimental data is available for fitting; this is preferable to digitized figure data.
+- Use the :meth:`Vector.interpolate` method in NEURON to handle irregular sampling as necessary.
+- Define error evaluation regions thoughtfully within MRF to weigh contributions according to experimental relevance.
+- Check your error calculations manually by inspecting data points and model interpolation at those points to ensure consistency.
+- Be mindful that using mean squared error may not always capture the qualitative aspects important for action potential shapes or other electrophysiological features; consider alternative error metrics if appropriate.
+
+5. Example: Python Code Snippet for Fixed Time Vector Recording
+---------------------------------------------------------------
+
+.. code-block:: python
+
+   from neuron import h, gui
+   import numpy as np
+
+   soma = h.Section(name='soma')
+   soma.insert('hh')
+
+   stim = h.IClamp(soma(0.5))
+   stim.delay = 5
+   stim.dur = 1
+   stim.amp = 0.1
+
+   # Set up fixed time vector for recording
+   dt = 0.025  # ms
+   tstop = 20
+
+   times = h.Vector(np.arange(0, tstop + dt, dt))
+   v_vec = h.Vector(len(times))
+
+   # Record voltage at fixed times during adaptive integration
+   v_vec.record(soma(0.5)._ref_v, times)
+
+   h.tstop = tstop
+   h.dt = dt
+   h.cvode.active(1)  # Enable variable step integration
+
+   h.finitialize(-65)
+   h.continuerun(tstop)
+
+   # Now v_vec contains voltage at fixed regular intervals for fitting with MRF
+
+6. Additional Notes on the MRF Error Calculation Implementation
+---------------------------------------------------------------
+
+- Error calculation is implemented in the hoc file: `nrn/lib/hoc/mulfit/e_norm.hoc`.
+- The function `efun()` calculates the means squared error using weighted regions.
+- The model output is interpolated to data times using `set_modelx()` before error computation.
+- User-defined weights and regions affect the aggregate error used by MRF during optimization.
+
+.. note::
+
+   The MRF fitness function assumes continuity and linear interpolation between model time points but calculates errors only at discrete data sampling times to reflect the actual data fidelity.
+
+
+Summary
+-------
+
+When fitting data sampled at irregular intervals with :class:`MRF` in NEURON:
+
+- The fitness evaluation interpolates model output values to the data sample times.
+- Error is computed only at provided data points but weighted by time regions.
+- Differences between fixed and adaptive integration can affect parameter estimation; record at regular times if possible.
+- Use careful region and weight definitions and manual checks to confirm error calculations.
+- Prefer raw experimental data over digitized figure data for robust fitting.
+
+This approach ensures meaningful and consistent data fitting while accommodating irregular sampling inherent in many experimental electrophysiological recordings.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3112 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3112>`_

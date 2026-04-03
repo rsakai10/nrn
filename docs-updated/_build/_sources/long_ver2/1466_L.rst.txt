@@ -1,0 +1,156 @@
+Ion Concentrations and Currents in NEURON
+==========================================
+
+Introduction
+------------
+
+In NEURON, the relationship between ionic species, membrane voltage, and ionic currents is managed through mechanisms that explicitly specify ions. Many NMODL mechanisms calculate currents without explicitly specifying ion species; these models usually assume fixed ionic concentrations and equilibrium potentials.
+
+Ion Specification in NMODL Mechanisms
+-------------------------------------
+
+To manage ionic concentrations dynamically, an NMODL mechanism must include the ``USEION`` statement for each relevant ion. This statement declares which ion variables the mechanism reads or writes, such as reversal potentials or internal/external concentrations.
+
+Example from the Hodgkin-Huxley (HH) Model:
+
+```hoc
+create soma
+access soma
+insert hh
+psection()
+```
+
+Output snippet:
+
+```
+soma {
+  na_ion { ena=50 }
+  k_ion { ek=-77 }
+  ...
+}
+```
+
+Here, NEURON automatically creates ``na_ion`` and ``k_ion`` mechanisms that manage sodium and potassium ions respectively. The HH mechanism uses ``USEION na`` and ``USEION k`` internally to read or write relevant ion variables.
+
+Automatic Creation of Ion Variables
+-----------------------------------
+
+Ionic variables such as ``ena``, ``eki``, ``cai``, etc., do not exist by default. They come into existence only if a mechanism with appropriate ``USEION`` statements is inserted in a section. For example:
+
+- ``ena``, ``ek``: Equilibrium potentials for sodium and potassium ions.
+- ``nai``, ``nao``, ``ki``, ``ko``: Internal and external concentrations for sodium and potassium.
+- Similar variables exist for calcium (e.g., ``cai``, ``cao``), chloride, and other ions, but only if corresponding mechanisms with ``USEION`` appear.
+
+If no mechanism writes internal or external concentrations (i.e., no mechanism updates concentrations dynamically), the corresponding concentration variables are treated as constant parameters.
+
+Predefined Default Concentrations for Special Ions
+--------------------------------------------------
+
+NEURON defines default ion concentration values for some common ions:
+
+- Sodium: internal concentration ``nai`` ≈ 10 mM, external ``nao`` ≈ 140 mM
+- Potassium: internal ``ki`` ≈ 54.4 mM, external ``ko`` ≈ 2.5 mM
+
+These values can be printed in HOC after inserting a mechanism that uses the ion:
+
+```hoc
+print nai, nao, ki, ko
+```
+
+If you try to print calcium concentrations without a calcium ion mechanism inserted, an error occurs:
+
+```hoc
+print cai, cao
+```
+
+Error:
+
+```
+nrniv: undefined variable cai
+near line ...
+```
+
+Useion and Ion Styles
+---------------------
+
+The way NEURON manages ion concentrations, currents, and equilibrium potentials can be customized using the ``ion_style`` HOC command. By default, NEURON selects appropriate methods automatically.
+
+Simulation of Extracellular Reagents or Diffusible Substances
+-------------------------------------------------------------
+
+To simulate an extracellular reagent (e.g., neurotransmitter, drug) that diffuses and affects neuronal activity, different approaches can be considered:
+
+1. **Simplified Temporal Variation of Conductance**
+
+   - If you only need the conductance to change over time (not spatially or mechanistically), precalculate the time course and apply it using the :meth:`Vector.play` method.
+   
+   - Alternatively, implement the time course directly in a NMODL mechanism's ``BREAKPOINT`` block.
+
+   - For abrupt changes, use the :class:`CVode` class's :meth:`event` method to trigger discrete parameter changes.
+
+2. **Detailed Diffusion and Reaction Modeling**
+
+   - Write a custom NMODL mechanism modeling diffusion, buffering, enzymatic degradation, or pumps with spatial detail.
+
+   - Use examples from NEURON’s model files (e.g., calcium or sodium accumulation models) for guidance.
+
+   - Model interactions with receptors using either NMODL or the Channel Builder.
+
+Summary of NEURON Ion Handling
+------------------------------
+
+- Ionic concentrations and reversal potentials are created only if a mechanism with ``USEION`` is inserted.
+
+- Variables such as ``ena``, ``ek`` come from the automatically created ion mechanisms (e.g., ``na_ion``, ``k_ion``).
+
+- If no mechanism declares ion concentration states, those values remain constant parameters.
+
+- Default values exist for common ions but only become accessible when relevant ion mechanisms are present.
+
+- Flexible simulation of extracellular reagents can range from simple conductance changes to complex diffusion-reaction models.
+
+.. note::
+
+   For details on ion handling, see chapters 8 and 9 in *The NEURON Book*, which cover ionic concentration dynamics, accumulation mechanisms, and initialization strategies.
+
+Code Examples
+-------------
+
+**Inserting HH mechanism and printing ion concentrations:**
+
+```hoc
+create soma
+access soma
+insert hh
+print nai, nao, ki, ko  // prints default internal and external Na and K concentrations
+```
+
+**Using :meth:`Vector.play` to apply time-varying conductance in Python:**
+
+```python
+from neuron import h
+
+soma = h.Section(name='soma')
+soma.insert('pas')
+g_pas_vec = h.Vector([0, 0.001, 0.002, 0.001, 0])  # example conductance values in S/cm2
+t_vec = h.Vector([0, 10, 20, 30, 40])              # corresponding times in ms
+
+g_pas_vec.play(soma(0.5).pas._ref_g, t_vec)
+```
+
+**Using :meth:`CVode.event` for abrupt parameter change:**
+
+```python
+cvode = h.CVode()
+def change_conductance():
+    soma(0.5).pas.g = 0.005
+
+cvode.event(50, change_conductance)  # change conductance at 50 ms
+cvode.event(100, lambda: setattr(soma(0.5).pas, 'g', 0.001))  # revert at 100 ms
+```
+
+.. seealso::
+
+   :class:`Section`, :class:`Ion`, :class:`Vector`, :class:`CVode`, :meth:`Vector.play`, :meth:`CVode.event`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1466 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1466>`_

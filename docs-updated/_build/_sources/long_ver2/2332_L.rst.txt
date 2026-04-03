@@ -1,0 +1,133 @@
+Surface Area Calculation of an Entire Neuron
+=============================================
+
+NEURON provides several straightforward methods to calculate the total surface area of a neuronal morphology. The surface area is expressed in square micrometers (µm²).
+
+Basic Command-Line Approach
+---------------------------
+
+1. Initialize the simulation environment to ensure geometry is fully defined by executing:
+
+   .. code-block:: hoc
+
+      finitialize()
+
+2. Sum the surface area of all segments using the following commands at the interpreter prompt:
+
+   .. code-block:: hoc
+
+      _sum = 0
+      forall for (x, 0) _sum += area(x)
+      print _sum
+
+This will output the total surface area of the neuron in µm².
+
+HOC Procedure for Reusability
+-----------------------------
+
+You can define a reusable procedure to compute and print the total surface area:
+
+.. code-block:: hoc
+
+   proc totalarea() { local sum
+     finitialize()
+     sum = 0
+     forall for (x,0) sum += area(x)
+     print "total surface area = ", sum, " um2"
+   }
+   totalarea()
+
+Save this code in a file named ``totalarea.hoc``. Load it in NEURON using the GUI's File menu or by typing at the prompt:
+
+.. code-block:: hoc
+
+   xopen("totalarea.hoc")
+
+Now, whenever the neuronal morphology changes or you want to re-check the total surface area, simply call:
+
+.. code-block:: hoc
+
+   totalarea()
+
+Using This Method with Network Models
+------------------------------------
+
+For network models or if you want to calculate the total surface area of a specific cell instance, modify the procedure to accept an object reference to a cell. This approach sums the surface area over all sections of that specific cell.
+
+.. code-block:: hoc
+
+   proc totalarea() { local sum
+     finitialize()
+     sum = 0
+     forsec $o1.all for (x, 0) sum += area(x)
+     print "total surface area = ", sum, " um2"
+   }
+
+Call this procedure by setting the object reference ``o1`` to a particular cell instance:
+
+.. code-block:: hoc
+
+   objref cellobj
+   cellobj = Pyr[24]  // example cell instance from a population
+   totalarea()
+
+Or directly pass cell instances as arguments per your implementation.
+
+Python Equivalent
+----------------
+
+In Python, you can calculate the total surface area of a cell as follows:
+
+.. code-block:: python
+
+   from neuron import h
+
+   h.finitialize()
+
+   def total_area(cell):
+       total = 0.0
+       for sec in cell.all:
+           for seg in sec:
+               total += seg.area()
+       print(f"Total surface area = {total} um2")
+       return total
+
+   # Example usage:
+   # total_area(pyr[24])  # assuming pyr is a list of cell instances
+
+Details on Surface Area Calculation
+-----------------------------------
+
+- For sections defined with the stylized method using length (L) and diameter (diam), each segment is treated as a cylinder. The surface area of a segment is computed as
+
+  .. math::
+
+     A = 2 \pi r l
+
+  where \$r\$ is the segment radius and \$l\$ is the segment length. The area of the cylinder ends (circular caps) is *not* included.
+
+- For sections defined with the 3D point method (:func:`h.pt3dadd` calls), sections are modeled as sequences of truncated cones (frusta), with varying diameters and positions. Surface area is computed accordingly along these 3D-defined geometries.
+
+- By default, NEURON assumes "sealed end" boundary conditions, meaning no axial current flows at the ends not attached to other sections. Consequently, the surface area calculation excludes the area of section ends.
+
+Verifying Surface Area Calculation
+----------------------------------
+
+You can verify surface area calculations by creating two sections with different geometry specifications (stylized vs. 3D style) and comparing their reported surface areas.
+
+Summary
+-------
+
+- Use :hoc:`forall` loops combined with the :meth:`area` function to compute segment areas.
+
+- Define reusable procedures (:hoc:`proc`) or Python functions for convenience.
+
+- Be aware that surface area excludes section-end caps due to boundary condition assumptions.
+
+- The total surface area is a sum over all segments of all sections comprising the cell(s) of interest.
+
+.. note::
+
+  Always call :func:`h.finitialize()` before querying area values to ensure all geometry is correctly initialized.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=2332 <https://neuron.yale.edu/phpBB/viewtopic.php?t=2332>`_

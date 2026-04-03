@@ -1,0 +1,40 @@
+.. note::
+   When including a HOC file inside a :class:`Template` that references variables defined within the template, use :func:`xopen` instead of :func:`load_file`.
+   
+   For example, in HOC:
+   
+   .. code-block:: hoc
+   
+      begintemplate myclass
+      public mystring
+      strdef mystring
+      
+      proc init() {
+          set_string()
+          use_string()
+      }
+      
+      proc set_string() {
+          mystring = "hello brain"
+      }
+      
+      proc use_string() {
+          xopen("myfile.hoc")  // Executes in instance context and recognizes mystring
+      }
+      endtemplate myclass
+   
+   where ``myfile.hoc`` contains:
+   
+   .. code-block:: hoc
+   
+      print mystring
+   
+   Using :func:`load_file` results in "undefined variable" errors because it executes at the top-level context, not within the template instance. 
+   
+.. warning::
+   Calling :func:`xopen` inside methods means the file is read every time the method runs for each instance. If the included file defines new template-level names, this can lead to namespace issues.
+
+.. seealso::
+   :meth:`xopen`, :func:`load_file`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3016 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3016>`_

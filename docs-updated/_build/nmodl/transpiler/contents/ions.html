@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ions &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="NMODL “pointers”" href="pointers.html" />
+    <link rel="prev" title="Currents" href="currents.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmake_doc/options.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../progref/index.html">NEURON Programmer’s Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">About the NMODL transpiler</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../readme.html">The NMODL Transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html">Visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="currents.html">Currents</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ndmol-keywords">NDMOL Keywords</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#keyword-write">Keyword: WRITE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#storage">Storage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#optimizing-storage">Optimizing Storage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#concentrations">Concentrations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#writing-concentrations">Writing Concentrations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ion-styles">Ion Styles</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#special-case-zero-area-nodes">Special Case: zero-area nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="globals.html">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cvode.html">Variable timestep integration (CVODE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">Contributing to the NMODL transpiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html">Python package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../capi.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doxygen.html">Internal C/C++ documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">NEURON 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-2">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">About the NMODL transpiler</a></li>
+      <li class="breadcrumb-item active">Ions</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/nmodl/transpiler/contents/ions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ions">
+<h1>Ions<a class="headerlink" href="#ions" title="Link to this heading"></a></h1>
+<p>NEURON supports computing the ion currents and ion concentrations. For each segment
+there can be separate current for separate ions, i.e. one for sodium ions and
+another for calcium ions.</p>
+<p>There are five variables associated with ions: the current (<code class="docutils literal notranslate"><span class="pre">ina</span></code>), the
+concentration inside the segment adjacent to the membrane (<code class="docutils literal notranslate"><span class="pre">nai</span></code>), the
+concentration outside the segment adjacent to the membrane (<code class="docutils literal notranslate"><span class="pre">nao</span></code>), the
+reversal potential (<code class="docutils literal notranslate"><span class="pre">ena</span></code>) and the derivative if the current w.r.t. the
+voltage (<code class="docutils literal notranslate"><span class="pre">dinadv</span></code>). The names should be split as <code class="docutils literal notranslate"><span class="pre">i{na}</span></code> and therefore
+refer to the value for sodium, for calcium it would have been <code class="docutils literal notranslate"><span class="pre">ica</span></code>.</p>
+<p>These variables are physical properties of the segment. Therefore, there exists
+one mechanism per ion. MOD files can include code to read or write these
+variables.</p>
+<section id="ndmol-keywords">
+<h2>NDMOL Keywords<a class="headerlink" href="#ndmol-keywords" title="Link to this heading"></a></h2>
+<p>A MOD file seeking to use ions should use <code class="docutils literal notranslate"><span class="pre">USEION</span></code> as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NEURON</span> <span class="p">{</span>
+   <span class="n">USEION</span> <span class="n">na</span> <span class="n">READ</span> <span class="n">ina</span> <span class="n">WRITE</span> <span class="n">ena</span>
+<span class="p">}</span>
+
+<span class="n">ASSIGNED</span> <span class="p">{</span>
+  <span class="n">ena</span> <span class="p">(</span><span class="n">mV</span><span class="p">)</span>
+  <span class="n">ina</span> <span class="p">(</span><span class="n">mA</span> <span class="o">/</span> <span class="n">cm2</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Multiple ions are expressed by one line of <code class="docutils literal notranslate"><span class="pre">USEION</span></code> per ion.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">{ion_name}</span></code> is a string giving the ion a name. For sodium it’s <code class="docutils literal notranslate"><span class="pre">na</span></code>
+and for calcium <code class="docutils literal notranslate"><span class="pre">ca</span></code>. If the no other mechanisms have defined an ion with
+this name a new ion mechanism is created.</p>
+<p>Both <code class="docutils literal notranslate"><span class="pre">READ</span></code> and <code class="docutils literal notranslate"><span class="pre">WRITE</span></code> are optional and are followed by a comma separated
+list of ion variable names, e.g. <code class="docutils literal notranslate"><span class="pre">ina,</span> <span class="pre">ena</span></code>.</p>
+<section id="keyword-write">
+<h3>Keyword: WRITE<a class="headerlink" href="#keyword-write" title="Link to this heading"></a></h3>
+<section id="writing-ion-currents">
+<h4>Writing Ion Currents<a class="headerlink" href="#writing-ion-currents" title="Link to this heading"></a></h4>
+<p>In MOD file one can set the value of ion variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BREAKPOINT</span> <span class="p">{</span>
+  <span class="n">ina</span> <span class="o">=</span> <span class="n">gna</span><span class="o">*</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">ena</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Semantically, this states that the contribution of the Hodgkin-Huxley model to
+the overall sodium current in that segment is <code class="docutils literal notranslate"><span class="pre">gna*(v</span> <span class="pre">-</span> <span class="pre">ena)</span></code>. Since
+everything is at the level of segment, we’ll not keep repeating “for that
+segment”. Similarly, each mechanism computes a <cite>local</cite> contribution, i.e. the
+contribution due to this mechanism to the actual <cite>global</cite> ion current.</p>
+<p>Therefore, code for the following must be generated:</p>
+<ol class="arabic simple">
+<li><p>Compute the local contribution to the sodium current.</p></li>
+<li><p>Increment the total, local, current contribution by <code class="docutils literal notranslate"><span class="pre">ina</span></code>.</p></li>
+<li><p>Increment the global sodium current by <code class="docutils literal notranslate"><span class="pre">ina</span></code>.</p></li>
+<li><p>Compute local derivative of <code class="docutils literal notranslate"><span class="pre">ina</span></code> w.r.t. the voltage.</p></li>
+<li><p>Increment the global derivative of the sodium current w.r.t. the voltage.</p></li>
+</ol>
+<p>The global current must also be updated as usual. However, this isn’t ion
+specific and hence omitted.</p>
+</section>
+</section>
+</section>
+<section id="storage">
+<h2>Storage<a class="headerlink" href="#storage" title="Link to this heading"></a></h2>
+<p>Each mechanism that specifies <code class="docutils literal notranslate"><span class="pre">USEION</span> <span class="pre">na</span></code> contains a copy of all used ion
+variables and pointers to the shared values in the ion mechanism, see Figure 1.</p>
+<p>The pointer to the variable in the ion mechanism is prefixed with <code class="docutils literal notranslate"><span class="pre">ion_</span></code>,
+e.g. during initialization we might copy the shared value <code class="docutils literal notranslate"><span class="pre">*ion_ena[i]</span></code> to
+<code class="docutils literal notranslate"><span class="pre">ena[i]</span></code> (the copy local to the mechanism using the ion).</p>
+<figure class="align-default" id="id1">
+<img alt="../../../_images/ion_storage.svg" src="../../../_images/ion_storage.svg" />
+<figcaption>
+<p><span class="caption-text">Figure 1: Ion mechanism for sodium (<code class="docutils literal notranslate"><span class="pre">na</span></code>) and its use in the
+Hodgkin-Huxley mechanism. This figure shows the NEURON memory layout.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="optimizing-storage">
+<h3>Optimizing Storage<a class="headerlink" href="#optimizing-storage" title="Link to this heading"></a></h3>
+<p>Since the common pattern is to only access the values of a particular instance,
+the local copy isn’t needed. It might facilitate SIMD, but it could be replaced
+by local variables to save memory, see Figure 2.</p>
+<figure class="align-default" id="id2">
+<img alt="../../../_images/ion_storage-opt.svg" src="../../../_images/ion_storage-opt.svg" />
+<figcaption>
+<p><span class="caption-text">Figure 2: Optimized ion storage layout.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>This optimization is implemented in NMODL. It can be activated on the CLI via</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nmodl<span class="w"> </span>...<span class="w"> </span>codegen<span class="w"> </span>--opt-ionvar-copy
+</pre></div>
+</div>
+</section>
+</section>
+<section id="concentrations">
+<h2>Concentrations<a class="headerlink" href="#concentrations" title="Link to this heading"></a></h2>
+<p>Concentrations adjacent to the inside and outside of the membrane are computed.
+MOD files can change the value by setting <code class="docutils literal notranslate"><span class="pre">nai</span></code> or <code class="docutils literal notranslate"><span class="pre">nao</span></code>. It’s considered
+an error if two MOD files write the same concentration, which result in a
+warning.</p>
+<p>The reversal potential <code class="docutils literal notranslate"><span class="pre">ena</span></code> is a function of the two concentrations.
+Therefore, when writing to either concentration, we must allow <code class="docutils literal notranslate"><span class="pre">ena</span></code> to be
+recomputed.</p>
+<section id="writing-concentrations">
+<h3>Writing Concentrations<a class="headerlink" href="#writing-concentrations" title="Link to this heading"></a></h3>
+<p>When writing concentrations we must notify NEURON of three things: a) the fact
+that this mechanism writes some concentration; b) that this instance of the
+mechanism does so; c) that we’ve written the concentration.</p>
+<p>The first notification happens when registering the mechanism and controls the
+position of the mechanism relative to others, i.e. mechanisms that write the
+concentration must appear in the <code class="docutils literal notranslate"><span class="pre">Memb_list</span></code> before mechanisms that only read
+the concentration, that way all mechanisms get to see the updated values. We
+must call <code class="docutils literal notranslate"><span class="pre">nrn_writes_conc</span></code> to inform NEURON that this mechanisms intends to
+write to some concentration.</p>
+<p>The second notification happens as part of <code class="docutils literal notranslate"><span class="pre">nrn_alloc</span></code>, i.e. when allocating
+the <code class="docutils literal notranslate"><span class="pre">Prop</span></code>, by calling <code class="docutils literal notranslate"><span class="pre">nrn_check_conc_write</span></code>. This enables NEURON to check
+that there’s no conflict and modifies the style of the ion. We pass <code class="docutils literal notranslate"><span class="pre">0</span></code> for
+exterior and <code class="docutils literal notranslate"><span class="pre">1</span></code> for interior.</p>
+<p>The third notification happens in the INITIAL block after setting the
+concentrations. We use <code class="docutils literal notranslate"><span class="pre">nrn_wrote_conc</span></code>. This enables NEURON to conditionally
+trigger recomputing the reversal potential via the Nernst equation (depending
+on the ion style).</p>
+</section>
+<section id="ion-styles">
+<h3>Ion Styles<a class="headerlink" href="#ion-styles" title="Link to this heading"></a></h3>
+<p>The <em>style</em> of an ion is a 12-bit wide bitfield it stores information whether
+MOD files write to the concentrations or reversal potential, if the reversal
+potential should be recomputed after every timestep, etc. The style is part of
+the ion mechanism.</p>
+<p>It’s stored in the <code class="docutils literal notranslate"><span class="pre">dparam</span></code> array of the ion <code class="docutils literal notranslate"><span class="pre">Prop</span></code> as an <code class="docutils literal notranslate"><span class="pre">int</span></code> at
+location <code class="docutils literal notranslate"><span class="pre">0</span></code> (variable name in NEURON: <code class="docutils literal notranslate"><span class="pre">iontype_index_dparam</span></code>). A mechanism
+using the style of an ion stores a <code class="docutils literal notranslate"><span class="pre">generic_data_handle</span></code> in it’s <code class="docutils literal notranslate"><span class="pre">dparam</span></code>
+array (not necessarily at location <code class="docutils literal notranslate"><span class="pre">0</span></code>) that points to the relevant <code class="docutils literal notranslate"><span class="pre">style</span></code>
+in the ion <code class="docutils literal notranslate"><span class="pre">Prop</span></code>.</p>
+<p>From MOD files we need to notify NEURON if we’re reading/writing a concentration
+or reversal potential. This is done by calling <code class="docutils literal notranslate"><span class="pre">nrn_promote(.,</span> <span class="pre">conc,</span> <span class="pre">rev)</span></code>.
+The magic value for <code class="docutils literal notranslate"><span class="pre">rev</span></code> and <code class="docutils literal notranslate"><span class="pre">conc</span></code> is <code class="docutils literal notranslate"><span class="pre">3</span></code> when writing, <code class="docutils literal notranslate"><span class="pre">1</span></code> when only
+reading and <code class="docutils literal notranslate"><span class="pre">0</span></code> if we do neither.</p>
+</section>
+</section>
+<section id="special-case-zero-area-nodes">
+<h2>Special Case: zero-area nodes<a class="headerlink" href="#special-case-zero-area-nodes" title="Link to this heading"></a></h2>
+<p>Ions are not defined for nodes that represent a segment with zero area. This
+means point processes can’t use ions at nodes with surface zero-area.
+Therefore, this should be asserted in generated code. It also allows converting
+ion currents to ion current densities by dividing by the area.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="currents.html" class="btn btn-neutral float-left" title="Currents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pointers.html" class="btn btn-neutral float-right" title="NMODL “pointers”" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

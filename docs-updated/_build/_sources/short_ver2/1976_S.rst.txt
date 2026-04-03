@@ -1,0 +1,34 @@
+Maximum Time Step (dt) and Numerical Methods in NEURON
+=========================================================
+
+When using NEURON's fixed time step integration, two key parameters affect the timing:
+
+- ``dt``: the integration time step.
+- ``steps_per_ms``: controls how often simulation points are recorded or plotted.
+
+The internal procedure :meth:`run <h.run>` calls :meth:`setdt <h.setdt>`, which enforces compatibility so that ::
+
+    dt = 1 / (N * steps_per_ms)
+
+where N is a positive integer (1, 2, 3, ...). Thus, ``dt`` values are effectively quantized and can be reduced by integer divisors but not arbitrary fractions.
+
+Spatial discretization is controlled by the number of segments ``nseg`` per section. Each segment corresponds to an internal node where the membrane potential is computed. The second spatial derivative is approximated using the central difference method, yielding second order accuracy at segment centers. For best accuracy, use an odd number for ``nseg`` so that a node is centered midway along the section.
+
+NEURON's default numerical integration scheme is implicit Euler. Additional methods such as Crank-Nicholson and adaptive time step/order solvers are also available and described in detail in the Programmer's Reference.
+
+.. code-block:: python
+
+    from neuron import h
+    h.steps_per_ms = 100  # for example, 100 steps per ms
+    h.dt = 1 / (2 * h.steps_per_ms)  # dt must satisfy dt = 1/(N*steps_per_ms)
+
+.. code-block:: hoc
+
+    steps_per_ms = 100
+    dt = 1/(2 * steps_per_ms)  // dt compatible with steps_per_ms
+
+.. note::
+
+   To ensure numerical accuracy and stability, choose ``nseg`` as an odd number and set ``dt`` consistent with ``steps_per_ms`` as enforced by :meth:`setdt`.
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=1976 <https://neuron.yale.edu/phpBB/viewtopic.php?t=1976>`_

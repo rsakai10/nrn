@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fano Factor Analysis of NetStim Events &mdash; NEURON  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6933245a" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NEURON
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Building:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmake_doc/index.html">CMake Build Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install/developer.html">Developer Builds</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">Training videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../courses/exercises2018.html">NEURON Course Exercises</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://neuron.yale.edu/phpBB">The NEURON forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications.html">Publications about NEURON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publications-using-neuron.html">Publications using NEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NEURON scripting:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scripting.html">Running Python and HOC scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">NEURON Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hoc/index.html">NEURON HOC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../otherscripting.html">Other scripting languages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rxd-tutorials/index.html">Python RXD tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coreneuron/index.html">CoreNEURON</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">NMOD Language:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/language.html">Language Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nmodl/transpiler/index.html">About the NMODL transpiler</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scm/index.html">NEURON SCM and Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">NEURON Development topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C/C++ API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Removed Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../removed_features.html">Removed Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">NEURON 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-1">NEURON 8.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#neuron-8-0">NEURON 8.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html#feedback-help">Feedback / Help</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEURON</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fano Factor Analysis of NetStim Events</li>
+<li class="wy-breadcrumbs-aside">
+    
+    
+</li>
+
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/long_ver2/2992_L.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fano-factor-analysis-of-netstim-events">
+<h1>Fano Factor Analysis of NetStim Events<a class="headerlink" href="#fano-factor-analysis-of-netstim-events" title="Link to this heading"></a></h1>
+<p>This document explains how to analyze the stochastic spike times generated by NEURON’s <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> with noise enabled, to verify that the spike counts follow a Poisson distribution, which should exhibit a Fano factor close to 1.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
+<p>The Fano factor is defined as the ratio of the variance to the mean of spike counts within fixed time intervals. It applies to <em>discrete</em> event counts, not to continuous variables such as interspike intervals (ISIs). For a Poisson process, the Fano factor equals 1.</p>
+<p>When <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> is configured with <cite>noise=1</cite>, it generates spike times as a renewal process with interspike intervals drawn from a negative exponential distribution. While the ISI distribution is continuous, the <em>counts</em> of spikes in equally sized time windows are Poisson distributed.</p>
+</section>
+<section id="incorrect-approach">
+<h2>Incorrect Approach<a class="headerlink" href="#incorrect-approach" title="Link to this heading"></a></h2>
+<p>A common mistake is to compute the Fano factor using interspike intervals directly, for example by dividing the variance of ISIs by their mean:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>Vec1 = new Vector()
+for i=1,(Vec.size()-1){
+    Vec1.append(Vec.x[i] - Vec.x[i-1])
+}
+print Vec1.var()/Vec1.mean()
+</pre></div>
+</div>
+<p>This yields a large value (much greater than 1) that does NOT represent the Fano factor because ISIs are continuous and the ratio of variances to means in ISIs does not correspond to the Fano factor.</p>
+</section>
+<section id="correct-procedure">
+<h2>Correct Procedure<a class="headerlink" href="#correct-procedure" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Record spike times produced by <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> into a <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector" title="Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>.</p></li>
+<li><p>Divide the simulation interval into bins of fixed size (time windows).</p></li>
+<li><p>Count the number of spikes within each bin.</p></li>
+<li><p>Compute the variance and mean of these spike counts.</p></li>
+<li><p>Calculate the Fano factor as variance divided by mean of the binned spike counts.</p></li>
+</ol>
+</section>
+<section id="example-hoc-code">
+<h2>Example HOC Code<a class="headerlink" href="#example-hoc-code" title="Link to this heading"></a></h2>
+<p>This example sets up a <a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> generating noisy spike times and calculates the Fano factor based on counts in 20 ms bins:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>objref sti, con, vec, hist
+sti = new NetStim()
+sti.interval = 100      // Mean interspike interval 100 ms
+sti.start = 10         // Spike train starts at 10 ms
+sti.number = 1e9       // Effectively unlimited number of spikes
+sti.noise = 1          // Full noise (Poisson-like spike train)
+
+con = new NetCon(sti, nil)
+vec = new Vector()
+con.record(vec)        // Record spike times from NetStim
+
+tstop = 35000          // Simulation duration (ms)
+load_file(&quot;stdgui.hoc&quot;) // Ensure standard run library loaded
+cvode_active(1)        // Turn on variable time step integration for speed
+
+run()
+
+// Compute histogram of spike counts in 20 ms bins
+hist = vec.histogram(0, tstop, 20)
+
+// Calculate and print the Fano factor (variance/mean of spike counts)
+print &quot;Fano factor from spike counts in 20 ms bins: &quot;, hist.var()/hist.mean()
+
+// Optionally compute ISI statistics
+objref isivec
+isivec = new Vector()
+isivec.deriv(vec, 1, 1)    // Compute ISIs from spike times using Euler method
+print &quot;Mean ISI:&quot;, isivec.mean()
+print &quot;Stddev ISI:&quot;, isivec.stdev()
+print &quot;CV (std/mean ISI):&quot;, isivec.stdev()/isivec.mean()
+</pre></div>
+</div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.histogram" title="Vector.histogram"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.histogram()</span></code></a> method counts the number of spike events in successive bins over the simulation time.</p></li>
+<li><p>The Fano factor is meaningful only when computed over spike counts in defined intervals, <em>not</em> from continuous ISIs.</p></li>
+<li><p>Using <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.deriv" title="Vector.deriv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.deriv()</span></code></a> on the spike times vector efficiently computes the ISI distribution.</p></li>
+<li><p>Specifying a very large <cite>sti.number</cite> ensures that the spike train length is limited only by simulation time (<cite>tstop</cite>), not by the maximum spike count.</p></li>
+<li><p>Enabling <cite>cvode_active(1)</cite> activates adaptive integration, speeding up the simulation when no biophysical model cells are involved (i.e., when just <cite>NetStim</cite> is used).</p></li>
+</ul>
+</section>
+<section id="additional-example-for-fast-analysis">
+<h2>Additional Example for Fast Analysis<a class="headerlink" href="#additional-example-for-fast-analysis" title="Link to this heading"></a></h2>
+<p>Here is a complete minimal example to run at the <a href="#id1"><span class="problematic" id="id2">:hoc:`oc&gt;`</span></a> prompt:</p>
+<div class="highlight-hoc notranslate"><div class="highlight"><pre><span></span>load_file(&quot;stdgui.hoc&quot;)
+
+objref sti, con, vec, hist, isivec
+sti = new NetStim()
+sti.interval = 100
+sti.start = 10
+sti.number = 1e9
+sti.noise = 1
+
+con = new NetCon(sti, nil)
+vec = new Vector()
+con.record(vec)
+
+tstop = 35000
+cvode_active(1)
+
+run()
+
+// Compute interspike intervals
+isivec = new Vector()
+isivec.deriv(vec, 1, 1)
+print &quot;Mean ISI:&quot;, isivec.mean()
+print &quot;ISI stddev:&quot;, isivec.stdev()
+print &quot;CV (ISI stddev/mean):&quot;, isivec.stdev()/isivec.mean()
+
+// Compute Fano factor from spike counts in 20 ms bins
+hist = vec.histogram(0, tstop, 20)
+print &quot;Fano factor (variance/mean of spike counts in 20 ms bins):&quot;, hist.var()/hist.mean()
+</pre></div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The Fano factor measures variability of <em>counts</em> of spike events in time windows, not variability of intervals.</p></li>
+<li><p>Use <a class="reference internal" href="../progref-1/programming/math/vector.html#Vector.histogram" title="Vector.histogram"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.histogram()</span></code></a> to bin spike counts and compute variance and mean for the Fano factor.</p></li>
+<li><p><a class="reference internal" href="../progref-1/modelspec/programmatic/mechanisms/mech.html#NetStim" title="NetStim"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetStim</span></code></a> with <cite>noise=1</cite> generates spike times as a Poisson process (interspike intervals are negative exponential distributed), so counts over fixed intervals show a Fano factor near 1.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Always load the standard run library with <code class="docutils literal notranslate"><span class="pre">load_file(&quot;stdgui.hoc&quot;)</span></code> before using <code class="xref py py-func docutils literal notranslate"><span class="pre">cvode_active()</span></code> or event-driven simulations to ensure proper operation on all platforms.</p>
+</div>
+<p>Original Thread: <a class="reference external" href="https://neuron.yale.edu/phpBB/viewtopic.php?t=2992">https://neuron.yale.edu/phpBB/viewtopic.php?t=2992</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Duke, Yale and the Blue Brain Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

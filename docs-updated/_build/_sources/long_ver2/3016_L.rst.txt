@@ -1,0 +1,114 @@
+Load a Hoc File Within a Template and Access Template Variables
+=================================================================
+
+When working with :class:`Template` definitions in NEURON's HOC language, you may want to load an external hoc file that accesses variables defined within the template. However, using :func:`load_file` inside a template often leads to errors such as "undefined variable" because :func:`load_file` executes the target file in the top-level context, which does not have access to the template's local variables.
+
+This section explains how to properly include a hoc file inside a template definition while accessing template variables.
+
+Problem Demonstration
+---------------------
+
+Consider the following example stored in **testclass.hoc**:
+
+.. code-block:: hoc
+
+    begintemplate myclass
+    public mystring
+    strdef mystring
+    
+    proc init() {
+        set_string()
+        use_string()
+    }
+    
+    proc set_string() {
+        mystring = "hello brain"
+    }
+    
+    proc use_string() {
+        load_file("myfile.hoc")
+    }
+    endtemplate myclass
+
+Suppose **myfile.hoc** contains:
+
+.. code-block:: hoc
+
+    print mystring
+
+Creating an instance of the template:
+
+.. code-block:: hoc
+
+    objref c
+    c = new myclass()
+
+results in an error:
+
+.. code-block:: text
+
+    undefined variable mystring
+
+because :func:`load_file` operates at the global interpreter level and cannot see the template’s local variable ``mystring``.
+
+Recommended Solution: Use `xopen`
+---------------------------------
+
+Replace :func:`load_file` with :func:`xopen` to load the hoc file within the context of the current object instance:
+
+.. code-block:: hoc
+
+    proc use_string() {
+        xopen("myfile.hoc")
+    }
+
+This causes **myfile.hoc** to be executed in the context of the calling object instance, allowing direct access to template variables such as ``mystring``.
+
+Usage example after modification:
+
+.. code-block:: hoc
+
+    objref c
+    c = new myclass()
+    // This will print: hello brain
+
+Important Details About `xopen`
+--------------------------------
+
+- :func:`xopen` executes the hoc file in the *context* that calls it, which in this case is the template instance.
+
+- Calling :func:`xopen` inside a template procedure (e.g., inside ``init()`` as above) means the file is read and executed each time an instance is created.
+
+- If you place :func:`xopen` at the top-level of the template (outside of any procedure), the content of the loaded file becomes part of the template definition itself (executed once when the template is parsed).
+
+- Be cautious that :func:`xopen` can modify the template's namespace dynamically if used inappropriately. Names declared by :func:`xopen` inside a procedure will affect only that instance, while top-level :func:`xopen` affects all instances.
+
+Python Interface Considerations
+-------------------------------
+
+If using NEURON's Python interface and templates defined in hoc, the same behavior applies. For example, in Python:
+
+.. code-block:: python
+
+    from neuron import h
+
+    h.load_file("testclass.hoc")
+    c = h.myclass()
+    # This will execute myfile.hoc in c's context when c.init() is called (or adjust accordingly).
+
+Summary
+-------
+
+- Use :func:`xopen` inside template procedures to load hoc files that reference template variables.
+
+- Avoid using :func:`load_file` inside templates for such purposes.
+
+- Understand when to load files during template parsing (top-level) versus instance creation (inside procedures).
+
+.. note::
+    Using :func:`xopen` inside an instance method runs the loaded code in the instance's namespace, allowing access to the instance’s variables. Using :func:`xopen` at the template's top level integrates the loaded code into the template's definition, making it available to all instances without re-reading the file multiple times.
+
+.. seealso::
+    :class:`Template`, :func:`load_file`, :func:`xopen`
+
+Original Thread: `https://neuron.yale.edu/phpBB/viewtopic.php?t=3016 <https://neuron.yale.edu/phpBB/viewtopic.php?t=3016>`_
