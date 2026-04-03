@@ -1,0 +1,1296 @@
+[
+  {
+    "thread_id": 136,
+    "summary": "The user expected a large change in membrane potential due to a large conductance and a fixed time step, but observed no change. The solution is that NEURON uses the implicit Euler method by default, which allows the system to reach its steady state in a single step when the time step is much larger than the system's time constant.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 138,
+    "summary": "The user wanted to stop a NEURON simulation after a certain number of spikes to save time, instead of running it until a fixed tstop. Initially, they modified run() and continuerun() to achieve this, but a more efficient solution was suggested using NEURON's event delivery system with NetCon's record() method and CVode's event() method to track spikes and terminate the simulation after a preset number of spikes.",
+    "functions_mentioned": [
+      "NetCon.record",
+      "FInitializeHandler",
+      "CVode.event"
+    ]
+  },
+  {
+    "thread_id": 162,
+    "summary": "The original problem was about implementing a 'temperature clamp' in a NEURON model using NMODL code, which failed because 'celsius' is a special variable that cannot be assigned directly in a model description file. The solution involved using NEURON's Vector class to programmatically change the temperature over time, and using NEURON's event delivery system with FInitializeHandler and cvode.event() for event-driven parameter changes.",
+    "functions_mentioned": [
+      "at_time",
+      "Vector.play",
+      "FInitializeHandler",
+      "cvode.event",
+      "cvode.re_init",
+      "fcurrent"
+    ]
+  },
+  {
+    "thread_id": 203,
+    "summary": "The forum thread discusses how to model realistic current clamp electrodes in NEURON, incorporating electrode resistance and capacitance to recreate bridge balance artifacts observed in experimental recordings. The solution involves using the Linear Circuit Builder to create an equivalent L or T circuit to represent the electrode, with the T circuit providing a more accurate representation of distributed resistance and capacitance. The SEClamp class is also mentioned as a simpler model for electrodes with series resistance but no capacitance.",
+    "functions_mentioned": [
+      "Linear Circuit Builder",
+      "SEClamp"
+    ]
+  },
+  {
+    "thread_id": 245,
+    "summary": "The thread discusses how to randomly select a dendrite from a SectionList in NEURON to attach synapses. The solution involves using a cumulative sum of surface areas to map sections to a line, allowing random selection based on surface area, and suggests using the SectionRef class to manage sections as objects for easier manipulation.",
+    "functions_mentioned": [
+      "Random",
+      "SectionList",
+      "Vector",
+      "SectionRef",
+      "List"
+    ]
+  },
+  {
+    "thread_id": 346,
+    "summary": "The original poster wanted to implement a fast-acting Na channel and a persistent NaP channel in a neuron model using NMODL, and was advised to use separate .mod files for each channel to maintain clarity and ease of maintenance. Another user had a related question about plotting individual ionic current contributions, which was resolved by modifying the NMODL file to make specific ionic currents accessible as range variables.",
+    "functions_mentioned": [
+      "USEION",
+      "RANGE",
+      "SUFFIX",
+      "INITIAL",
+      "BREAKPOINT",
+      "rates",
+      "mknrndll",
+      "nrnivmodl"
+    ]
+  },
+  {
+    "thread_id": 589,
+    "summary": "The user is trying to modify a HOC script that collapses a dendritic tree into a specified number of compartments while preserving axial resistance. Initially, the script was designed to collapse the tree into three compartments, but the user wants to extend it to more compartments, such as 10 or 40. The solution involved refactoring the code to use a vector for cutoffs, allowing for dynamic adjustment of the number of compartments, and ensuring the modified code produces results consistent with the original for three compartments.",
+    "functions_mentioned": [
+      "xopen",
+      "new Vector",
+      "set",
+      "append",
+      "forall",
+      "proc",
+      "setmrg",
+      "getnextABP",
+      "shortnms",
+      "joinAP",
+      "joinBP",
+      "joinABP",
+      "tagAcyc",
+      "tagBcyc",
+      "tagABcyc",
+      "cycmake",
+      "arborcharacterize"
+    ]
+  },
+  {
+    "thread_id": 773,
+    "summary": "The forum thread discusses how the 'nseg' parameter in NEURON affects spatial accuracy in simulations. Increasing 'nseg' improves accuracy by refining the spatial discretization, which can be verified by observing changes in plots of membrane potential over time. The thread also touches on the concept of compartmental modeling, explaining that dividing a section into multiple parts with 'nseg=1' effectively creates a multi-compartment model, and suggests using the d_lambda rule for determining the appropriate number of compartments.",
+    "functions_mentioned": [
+      "forall",
+      "create",
+      "access",
+      "insert",
+      "for"
+    ]
+  },
+  {
+    "thread_id": 1168,
+    "summary": "The forum thread discusses how to choose synaptic weights for modeling inhibition effects in NEURON simulations. The solution highlights that the choice of synaptic weight depends on the specific model and context, such as whether the synapse is current-based or conductance-based, and suggests consulting relevant literature and NEURON documentation for guidance. The weight affects the activation variable in artificial spiking cells and specifies the maximum conductance change in conductance change synaptic mechanisms.",
+    "functions_mentioned": [
+      "IntFire1",
+      "IntFire2",
+      "IntFire4",
+      "ExpSyn",
+      "Exp2Syn"
+    ]
+  },
+  {
+    "thread_id": 1272,
+    "summary": "The user was having trouble with a NEURON model for internal calcium concentration where the calcium concentration (cai) was not changing as expected. The solution involved ensuring proper initialization of cai by setting cai0 explicitly in the mod file and correcting the equation for calcium dynamics to account for the correct surface area to volume ratio, as well as ensuring that parameters like F, tau, and L were properly assigned.",
+    "functions_mentioned": [
+      "fadvance",
+      "fcurrent",
+      "frecord_init",
+      "finitialize",
+      "at_time"
+    ]
+  },
+  {
+    "thread_id": 1436,
+    "summary": "The user was trying to access diffusible ion concentrations stored as STATE variables in an array within a KINETIC block and thought they needed to convert them to RANGE variables to access them from hoc or Python. The solution clarified that STATE variables are automatically RANGE variables and can be accessed using the correct syntax without needing to declare them as separate RANGE variables.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 1459,
+    "summary": "The forum thread discusses the issue of varying action potential amplitudes in a single compartment model with the 'hh' mechanism when model parameters are changed. The solution involves understanding the relationship between ionic currents and membrane potential, and adjusting channel densities or using tools like the Multiple Run Fitter to achieve consistent action potential amplitudes across different model configurations.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 1522,
+    "summary": "The user experienced exponential slowing when creating multiple instances of a cell template due to the use of PointProcessManager and VectorPlay, which are not optimized for large-scale simulations. The solution involved replacing PointProcessManager with IClamp and using the Vector class's play method instead of VectorPlay, significantly improving execution speed and reducing memory usage. Additionally, a custom mod file was created to efficiently deliver sinusoidal current to multiple neurons, further optimizing the simulation.",
+    "functions_mentioned": [
+      "Vector.record",
+      "Vector.play",
+      "fadvance",
+      "net_send",
+      "NET_RECEIVE"
+    ]
+  },
+  {
+    "thread_id": 1724,
+    "summary": "The user encountered an error where the variable 'tstop' was undefined within a template in their NEURON model. The solution involves using the 'external' keyword to allow the template to access top-level variables like 'tstop'.",
+    "functions_mentioned": [
+      "NetStim"
+    ]
+  },
+  {
+    "thread_id": 1905,
+    "summary": "The user was trying to set the basal intracellular calcium concentration (cai) to 116 nM in a NEURON model but encountered issues with the concentration remaining at 50 nM. The solution involved ensuring no conflicting mechanisms were present, using a custom initialization procedure, and potentially creating a toy model to test the initialization strategy. The user was advised to clean up the code and test with a simpler model before applying changes to the complex model.",
+    "functions_mentioned": [
+      "USEION",
+      "insert",
+      "finitialize",
+      "fcurrent",
+      "cvode.re_init",
+      "ion_style",
+      "LONGITUDINAL_DIFFUSION",
+      "COMPARTMENT",
+      "SOLVE",
+      "BREAKPOINT",
+      "INITIAL",
+      "proc",
+      "forall",
+      "create",
+      "access",
+      "connect",
+      "delete_section",
+      "xopen",
+      "new",
+      "Graph",
+      "addvar",
+      "save_name",
+      "append",
+      "nrnmainmenu",
+      "nrncontrolmenu",
+      "load_file",
+      "objref",
+      "steps_per_ms",
+      "dt",
+      "tstop",
+      "nseg",
+      "diam",
+      "L",
+      "Ra",
+      "cm",
+      "g_pas",
+      "e_pas",
+      "gbar_na",
+      "gbar_kv",
+      "gbar_km",
+      "gbar_kca",
+      "gbar_ca",
+      "eca",
+      "ek",
+      "ena",
+      "vshift_na",
+      "vshift_ca",
+      "eca",
+      "ica",
+      "ica_pmp",
+      "ica_pmp_last",
+      "parea",
+      "cai",
+      "cao",
+      "vrat",
+      "Kd",
+      "B0",
+      "factors",
+      "factors_done",
+      "frat",
+      "dsq",
+      "dsqvol",
+      "trates",
+      "rates",
+      "efun",
+      "MultipleRunFitter"
+    ]
+  },
+  {
+    "thread_id": 1935,
+    "summary": "The user encountered a problem with differing simulation results after changing the units of conductance from microsiemens to nanosiemens in an NMODL file. The issue was due to a dimensional inconsistency in the second version of the code, where the conductance and voltage units did not correctly produce a current in nanoamps, leading to an incorrect calculation of the current. The solution was to include a conversion factor of 0.001 in the calculation of the current to ensure dimensional consistency.",
+    "functions_mentioned": [
+      "at_time",
+      "wexpzero",
+      "expzero"
+    ]
+  },
+  {
+    "thread_id": 1947,
+    "summary": "The user wanted to dynamically create variable names for vectors to record action potential times in a NEURON simulation with multiple nodes. The solution involved using indexed lists (arrays) of vectors instead of dynamically named variables, and the suggestion to use lists for better scalability and flexibility. The user was also advised to avoid 'access abuse' and to use symbolic constants instead of magic numbers.",
+    "functions_mentioned": [
+      "APCount",
+      "record",
+      "sprint",
+      "execute",
+      "List",
+      "forall"
+    ]
+  },
+  {
+    "thread_id": 1976,
+    "summary": "A user was trying to adjust the time step (dt) in NEURON for performance testing but couldn't increase it beyond 0.025 ms. The solution involved understanding that dt can be reduced by whole number factors and is controlled by the setdt() procedure, which ensures compatibility with steps_per_ms. NEURON uses the implicit Euler method by default, with other methods like Crank-Nicholson available.",
+    "functions_mentioned": [
+      "setdt",
+      "run"
+    ]
+  },
+  {
+    "thread_id": 2245,
+    "summary": "The user encountered unexpected behavior when setting gbar_kv to 0 in a NEURON model, expecting no current to be produced. The issue was due to a misunderstanding of how sections and SectionLists work in NEURON, leading to the soma section being affected instead of the intended dendritic sections. The solution involved correctly targeting the dendritic sections using a separate SectionList that excluded the soma.",
+    "functions_mentioned": [
+      "insert",
+      "forsec",
+      "secname",
+      "psection",
+      "ifsec",
+      "issection"
+    ]
+  },
+  {
+    "thread_id": 2459,
+    "summary": "The user was attempting to reproduce QUB ion channel models in NEURON and MATLAB but encountered discrepancies in the initial steady-state probabilities and behavior of the models, particularly when using more than two states. The issue was traced back to an incorrect initial voltage setting (v_init) in NEURON, which was causing the initial conditions to differ from expectations. Once corrected, the NEURON model behaved as expected, matching the MATLAB and QUB results.",
+    "functions_mentioned": [
+      "SEClamp",
+      "VClamp",
+      "SOLVE states STEADYSTATE sparse",
+      "SOLVE states METHOD sparse",
+      "CONSERVE",
+      "printf"
+    ]
+  },
+  {
+    "thread_id": 2656,
+    "summary": "The user was trying to plot a specific NaP current from a custom .mod file but encountered issues because the NaP channel and another hh Na channel both used the same ion, leading to confusion in plotting the currents separately. The solution involved creating an intermediate variable in the ASSIGNED block and making it a RANGE variable in the NEURON block to differentiate the currents, allowing the user to plot the specific NaP current separately.",
+    "functions_mentioned": [
+      "USEION",
+      "RANGE",
+      "ASSIGNED",
+      "BREAKPOINT",
+      "SOLVE",
+      "METHOD",
+      "cnexp"
+    ]
+  },
+  {
+    "thread_id": 2708,
+    "summary": "The user wanted to create a shape plot in NEURON that displays only the soma and dendrites, excluding axons. The solution involved creating a SectionList with the desired sections and using the Shape class's observe() method to display only those sections, followed by exec_menu('View = plot') to finalize the view.",
+    "functions_mentioned": [
+      "SectionList",
+      "Shape",
+      "observe",
+      "exec_menu"
+    ]
+  },
+  {
+    "thread_id": 2714,
+    "summary": "The forum thread discusses the creation of a single compartment model of a neuron using experimental data, focusing on the challenges of accurately representing ionic currents and spiking behavior. The solution involves using NEURON's simulation environment to model ionic channels and validate the model by reproducing observed spiking patterns, while considering the effects of gap junctions and the spatial distribution of ion channels.",
+    "functions_mentioned": [
+      "SEClamp",
+      "IClamp",
+      "Vector.mul",
+      "area"
+    ]
+  },
+  {
+    "thread_id": 2718,
+    "summary": "The user wanted to change the density of voltage-gated channels at regular intervals along a dendritic tree but was unsure how to handle varying section lengths. The solution involved using range variables to set channel densities at specific positions within a section, eliminating the need to alter section lengths or geometry.",
+    "functions_mentioned": [
+      "nseg",
+      "insert",
+      "gnabar_hh",
+      "for"
+    ]
+  },
+  {
+    "thread_id": 2742,
+    "summary": "The user encountered an issue where a parameter (cli0) from a custom intracellular chloride management mechanism did not appear in the NEURON GUI. The solution was to declare the parameter as a RANGE variable in the NEURON block, which allows it to be displayed as a button and numeric field widget in the GUI tools. This approach applies to both point processes and distributed mechanisms, ensuring parameters are editable in the GUI.",
+    "functions_mentioned": [
+      "forall",
+      "psection",
+      "xpanel"
+    ]
+  },
+  {
+    "thread_id": 2747,
+    "summary": "The user experienced inconsistent results when running multiple simulations in NEURON with identical parameters. The issue was identified as a failure to reinitialize pseudorandom number generators used by NetStims, which led to different spatiotemporal patterns of synaptic activation across runs. The solution involved setting a seed for the NetStim objects to ensure reproducibility of results.",
+    "functions_mentioned": [
+      "stdinit",
+      "continuerun",
+      "NetCon.record",
+      "NetStim.seed"
+    ]
+  },
+  {
+    "thread_id": 2840,
+    "summary": "A user wanted to change synaptic conductance during a sequence of events in a NEURON simulation. The solution involved using a VecStim object to generate events and adjusting synaptic weights via NetCon objects, rather than modifying a gmax parameter, to avoid issues with heterosynaptic interactions and causality.",
+    "functions_mentioned": [
+      "FInitializeHandler",
+      "NetCon.event",
+      "VecStim",
+      "NetCon.record",
+      "NetCon",
+      "NetStim"
+    ]
+  },
+  {
+    "thread_id": 2926,
+    "summary": "The user wants to isolate a section of a neuron model and ensure that the voltage response in the isolated section matches the response when it was part of the full model. The solution involves recording the voltage from the section, using it to drive a voltage clamp in the isolated section, and then using a current clamp to replicate the voltage response. Key steps include using the SEClamp with low series resistance and the Vector class's record() and play() methods.",
+    "functions_mentioned": [
+      "IClamp",
+      "SEClamp",
+      "Vector.record",
+      "Vector.play",
+      "disconnect"
+    ]
+  },
+  {
+    "thread_id": 2962,
+    "summary": "The user was attempting to run multiple simulation iterations in NEURON using a hoc file but encountered syntax errors and issues with event timing. The solution involved correcting syntax errors, optimizing the code by using NEURON's standard run system, and utilizing the VariableTimeStep tool for adaptive integration to ensure accurate simulations.",
+    "functions_mentioned": [
+      "Vector.append",
+      "VecStim.play",
+      "finitialize",
+      "frecord_init",
+      "fadvance",
+      "NetCon.record",
+      "load_file",
+      "run",
+      "Vector.resize",
+      "Vector.indgen",
+      "Vector.add"
+    ]
+  },
+  {
+    "thread_id": 2992,
+    "summary": "The user was attempting to calculate the Fano Factor for synaptic events generated by a NetStim with noise=1, expecting a value of 1 for a Poisson distribution. The issue was a misunderstanding of the Fano Factor's application, which is for discrete distributions like spike counts, not continuous variables like interspike intervals. The solution involved correctly calculating the Fano Factor using spike counts over time intervals, leading to the expected result.",
+    "functions_mentioned": [
+      "NetStim",
+      "Exp2Syn",
+      "NetCon",
+      "Vector",
+      "Vector.var",
+      "Vector.mean",
+      "Vector.histogram",
+      "Vector.stdev",
+      "cvode_active",
+      "cvode.active"
+    ]
+  },
+  {
+    "thread_id": 3021,
+    "summary": "The user wants to play a set of values into a point process to activate a synapse, but encounters a segmentation violation error. The solution is to use the VecStim class to generate spike events from a vector of spike times, which can then be connected to synapses using NetCon objects.",
+    "functions_mentioned": [
+      "vector.play",
+      "VecStim",
+      "NetCon",
+      "run"
+    ]
+  },
+  {
+    "thread_id": 3112,
+    "summary": "The forum thread discusses how the Model Reference Fitting (MRF) tool in NEURON handles data sampled at irregular intervals. It is clarified that MRF interpolates the model trajectory to match the data trajectory and evaluates errors only at the data points provided. The discussion also touches on the importance of using raw data for fitting whenever possible.",
+    "functions_mentioned": [
+      "Vector.interpolate",
+      "Vector.record",
+      "set_w",
+      "efun",
+      "set_modelx"
+    ]
+  },
+  {
+    "thread_id": 3209,
+    "summary": "The user wanted to create a model with a variable number of dendrites in NEURON, controlled by Python, but faced issues with hoc's requirement for 'create' statements to be outside the 'init()' procedure. The solution involved using arrays of sections in hoc, allowing the user to resize the array of sections within the 'init()' procedure, thus enabling the creation of a model with a variable number of dendrites.",
+    "functions_mentioned": [
+      "create"
+    ]
+  },
+  {
+    "thread_id": 3260,
+    "summary": "The user encountered unit errors in several mod files of the Morgan/Santhakumar 2007 model when using the NEURON simulator. The solution involved iteratively using the modlunit tool to identify and correct unit inconsistencies, such as changing 'DegC' to 'degC' and ensuring variables like 'on' are dimensionless. Additionally, the user faced an issue with a mystery file in the directory, which was resolved by escaping special characters in the filename when using the cygwin terminal.",
+    "functions_mentioned": [
+      "modlunit"
+    ]
+  },
+  {
+    "thread_id": 3303,
+    "summary": "The user wants to extract spike times from voltage trace simulations of neuron models, specifically when the voltage crosses a defined threshold. The solution involves using the NetCon class's record() method to directly capture spike times during simulations, or using the Vector class's indwhere method to find threshold crossings in existing voltage recordings.",
+    "functions_mentioned": [
+      "NetCon.record",
+      "Vector.indwhere"
+    ]
+  },
+  {
+    "thread_id": 3418,
+    "summary": "Maria asked about the meaning of '$o1' in a NEURON hoc script, specifically how it differs from '$1'. Ted explained that '$o1' refers to the first argument of a function or procedure when it is an object reference, whereas '$1' would be used for a scalar. Ted also suggested reading chapter 12 of The NEURON Book for more information on hoc syntax.",
+    "functions_mentioned": [
+      "proc"
+    ]
+  },
+  {
+    "thread_id": 3422,
+    "summary": "The forum thread discusses the representation of calcium concentration in computational models, specifically focusing on whether the calcium concentration in the outermost shell can represent intracellular calcium concentration. The solution suggests that while the outermost shell's concentration is used for detecting local calcium levels near the membrane, the average intracellular calcium concentration can be calculated as a weighted average of shell concentrations for comparison with experimental data.",
+    "functions_mentioned": [
+      "USEION",
+      "Vector.record",
+      "mkcaveclist",
+      "wtsum",
+      "xformcai"
+    ]
+  },
+  {
+    "thread_id": 3428,
+    "summary": "Maria sought help on recording GABA, AMPA, and NMDA currents in a cell population to approximate the local field potential (LFP). Ted provided guidance on using NEURON's Vector record to capture synaptic currents and suggested strategies for efficient memory usage during simulations, including breaking simulations into segments and summing currents post-simulation. Ted also highlighted the importance of correctly implementing synaptic mechanisms in the BREAKPOINT block to ensure accurate simulation results.",
+    "functions_mentioned": [
+      "Vector.record",
+      "fadvance",
+      "frecord_init",
+      "continuerun",
+      "stdinit"
+    ]
+  },
+  {
+    "thread_id": 3452,
+    "summary": "The user wanted to record the second derivative of an action potential and plot it against time and the first derivative. The solution involved recording the membrane potential and i_cap to vectors during the simulation, then using the Vector class's methods to calculate the second derivative post-simulation. Adaptive integration was recommended for accuracy, and the Vector class's interpolate() method could be used to resample data if needed.",
+    "functions_mentioned": [
+      "Vector.record",
+      "Vector.deriv",
+      "Graph.plot",
+      "Graph.exec_menu",
+      "run",
+      "finitialize"
+    ]
+  },
+  {
+    "thread_id": 3455,
+    "summary": "The user encountered strange voltage discontinuities when increasing the amplitude of a noise current generated by an Ornstein\u2013Uhlenbeck process in a NEURON model. The issue was due to the random number generator being called twice per time step in the BREAKPOINT block, leading to incorrect conductance estimates. The solution involved moving the random number generator call to a separate PROCEDURE and using SOLVE in the BREAKPOINT block, which corrected the voltage behavior and required adjusting the amplitude parameter.",
+    "functions_mentioned": [
+      "normrand",
+      "set_seed",
+      "SOLVE"
+    ]
+  },
+  {
+    "thread_id": 3482,
+    "summary": "The user was simulating action potential (AP) propagation in a pyramidal neuron using the NEURON simulator but observed an unexpectedly slow propagation speed. The issue was resolved by adjusting the simulation temperature from the default 6.3 Celsius to 20 Celsius, which aligned the results with expected values. The user also inquired about setting the temperature in Python, which was addressed by using 'h.celsius = 20'.",
+    "functions_mentioned": [
+      "h.celsius",
+      "LFPy.Cell",
+      "sec.insert"
+    ]
+  },
+  {
+    "thread_id": 3485,
+    "summary": "The forum thread discusses the challenge of modeling calcium dynamics in neurons with varying shell widths due to different diameters of soma, dendrites, and axons. The solution involves computational experimentation with different models to determine the impact of shell width on calcium concentration and BK channel activation, emphasizing the importance of empirical testing to ensure accurate simulation results. The discussion also covers the implementation of volume distribution for cytoplasm and ER in a calcium dynamics model, with suggestions for verifying the correctness of the approach through test runs and parameter adjustments.",
+    "functions_mentioned": [
+      "SEClamp",
+      "NMODL",
+      "COMPARTMENT",
+      "KINETIC"
+    ]
+  },
+  {
+    "thread_id": 3628,
+    "summary": "The discussion revolves around optimizing load balancing in a large network model with heterogeneous cell morphologies and synapses. The solution involves using the LoadBalance class and potentially the least processing time (LPT) algorithm to distribute cells across hosts more efficiently, rather than relying solely on the round-robin method. The use of the ExperimentalMechComplex function is suggested for better complexity estimation, and the discussion includes code examples for implementing these strategies.",
+    "functions_mentioned": [
+      "h.ParallelContext",
+      "h.load_file",
+      "h.allsec",
+      "pc.allreduce",
+      "pc.barrier",
+      "h.quit",
+      "pc.psolve",
+      "pc.step_time",
+      "pc.step_wait",
+      "pc.py_alltoall",
+      "lb.cell_complexity",
+      "lb.ExperimentalMechComplex",
+      "lb.read_mcomplex"
+    ]
+  },
+  {
+    "thread_id": 3693,
+    "summary": "A user was trying to simulate neuron models with a time step greater than 0.025 ms, but NEURON automatically reset the time step to 0.025 ms. The solution involved setting the time step using 'h.dt' and adjusting 'h.steps_per_ms' accordingly.",
+    "functions_mentioned": [
+      "h.dt",
+      "h.steps_per_ms"
+    ]
+  },
+  {
+    "thread_id": 3820,
+    "summary": "The user was confused about the direction of current in a point process model for an Ornstein-Uhlenbeck Process, specifically whether a positive current is depolarizing or hyperpolarizing. The solution clarified that in NEURON, a NONSPECIFIC_CURRENT follows the standard sign convention where depolarizing current is negative and hyperpolarizing current is positive. Additionally, a bug in the original code was identified and fixed to ensure correct behavior when tau_e or tau_i are zero.",
+    "functions_mentioned": [
+      "normrand",
+      "exp",
+      "sqrt",
+      "SOVE",
+      "set_seed"
+    ]
+  },
+  {
+    "thread_id": 3835,
+    "summary": "The user is trying to track the synaptic current from specific synaptic inputs to the soma in a biophysically realistic CA1 pyramidal cell model using NEURON. The suggested approach involves running simulations to record the soma's transmembrane current with and without specific synapses activated, and then comparing the results to estimate the contribution of each synapse. However, this method is approximate due to the complex interactions of synaptic conductance changes and membrane potential perturbations throughout the neuron.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 3930,
+    "summary": "A user encountered an issue where a short-duration, high-amplitude current injection using NEURON's IClamp method did not produce an observable voltage response. The problem was identified as a limitation of fixed time step simulation, where the default time step was longer than the duration of the current pulse, resulting in no current being injected at the calculated time points. Switching to variable time step integration would allow NEURON to adjust the time step to capture the stimulus accurately.",
+    "functions_mentioned": [
+      "h.IClamp"
+    ]
+  },
+  {
+    "thread_id": 4001,
+    "summary": "The forum thread discusses the difference between synaptic weight and reversal potential when using NEURON's ExpSyn or Exp2Syn classes. The synaptic weight refers to the magnitude of the effect on the postsynaptic cell, while the reversal potential is a parameter that determines the direction of ion flow during synaptic transmission. It is clarified that the weight parameter should not be negative for conductance-based synaptic mechanisms, as this would imply a violation of thermodynamic principles.",
+    "functions_mentioned": [
+      "NetCon",
+      "ExpSyn",
+      "Exp2Syn",
+      "IntFire1",
+      "IntFire2",
+      "IntFire4"
+    ]
+  },
+  {
+    "thread_id": 4032,
+    "summary": "A user new to the hoc programming language asked how to assign multiple values to an array in a concise manner. The solution suggested using hoc's Vector class instead of traditional arrays, utilizing methods like insrt to populate the Vector with values efficiently.",
+    "functions_mentioned": [
+      "Vector",
+      "Vector.insrt",
+      "Vector.printf"
+    ]
+  },
+  {
+    "thread_id": 4033,
+    "summary": "A user was trying to change parameters in NMODL files from hoc but found that the changes did not affect the channel kinetics. The solution involved setting 'usetable=0' to disable the use of lookup tables, which were preventing the changes from taking effect. Additionally, it was suggested to use the DEPEND clause in TABLE statements to ensure tables are recalculated when parameters change, although this approach was limited by NMODL's restriction of one TABLE per function.",
+    "functions_mentioned": [
+      "usetable",
+      "TABLE",
+      "DEPEND"
+    ]
+  },
+  {
+    "thread_id": 4097,
+    "summary": "The thread discusses extending a single-compartment Hodgkin-Huxley (HH) model to a multi-compartment model by adding axial resistance (Ra), membrane capacitance (cm), and passive (pas) mechanisms to different compartments. A potential issue highlighted is the non-uniform resting potential when combining sections with different mechanisms, which can be mitigated by adjusting the equilibrium potential of the pas mechanism. The thread also clarifies that Ra and cm are attributes of sections, not mechanisms, and suggests consulting the NEURON Book for further understanding.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 4105,
+    "summary": "A user was trying to implement a custom synaptic mechanism in NEURON but found that the section did not recognize the current from the mechanism. The solution involved using a BREAKPOINT block in the NMODL file to assign a value to the current variable, ensuring the mechanism affects the model's charge balance equations. Additional suggestions included parameterizing the model and using the modlunit tool to check for unit consistency.",
+    "functions_mentioned": [
+      "h.Section",
+      "h.Exp2Syn",
+      "h.Vector",
+      "h.VecStim",
+      "h.NetCon",
+      "record",
+      "h.run"
+    ]
+  },
+  {
+    "thread_id": 4167,
+    "summary": "The user wanted to efficiently assign the same large array of values to multiple instances of an NMODL mechanism in NEURON without duplicating data. The solution involved using a POINTER and a VERBATIM block in the NMODL code to reference a single numpy array, allowing all instances to access the same data without copying, using neuron.numpy_element_ref and h.setpointer functions.",
+    "functions_mentioned": [
+      "Vector.play",
+      "neuron.numpy_element_ref",
+      "h.setpointer",
+      "h.fadvance"
+    ]
+  },
+  {
+    "thread_id": 4190,
+    "summary": "The user was trying to reconstruct 3D points of a morphology imported using the Import3D tool in NEURON but faced issues with understanding how 3D data corresponds to segments and sections. The solution involved understanding that sections and segments have different representations and that the 3D data does not directly map to segment ends, as well as clarifying the use of functions like n3d(), x3d(), y3d(), and z3d() for accessing 3D coordinates.",
+    "functions_mentioned": [
+      "Import3D",
+      "n3d",
+      "x3d",
+      "y3d",
+      "z3d",
+      "parentseg",
+      "pt3dclear",
+      "pt3dadd",
+      "connect",
+      "define_shape",
+      "pt3dstyle"
+    ]
+  },
+  {
+    "thread_id": 4236,
+    "summary": "The user was trying to find the middle of a section in a NEURON model to determine the minimum current needed for an action potential using extracellular stimulation. The solution involved using the 'coordinate' function to accurately find the (x, y, z) coordinates of a section at a given position, rather than relying on potentially misleading 3D point data or averaging methods. Additionally, it was recommended to use 'h.define_shape()' to ensure correct pt3d data after setting section geometries.",
+    "functions_mentioned": [
+      "h.APCount",
+      "sec.n3d",
+      "sec.x3d",
+      "sec.y3d",
+      "sec.z3d",
+      "sec.arc3d",
+      "h.define_shape",
+      "pt3dadd"
+    ]
+  },
+  {
+    "thread_id": 4242,
+    "summary": "The user was trying to implement a neuromuscular system in NEURON that interacts with other software at runtime, using a Python callback function. The initial implementation was incorrect because the callback was set to the result of the function call rather than the function itself. The solution involved using a lambda function to correctly pass the callback, and it was suggested to use NEURON's built-in support for Python callbacks, such as FInitializeHandler, CVode.event, and CVode.extra_scatter_gather, to achieve the desired functionality.",
+    "functions_mentioned": [
+      "FInitializeHandler",
+      "CVode.event",
+      "CVode.extra_scatter_gather",
+      "NetStim",
+      "NetCon",
+      "Vector.record",
+      "PyBeforeStep.set_callback",
+      "finitialize",
+      "continuerun"
+    ]
+  },
+  {
+    "thread_id": 4264,
+    "summary": "The user was trying to simulate action potential propagation along an axon using NEURON but did not observe the expected time delay between spikes at different points along the axon. The solution involved increasing the number of segments in the axon, reducing its diameter, and shortening the stimulus duration to better observe the propagation delay. Additionally, the user was guided on how to compute intracellular voltage by summing membrane potential and extracellular potential values.",
+    "functions_mentioned": [
+      "psection",
+      "IClamp",
+      "Vector.record",
+      "finitialize",
+      "continuerun",
+      "run"
+    ]
+  },
+  {
+    "thread_id": 4286,
+    "summary": "The user was trying to replicate HOC syntax for specifying a range along a section in NEURON using Python, specifically for varying diameters and ion channel conductances. The solution involved using a Python function with a for loop to linearly assign values to each segment's variable, as the HOC syntax does not directly translate to Python and can be confusing and non-intuitive.",
+    "functions_mentioned": [
+      "psection",
+      "setattr",
+      "pt3dadd",
+      "x3d",
+      "y3d",
+      "z3d"
+    ]
+  },
+  {
+    "thread_id": 4298,
+    "summary": "The user wants to model synaptic activation in NEURON without requiring the presynaptic cell to fire. The solution involves using the NetCon class to create a connection with a nil source and then using the .event() method to specify the event delivery time, or using VecStim for multiple events.",
+    "functions_mentioned": [
+      "NetCon",
+      "NetCon.event",
+      "VecStim"
+    ]
+  },
+  {
+    "thread_id": 4303,
+    "summary": "The user needed a memory-efficient way to apply scaled versions of a vector to multiple synaptic conductances in a NEURON simulation. The solution involved using a custom NMODL mechanism called VecSyn, which allows a single vector to drive the conductance values for multiple synapses by using a scale factor for each instance.",
+    "functions_mentioned": [
+      "Vector.play"
+    ]
+  },
+  {
+    "thread_id": 4325,
+    "summary": "The issue discussed in the forum thread involves the initialization of calcium concentrations in a segment of a neuron model when a synapse is attached. The problem arises because the NEURON simulator's default initial calcium concentration parameters override user-defined values in certain segments. The solution involves modifying the NMODL code to explicitly initialize calcium concentrations using an INITIAL block and adjusting the use of the ion_style function to prevent unintended changes.",
+    "functions_mentioned": [
+      "h.ion_style",
+      "h.finitialize",
+      "h.fcurrent",
+      "h.frecord_init",
+      "h.cao0_ca_ion",
+      "h.cai0_ca_ion"
+    ]
+  },
+  {
+    "thread_id": 4364,
+    "summary": "A user asked about the units of the sodium (ina) and potassium (ik) currents in the Hodgkin-Huxley (hh) model in NEURON. The response clarified that these currents are expressed in units of current density (mA/cm\u00b2) and explained that while the hh mechanism calculates these currents, they are not directly accessible in Python due to the way they are declared in the hh.mod file. However, the total sodium or potassium current density for a segment can be accessed, which is typically sufficient for calculations involving ionic concentrations.",
+    "functions_mentioned": [
+      "h.Section",
+      "axon.insert",
+      "h.finitialize"
+    ]
+  },
+  {
+    "thread_id": 4388,
+    "summary": "The user is trying to ensure that the random pattern generated by NetStim objects in NEURON remains consistent across simulation runs by fixing the seed. The solution involves creating a separate Random object for each NetStim to prevent them from sharing the same pseudorandom number generator, and using the Random123 method to ensure each has its own stream, allowing for consistent random patterns by calling the seq(1) method to restart the sequence.",
+    "functions_mentioned": [
+      "NetStim",
+      "NetCon",
+      "Exp2Syn",
+      "Random",
+      "Random123",
+      "noiseFromRandom",
+      "seq"
+    ]
+  },
+  {
+    "thread_id": 4389,
+    "summary": "The original poster wanted a function to remove all point processes from a cell in NEURON, but was advised to maintain a list of point processes to manage their lifecycle effectively. The suggested solution was to append point processes to a list upon creation and clear the list when they need to be removed, ensuring no undesired persistence of object instances.",
+    "functions_mentioned": [
+      "h.IClamp",
+      "h.allsec",
+      "sec.psection",
+      "h.allobjects"
+    ]
+  },
+  {
+    "thread_id": 4411,
+    "summary": "The forum thread discusses how sections in NEURON models are connected and how to calculate total membrane capacitance and input resistance. It clarifies that sections are connected with axial resistance, not in parallel, and explains that total membrane capacitance is the integral over the cell's surface. The thread also addresses misconceptions about calculating input resistance and time constants, emphasizing that these depend on specific conditions like electrotonic compactness.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 4499,
+    "summary": "The user encountered a performance issue when separating equations into different .mod files using POINTER in NEURON, which led to a significant slowdown. The solution involved understanding the inefficiencies caused by the adaptive integrator and using a squashing function to prevent a state variable from becoming negative, allowing the use of variable time steps efficiently.",
+    "functions_mentioned": [
+      "NET_RECEIVE",
+      "WATCH",
+      "net_send",
+      "net_event",
+      "setpointer",
+      "SOLVE",
+      "BREAKPOINT",
+      "DERIVATIVE",
+      "INITIAL",
+      "CVode",
+      "BEFORE STEP"
+    ]
+  },
+  {
+    "thread_id": 4593,
+    "summary": "The user wanted to split a NEURON simulation into two parts, allowing parameter changes between runs. The solution involved running the first simulation, making parameter changes, and then using 'cvode.re_init()' or 'fcurrent()' to reinitialize the simulation state before continuing with the second run. To record data across both runs, the same recording vectors should be used, and 'h.frecord_init()' can be used to clear previous recordings if needed.",
+    "functions_mentioned": [
+      "h.finitialize",
+      "h.continuerun",
+      "cvode.active",
+      "cvode.re_init",
+      "fcurrent",
+      "h.Vector().record",
+      "h.frecord_init"
+    ]
+  },
+  {
+    "thread_id": 4623,
+    "summary": "The user wanted to play a unique vector into a variable for each segment of a model in NEURON but faced issues with the NMODL file and Python script. The solution involved using the RANGE keyword for the variable to allow different values at different locations and using pointers to play vectors into segment-specific variables.",
+    "functions_mentioned": [
+      "Vector.play",
+      "Vector.record",
+      "finitialize",
+      "continuerun",
+      "Section",
+      "wholetree"
+    ]
+  },
+  {
+    "thread_id": 4628,
+    "summary": "A user sought guidance on installing NEURON with Python on Windows 10 using Anaconda3 and Python 3.11. The solution involved following installation instructions from nrn.readthedocs.io and verifying the installation by running 'neurondemo' and importing NEURON in Python. An issue with the 'no module named hoc' error was resolved by using the updated installer version 8.2.3 from nrn.readthedocs.io.",
+    "functions_mentioned": [
+      "neurondemo",
+      "from neuron import h, gui"
+    ]
+  },
+  {
+    "thread_id": 4652,
+    "summary": "The user wanted to terminate a NEURON simulation based on the convergence of inter-spike intervals (ISIs). The solution involved using a NetCon object to record spikes and a callback function to check the ISI condition, with the help of global variables to track spike counts and ISIs. The discussion also explored using FInitializeHandler for initialization and considered alternatives to using global variables.",
+    "functions_mentioned": [
+      "FInitializeHandler",
+      "NetCon.record",
+      "h.stoprun",
+      "h.finitialize",
+      "h.continuerun"
+    ]
+  },
+  {
+    "thread_id": 4718,
+    "summary": "Claudio is exploring the modeling of a multicompartment soma to understand the effects of perisomatic inhibitory synapses and postsynaptic channels. Ted suggests that for electrical signals in vertebrate somas, a single compartment is sufficient due to rapid equilibration, but chemical signals may require spatial discretization using NMODL or RxD. For modeling multiple inhibitory synapses, Ted recommends using AlphaSynapse or Exp2Syn, with adjustments for simultaneous or staggered activation.",
+    "functions_mentioned": [
+      "AlphaSynapse",
+      "Exp2Syn",
+      "NetStim"
+    ]
+  },
+  {
+    "thread_id": 4720,
+    "summary": "The user was trying to track sodium currents from synaptic mechanisms in a NEURON model using HOC but faced difficulties due to the random distribution of synapses and the complexity of iterating over point processes. The solution involved modifying the NMODL files to use specific ion declarations (USEION) for sodium and potassium, allowing the user to directly record these currents without iterating over point processes, thus simplifying the process and reducing errors.",
+    "functions_mentioned": [
+      "Vector.record",
+      "fadvance",
+      "ismembrane",
+      "area",
+      "state_discontinuity"
+    ]
+  },
+  {
+    "thread_id": 4734,
+    "summary": "The forum thread discusses the factors influencing NEURON simulation run time beyond the total compartment count. It highlights that simulation time is affected by the total number of ordinary differential equations (ODEs) due to model complexity, including the number of state variables and mechanisms requiring numerical integration. Additionally, efficient use of cache, such as enabling cache_efficient, can also impact simulation performance.",
+    "functions_mentioned": [
+      "CVode.cache_efficient"
+    ]
+  },
+  {
+    "thread_id": 2402,
+    "summary": "A user was unable to see all sections of their cell in the 'Plot What' menu of the NEURON simulator, only a few sections were visible. The solution provided explained that the menu shows only a few examples when there are many sections, and users can manually enter the section name to view it. Additionally, commands were provided to list all section names or filter them by a substring.",
+    "functions_mentioned": [
+      "forall",
+      "print",
+      "secname",
+      "forsec"
+    ]
+  },
+  {
+    "thread_id": 3016,
+    "summary": "The user encountered an issue where a hoc file loaded within a template could not access variables defined in the template, resulting in an 'undefined variable' error. The solution was to use the 'xopen' function instead of 'load_file', as 'xopen' executes in the context of the object instance, allowing access to the template's variables.",
+    "functions_mentioned": [
+      "xopen",
+      "load_file"
+    ]
+  },
+  {
+    "thread_id": 4265,
+    "summary": "A user inquired about the availability of the Mersenne Twister RNG in NEURON for simulating a large network of neurons. It was clarified that while Mersenne Twister is not available, NEURON offers Random123, a high-quality PRNG that is suitable for parallel computing environments and provides reproducible randomness. Random123 is recommended over Mersenne Twister due to its ability to generate independent random streams and its suitability for parallel processing.",
+    "functions_mentioned": [
+      "Random123"
+    ]
+  },
+  {
+    "thread_id": 4409,
+    "summary": "A physicist returning to NEURON seeks to understand its scope and the mathematical models it uses. The response highlights NEURON's focus on mechanistic modeling of neurons and networks, suggesting resources like The NEURON Book and various articles for further reading. The discussion also touches on the importance of understanding the underlying mathematics and numerical calculations, recommending specific chapters and additional literature for deeper insights.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 287,
+    "summary": "The user is trying to understand how to implement non-uniform channel distributions in NEURON, specifically how to assign different channel densities and create a Gaussian distribution of Na+ channels across a section. The response clarifies that using a larger 'nseg' value is necessary for non-uniform distributions and advises against using even values for 'nseg' to avoid ambiguity in midpoint values. It also suggests consulting The NEURON Book and related papers for detailed guidance on handling range variables.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 1839,
+    "summary": "The forum thread discusses the behavior of the NetStim.noise parameter in the NEURON simulator, which controls the randomness of spike intervals. When NetStim.noise is set to 0, spikes occur at regular intervals, while a value of 1 results in intervals following a Poisson distribution. For intermediate values, the interval is a combination of a fixed duration and a negative exponential distribution, with the most likely interval being 0 due to the properties of the exponential distribution.",
+    "functions_mentioned": [
+      "NetStim.noise",
+      "erand",
+      "nrn_random_pick",
+      "exprand"
+    ]
+  },
+  {
+    "thread_id": 2271,
+    "summary": "The forum thread discusses the challenges of measuring propagation speed in a myelinated axon model, specifically focusing on the effects of spatial discretization (d_lambda) and temporal discretization (dt) on conduction velocity. The solution involves adjusting the number of segments (nseg) and using second-order spike time detection with CVODE to achieve accurate results, while also considering the impact of extracellular mechanisms and xraxial on the model's behavior.",
+    "functions_mentioned": [
+      "CVode.event",
+      "NetCon.record",
+      "fadvance",
+      "cvode_active",
+      "cvode.condition_order",
+      "geom_nseg",
+      "cvode.dae_init_dteps"
+    ]
+  },
+  {
+    "thread_id": 2304,
+    "summary": "The forum thread discusses the implementation of synaptic conductances in the COBA neuron model using NEURON. The solution involves examining the CobaCell template in cobacell.hoc, which defines synaptic mechanisms as ExpSyn point processes. The thread also covers the role of the BREAKPOINT block and the conductance variable in spikeout.mod, and how the NET_RECEIVE block is activated in the absence of synaptic input.",
+    "functions_mentioned": [
+      "ExpSyn",
+      "NET_RECEIVE",
+      "BREAKPOINT",
+      "WATCH",
+      "net_event",
+      "net_send",
+      "fadvance"
+    ]
+  },
+  {
+    "thread_id": 2489,
+    "summary": "The user encountered an issue where a list of vectors was expected to store the time evolution of each section in a model, but instead, it contained identical vectors corresponding to the last section. The solution was to create a new Vector instance within the loop, ensuring each section's data is recorded in a separate vector.",
+    "functions_mentioned": [
+      "Vector.record",
+      "List.append"
+    ]
+  },
+  {
+    "thread_id": 2508,
+    "summary": "A user inquired about the possibility of using printf statements within BREAKPOINT and FUNCTION blocks in mod files for debugging purposes. It was confirmed that printf statements can be used in NMODL source code with syntax similar to C, and variable names should be used as they are known in the NMODL code.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 150,
+    "summary": "The user attempted to record and print simulation data using NEURON's Vector class but encountered an issue where the recorded vector appeared empty. The solution was to ensure that the simulation is run before attempting to print the vector, as the printf statement executes immediately and requires the simulation to have been completed to display recorded data.",
+    "functions_mentioned": [
+      "Vector.record",
+      "Vector.printf",
+      "run"
+    ]
+  },
+  {
+    "thread_id": 353,
+    "summary": "A user wanted to calculate and plot the instantaneous average postsynaptic current through synapses of a specific neuron type in a network using the NEURON simulator. Two methods were suggested: one using Vectors and Lists to record and post-process synaptic currents after a simulation, and another using a List to calculate the average current during each time step of the simulation. Both methods involve custom procedures for initialization and advancement of the simulation.",
+    "functions_mentioned": [
+      "List.append",
+      "List.count",
+      "List.object",
+      "Vector.record",
+      "Vector.add",
+      "Vector.div",
+      "CVode.record",
+      "stdinit",
+      "continuerun",
+      "finitialize",
+      "fcurrent",
+      "frecord_init",
+      "fadvance"
+    ]
+  },
+  {
+    "thread_id": 579,
+    "summary": "The user inquired about the corresponding hoc file for the 'stylized' model in NEURON and how to build a new neuron model. The solution involved using the 'topology()' and 'forall psection()' commands to understand the model's structure and properties, and utilizing the Model View tool for a better understanding of the biophysical specifications. The discussion also touched on the principles of model design, emphasizing abstraction and simplification based on known data and the purpose of the model.",
+    "functions_mentioned": [
+      "topology",
+      "forall psection"
+    ]
+  },
+  {
+    "thread_id": 755,
+    "summary": "The user was trying to save sodium current data from a NEURON simulation to a file but encountered discrepancies when viewing the data in Excel. The solution involved ensuring that the data recording was properly synchronized with the simulation run, specifically by using the run() command after setting up the Vector to record the data.",
+    "functions_mentioned": [
+      "Vector.record",
+      "run",
+      "finitialize",
+      "fadvance"
+    ]
+  },
+  {
+    "thread_id": 2048,
+    "summary": "The user wanted to perform consecutive simulations of a neuron using different input files, ensuring each simulation starts from the last state of the previous one. The solution involved using the SaveState object to save and restore states between runs, and it was discovered that calling SaveState.restore() with an argument of 1 prevents clearing the event queue, allowing the Vector play to work correctly across multiple runs.",
+    "functions_mentioned": [
+      "SaveState",
+      "SaveState.restore",
+      "SaveState.save",
+      "Vector.play",
+      "finitialize",
+      "cvode.re_init",
+      "fcurrent",
+      "frecord_init",
+      "continuerun",
+      "f.ropen",
+      "r.scanf"
+    ]
+  },
+  {
+    "thread_id": 2663,
+    "summary": "The forum thread discusses the correct usage of the 'for (x)' loop in NEURON, highlighting a common mistake where it is used to assign values to range variables, leading to incorrect values in the last segment of a section. The solution is to use 'for (x,0)' when assigning values to range variables, as it excludes the 0 and 1 nodes from the iteration, ensuring correct assignment across segments.",
+    "functions_mentioned": [
+      "for",
+      "for (var)",
+      "for (var, expr)"
+    ]
+  },
+  {
+    "thread_id": 524,
+    "summary": "The user was confused about the 'Init (mV)' function in the NEURON simulator's RunControl panel, expecting it to maintain a resting membrane potential similar to a current clamp in patch clamping. The solution clarified that the 'Init' button performs a steady state initialization under voltage clamp, setting the membrane potential to a specified value and adjusting voltage-dependent states accordingly, which differs from the user's expectation of a current clamp behavior.",
+    "functions_mentioned": [
+      "create",
+      "access",
+      "insert"
+    ]
+  },
+  {
+    "thread_id": 3093,
+    "summary": "The user was trying to calculate the surface area of a section in NMODL by using the length (L) and diameter (diam) but found that L was incorrectly set to 0. The solution provided was to use the 'area' variable, which NMODL already knows, instead of manually calculating the surface area using L.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 697,
+    "summary": "The forum thread discusses the appropriate setting of the equilibrium potential (e_pas) for passive mechanisms in NEURON simulations. The solution suggests that if only the passive mechanism is present, the initial voltage (v_init) should be set to e_pas to reflect the resting potential. For more complex models with nonuniform biophysical properties, careful consideration is needed to ensure the model starts from a steady state, and the NEURON Book provides strategies for such initialization.",
+    "functions_mentioned": [
+      "insert pas"
+    ]
+  },
+  {
+    "thread_id": 70,
+    "summary": "The user inquired about the syntax for connecting sections in NEURON, specifically the difference between a classic connect command and a more complex model involving multiple compartments. The solution clarified that the syntax within curly brackets allows multiple sections to be connected to a parent section, with the numbers after the comma indicating the location on the parent section where the child section is attached.",
+    "functions_mentioned": [
+      "connect"
+    ]
+  },
+  {
+    "thread_id": 180,
+    "summary": "The user wants to simulate the effect of somatic current injection to hyperpolarize a cell's resting potential in NEURON. It is clarified that simply changing the membrane potential (Vm) during initialization does not replicate the effect of injecting a hyperpolarizing current, unless the model is very small and the current is applied long enough for all mechanisms to reach steady state.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 361,
+    "summary": "The user is experiencing identical voltage responses in multiple instances of a stochastic single channel simulation in NEURON, despite expecting variability due to randomness. The solution is to use different random number seeds for each simulation instance or run to achieve true stochastic behavior.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 585,
+    "summary": "A user was trying to convert a string to an integer in hoc code and was unsure how to do it using NEURON's built-in functions. The solution provided was to use the sscanf function, which can read integers from a string in various formats such as hex, binary, and decimal.",
+    "functions_mentioned": [
+      "sscanf"
+    ]
+  },
+  {
+    "thread_id": 648,
+    "summary": "The user wanted to iterate over all sections of a complex cell morphology in NEURON and perform operations on each section. The solution involved using the 'forall' and 'forsec' commands to access section names and create a SectionList, allowing iteration over all sections with a specific naming pattern. Additionally, a custom function was defined and used within the 'forsec' loop to perform calculations on each section.",
+    "functions_mentioned": [
+      "topology",
+      "forall",
+      "forsec",
+      "secname",
+      "SectionList.append"
+    ]
+  },
+  {
+    "thread_id": 875,
+    "summary": "The user encountered an issue where the NetCon.event function did not trigger synaptic events as expected because the event was discarded during initialization. The solution was to use the FInitializeHandler class to ensure that the event is scheduled during the initialization process, preventing it from being cleared when the simulation starts.",
+    "functions_mentioned": [
+      "NetCon.event",
+      "FInitializeHandler",
+      "finitialize"
+    ]
+  },
+  {
+    "thread_id": 1191,
+    "summary": "The user wanted to iterate over sections in a SectionList in groups of ten and execute different statements for each group. The solution involved using an auxiliary variable to track the index within the SectionList and a procedure to execute statements based on this index, utilizing NEURON's String class to manage command strings.",
+    "functions_mentioned": [
+      "forsec",
+      "execute",
+      "load_file",
+      "new String",
+      "proc"
+    ]
+  },
+  {
+    "thread_id": 1243,
+    "summary": "The user was confused about whether NEURON overrides specified units for calcium current in the ASSIGNED block. The solution clarified that currents in the WRITE clause of USEION statements must be in mA/cm2, and suggested using a surrogate variable with the desired units and applying a scale factor in the BREAKPOINT block to maintain consistency.",
+    "functions_mentioned": [
+      "USEION",
+      "RANGE",
+      "modlunit"
+    ]
+  },
+  {
+    "thread_id": 1260,
+    "summary": "The user is confused about the difference between doubles and objrefs in NEURON's HOC language. The solution clarifies that doubles and objrefs are distinct types, with doubles being scalars or arrays of scalars, while objrefs are used for object references. It is recommended to use Vectors and the List class for dynamic sizing and flexibility instead of arrays declared with 'double'.",
+    "functions_mentioned": [
+      "Vector.append",
+      "Vector.insrt",
+      "Vector.resize"
+    ]
+  },
+  {
+    "thread_id": 1466,
+    "summary": "The user is confused about how NEURON handles ion concentrations and currents when the NMODL code does not specify ions explicitly. The solution involves understanding that many models assume constant ionic concentrations and equilibrium constants, and NEURON uses mechanisms like USEION statements to manage these variables. Additionally, NEURON can simulate the diffusion of reagents affecting neuronal activity by using methods like Vector.play() for smooth changes or CVode.event() for abrupt changes.",
+    "functions_mentioned": [
+      "Vector.play",
+      "CVode.event",
+      "fadvance",
+      "ion_style"
+    ]
+  },
+  {
+    "thread_id": 1788,
+    "summary": "The user is trying to implement a mechanism in NEURON where a cell's sodium channel conductance is set to zero for a period after an action potential. The solution involves using a custom point process with a NET_RECEIVE block and WATCH statements to detect spikes and manage conductance state changes using self-events and flags, avoiding the need for NetCons.",
+    "functions_mentioned": [
+      "NetCon",
+      "net_send",
+      "net_move",
+      "WATCH",
+      "NET_RECEIVE",
+      "cvode_event",
+      "at_time"
+    ]
+  },
+  {
+    "thread_id": 2055,
+    "summary": "The user was trying to add white Gaussian noise to a current injection in a NEURON model using the normrand() function, but encountered instability due to the random number generator being called in the BREAKPOINT block, which is executed twice per time step. The solution involved moving the noise calculation to a BEFORE BREAKPOINT block to ensure it is only executed once per time step, thus stabilizing the model.",
+    "functions_mentioned": [
+      "normrand",
+      "fadvance",
+      "at_time",
+      "net_send",
+      "set_seed",
+      "SOLVE state METHOD cnexp"
+    ]
+  },
+  {
+    "thread_id": 2108,
+    "summary": "The user is confused about the difference between 'h.Section' and 'h.Section()' in the NEURON simulator. It is clarified that 'h.Section()' is a method that returns an instance of the Section class, while 'h.Section' is a callable that can be used to construct an instance of the class.",
+    "functions_mentioned": [
+      "h.Section"
+    ]
+  },
+  {
+    "thread_id": 2332,
+    "summary": "The forum thread discusses methods to calculate the surface area of an entire neuron in the NEURON simulator. The solution involves using a command line approach or writing a hoc procedure to sum the areas of all segments, with considerations for different geometry specifications (cylindrical or frusta). The area calculation excludes the ends of segments, treating them as cylinders or frusta depending on the geometry specification method.",
+    "functions_mentioned": [
+      "finitialize",
+      "area",
+      "forall",
+      "forsec",
+      "xopen"
+    ]
+  },
+  {
+    "thread_id": 2336,
+    "summary": "The user inquired whether they could directly set the conductance (g) of an Exp2Syn object and have the NetCon weight adjust accordingly. The response clarified that this is not possible, and instead, the user should adjust the NetCon weight to achieve the desired conductance.",
+    "functions_mentioned": [
+      "Exp2Syn.g",
+      "NetCon"
+    ]
+  },
+  {
+    "thread_id": 2475,
+    "summary": "The user was trying to model a synapse by changing membrane conductance according to a specified waveform using a dynamic clamp code. The issue was resolved by changing the declaration from ELECTRODE_CURRENT to NONSPECIFIC_CURRENT in the NEURON block, which stabilized the simulation. Additionally, it was suggested to ensure the conductance values remain positive to avoid instability and to consider using an AlphaSynapse for simplicity.",
+    "functions_mentioned": [
+      "Vector.play",
+      "Vector.retrieve",
+      "Vector.plot"
+    ]
+  },
+  {
+    "thread_id": 2481,
+    "summary": "A user asked how to calculate a cell's total membrane capacitance in NEURON, as opposed to the specific membrane capacitance (cm). The solution provided involves iterating over each section and segment of the cell, calculating the product of the segment's area and its specific membrane capacitance, and summing these products to get the total capacitance.",
+    "functions_mentioned": [
+      "func",
+      "forall",
+      "area",
+      "cm"
+    ]
+  },
+  {
+    "thread_id": 2483,
+    "summary": "The user inquired about using the pt3dadd command to construct neurons with complex geometries and how it handles bifurcations. The solution clarified that pt3dadd is used for specifying the geometry of individual sections, and branching requires multiple sections connected with connect statements.",
+    "functions_mentioned": [
+      "pt3dadd",
+      "connect"
+    ]
+  },
+  {
+    "thread_id": 2619,
+    "summary": "The user inquired about how to view information for all segments of a section in NEURON when nseg > 1, as h.psection(sec=Section) only provides information for the first segment. The solution involves iterating over the segments of the section and printing the desired variable for each segment.",
+    "functions_mentioned": [
+      "h.psection"
+    ]
+  },
+  {
+    "thread_id": 2683,
+    "summary": "The user wants to save graphs generated by their NEURON model runs for later analysis without having to rerun the model. The solution is to use the Vector class's record() method to capture the data and save it to text files, which can be reloaded later for analysis.",
+    "functions_mentioned": [
+      "Vector.record"
+    ]
+  },
+  {
+    "thread_id": 2815,
+    "summary": "The forum thread discusses how to translate a NEURON code snippet that uses indexed arrays of objects into Python, where lists are recommended over arrays for managing collections of objects. The solution involves using Python lists to manage synaptic mechanisms and NetCons, and it is noted that using a single instance of a synaptic mechanism can be more efficient if the synapse parameters are identical, due to the linearity of the ordinary differential equations governing synaptic conductance.",
+    "functions_mentioned": [
+      "Exp2Syn",
+      "NetStim",
+      "NetCon",
+      "List"
+    ]
+  },
+  {
+    "thread_id": 3127,
+    "summary": "The problem discussed in the forum thread involves a custom initialization procedure in a NEURON model that affects synapse timing due to missing function calls. The solution is to ensure that after any fadvance() calls in the custom init procedure, frecord_init() should be called to reset the internal index used by Vector.record, preventing delays in recorded synaptic events.",
+    "functions_mentioned": [
+      "fadvance",
+      "frecord_init",
+      "finitialize",
+      "fcurrent"
+    ]
+  },
+  {
+    "thread_id": 3294,
+    "summary": "The user encountered an issue where setting the IClamp stimulus current amplitude to 0 still affected the neuron's potential, particularly when changing the duration of the pulse. The problem was identified as being caused by the use of variable time step integration, which re-initializes the integrator at the start and end of the IClamp pulse, even if the amplitude is zero. The suggested solutions included using fixed time step integration or adjusting the absolute error tolerance for adaptive integration.",
+    "functions_mentioned": [
+      "fadvance",
+      "cvode.active",
+      "cvode.atol",
+      "cvode.atolscale",
+      "SaveState"
+    ]
+  },
+  {
+    "thread_id": 3446,
+    "summary": "The user encountered an issue where only the first axon was stimulated regardless of which axon the IClamp was connected to. The solution involved specifying the target section explicitly using the 'sec=' parameter in the IClamp constructor to ensure the correct axon is stimulated. Additionally, it was suggested to use consistent naming conventions and to refer to NEURON documentation for further guidance.",
+    "functions_mentioned": [
+      "h.IClamp",
+      "axon.insert",
+      "h.Vector.record",
+      "h.run",
+      "h.finitialize",
+      "axon.allseg"
+    ]
+  },
+  {
+    "thread_id": 3811,
+    "summary": "The forum thread discusses the issue of obtaining the exact location (x value) on a pre-section for a NetCon instance in the NEURON simulator, which by default only returns 0, 0.5, or 1.0. A new method, NetCon.preseg(), was introduced to return a nrn.Segment object, allowing users to retrieve the actual x value and section of the source. This method addresses the limitation of preloc() and provides a more accurate way to determine the pre-section location.",
+    "functions_mentioned": [
+      "NetCon.preloc",
+      "NetCon.preseg",
+      "h.pop_section",
+      "h.NetCon",
+      "h.Section",
+      "h.ParallelContext",
+      "h.ExpSyn"
+    ]
+  },
+  {
+    "thread_id": 3883,
+    "summary": "The user wants to record action potentials from the distal axon of a model using ParallelNetManager's want_all_spikes(), which by default records spikes at the soma. The solution is to attach NetCons to the desired locations in the cell and assign global identifiers (gids) to them, allowing want_all_spikes() to capture spikes from those locations.",
+    "functions_mentioned": [
+      "ParallelNetManager.want_all_spikes",
+      "NetCon"
+    ]
+  },
+  {
+    "thread_id": 3935,
+    "summary": "The user encountered a discrepancy between the area calculated using the area() function and a custom formula when defining a section's geometry using the 3D method in NEURON. The issue was clarified by explaining that the area() function accounts for the frusta between adjacent 3D points, which can result in different values compared to a simple cylindrical calculation. NEURON uses the area() function's result for computing transmembrane currents, and the user resolved their confusion by using the correct formula for a conical frustum.",
+    "functions_mentioned": [
+      "area",
+      "pt3dadd"
+    ]
+  },
+  {
+    "thread_id": 4193,
+    "summary": "The user was confused about why a synapse instantiated at a specific location on a dendrite did not appear at the expected position. It was clarified that the synapse's position is influenced by the number of segments (nseg) in the section, and increasing nseg can improve the accuracy of the synapse's placement. Additionally, the d_lambda rule was suggested as a method for determining an appropriate nseg value for spatial discretization.",
+    "functions_mentioned": [
+      "get_segment",
+      "get_loc",
+      "h.xopen",
+      "h.geom_nseg"
+    ]
+  },
+  {
+    "thread_id": 4373,
+    "summary": "The user encountered an issue where their Python script using NEURON was not loading the nrnmech.dll file, resulting in a ValueError when trying to insert mechanisms. The solution was to ensure that the h.nrn_load_dll() function included the full path to the nrnmech.dll file, including the file name itself, which resolved the issue. Additionally, it was suggested to place mod files in the same directory as the main script and run mknrndll there to avoid using h.nrn_load_dll() altogether.",
+    "functions_mentioned": [
+      "h.nrn_load_dll",
+      "h.Section",
+      "h.allsec",
+      "h.ismembrane",
+      "h.define_shape",
+      "h.topology",
+      "h.PlotShape"
+    ]
+  },
+  {
+    "thread_id": 4561,
+    "summary": "A user inquired about the references for default parameter values in the NEURON simulator, specifically regarding the biological basis of these defaults. It was clarified that the default values for section properties like diameter, specific membrane capacitance, and cytoplasmic resistivity are based on the squid giant axon, while the parameters for the built-in hh mechanism are derived from Hodgkin and Huxley's research.",
+    "functions_mentioned": []
+  },
+  {
+    "thread_id": 4701,
+    "summary": "The user encountered an issue with NEURON simulations where data appeared constant across time chunks due to the use of Python multiprocessing and the h.frecord_init() function. The problem was that h.frecord_init() resized recording vectors before worker processes could process the data, leading to incorrect data being passed. The solution involved delaying the call to h.frecord_init() or creating deep copies of the data to ensure worker processes received the correct data.",
+    "functions_mentioned": [
+      "h.frecord_init",
+      "h.continuerun",
+      "h.Vector",
+      "h.CVode",
+      "h.CVode().event",
+      "h.Vector().record",
+      "h.finitialize"
+    ]
+  }
+]
